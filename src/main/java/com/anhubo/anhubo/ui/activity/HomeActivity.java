@@ -28,6 +28,7 @@ public class HomeActivity extends BaseActivity {
 
     @InjectView(R.id.viewpager)
     NoScrollViewPager viewpager;
+
     @InjectView(R.id.rg_home_bottom)
     RadioGroup rgHomeBottom;
     private ArrayList<Fragment> list;
