@@ -122,8 +122,8 @@ public class UploadingActivity3 extends BaseActivity {
         } else {
             file = filePhoto02;
         }
-        if (!file.exists()) {
-            ToastUtils.showLongToast(mActivity, "图片不存在");
+        if (file==null||!file.exists()) {
+            ToastUtils.showLongToast(mActivity, "请先拍照或者获取图库图片");
             return;
         }
         Map<String, String> params = new HashMap<>();

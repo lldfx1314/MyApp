@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.anhubo.anhubo.bean.MyPolygonBean;
+import com.anhubo.anhubo.utils.DisplayUtil;
 
 /**
  * =====作者=====
@@ -43,7 +44,7 @@ public class MyPolygonView extends View {
     //n边形个数
     private int num = 7;
     //两个多边形之间的半径
-    private int r = 40;
+    private int r = DisplayUtil.dp2px(getContext(),14);
     //n边形顶点坐标
     private float x, y;
     //n边形角度
@@ -109,10 +110,10 @@ public class MyPolygonView extends View {
         borderPaint.setAntiAlias(true);
         borderPaint.setStyle(Paint.Style.STROKE);
         borderPaint.setColor(mColor);
-        borderPaint.setStrokeWidth(3);
+        borderPaint.setStrokeWidth(DisplayUtil.dp2px(getContext(),1.2f));
         //文字画笔
         textPaint = new Paint();
-        textPaint.setTextSize(30);
+        textPaint.setTextSize(DisplayUtil.sp2px(getContext(),14));
         textPaint.setColor(textColor);
         textPaint.setAntiAlias(true);
         //区域画笔
@@ -177,7 +178,6 @@ public class MyPolygonView extends View {
             //测量文字的宽高
             Rect rect = new Rect();
             if(polygonBean!=null){
-                //            textPaint.getTextBounds(text[i - 1], 0, text[i - 1].length(), rect);
                 textPaint.getTextBounds(polygonBean.getText()[i - 1], 0, polygonBean.getText()[i - 1].length(), rect);
                 float textWidth = rect.width();
                 float textHeight = rect.height();
@@ -209,7 +209,6 @@ public class MyPolygonView extends View {
         if(polygonBean!=null){
             Path path = new Path();
             for (int i = 1; i <= n; i++) {
-                //float r = area[i - 1] * this.r;
                 float r = polygonBean.getArea()[i - 1] * this.r;
                 x = (float) (Math.cos(i * angle) * r);
                 y = (float) (Math.sin(i * angle) * r);

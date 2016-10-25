@@ -1,15 +1,24 @@
 package com.anhubo.anhubo.ui.impl;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
+import com.anhubo.anhubo.adapter.BuildAdapter;
+import com.anhubo.anhubo.adapter.UnitAdapter;
 import com.anhubo.anhubo.base.BaseFragment;
 import com.anhubo.anhubo.bean.MyPolygonBean;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.MyPolygonView;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * Created by Administrator on 2016/10/8.
@@ -17,6 +26,7 @@ import com.anhubo.anhubo.view.MyPolygonView;
 public class BuildFragment extends BaseFragment {
 
 
+    private ListView lvBuild;
     private RelativeLayout rlBuild01;
     private RelativeLayout rlBuild02;
     private TextView tvBuildFragMsg;
@@ -43,7 +53,7 @@ public class BuildFragment extends BaseFragment {
 
     @Override
     public void initView() {
-        // 统计图
+        // 统计图的外围布局
         rlBuild01 = findView(R.id.rl_build_01);
         rlBuild02 = findView(R.id.rl_build_02);
 
@@ -58,18 +68,32 @@ public class BuildFragment extends BaseFragment {
 
         // 设置下划线 setUnderline里面的参数是可变参数
         Utils.setUnderline(tvBuildFragMsg, tvBuildFragTest);
+
+        //ListView
+        lvBuild = findView(R.id.lv_build);
+        // 填充头布局
+        View view = View.inflate(mActivity,R.layout.header_build,null);
+        RelativeLayout rlBuild01 = (RelativeLayout) view.findViewById(R.id.rl_build_01);
+        RelativeLayout rlBuild02 = (RelativeLayout) view.findViewById(R.id.rl_build_02);
+        RelativeLayout rlBuild03 = (RelativeLayout) view.findViewById(R.id.rl_build_03);
+        lvBuild.addHeaderView(view);
+        BuildAdapter adapter = new BuildAdapter(this);
+        lvBuild.setAdapter(adapter);
+
     }
 
     private MyPolygonBean getPolygonData() {
         MyPolygonBean myPolygonBean = new MyPolygonBean();
-        String[] arrText = new String[]{"救援情况", "周边道路", "建筑情况", "三色预警", "设施设备","毗邻建筑"};
+        String[] arrText = new String[]{"救援情况", "周边道路", "建筑情况", "三色预警", "设施设备", "毗邻建筑"};
         myPolygonBean.setText(arrText);
-        int[] arrArea = new int[]{3, 1, 5, 2, 2,3};
+        int[] arrArea = new int[]{1, 1, 5, 2, 6, 3};
         myPolygonBean.setArea(arrArea);
         return myPolygonBean;
     }
 
-    /**设置监听*/
+    /**
+     * 设置监听
+     */
     @Override
     public void initListener() {
         // 统计图
@@ -87,9 +111,9 @@ public class BuildFragment extends BaseFragment {
 
     @Override
     public void processClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.ivTopBarleft_build_pen:
-                ToastUtils.showLongToast(mActivity,"编辑");
+                ToastUtils.showLongToast(mActivity, "编辑");
                 break;
             case R.id.tv_build_frag_02_msg:
                 ToastUtils.showLongToast(mActivity, "完善基础信息");

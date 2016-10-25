@@ -153,8 +153,8 @@ public class UploadingActivity2 extends BaseActivity {
         }
         isClick = !isClick;
 
-        if (!file1.exists()||!file2.exists()) {
-            ToastUtils.showLongToast(mActivity, "图片不存在");
+        if (file1==null||file2==null||!file1.exists()||!file2.exists()) {
+            ToastUtils.showLongToast(mActivity, "请先拍照或者获取图库图片");
             return;
         }
         /*if (!file2.exists()) {
