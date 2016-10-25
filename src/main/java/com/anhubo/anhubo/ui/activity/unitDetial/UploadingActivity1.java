@@ -1,0 +1,351 @@
+package com.anhubo.anhubo.ui.activity.unitDetial;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.provider.MediaStore;
+import android.text.format.DateFormat;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import com.anhubo.anhubo.R;
+import com.anhubo.anhubo.base.BaseActivity;
+import com.anhubo.anhubo.bean.MsgPerfectLicenseBean;
+import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.utils.ImageTools;
+import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.SpUtils;
+import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.view.ShowBottonDialog;
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import butterknife.InjectView;
+import butterknife.OnClick;
+import okhttp3.Call;
+
+/**
+ * Created by Administrator on 2016/10/17.
+ */
+public class UploadingActivity1 extends BaseActivity {
+
+    private static final int CAMERA = 0;
+    private static final int PICTURE = 1;
+    @InjectView(R.id.ll_takePhoto01)
+    LinearLayout llTakePhoto01;
+    @InjectView(R.id.btn_unloading01)
+    Button btnUnloading01;
+    @InjectView(R.id.iv_showPhoto01)
+    ImageView ivShowPhoto01;
+
+    private Button btnTakephoto;
+    private Button btnPhoto;
+    private Dialog dialog;
+    private String imgName;
+
+    private String selectedImagePath;
+    private File filePhoto02;
+    private File filePhoto01;
+    private boolean isClick = false;
+    @Override
+    protected int getContentViewId() {
+        return R.layout.activity_uploading1;
+    }
+
+    @Override
+    protected void initViews() {
+        setTopBarDesc("营业执照");
+
+    }
+
+    @Override
+    protected void onLoadDatas() {
+
+    }
+
+
+
+    @OnClick({R.id.ll_takePhoto01, R.id.btn_unloading01})
+    public void onClick(View view) {
+        //
+        switch (view.getId()) {
+            case R.id.ll_takePhoto01:
+                // 底部弹出对话框
+                showDialog();
+                break;
+            case R.id.btn_unloading01:
+                // 提交按钮，走网络
+                upLoading();
+                break;
+            case R.id.btn_popDialog_takephoto:
+                // 拍照
+                isClick = true;
+                takePhoto();
+                break;
+            case R.id.btn_popDialog_photo:
+                // 相册
+                isClick = false;
+                getPhoto();
+                break;
+        }
+    }
+
+    /**
+     * 拿到拍到的照片去上传
+     */
+    private void upLoading() {
+        // 获取
+        String businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
+        File file = null;
+        if (isClick) {
+            file = filePhoto01;
+        } else {
+            file = filePhoto02;
+        }
+        if (!file.exists()) {
+            ToastUtils.showLongToast(mActivity, "图片不存在");
+            return;
+        }
+        Map<String, String> params = new HashMap<>();
+        params.put("business_id", businessid);
+
+
+        String url = Urls.Url_UpLoading01;
+
+        OkHttpUtils.post()//
+                .addFile("file", "file01.png", file)//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
+
+
+    }
+
+    private Handler handler = new Handler();
+
+    class MyStringCallback extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+            System.out.println("UploadingActivity1+++===界面失败"+e.getMessage());
+
+            ToastUtils.showToast(mActivity, "网络有问题，请检查");
+
+        }
+
+        @Override
+        public void onResponse(String response) {
+
+            MsgPerfectLicenseBean licenseBean = new Gson().fromJson(response, MsgPerfectLicenseBean.class);
+            int code = licenseBean.code;
+            final String msg = licenseBean.msg;
+            if (code != 0) {
+                ToastUtils.showToast(mActivity, "上传失败");
+            }else{
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtils.showToast(mActivity, "上传成功");
+                        Intent intent = new Intent();
+                        intent.putExtra(Keys.ISCLICK1, true);
+                        setResult(1, intent);
+                        finish();
+                    }
+                }, 2000);
+            }
+        }
+    }
+
+    private void getPhoto() {
+
+        Intent intent = new Intent();
+        intent.setType("image/*");  // 开启Pictures画面Type设定为image
+        intent.setAction(Intent.ACTION_GET_CONTENT); //使用Intent.ACTION_GET_CONTENT这个Action
+        startActivityForResult(intent, PICTURE); //取得相片后返回到本画面
+        dialog.dismiss();
+
+    }
+
+    private void takePhoto() {
+        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(camera, CAMERA);
+        dialog.dismiss();
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK && null != data) {
+            switch (requestCode) {
+                case CAMERA:
+                    showPhoto01(data);
+                    break;
+                case PICTURE:
+                    showPhoto02(data);
+                    break;
+            }
+        }
+
+    }
+
+    private void showPhoto02(Intent data) {
+        ContentResolver resolver = getContentResolver();
+        //照片的原始资源地址
+        Uri originalUri = data.getData();
+        //System.out.println(originalUri.toString());  //" content://media/external/images/media/15838 "
+
+        //                  //将原始路径转换成图片的路径
+        selectedImagePath = uri2filePath(originalUri);
+        filePhoto02 = new File(selectedImagePath);
+        //                  System.out.println(selectedImagePath);  //" /mnt/sdcard/DCIM/Camera/IMG_20130603_185143.jpg "
+        try {
+            //使用ContentProvider通过URI获取原始图片
+            Bitmap photo = MediaStore.Images.Media.getBitmap(resolver, originalUri);
+
+            imgName = createPhotoFileName();
+            //写一个方法将此文件保存到本应用下面啦
+            savePicture(imgName, photo);
+
+            if (photo != null) {
+                //为防止原始图片过大导致内存溢出，这里先缩小原图显示，然后释放原始Bitmap占用的内存
+                Bitmap bitmap = ImageTools.zoomBitmap(photo, photo.getWidth() / 5, photo.getHeight() / 5);
+
+                llTakePhoto01.setVisibility(View.GONE);
+                //显示图片
+                ivShowPhoto01.setImageBitmap(bitmap);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取文件路径
+     **/
+    public String uri2filePath(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String path = cursor.getString(column_index);
+        return path;
+    }
+
+    /**
+     * 保存图片到本应用下
+     **/
+    private void savePicture(String fileName, Bitmap bitmap) {
+
+        FileOutputStream fos = null;
+        try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新内容写入会被覆盖
+            fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);// 把图片写入指定文件夹中
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != fos) {
+                    fos.close();
+                    fos = null;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    /**
+     * 创建图片不同的文件名
+     **/
+    private String createPhotoFileName() {
+        String fileName = "";
+        Date date = new Date(System.currentTimeMillis());  //系统当前时间
+        SimpleDateFormat dateFormat = new SimpleDateFormat("'IMG'_yyyyMMdd_HHmmss");
+        fileName = dateFormat.format(date) + ".jpg";
+        return fileName;
+    }
+
+    private void showPhoto01(Intent data) {
+        String sdState = Environment.getExternalStorageState();
+        if (!sdState.equals(Environment.MEDIA_MOUNTED)) {
+            ToastUtils.showLongToast(mActivity, "sd card unmount");
+            return;
+        }
+        new DateFormat();
+        String name = DateFormat.format("yyyyMMdd_hhmmss", Calendar.getInstance(Locale.CHINA)) + ".jpg";
+        Bundle bundle = data.getExtras();
+        //获取相机返回的数据，并转换为图片格式
+        Bitmap bitmap = (Bitmap) bundle.get("data");
+        FileOutputStream fout = null;
+        File file = new File("/sdcard/photo_anhubo/");
+        file.mkdirs();
+        String filename = file.getPath() + name;
+        filePhoto01 = new File(filename);//图片的文件
+        try {
+            fout = new FileOutputStream(filename);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fout);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fout.flush();
+                fout.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        llTakePhoto01.setVisibility(View.GONE);
+        //显示图片
+        ivShowPhoto01.setImageBitmap(bitmap);
+    }
+
+    /**
+     * 弹出对话框
+     */
+    private void showDialog() {
+        // 创建一个对象
+        View view = View.inflate(mActivity, R.layout.dialog_layout, null);
+        View btnCancel = view.findViewById(R.id.btn_popDialog_cancel);//取消按钮
+        //显示对话框
+        ShowBottonDialog showBottonDialog = new ShowBottonDialog(mActivity, view, btnCancel);
+        dialog = showBottonDialog.show();
+        //拍照按钮
+        btnTakephoto = (Button) view.findViewById(R.id.btn_popDialog_takephoto);
+        //相册获取
+        btnPhoto = (Button) view.findViewById(R.id.btn_popDialog_photo);
+        // 设置监听
+        btnTakephoto.setOnClickListener(this);
+        btnPhoto.setOnClickListener(this);
+
+
+    }
+
+}
