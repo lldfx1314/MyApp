@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,7 +35,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     protected Activity mActivity;
     protected static final String INTENT_FINISH = "intent_finish";
-    protected ImageView iv_basepager_left;
+    protected ImageButton iv_basepager_left;
     protected ImageView ivTopBarleftUnitMenu;
     protected ImageView ivTopBarRightUnitMsg;
     protected ImageView ivTopBarleftBuildPen;
@@ -114,7 +115,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     /**加载Title布局*/
     private void initTitleView() {
         // 找到顶部控件
-        iv_basepager_left = (ImageView) findViewById(R.id.ivTopBarLeft);//左上角返回按钮
+        iv_basepager_left = (ImageButton) findViewById(R.id.ivTopBarLeft);//左上角返回按钮
         ivTopBarleftUnitMenu = (ImageView) findViewById(R.id.ivTopBarleft_unit_menu);//左上角菜单按钮
         ivTopBarRightUnitMsg = (ImageView) findViewById(R.id.ivTopBarRight_unit_msg);//右上角信息按钮
         tvTopBarRight = (TextView) findViewById(R.id.tvTopBarRight);//右上角列表

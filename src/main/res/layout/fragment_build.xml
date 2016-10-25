@@ -13,11 +13,46 @@
         <RelativeLayout
             android:id="@+id/rl_build_01"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="270dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"></RelativeLayout>
-        >
+            android:layout_marginTop="30dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/backgroud_white"
+                    android:textSize="18sp"
+                    android:text="建筑安全指数"/>
+
+                <TextView
+                    android:id="@+id/tv_build_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/backgroud_white"
+                    android:layout_marginTop="5dp"
+                    android:textSize="38sp"
+                    android:text="0"
+                    />
+                <TextView
+                    android:id="@+id/tv_build_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray"
+                    android:layout_marginTop="5dp"
+                    android:textSize="16sp"
+
+                    android:text="评估时间 10-08"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+
         <!--蜘蛛网统计图-->
         <RelativeLayout
             android:id="@+id/rl_build_02"
@@ -25,6 +60,7 @@
             android:layout_height="230dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:visibility="gone"
             android:layout_marginTop="30dp">
 
             <com.anhubo.anhubo.view.MyPolygonView

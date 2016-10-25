@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,7 +26,7 @@ public abstract class BaseFragment extends Fragment  implements View.OnClickList
     private View rootView;
     protected Context mActivity;
     private View view;
-    protected ImageView iv_basepager_left;
+    protected ImageButton iv_basepager_left;
     protected ImageView ivTopBarleftUnitMenu;
     protected ImageView ivTopBarleftBuildPen;
     protected ImageView ivTopBarRightUnitMsg;
@@ -63,7 +64,7 @@ public abstract class BaseFragment extends Fragment  implements View.OnClickList
     /**加载Title布局*/
     private void initTitleView() {
         // 找到控件
-        iv_basepager_left = (ImageView) view.findViewById(R.id.ivTopBarLeft);//左上角返回按钮
+        iv_basepager_left = (ImageButton) view.findViewById(R.id.ivTopBarLeft);//左上角返回按钮
         ivTopBarleftUnitMenu = (ImageView) view.findViewById(R.id.ivTopBarleft_unit_menu);//左上角菜单按钮
         ivTopBarRightUnitMsg = (ImageView) view.findViewById(R.id.ivTopBarRight_unit_msg);//右上角信息按钮
         tvTopBarRight = (TextView) view.findViewById(R.id.tvTopBarRight);//右上角列表

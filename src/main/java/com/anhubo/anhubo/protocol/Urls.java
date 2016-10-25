@@ -72,4 +72,6 @@ public interface Urls {
     String Url_UnitMsgCenter = UrlBase +"Push/msg_list";
     /**单位下所有设备列表*/
     String Device_List = UrlBase +"Device/check_device_list";
+    /**建筑下建筑安全指数，三色环比*/
+    String Url_Build_score = UrlBase +"BulidingChart/index";
 }

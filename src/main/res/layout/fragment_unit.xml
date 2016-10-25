@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:text="蓝色预警解读"
+                android:text="三色预警解读"
                 android:textColor="@color/tv_gray"
                 android:textSize="16sp" />
         </RelativeLayout>

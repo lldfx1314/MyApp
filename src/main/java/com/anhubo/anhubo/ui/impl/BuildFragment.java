@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -13,12 +14,21 @@ import com.anhubo.anhubo.adapter.BuildAdapter;
 import com.anhubo.anhubo.adapter.UnitAdapter;
 import com.anhubo.anhubo.base.BaseFragment;
 import com.anhubo.anhubo.bean.MyPolygonBean;
+import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.MyPolygonView;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import okhttp3.Call;
 
 /**
  * Created by Administrator on 2016/10/8.
@@ -32,6 +42,7 @@ public class BuildFragment extends BaseFragment {
     private TextView tvBuildFragMsg;
     private TextView tvBuildFragTest;
     private MyPolygonView myPolygonView;
+    private String bulidingid;
 
     @Override
     public void initTitleBar() {
@@ -72,10 +83,11 @@ public class BuildFragment extends BaseFragment {
         //ListView
         lvBuild = findView(R.id.lv_build);
         // 填充头布局
-        View view = View.inflate(mActivity,R.layout.header_build,null);
-        RelativeLayout rlBuild01 = (RelativeLayout) view.findViewById(R.id.rl_build_01);
+        View view = View.inflate(mActivity, R.layout.header_build, null);
+        /*RelativeLayout rlBuild01 = (RelativeLayout) view.findViewById(R.id.rl_build_01);
         RelativeLayout rlBuild02 = (RelativeLayout) view.findViewById(R.id.rl_build_02);
-        RelativeLayout rlBuild03 = (RelativeLayout) view.findViewById(R.id.rl_build_03);
+        RelativeLayout rlBuild03 = (RelativeLayout) view.findViewById(R.id.rl_build_03);*/
+        ProgressBar proBarBuild = (ProgressBar) view.findViewById(R.id.proBar_build);
         lvBuild.addHeaderView(view);
         BuildAdapter adapter = new BuildAdapter(this);
         lvBuild.setAdapter(adapter);
@@ -91,6 +103,7 @@ public class BuildFragment extends BaseFragment {
         return myPolygonBean;
     }
 
+
     /**
      * 设置监听
      */
@@ -105,8 +118,44 @@ public class BuildFragment extends BaseFragment {
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            // 定义方法，获取建筑安全指数
+            getBuildData();
+        }
+    }
+
+    @Override
     public void initData() {
 
+    }
+
+    /**
+     * 获取建筑安全指数
+     */
+    private void getBuildData() {
+        bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
+        Map<String, String> params = new HashMap<>();
+        params.put("building_id", bulidingid);
+        String url = Urls.Url_Build_score;
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
+
+    }
+    class MyStringCallback extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+
+        }
+
+        @Override
+        public void onResponse(String response) {
+            System.out.println("BuildFragment+++==="+response);
+        }
     }
 
     @Override
@@ -128,8 +177,8 @@ public class BuildFragment extends BaseFragment {
                 tvBuildFragTest.setVisibility(View.VISIBLE);
                 break;
             case R.id.rl_build_02:
-                rlBuild02.setVisibility(View.GONE);
                 rlBuild01.setVisibility(View.VISIBLE);
+                rlBuild02.setVisibility(View.GONE);
                 tvBuildFragMsg.setVisibility(View.GONE);
                 tvBuildFragTest.setVisibility(View.GONE);
                 break;

@@ -3,6 +3,7 @@ package com.anhubo.anhubo.ui.activity.unitDetial;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.UnitMenuAdapter;
@@ -152,6 +153,7 @@ public class UnitMenuActivity extends BaseActivity {
             // 拿到一条信息记录
             record = records.get(i);
             String time = record.time;
+
             listTime.add(time);
             // 拿到详细记录的集合
             recordList = record.record_list;
@@ -166,7 +168,7 @@ public class UnitMenuActivity extends BaseActivity {
             }
             if(!isLoadMore){
                 // 给listView设置适配器
-                menuAdapter = new UnitMenuAdapter(mActivity, listTime, listUserName, listTypeId);
+                menuAdapter = new UnitMenuAdapter(mActivity, listTime, listUserName, listTypeId,pager);
                 lvStudy.setAdapter(menuAdapter);
             }else{
                 menuAdapter.notifyDataSetChanged();
