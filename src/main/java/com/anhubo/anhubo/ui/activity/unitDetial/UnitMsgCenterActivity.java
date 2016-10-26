@@ -1,28 +1,26 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
-import android.os.Bundle;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.UnitMsgCenterAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.UnitMsgCenterBean;
-import com.anhubo.anhubo.protocol.RequestResultListener;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
-import com.anhubo.anhubo.utils.NetUtil;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.RefreshListview;
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
+import okhttp3.Call;
 
 /**
  * Created by LUOLI on 2016/10/20.
@@ -105,18 +103,28 @@ public class UnitMsgCenterActivity extends BaseActivity {
         params.put("uid", uid);
         params.put("page", pager + "");
         pager++;
-        MyRequestResultListener requestResultListener = new MyRequestResultListener();
-        NetUtil.requestData(url, params, UnitMsgCenterBean.class, requestResultListener, 0);
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
+
     }
 
     @Override
     public void onClick(View v) {
 
     }
-
-    class MyRequestResultListener implements RequestResultListener<UnitMsgCenterBean> {
+    class MyStringCallback extends StringCallback {
         @Override
-        public void onRequestFinish(UnitMsgCenterBean bean, int what) {
+        public void onError(Call call, Exception e) {
+
+            System.out.println("UnitMsgCenterActivity+++===没拿到数据" + e.getMessage());
+        }
+
+        @Override
+        public void onResponse(String response) {
+            UnitMsgCenterBean bean = new Gson().fromJson(response, UnitMsgCenterBean.class);
             if (bean != null) {
                 processData(bean);
                 isLoadMore = false;
@@ -130,12 +138,8 @@ public class UnitMsgCenterActivity extends BaseActivity {
                 System.out.println("UnitMsgCenterActivity+++===没拿到bean对象");
             }
         }
-
-        @Override
-        public void showJsonStr(String str, int what) {
-            //System.out.println("UnitMsgCenterActivity+++===" + str);
-        }
     }
+
 
     private void processData(UnitMsgCenterBean bean) {
 

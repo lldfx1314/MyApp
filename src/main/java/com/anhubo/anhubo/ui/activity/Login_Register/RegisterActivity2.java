@@ -9,18 +9,20 @@ import android.widget.EditText;
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.Register_Com_Bean;
-import com.anhubo.anhubo.protocol.RequestResultListener;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.HomeActivity;
 import com.anhubo.anhubo.utils.Keys;
-import com.anhubo.anhubo.utils.NetUtil;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.HashMap;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 /**
  * Created by Administrator on 2016/9/27.
@@ -106,16 +108,22 @@ public class RegisterActivity2 extends BaseActivity {
         params.put("floor_name", floorName);//楼层数
         params.put("area_name", areaName);//区域名称
         params.put("business_name", "安互保"); //单位名称
-        MyRequestResultListener requestResultListener = new MyRequestResultListener();
-        NetUtil.requestData(url,params, Register_Com_Bean.class, requestResultListener,0);
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
     }
-    class MyRequestResultListener implements RequestResultListener<Register_Com_Bean> {
+    class MyStringCallback extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
 
-
+            System.out.println("RegisterActivity2+++===没拿到数据" + e.getMessage());
+        }
 
         @Override
-        public void onRequestFinish(Register_Com_Bean bean, int what) {
-
+        public void onResponse(String response) {
+            Register_Com_Bean bean = new Gson().fromJson(response, Register_Com_Bean.class);
             if(bean!=null){
                 // 拿到数据，开始存储数据，并跳转到主界面
                 code = bean.code;
@@ -138,12 +146,8 @@ public class RegisterActivity2 extends BaseActivity {
                 System.out.println("RegisterActivity2界面+++===没拿到bean对象");
             }
         }
-
-        @Override
-        public void showJsonStr(String str, int what) {
-            //System.out.println("RegisterActivity2界面+++==="+str);
-        }
     }
+
 
     private void enterHome() {
         Intent intent = new Intent(RegisterActivity2.this, HomeActivity.class);
