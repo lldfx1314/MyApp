@@ -135,9 +135,9 @@ public class UnitFragment extends BaseFragment {
         dotCheck = view.findViewById(R.id.dot_check);
         dotDrill = view.findViewById(R.id.dot_drill);
         //先隐藏小圆点
-       /* dotStudy.setVisibility(View.GONE);
+        dotStudy.setVisibility(View.GONE);
         dotCheck.setVisibility(View.GONE);
-        dotDrill.setVisibility(View.GONE);*/
+        dotDrill.setVisibility(View.GONE);
         lvUnit.addHeaderView(view);
         UnitAdapter adapter = new UnitAdapter(this);
         lvUnit.setAdapter(adapter);

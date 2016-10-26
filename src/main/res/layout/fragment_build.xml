@@ -48,7 +48,7 @@
                     android:layout_marginTop="5dp"
                     android:textSize="16sp"
 
-                    android:text="评估时间 10-08"/>
+                    android:text="评估时间 00-00"/>
             </LinearLayout>
 
         </RelativeLayout>
@@ -78,7 +78,7 @@
             android:layout_marginBottom="15dp"
             android:layout_marginLeft="16dp"
             android:enabled="true"
-            android:text="完善信息完善>>"
+            android:text="完善基础信息>>"
             android:textColor="@color/tv_gray"
             android:textSize="16sp"
             android:visibility="gone" />
@@ -102,7 +102,7 @@
     <ListView
         android:id="@+id/lv_build"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </ListView>
+        android:layout_height="match_parent"
+        android:divider="@null"/>
 
 </LinearLayout>

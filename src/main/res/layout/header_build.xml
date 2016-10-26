@@ -41,16 +41,17 @@
                     android:layout_height="6dp"
                     android:layout_above="@+id/tv_build_low"
                     android:layout_marginBottom="8dp"
+
                     android:background="@drawable/dot_red_shape" />
 
                 <TextView
                     android:id="@+id/tv_build_lowNum"
-                    android:layout_width="wrap_content"
+                    android:layout_width="52dp"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/tv_build_low"
                     android:layout_marginLeft="5dp"
                     android:layout_toRightOf="@+id/view_build_red"
-                    android:text="21"
+                    android:text="20"
                     android:textSize="30sp" />
 
                 <TextView
@@ -58,7 +59,6 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/tv_build_low"
                     android:layout_marginBottom="3dp"
-                    android:layout_marginLeft="5dp"
                     android:layout_toRightOf="@+id/tv_build_lowNum"
                     android:text="%"
                     android:textSize="20sp" />
@@ -68,7 +68,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:text="安全级别低"
                     android:textColor="@color/tv_gray"
                     android:textSize="14sp" />
@@ -88,7 +90,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="5dp"
-                android:layout_weight="1"
                 android:layout_centerInParent="true"
                 android:gravity="center">
 
@@ -102,12 +103,12 @@
 
                 <TextView
                     android:id="@+id/tv_build_middleNum"
-                    android:layout_width="wrap_content"
+                    android:layout_width="52dp"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/tv_build_middle"
                     android:layout_marginLeft="5dp"
                     android:layout_toRightOf="@+id/view_build_yellow"
-                    android:text="29"
+                    android:text="30"
                     android:textSize="30sp" />
 
                 <TextView
@@ -115,7 +116,6 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/tv_build_middle"
                     android:layout_marginBottom="3dp"
-                    android:layout_marginLeft="5dp"
                     android:layout_toRightOf="@+id/tv_build_middleNum"
                     android:text="%"
                     android:textSize="20sp" />
@@ -125,7 +125,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
                     android:text="安全级别中"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:textColor="@color/tv_gray"
                     android:textSize="14sp" />
             </RelativeLayout>
@@ -156,7 +159,7 @@
 
                 <TextView
                     android:id="@+id/tv_build_heighNum"
-                    android:layout_width="wrap_content"
+                    android:layout_width="52dp"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/tv_build_heigh"
                     android:layout_marginLeft="5dp"
@@ -169,7 +172,6 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/tv_build_heigh"
                     android:layout_marginBottom="3dp"
-                    android:layout_marginLeft="5dp"
                     android:layout_toRightOf="@+id/tv_build_heighNum"
                     android:text="%"
                     android:textSize="20sp" />
@@ -179,7 +181,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:text="安全级别高"
                     android:textColor="@color/tv_gray"
                     android:textSize="14sp" />
@@ -188,12 +192,33 @@
 
         </RelativeLayout>
     </LinearLayout>
-    <ProgressBar
-        android:id="@+id/proBar_build"
-        style="@android:style/Widget.ProgressBar.Horizontal"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+        android:layout_height="5dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
         android:layout_marginTop="5dp"
-        android:layout_height="5dp" />
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/red"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/tv_shap_red1"/>
+        <TextView
+            android:id="@+id/yellow"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/tv_shap_yellow"/>
+        <TextView
+            android:id="@+id/green"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/tv_shap_green2"/>
+
+
+    </LinearLayout>
 </LinearLayout>
+
+
+<!---->

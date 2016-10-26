@@ -73,5 +73,7 @@ public interface Urls {
     /**单位下所有设备列表*/
     String Device_List = UrlBase +"Device/check_device_list";
     /**建筑下建筑安全指数，三色环比*/
-    String Url_Build_score = UrlBase +"BulidingChart/index";
+    String Url_Build_score = UrlBase +"BuildingChart/details";
+    /**建筑，三色预警*/
+    String Url_Build_ThreeColour = UrlBase +"BuildingChart/Threec";
 }

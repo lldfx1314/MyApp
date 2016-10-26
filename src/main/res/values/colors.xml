@@ -19,9 +19,13 @@
     <color name="unit_top">#1D212F</color>
     <!--统计图下面TextView的颜色-->
     <color name="tv_gray">#939498</color>
-    <color name="dot_red">#FF6927</color>
-    <color name="dot_yellow">#FFE718</color>
-    <color name="dot_green">#61A21B</color>
+
+    <!--三色小圆点的颜色-->
+    <color name="dot_red">#ff2828</color>
+    <color name="dot_yellow">#ffe718</color>
+    <color name="dot_green">#61a21b</color>
+
+
     <color name="text_biack">#1C1C1C</color>
     <color name="view_gray">#F0EFF1</color>
     <color name="bg_upload">#F4F4F4</color>
