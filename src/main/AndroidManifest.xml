@@ -77,7 +77,15 @@
         <activity android:name=".ui.activity.unitDetial.DeviceList" />
 
         <!--建筑界面-->
-        <activity android:name=".ui.activity.buildDetial.Build_CltMsgActivity"></activity>
+        <activity android:name=".ui.activity.buildDetial.Build_CltMsgActivity"/>
+
+
+        <!--我的界面-->
+        <activity android:name=".ui.activity.MyDetial.InvateActivity" />
+        <activity android:name=".ui.activity.MyDetial.SettingActivity" />
+        <activity android:name=".ui.activity.MyDetial.AboutWeActivity" />
+
+
         <!--欢迎界面-->
         <activity android:name=".ui.activity.WelcomeActivity">
             <intent-filter>

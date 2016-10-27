@@ -72,4 +72,6 @@ public interface Keys {
     String DEVICECHECKEDNUM = "DEVICECHECKEDNUM";
     /**添加的设备总数，用来做缓存*/
     String DEVICESNUM = "DEVICESNUM";
+    /**邀请*/
+    String INVATE = "invate";
 }

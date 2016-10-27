@@ -49,6 +49,10 @@ public interface Urls {
     String Url_RegCom = UrlBase +"User/businessRegister";
     /**学习*/
     String Url_UnitStudy = "http://anhubo.com/s/html/answerSheetAO.html";
+    /**邀请注册*/
+    String Url_MyInvare = "http://anhubo.com/s/html/inviteRegisterAO.html?uid=%@";
+    /**关于我们*/
+    String Url_MyAboutWe = "http://anhubo.com/s/html/AboutAnhubo.html";
     /**学习、检查记录*/
     String Url_studyRecord = UrlBase +"Record/get_re_list";
     String Url_Unit = UrlBase +"BusinessChart/index";

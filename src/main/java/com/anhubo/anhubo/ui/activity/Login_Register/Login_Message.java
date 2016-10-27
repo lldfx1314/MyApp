@@ -150,12 +150,12 @@ public class Login_Message extends BaseActivity {
             ToastUtils.showToast(mActivity,"验证码长度为4");
             return;
         }
-        login_NoHttp();
+        login_OKHttp();
     }
 
 
 
-    private void login_NoHttp() {
+    private void login_OKHttp() {
         String url = Urls.Url_LoginMsg;
         // 封装请求参数
         HashMap<String, String> params = new HashMap<String, String>();
