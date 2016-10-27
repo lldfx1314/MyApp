@@ -11,18 +11,20 @@ import android.widget.EditText;
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.Register1_Bean;
-import com.anhubo.anhubo.protocol.RequestResultListener;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.InputWatcher;
 import com.anhubo.anhubo.utils.Keys;
-import com.anhubo.anhubo.utils.NetUtil;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.HashMap;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 /**
  * 密码注册的界面
@@ -141,14 +143,24 @@ public class PwdRegisterActivity extends BaseActivity {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("telphone", phoneNumber);
         params.put("password", firstPwd);
-        MyRequestResultListener requestResultListener = new MyRequestResultListener();
-        NetUtil.requestData(url, params, Register1_Bean.class, requestResultListener, 0);
+
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
     }
 
-
-    class MyRequestResultListener implements RequestResultListener<Register1_Bean> {
+    class MyStringCallback extends StringCallback {
         @Override
-        public void onRequestFinish(Register1_Bean bean, int what) {
+        public void onError(Call call, Exception e) {
+
+            System.out.println("PwdRegisterActivity+++===没拿到数据" + e.getMessage());
+        }
+
+        @Override
+        public void onResponse(String response) {
+            Register1_Bean bean = new Gson().fromJson(response, Register1_Bean.class);
             if (bean != null) {
                 int uid = bean.data.uid;
                 //System.out.println("拿到uid了"+uid);
@@ -165,14 +177,9 @@ public class PwdRegisterActivity extends BaseActivity {
             } else {
                 System.out.println("PwdRegisterActivity没拿到uid");
             }
-
-        }
-
-        @Override
-        public void showJsonStr(String str, int what) {
-            //System.out.println(str);
         }
     }
+
 
     /**
      * 获取输入的内容

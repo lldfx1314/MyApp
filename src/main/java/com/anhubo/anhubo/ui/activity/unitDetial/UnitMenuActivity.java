@@ -1,27 +1,26 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.UnitMenuAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.StudyBean;
-import com.anhubo.anhubo.protocol.RequestResultListener;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
-import com.anhubo.anhubo.utils.NetUtil;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.RefreshListview;
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import butterknife.InjectView;
+import okhttp3.Call;
 
 /**
  * Created by Administrator on 2016/10/11.
@@ -95,8 +94,12 @@ public class UnitMenuActivity extends BaseActivity {
         params.put("business_id", businessId);
         params.put("page", pager + "");
         pager++;
-        MyRequestResultListener requestResultListener = new MyRequestResultListener();
-        NetUtil.requestData(url, params, StudyBean.class, requestResultListener, 0);
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
+
     }
 
     class MyOnRefreshingListener implements RefreshListview.OnRefreshingListener {
@@ -118,31 +121,30 @@ public class UnitMenuActivity extends BaseActivity {
         }
     }
 
-
-    class MyRequestResultListener implements RequestResultListener<StudyBean> {
+    class MyStringCallback extends StringCallback {
         @Override
-        public void onRequestFinish(StudyBean bean, int what) {
-            if (what == 0) {
-                if (bean != null) {
-                    processData(bean);
-                    isLoadMore = false;
-                    // 恢复加载更多状态
-                    lvStudy.loadMoreFinished();
-                } else {
-                    isLoadMore = false;
-                    // 恢复加载更多状态
-                    lvStudy.loadMoreFinished();
-                    // 没拿到bean对象
-                    System.out.println("UnitMenuActivity+++===没拿到bean对象");
-                }
+        public void onError(Call call, Exception e) {
+            System.out.println("UnitMenuActivity+++===没拿到数据" + e.getMessage());
+        }
+
+        @Override
+        public void onResponse(String response) {
+            StudyBean bean = new Gson().fromJson(response, StudyBean.class);
+            if (bean != null) {
+                processData(bean);
+                isLoadMore = false;
+                // 恢复加载更多状态
+                lvStudy.loadMoreFinished();
+            } else {
+                isLoadMore = false;
+                // 恢复加载更多状态
+                lvStudy.loadMoreFinished();
+                // 没拿到bean对象
+                System.out.println("UnitMenuActivity+++===没拿到bean对象");
             }
         }
-
-        @Override
-        public void showJsonStr(String str, int what) {
-            //System.out.println("UnitMenuActivity+++===" + str);
-        }
     }
+
 
     private void processData(StudyBean bean) {
         // 拿到解析的数据

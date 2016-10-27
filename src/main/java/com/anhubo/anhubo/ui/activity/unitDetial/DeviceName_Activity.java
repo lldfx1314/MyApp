@@ -11,13 +11,16 @@ import com.anhubo.anhubo.adapter.DeviceNameAdapterOne;
 import com.anhubo.anhubo.adapter.DeviceNameAdapterSecond;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.DeviceNameBean;
-import com.anhubo.anhubo.protocol.RequestResultListener;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
-import com.anhubo.anhubo.utils.NetUtil;
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
 
 /**
  * 这个类是用来设置设备名称的
@@ -79,13 +82,22 @@ public class DeviceName_Activity extends BaseActivity {
     private void getData() {
 
         String url = Urls.Url_GetDevName;
-        MyRequestResultListener requestResultListener = new MyRequestResultListener();
-        NetUtil.requestData(url, null, DeviceNameBean.class, requestResultListener, 0);
-    }
 
-    class MyRequestResultListener implements RequestResultListener<DeviceNameBean> {
+        OkHttpUtils.post()//
+                .url(url)//
+                .build()//
+                .execute(new MyStringCallback());
+    }
+    class MyStringCallback extends StringCallback {
         @Override
-        public void onRequestFinish(DeviceNameBean bean, int what) {
+        public void onError(Call call, Exception e) {
+
+            System.out.println("DeviceName_Activity+++===没拿到数据" + e.getMessage());
+        }
+
+        @Override
+        public void onResponse(String response) {
+            DeviceNameBean bean = new Gson().fromJson(response, DeviceNameBean.class);
             if (bean != null) {
                 showData(bean);
                 // 设置第一个适配器
@@ -95,12 +107,8 @@ public class DeviceName_Activity extends BaseActivity {
                 System.out.println("DeviceName_Activity+++===没拿到bean对象");
             }
         }
-
-        @Override
-        public void showJsonStr(String str, int what) {
-            //System.out.println("DeviceName_Activity+++==="+str);
-        }
     }
+
 
     private void setAdapterOne() {
         // 拿到数据后调用构造把数据传过去

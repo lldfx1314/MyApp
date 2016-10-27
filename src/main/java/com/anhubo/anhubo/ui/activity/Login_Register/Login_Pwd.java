@@ -16,15 +16,18 @@ import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.HomeActivity;
 import com.anhubo.anhubo.utils.InputWatcher;
 import com.anhubo.anhubo.utils.Keys;
-import com.anhubo.anhubo.utils.NetUtil;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.HashMap;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 /**
  * Created by Administrator on 2016/9/27.
@@ -146,16 +149,26 @@ public class Login_Pwd extends BaseActivity {
         HashMap<String, String> params = new HashMap<>();
         params.put("telphone", phoneNumber);
         params.put("password", pwd);
-        MyRequestResultListener requestResultListener = new MyRequestResultListener();
-        NetUtil.requestData(url, params, Login_Bean.class, requestResultListener, 0);
+
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
+
+
     }
 
+    class MyStringCallback extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
 
-    class MyRequestResultListener implements RequestResultListener<Login_Bean> {
-
+            System.out.println("Login_Pwd+++===没拿到数据" + e.getMessage());
+        }
 
         @Override
-        public void onRequestFinish(Login_Bean bean, int what) {
+        public void onResponse(String response) {
+            Login_Bean bean = new Gson().fromJson(response, Login_Bean.class);
             if (bean != null) {
                 // 获取到数据
                 String code = bean.code;
@@ -203,11 +216,7 @@ public class Login_Pwd extends BaseActivity {
                 System.out.println("Login_Pwd界面没获取到bean对象");
             }
         }
-
-        @Override
-        public void showJsonStr(String str, int what) {
-            //System.out.println("Login_Pwd界面" + str);
-        }
+    }
 
         /**
          * 携带参数跳转到注册的第二个界面
@@ -236,7 +245,7 @@ public class Login_Pwd extends BaseActivity {
         }
 
 
-    }
+
 
     private void enterHome() {
         startActivity(new Intent(Login_Pwd.this, HomeActivity.class));

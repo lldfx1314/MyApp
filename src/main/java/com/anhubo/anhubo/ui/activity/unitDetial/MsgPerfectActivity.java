@@ -93,8 +93,6 @@ public class MsgPerfectActivity extends BaseActivity {
     private PopOneHelper popOneHelper;
     private String businessId;
     private Dialog dialog;
-    private ListView lvMsgPerfectLeft;
-    private ListView lvMsgPerfectRight;
 
     public static List<String> mainList = new ArrayList<>();
     private List<MsgPerfect_UsePro_Bean.Data.Properties> list;
@@ -134,8 +132,12 @@ public class MsgPerfectActivity extends BaseActivity {
                 HashMap<String, String> params = new HashMap<>();
                 params.put("business_id", businessId);
                 params.put("employ_num", str);
-                MyRequestResultListener1 requestResultListener = new MyRequestResultListener1();
-                NetUtil.requestData(url, params, MsgPerfectMemberBean.class, requestResultListener, 0);
+                OkHttpUtils.post()//
+                        .url(url)//
+                        .params(params)//
+                        .build()//
+                        .execute(new MyStringCallback1());
+
             }
         });
     }
@@ -148,8 +150,11 @@ public class MsgPerfectActivity extends BaseActivity {
         HashMap<String, String> params = new HashMap<>();
         String businessId = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
         params.put("business_id", businessId);
-        MyRequestResultListener requestResultListener = new MyRequestResultListener();
-        NetUtil.requestData(url, params, MsgPerfectBean.class, requestResultListener, 0);
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
     }
 
 
@@ -161,9 +166,16 @@ public class MsgPerfectActivity extends BaseActivity {
     /**
      * 员工数的网络强求
      */
-    class MyRequestResultListener1 implements RequestResultListener<MsgPerfectMemberBean> {
+    class MyStringCallback1 extends StringCallback {
         @Override
-        public void onRequestFinish(MsgPerfectMemberBean bean, int what) {
+        public void onError(Call call, Exception e) {
+
+            System.out.println("MsgPerfectActivity+++员工人数===没拿到数据" + e.getMessage());
+        }
+
+        @Override
+        public void onResponse(String response) {
+            MsgPerfectMemberBean bean = new Gson().fromJson(response, MsgPerfectMemberBean.class);
             if (bean != null) {
                 int code = bean.code;
                 String msg = bean.msg;
@@ -173,19 +185,22 @@ public class MsgPerfectActivity extends BaseActivity {
                 System.out.println("MsgPerfectActivity上传员工数量+++===界面没拿到bean对象");
             }
         }
-
-        @Override
-        public void showJsonStr(String str, int what) {
-            //System.out.println("MsgPerfectActivity上传员工数量+++===" + str);
-        }
     }
 
     /**
      * 首次加载网络
      */
-    class MyRequestResultListener implements RequestResultListener<MsgPerfectBean> {
+
+    class MyStringCallback extends StringCallback {
         @Override
-        public void onRequestFinish(MsgPerfectBean bean, int what) {
+        public void onError(Call call, Exception e) {
+
+            System.out.println("MsgPerfectActivity+++首次加载网络===没拿到数据" + e.getMessage());
+        }
+
+        @Override
+        public void onResponse(String response) {
+            MsgPerfectBean bean = new Gson().fromJson(response, MsgPerfectBean.class);
             if (bean != null) {
 
                 // 营业执照
@@ -206,12 +221,8 @@ public class MsgPerfectActivity extends BaseActivity {
                 System.out.println("MsgPerfectActivity界面+++===没拿到bean对象");
             }
         }
-
-        @Override
-        public void showJsonStr(String str, int what) {
-            //System.out.println("MsgPerfectActivity+++===" + str);
-        }
     }
+
 
     private void isShowView() {
 
@@ -422,14 +433,14 @@ public class MsgPerfectActivity extends BaseActivity {
                         .url(url)
                         .params(params)//
                         .build()//
-                        .execute(new MyStringCallback());
+                        .execute(new MyStringCallback2());
                 adapterSecond.notifyDataSetChanged();
 
             }
         });
     }
     /**场所使用性质*/
-    class MyStringCallback extends StringCallback{
+    class MyStringCallback2 extends StringCallback{
         @Override
         public void onError(Call call, Exception e) {
             ToastUtils.showToast(mActivity,"网络有问题，请检查");

@@ -1,6 +1,5 @@
 package com.anhubo.anhubo.ui.impl;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -71,6 +70,7 @@ public class BuildFragment extends BaseFragment {
     private TextView tvBuildLowNum;
     private TextView tvBuildMiddleNum;
     private TextView tvBuildHeighNum;
+    private TextView bottom;
 
     @Override
     public void initTitleBar() {
@@ -129,6 +129,9 @@ public class BuildFragment extends BaseFragment {
         red = (TextView) view.findViewById(R.id.red);
         green = (TextView) view.findViewById(R.id.green);
         yellow = (TextView) view.findViewById(R.id.yellow);
+        // 底色
+        bottom = (TextView) view.findViewById(R.id.bottom);
+
 
         //ListView添加脚布局
         lvBuild.addHeaderView(view);
@@ -140,10 +143,18 @@ public class BuildFragment extends BaseFragment {
 
     @Override
     public void initData() {
-        bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
-        getBuildData();
-        // 定义方法获取三色预警比例
-        getThreeWarning();
+
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
+            getBuildData();
+            // 定义方法获取三色预警比例
+            getThreeWarning();
+        }
     }
 
     /**
@@ -159,13 +170,6 @@ public class BuildFragment extends BaseFragment {
         tvBuildFragTest.setOnClickListener(this);
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-
-        }
-    }
 
     /**
      * ****************************************************
@@ -208,6 +212,7 @@ public class BuildFragment extends BaseFragment {
                 tvBuildMiddleNum.setText(yellowNumber + "");
                 tvBuildHeighNum.setText(greenNumber + "");
                 //设置权重
+                bottom.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0));
                 red.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, redNumber));
                 yellow.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, yellowNumber));
                 green.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, greenNumber));
@@ -250,7 +255,7 @@ public class BuildFragment extends BaseFragment {
 
         @Override
         public void onResponse(String response) {
-//            System.out.println("BuildFragment建筑安全指数+++===" + response);
+            //            System.out.println("BuildFragment建筑安全指数+++===" + response);
             list = new ArrayList<>();// 创建一个数组
             arrScores = new int[6];
 
@@ -306,7 +311,7 @@ public class BuildFragment extends BaseFragment {
                 rlBuild01.setVisibility(View.GONE);
                 rlBuild02.setVisibility(View.VISIBLE);
                 tvBuildFragMsg.setVisibility(View.VISIBLE);
-               // tvBuildFragTest.setVisibility(View.VISIBLE);
+                // tvBuildFragTest.setVisibility(View.VISIBLE);
                 break;
             case R.id.rl_build_02:
                 rlBuild01.setVisibility(View.VISIBLE);
@@ -319,7 +324,6 @@ public class BuildFragment extends BaseFragment {
 
         }
     }
-
 
 
     /**

@@ -21,15 +21,18 @@ import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.Register1_Bean;
 import com.anhubo.anhubo.bean.Security_Bean;
 import com.anhubo.anhubo.bean.Security_Token_Bean;
-import com.anhubo.anhubo.protocol.RequestResultListener;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.InputWatcher;
 import com.anhubo.anhubo.utils.Keys;
-import com.anhubo.anhubo.utils.NetUtil;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.HashMap;
+
+import okhttp3.Call;
 
 /**
  * 这是注册界面
@@ -260,7 +263,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     }
 
     /**
-     * Nohttp请求
+     * 网络请求
      * 下一步的网络请求
      */
     private void getUId() {
@@ -271,55 +274,56 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         params.put("verify_code", securityCode);
         params.put("password", pwd);
         params.put("users_qrcode", inviteCode);
-        MyRequestResultListener requestResultListener = new MyRequestResultListener();
-        NetUtil.requestData(url, params, Register1_Bean.class, requestResultListener, 2);
 
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
     }
 
     /**
      * 请求结果的监听器
      */
-    class MyRequestResultListener implements RequestResultListener<Register1_Bean> {
+    class MyStringCallback extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+
+            System.out.println("RegisterActivity+++===没拿到数据" + e.getMessage());
+        }
 
         @Override
-        public void onRequestFinish(Register1_Bean register1Bean, int what) {
-            if (what == 2) {
-                if (register1Bean != null) {
-                    String code = register1Bean.code;
-                    //System.out.println(code);
-                    String msg = register1Bean.msg;
-                    //System.out.println(msg);
-                    int uid = register1Bean.data.uid;
-                    //System.out.println("uid+++===" + uid);
-                    switch (code) {
-                        case "0":// 注册成功
-                            // 进入注册的第二个界面
-                            enterRegisterActivity2(uid);
-                            break;
-                        case "102":// 验证码错误
-                            ToastUtils.showToast(mActivity, msg);
-                            break;
-                        case "103":// 邀请码错误
-                            ToastUtils.showToast(mActivity, msg);
-                            break;
-                        case "108":// 该手机号码已注册
-                            ToastUtils.showToast(mActivity, msg);
-                            break;
+        public void onResponse(String response) {
+            Register1_Bean register1Bean = new Gson().fromJson(response, Register1_Bean.class);
+            if (register1Bean != null) {
+                String code = register1Bean.code;
+                //System.out.println(code);
+                String msg = register1Bean.msg;
+                //System.out.println(msg);
+                int uid = register1Bean.data.uid;
+                //System.out.println("uid+++===" + uid);
+                switch (code) {
+                    case "0":// 注册成功
+                        // 进入注册的第二个界面
+                        enterRegisterActivity2(uid);
+                        break;
+                    case "102":// 验证码错误
+                        ToastUtils.showToast(mActivity, msg);
+                        break;
+                    case "103":// 邀请码错误
+                        ToastUtils.showToast(mActivity, msg);
+                        break;
+                    case "108":// 该手机号码已注册
+                        ToastUtils.showToast(mActivity, msg);
+                        break;
 
-                    }
-                } else {
-                    System.out.println("RegisterActivity界面+++===没获取到bean");
                 }
+            } else {
+                System.out.println("RegisterActivity界面+++===没获取到bean");
             }
-
         }
-
-        @Override
-        public void showJsonStr(String str, int what) {
-
-        }
-
     }
+
 
     /**
      * 进入注册的第二个界面
@@ -387,24 +391,27 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         HashMap<String, String> params = new HashMap<>();
         params.put("mobile", phoneNumber);
         params.put("token", token);
-        MyRequestResultListener2 requestResultListener = new MyRequestResultListener2();
-        NetUtil.requestData(url, params, Security_Bean.class, requestResultListener, 1);
-    }
 
-    class MyRequestResultListener2 implements RequestResultListener<Security_Bean> {
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback2());
+    }
+    class MyStringCallback2 extends StringCallback {
         @Override
-        public void onRequestFinish(Security_Bean bean, int what) {
-            if (what == 1) {
-                // 第二次请求网络
-            }
+        public void onError(Call call, Exception e) {
+
+            System.out.println("RegisterActivity+++获取验证码===没拿到数据" + e.getMessage());
         }
 
         @Override
-        public void showJsonStr(String str, int what) {
-            //System.out.println("Login_Message+++==="+str);
+        public void onResponse(String response) {
+            Security_Bean bean = new Gson().fromJson(response, Security_Bean.class);
 
         }
     }
+
 
     /**
      * 第一次请求获取验证的token
@@ -412,29 +419,28 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private void getToken() {
 
         String url = Urls.Url_Token;
-
-        MyRequestResultListener1 requestResultListener = new MyRequestResultListener1();
-        NetUtil.requestData(url, null, Security_Token_Bean.class, requestResultListener, 0);
+        OkHttpUtils.post()//
+                .url(url)//
+                .build()//
+                .execute(new MyStringCallback1());
     }
-
-    class MyRequestResultListener1 implements RequestResultListener<Security_Token_Bean> {
+    class MyStringCallback1 extends StringCallback {
         @Override
-        public void onRequestFinish(Security_Token_Bean bean, int what) {
-            if (what == 0) {
-                if (bean != null) {
-                    // 拿到checkCompleteBean，获取token
-                    token = bean.data.token;
-                } else {
-                    System.out.println("Login_Message+++===没拿到bean对象");
+        public void onError(Call call, Exception e) {
+            System.out.println("UnitMenuActivity+++token===没拿到数据" + e.getMessage());
+        }
 
-                }
+        @Override
+        public void onResponse(String response) {
+            Security_Token_Bean bean = new Gson().fromJson(response, Security_Token_Bean.class);
+            if (bean != null) {
+                // 拿到checkCompleteBean，获取token
+                token = bean.data.token;
+            } else {
+                System.out.println("Login_Message+++===没拿到bean对象");
+
             }
         }
-
-        @Override
-        public void showJsonStr(String str, int what) {
-            //System.out.println("Login_Message+++==="+str);
-
-        }
     }
+
 }

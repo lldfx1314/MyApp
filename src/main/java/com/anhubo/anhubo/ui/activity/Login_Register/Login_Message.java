@@ -12,17 +12,20 @@ import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.Login_Bean;
 import com.anhubo.anhubo.bean.Security_Bean;
 import com.anhubo.anhubo.bean.Security_Token_Bean;
-import com.anhubo.anhubo.protocol.RequestResultListener;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.HomeActivity;
 import com.anhubo.anhubo.utils.InputWatcher;
 import com.anhubo.anhubo.utils.Keys;
-import com.anhubo.anhubo.utils.NetUtil;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.HashMap;
+
+import okhttp3.Call;
 
 /**
  * Created by Administrator on 2016/9/27.
@@ -158,68 +161,75 @@ public class Login_Message extends BaseActivity {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("telphone", phoneNumber);
         params.put("verify_code", securityCode);
-        MyRequestResultListener requestResultListener = new MyRequestResultListener();
-        NetUtil.requestData(url, params, Login_Bean.class, requestResultListener, 2);
+
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback2());
+
+
+    }
+
+    class MyStringCallback2 extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+
+            System.out.println("Login_Message+++===没拿到数据" + e.getMessage());
+        }
+
+        @Override
+        public void onResponse(String response) {
+            Login_Bean bean = new Gson().fromJson(response, Login_Bean.class);
+            if(bean!=null) {
+                // 获取到数据
+                String code = bean.code;
+                String msg = bean.msg;
+                Login_Bean.Data data = bean.data;
+                String uid = data.uid;
+                String businessId = data.business_id;
+                String buildingId = data.building_id;
+                String buildingName = data.building_name;
+                String businessName = data.business_name;
+
+                // 根据code值判断跳转到那个界面
+                switch (code){
+                    case "101"://网络错误
+                        ToastUtils.showToast(mActivity,msg);
+                        break;
+                    case "102"://验证码错误
+                        ToastUtils.showToast(mActivity,msg);
+                        break;
+                    case "104"://该手机号码没注册，携带输入的手机号跳转到密码注册界面
+                        goToPwdRegisterActivity();
+                        break;
+                    case "105":// 跳转到注册的第二步
+                        // 获取到uid后携带uid跳转到RegisterActivity2界面
+                        goTo_Activity(uid);
+                        break;
+                    case "106":// 跳转到注册的第二步
+                        goTo_Activity(uid);
+                        break;
+                    case "0":// 登录成功，携带返回的参数跳转到单位界面，同时存一下把uid等参数保存到本地
+
+                        // 保存参数
+                        SpUtils.putParam(mActivity,Keys.UID,uid);
+                        SpUtils.putParam(mActivity,Keys.BUSINESSID,businessId);
+                        SpUtils.putParam(mActivity,Keys.BULIDINGID,buildingId);
+                        SpUtils.putParam(mActivity,Keys.BUILDINGNAME,buildingName);
+                        SpUtils.putParam(mActivity,Keys.BUSINESSNAME,businessName);
+                        //跳转到主页面
+                        enterHome();
+                        break;
+                }
+
+            }else{
+                System.out.println("Login_Message+++===没拿到bean对象");
+            }
+        }
     }
 
 
-    class MyRequestResultListener implements RequestResultListener<Login_Bean> {
-
-        @Override
-        public void onRequestFinish(Login_Bean bean,int what) {
-            if(what == 2){
-                if(bean!=null) {
-                    // 获取到数据
-                    String code = bean.code;
-                    String msg = bean.msg;
-                    Login_Bean.Data data = bean.data;
-                    String uid = data.uid;
-                    String businessId = data.business_id;
-                    String buildingId = data.building_id;
-                    String buildingName = data.building_name;
-                    String businessName = data.business_name;
-
-                    // 根据code值判断跳转到那个界面
-                    switch (code){
-                        case "101"://网络错误
-                            ToastUtils.showToast(mActivity,msg);
-                            break;
-                        case "102"://验证码错误
-                            ToastUtils.showToast(mActivity,msg);
-                            break;
-                        case "104"://该手机号码没注册，携带输入的手机号跳转到密码注册界面
-                            goToPwdRegisterActivity();
-                            break;
-                        case "105":// 跳转到注册的第二步
-                            // 获取到uid后携带uid跳转到RegisterActivity2界面
-                            goTo_Activity(uid);
-                            break;
-                        case "106":// 跳转到注册的第二步
-                            goTo_Activity(uid);
-                            break;
-                        case "0":// 登录成功，携带返回的参数跳转到单位界面，同时存一下把uid等参数保存到本地
-
-                            // 保存参数
-                            SpUtils.putParam(mActivity,Keys.UID,uid);
-                            SpUtils.putParam(mActivity,Keys.BUSINESSID,businessId);
-                            SpUtils.putParam(mActivity,Keys.BULIDINGID,buildingId);
-                            SpUtils.putParam(mActivity,Keys.BUILDINGNAME,buildingName);
-                            SpUtils.putParam(mActivity,Keys.BUSINESSNAME,businessName);
-                            //跳转到主页面
-                            enterHome();
-                            break;
-                    }
-
-                }else{
-                    System.out.println("Login_Message+++===没拿到bean对象");
-                }
-            }
-        }
-
-        @Override
-        public void showJsonStr(String str,int what) {
-            //System.out.println("Login_Message页面"+str);
-        }
 
         /**携带输入的手机号跳转到密码注册界面*/
         private void goToPwdRegisterActivity() {
@@ -242,7 +252,7 @@ public class Login_Message extends BaseActivity {
                 ToastUtils.showToast(mActivity, "网络错误，请重试");
             }
         }
-    }
+
 
     private void enterHome() {
         startActivity(new Intent(Login_Message.this, HomeActivity.class));
@@ -298,23 +308,27 @@ public class Login_Message extends BaseActivity {
         HashMap<String, String> params = new HashMap<>();
         params.put("mobile", phoneNumber);
         params.put("token", token);
-        MyRequestResultListener2 requestResultListener = new MyRequestResultListener2();
-        NetUtil.requestData(url,params, Security_Bean.class, requestResultListener,1);
+
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback1());
     }
-    class MyRequestResultListener2 implements RequestResultListener<Security_Bean>{
+
+    class MyStringCallback1 extends StringCallback {
         @Override
-        public void onRequestFinish(Security_Bean bean, int what) {
-            if(what == 1){
-                // 第二次请求网络
-            }
+        public void onError(Call call, Exception e) {
+
+            System.out.println("Login_Message+++验证码===没拿到数据" + e.getMessage());
         }
 
         @Override
-        public void showJsonStr(String str, int what) {
-            //System.out.println("Login_Message+++==="+str);
-
+        public void onResponse(String response) {
+            Security_Bean bean = new Gson().fromJson(response, Security_Bean.class);
         }
     }
+
 
     /**
      * 第一次请求获取验证的token
@@ -322,30 +336,32 @@ public class Login_Message extends BaseActivity {
     private void getToken() {
 
         String url = Urls.Url_Token;
+        OkHttpUtils.post()//
+                .url(url)//
+                .build()//
+                .execute(new MyStringCallback());
 
-        MyRequestResultListener1 requestResultListener = new MyRequestResultListener1();
-        NetUtil.requestData(url,null, Security_Token_Bean.class, requestResultListener,0);
+
     }
-    class MyRequestResultListener1 implements RequestResultListener<Security_Token_Bean>{
+    class MyStringCallback extends StringCallback {
         @Override
-        public void onRequestFinish(Security_Token_Bean bean, int what) {
-            if(what == 0){
-                if(bean!=null) {
-                    // 拿到checkCompleteBean，获取token
-                    token = bean.data.token;
-                }else{
-                    System.out.println("Login_Message+++===没拿到bean对象");
+        public void onError(Call call, Exception e) {
+            System.out.println("Login_Message+++token===没拿到数据" + e.getMessage());
+        }
 
-                }
+        @Override
+        public void onResponse(String response) {
+            Security_Token_Bean bean = new Gson().fromJson(response, Security_Token_Bean.class);
+            if(bean!=null) {
+                // 拿到checkCompleteBean，获取token
+                token = bean.data.token;
+            }else{
+                System.out.println("Login_Message+++===没拿到bean对象");
+
             }
         }
-
-        @Override
-        public void showJsonStr(String str, int what) {
-            //System.out.println("Login_Message+++==="+str);
-
-        }
     }
+
     /**获取输入的内容*/
     private void getInputData() {
         //手机号

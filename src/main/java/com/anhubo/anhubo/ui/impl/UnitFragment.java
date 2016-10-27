@@ -3,10 +3,7 @@ package com.anhubo.anhubo.ui.impl;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
@@ -24,7 +21,6 @@ import com.anhubo.anhubo.bean.MyPolygonBean;
 import com.anhubo.anhubo.bean.SesameItemModel;
 import com.anhubo.anhubo.bean.SesameModel;
 import com.anhubo.anhubo.bean.UnitBean;
-import com.anhubo.anhubo.protocol.RequestResultListener;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.unitDetial.MsgPerfectActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.QrScanActivity;
@@ -32,20 +28,20 @@ import com.anhubo.anhubo.ui.activity.unitDetial.Unit2Study;
 import com.anhubo.anhubo.ui.activity.unitDetial.UnitMenuActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.UnitMsgCenterActivity;
 import com.anhubo.anhubo.utils.Keys;
-import com.anhubo.anhubo.utils.NetUtil;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.MyPolygonView;
 import com.anhubo.anhubo.view.SesameCreditPanel;
 import com.anhubo.anhubo.view.ShowLoadingDialog;
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+import okhttp3.Call;
 
 /**
  * Created by Administrator on 2016/10/8.
@@ -122,7 +118,7 @@ public class UnitFragment extends BaseFragment {
         // 设置下划线 setUnderline里面的参数是可变参数
         Utils.setUnderline(tvUnitFrag, tvUnitFragMsg, tvUnitFragInvite, tvUnitFragAdd);
         // listView
-         lvUnit = findView(R.id.lv_unit);
+        lvUnit = findView(R.id.lv_unit);
 
         View view = View.inflate(mActivity, R.layout.header_unit, null);
 
@@ -143,7 +139,6 @@ public class UnitFragment extends BaseFragment {
         lvUnit.setAdapter(adapter);
 
     }
-
 
 
     /**
@@ -190,8 +185,12 @@ public class UnitFragment extends BaseFragment {
             String url = Urls.Url_Unit;
             HashMap<String, String> params = new HashMap<>();
             params.put("business_id", businessid);
-            MyRequestResultListener requestResultListener = new MyRequestResultListener();
-            NetUtil.requestData(url, params, UnitBean.class, requestResultListener, 0);
+            OkHttpUtils.post()//
+                    .url(url)//
+                    .params(params)//
+                    .build()//
+                    .execute(new MyStringCallback());
+
             isLoading = true;
         } else {
             //否则不加载网络数据
@@ -203,10 +202,15 @@ public class UnitFragment extends BaseFragment {
     public void initData() {
     }
 
-    class MyRequestResultListener implements RequestResultListener<UnitBean> {
+    class MyStringCallback extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+            System.out.println("UnitFragment界面+++===没拿到数据" + e.getMessage());
+        }
 
         @Override
-        public void onRequestFinish(UnitBean bean, int what) {
+        public void onResponse(String response) {
+            UnitBean bean = new Gson().fromJson(response, UnitBean.class);
             list = new ArrayList<>();
             // 创建一个数组
             arrScores = new int[6];
@@ -254,11 +258,6 @@ public class UnitFragment extends BaseFragment {
             } else {
                 System.out.println("UnitFragment界面+++===没拿到bean对象");
             }
-        }
-
-        @Override
-        public void showJsonStr(String str, int what) {
-//            System.out.println("UnitFragment界面+++===" + str);
         }
     }
 

@@ -1,7 +1,6 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,20 +15,21 @@ import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.CheckComplete_Bean;
 import com.anhubo.anhubo.bean.ScanBean;
-import com.anhubo.anhubo.protocol.RequestResultListener;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
-import com.anhubo.anhubo.utils.NetUtil;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.HashMap;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zxing.ZXingView;
+import okhttp3.Call;
 
 public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate {
     private static final String TAG = QrScanActivity.class.getSimpleName();
@@ -238,30 +238,34 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
      */
     private void getData() {
         String url = Urls.Url_Check;
-        HashMap<String, String> parmas = new HashMap<String, String>();
-        parmas.put("device_id", cardNumber);
-        MyRequestResultListener requestResultListener = new MyRequestResultListener();
-        NetUtil.requestData(url, parmas, ScanBean.class, requestResultListener, 0);
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("device_id", cardNumber);
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
+
     }
 
+    class MyStringCallback extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
 
-    class MyRequestResultListener implements RequestResultListener<ScanBean> {
+            System.out.println("QrScanActivity+++===没拿到数据" + e.getMessage());
+        }
 
         @Override
-        public void onRequestFinish(ScanBean bean, int what) {
+        public void onResponse(String response) {
+            ScanBean bean = new Gson().fromJson(response, ScanBean.class);
             if (bean != null) {
-
                 parseMessage(bean);
             } else {
                 System.out.println("QrScanActivity+++===没获取bean对象");
             }
         }
-
-        @Override
-        public void showJsonStr(String str, int what) {
-            //System.out.println("QrScanActivity+++===" + str);
-        }
     }
+
 
     /**
      * 拿到数据后判断设备ID是否绑定而跳转到相应界面

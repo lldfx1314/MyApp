@@ -17,17 +17,20 @@ import com.anhubo.anhubo.adapter.DeviceDetailsAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.CheckComplete_Bean;
 import com.anhubo.anhubo.bean.ScanBean;
-import com.anhubo.anhubo.protocol.RequestResultListener;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
-import com.anhubo.anhubo.utils.NetUtil;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import okhttp3.Call;
 
 
 /**
@@ -213,18 +216,28 @@ public class Check_Device_Activity extends BaseActivity {
     private void checkComplete() {
         // 这里是完成的点击事件
         String url = Urls.Url_Check_Complete;
-        HashMap<String, String> parmas = new HashMap<String, String>();
-        parmas.put("uid",uid); //这是uid,登录后改成真正的用户
-        parmas.put("device_id",deviceId);
-        parmas.put("device_result",completeList.toString());//选择后的集合
-        parmas.put("business_id",businessid);//这是business_id,登录后改成真正的business_id
-        MyRequestResultListener requestResultListener = new MyRequestResultListener();
-        NetUtil.requestData(url,parmas,CheckComplete_Bean.class,requestResultListener, 0);
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("uid",uid); //这是uid,登录后改成真正的用户
+        params.put("device_id",deviceId);
+        params.put("device_result",completeList.toString());//选择后的集合
+        params.put("business_id",businessid);//这是business_id,登录后改成真正的business_id
+
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
     }
-    class MyRequestResultListener implements RequestResultListener<CheckComplete_Bean> {
+    class MyStringCallback extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+
+            System.out.println("Check_Device_Activity+++===没拿到数据" + e.getMessage());
+        }
 
         @Override
-        public void onRequestFinish(CheckComplete_Bean bean,int what) {
+        public void onResponse(String response) {
+            CheckComplete_Bean bean = new Gson().fromJson(response, CheckComplete_Bean.class);
             if(bean!=null){
                 ToastUtils.showToast(mActivity,"检查完成");
 
@@ -248,12 +261,8 @@ public class Check_Device_Activity extends BaseActivity {
                 System.out.println("Check_Device_Activity+++===没获取到bean对象");
             }
         }
-
-        @Override
-        public void showJsonStr(String str,int what) {
-            //System.out.println("Check_Device_Activity+++==="+str);
-        }
     }
+
 
     @Override
     public void onAttachedToWindow() {
