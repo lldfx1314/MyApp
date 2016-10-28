@@ -33,6 +33,7 @@ public class HomeActivity extends BaseActivity {
     RadioGroup rgHomeBottom;
     private ArrayList<Fragment> list;
     private long exitTime = 0;
+    private long exitTime1 = 0;
 
     @Override
     protected void initConfig() {
