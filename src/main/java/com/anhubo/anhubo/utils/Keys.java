@@ -1,5 +1,8 @@
 package com.anhubo.anhubo.utils;
 
+import android.content.Context;
+import android.content.Intent;
+
 /**
  * Created by Administrator on 2016/9/28.
  */
@@ -74,4 +77,12 @@ public interface Keys {
     String DEVICESNUM = "DEVICESNUM";
     /**邀请*/
     String INVATE = "invate";
+    /**头像保存成功，给上个页面传值*/
+    String HEADERICON = "headericon";
+    /**我的界面保存头像url*/
+    String IMGURL = "imgurl";
+    /**我的界面传递图片给个人信息*/
+    String BITMAP = "bitmap";
+    /**我的界面传递图片给个人信息*/
+    String MYBEAN = "mybean";
 }

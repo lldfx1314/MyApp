@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -69,6 +70,7 @@ public class UploadingActivity1 extends BaseActivity {
     private File filePhoto02;
     private File filePhoto01;
     private boolean isClick = false;
+
     @Override
     protected int getContentViewId() {
         return R.layout.activity_uploading1;
@@ -84,7 +86,6 @@ public class UploadingActivity1 extends BaseActivity {
     protected void onLoadDatas() {
 
     }
-
 
 
     @OnClick({R.id.ll_takePhoto01, R.id.btn_unloading01})
@@ -124,7 +125,7 @@ public class UploadingActivity1 extends BaseActivity {
         } else {
             file = filePhoto02;
         }
-        if (file==null||!file.exists()) {
+        if (file == null || !file.exists()) {
             ToastUtils.showLongToast(mActivity, "请先拍照或者获取图库图片");
             return;
         }
@@ -149,7 +150,7 @@ public class UploadingActivity1 extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            System.out.println("UploadingActivity1+++===界面失败"+e.getMessage());
+            System.out.println("UploadingActivity1+++===界面失败" + e.getMessage());
 
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
 
@@ -159,31 +160,34 @@ public class UploadingActivity1 extends BaseActivity {
         public void onResponse(String response) {
 
             MsgPerfectLicenseBean licenseBean = new Gson().fromJson(response, MsgPerfectLicenseBean.class);
-            int code = licenseBean.code;
-            final String msg = licenseBean.msg;
-            if (code != 0) {
-                ToastUtils.showToast(mActivity, "上传失败");
-            }else{
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        ToastUtils.showToast(mActivity, "上传成功");
-                        Intent intent = new Intent();
-                        intent.putExtra(Keys.ISCLICK1, true);
-                        setResult(1, intent);
-                        finish();
-                    }
-                }, 2000);
+            if (licenseBean != null) {
+                int code = licenseBean.code;
+                final String msg = licenseBean.msg;
+                if (code != 0) {
+                    ToastUtils.showToast(mActivity, "上传失败");
+                } else {
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ToastUtils.showToast(mActivity, "上传成功");
+                            Intent intent = new Intent();
+                            intent.putExtra(Keys.ISCLICK1, true);
+                            setResult(1, intent);
+                            finish();
+                        }
+                    }, 2000);
+                }
             }
+
         }
     }
 
     private void getPhoto() {
 
-        Intent intent = new Intent();
-        intent.setType("image/*");  // 开启Pictures画面Type设定为image
-        intent.setAction(Intent.ACTION_GET_CONTENT); //使用Intent.ACTION_GET_CONTENT这个Action
-        startActivityForResult(intent, PICTURE); //取得相片后返回到本画面
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, PICTURE);
+
         dialog.dismiss();
 
     }
@@ -213,22 +217,21 @@ public class UploadingActivity1 extends BaseActivity {
     }
 
     private void showPhoto02(Intent data) {
-        ContentResolver resolver = getContentResolver();
-        //照片的原始资源地址
-        Uri originalUri = data.getData();
-        //System.out.println(originalUri.toString());  //" content://media/external/images/media/15838 "
 
-        //                  //将原始路径转换成图片的路径
-        selectedImagePath = uri2filePath(originalUri);
-        filePhoto02 = new File(selectedImagePath);
-        //                  System.out.println(selectedImagePath);  //" /mnt/sdcard/DCIM/Camera/IMG_20130603_185143.jpg "
+        Uri selectedImage = data.getData();
+        String[] filePathColumns = {MediaStore.Images.Media.DATA};
+        Cursor c = getContentResolver().query(selectedImage, filePathColumns, null, null, null);
+        c.moveToFirst();
+        int columnIndex = c.getColumnIndex(filePathColumns[0]);
+        String imagePath = c.getString(columnIndex);
+        filePhoto02 = new File(imagePath);
+        Bitmap photo = BitmapFactory.decodeFile(imagePath);
         try {
-            //使用ContentProvider通过URI获取原始图片
-            Bitmap photo = MediaStore.Images.Media.getBitmap(resolver, originalUri);
 
-            imgName = createPhotoFileName();
+            /*imgName = createPhotoFileName();
             //写一个方法将此文件保存到本应用下面啦
-            savePicture(imgName, photo);
+            savePicture(imgName, photo);*/
+
 
             if (photo != null) {
                 //为防止原始图片过大导致内存溢出，这里先缩小原图显示，然后释放原始Bitmap占用的内存
@@ -238,24 +241,15 @@ public class UploadingActivity1 extends BaseActivity {
                 //显示图片
                 ivShowPhoto01.setImageBitmap(bitmap);
             }
-        } catch (FileNotFoundException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } finally {
+
+            c.close();
         }
     }
 
-    /**
-     * 获取文件路径
-     **/
-    public String uri2filePath(Uri uri) {
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String path = cursor.getString(column_index);
-        return path;
-    }
 
     /**
      * 保存图片到本应用下

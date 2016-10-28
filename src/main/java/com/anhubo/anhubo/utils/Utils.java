@@ -1,9 +1,17 @@
 package com.anhubo.anhubo.utils;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.CountDownTimer;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+
+import com.anhubo.anhubo.R;
+import com.anhubo.anhubo.view.ShowBottonDialog;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,7 +20,12 @@ import java.util.regex.Pattern;
  * 这个类存放各个方法的类
  * Created by Administrator on 2016/9/28.
  */
-public class Utils {
+public class Utils{
+
+    private static Dialog dialog;
+    private static Button btnTakephoto;
+    private static Button btnPhoto;
+
     /**判断手机号码是否合法*/
     public static boolean judgePhoneNumber(String str) {
 //        String regular_phone_number = "^[1]([3][0-9]{1}|45|47|50|51|52|53|55|56|57|58|59|70|71|76|77|78|80|81|82|83|84|85|86|87|88|89)[0-9]{8}$";
@@ -65,7 +78,5 @@ public class Utils {
         float density = getResources().getDisplayMetrics().density;
         return (int) (dp * density + 0.5);	// 加0.5是为了把结果四舍五入
     }*/
-
-
 
 }

@@ -80,4 +80,8 @@ public interface Urls {
     String Url_Build_score = UrlBase +"BuildingChart/details";
     /**建筑，三色预警*/
     String Url_Build_ThreeColour = UrlBase +"BuildingChart/Threec";
+    /**我的，上传头像*/
+    String Url_UpLoadingHeaderIcon = UrlBase +"Personal/save_pic";
+    /**我的，获取用户信息*/
+    String Url_My_GetUserInfo = UrlBase +"Personal/get_us_info";
 }

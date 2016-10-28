@@ -7,11 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
@@ -105,7 +107,6 @@ public class UploadingActivity4 extends BaseActivity {
         popDateHelper.setOnClickOkListener(new PopDateHelper.OnClickOkListener() {
 
 
-
             @Override
             public void onClickOk(String year, String month) {
                 tvTime.setVisibility(View.VISIBLE);
@@ -166,10 +167,21 @@ public class UploadingActivity4 extends BaseActivity {
         } else {
             file = filePhoto02;
         }
-        if (file==null||!file.exists()) {
+        if (TextUtils.isEmpty(newTime)) {
+            ToastUtils.showLongToast(mActivity, "请选择开始日期");
+            return;
+        }
+        if (TextUtils.isEmpty(timeLong)) {
+            ToastUtils.showLongToast(mActivity, "请选择租房时长");
+            return;
+        }
+
+        if (file == null || !file.exists()) {
             ToastUtils.showLongToast(mActivity, "请先拍照或者获取图库图片");
             return;
         }
+
+
         Map<String, String> params = new HashMap<>();
         params.put("business_id", businessid);
         params.put("rent_time", timeLong);
@@ -198,7 +210,7 @@ public class UploadingActivity4 extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-            System.out.println("UploadingActivity4-------"+response);
+            //System.out.println("UploadingActivity4-------"+response);
             MsgPerfectRentingBean rentingBean = new Gson().fromJson(response, MsgPerfectRentingBean.class);
             int code = rentingBean.code;
             final String msg = rentingBean.msg;
@@ -223,10 +235,9 @@ public class UploadingActivity4 extends BaseActivity {
 
     private void getPhoto() {
 
-        Intent intent = new Intent();
-        intent.setType("image/*");  // 开启Pictures画面Type设定为image
-        intent.setAction(Intent.ACTION_GET_CONTENT); //使用Intent.ACTION_GET_CONTENT这个Action
-        startActivityForResult(intent, PICTURE); //取得相片后返回到本画面
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, PICTURE);
         dialog.dismiss();
 
     }
@@ -256,21 +267,20 @@ public class UploadingActivity4 extends BaseActivity {
     }
 
     private void showPhoto02(Intent data) {
-        ContentResolver resolver = getContentResolver();
-        //照片的原始资源地址
-        Uri originalUri = data.getData();
-        //System.out.println(originalUri.toString());  //" content://media/external/images/media/15838 "
 
-        //将原始路径转换成图片的路径
-        String selectedImagePath = uri2filePath(originalUri);
-        filePhoto02 = new File(selectedImagePath);
+        Uri selectedImage = data.getData();
+        String[] filePathColumns = {MediaStore.Images.Media.DATA};
+        Cursor c = getContentResolver().query(selectedImage, filePathColumns, null, null, null);
+        c.moveToFirst();
+        int columnIndex = c.getColumnIndex(filePathColumns[0]);
+        String imagePath = c.getString(columnIndex);
+        filePhoto02 = new File(imagePath);
+        Bitmap photo = BitmapFactory.decodeFile(imagePath);
         try {
-            //使用ContentProvider通过URI获取原始图片
-            Bitmap photo = MediaStore.Images.Media.getBitmap(resolver, originalUri);
 
-            imgName = createPhotoFileName();
+            /*imgName = createPhotoFileName();
             //写一个方法将此文件保存到本应用下面啦
-            savePicture(imgName, photo);
+            savePicture(imgName, photo);*/
 
             if (photo != null) {
                 //为防止原始图片过大导致内存溢出，这里先缩小原图显示，然后释放原始Bitmap占用的内存
@@ -279,12 +289,13 @@ public class UploadingActivity4 extends BaseActivity {
                 llTakePhoto04.setVisibility(View.GONE);
                 //显示图片
                 ivShowPhoto04.setImageBitmap(bitmap);
+
             }
-            //ToastUtils.showLongToast(mActivity,"已保存本应用的files文件夹下");
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } finally {
+
+            c.close();
         }
     }
 
@@ -299,6 +310,7 @@ public class UploadingActivity4 extends BaseActivity {
         String path = cursor.getString(column_index);
         return path;
     }
+
     /**
      * 保存图片到本应用下
      **/

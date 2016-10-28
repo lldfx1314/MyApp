@@ -31,6 +31,7 @@
                 app:civ_border_width="3dp" />
 
             <TextView
+                android:id="@+id/tv_my_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -46,7 +47,7 @@
                 android:layout_marginTop="8dp">
 
                 <TextView
-                    android:id="@+id/tv_gebder"
+                    android:id="@+id/tv_my_gebder"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -62,11 +63,11 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:layout_toRightOf="@+id/tv_gebder"
+                    android:layout_toRightOf="@+id/tv_my_gebder"
                     android:background="@color/bg_upload" />
 
                 <TextView
-                    android:id="@+id/age"
+                    android:id="@+id/tv_my_age"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"

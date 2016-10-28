@@ -1,15 +1,12 @@
 package com.anhubo.anhubo.ui.activity.MyDetial;
 
-import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.protocol.Urls;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**

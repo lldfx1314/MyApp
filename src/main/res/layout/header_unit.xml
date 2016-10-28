@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:gravity="center_horizontal"
-        android:text="安全提升级别"
+        android:text="提升安全级别"
         android:textColor="@color/gray"
         android:textSize="16sp"/>
 

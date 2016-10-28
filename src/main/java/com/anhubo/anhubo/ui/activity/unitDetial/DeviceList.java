@@ -73,25 +73,28 @@ public class DeviceList extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
+
             //System.out.println("单位列表界面+++==="+response);
             DeviceListBean listBean = new Gson().fromJson(response, DeviceListBean.class);
-            List<DeviceListBean.Data.Devices> devices = listBean.data.devices;
-            for (int i = 0; i < devices.size(); i++) {
-                DeviceListBean.Data.Devices device = devices.get(i);
-                String deviceId = device.device_id;
-                deviceIds.add(deviceId);
-                String deviceName = device.device_name;
-                deviceNames.add(deviceName);
+            if(listBean!=null){
+                List<DeviceListBean.Data.Devices> devices = listBean.data.devices;
+                for (int i = 0; i < devices.size(); i++) {
+                    DeviceListBean.Data.Devices device = devices.get(i);
+                    String deviceId = device.device_id;
+                    deviceIds.add(deviceId);
+                    String deviceName = device.device_name;
+                    deviceNames.add(deviceName);
+                }
+                if(deviceIds!=null&&deviceNames!=null){
+                    tvDevice.setText("设备总数："+deviceIds.size());
+                    // 创建一个设备列表的适配器
+                    //System.out.println("设备列表界面"+deviceIds);
+                    //System.out.println("设备列表界面"+deviceNames);
+                    DeviceListAdapter adapter = new DeviceListAdapter(mActivity,deviceIds,deviceNames);
+                    deviceListview.setAdapter(adapter);
+                }
+            }
 
-            }
-            if(deviceIds!=null&&deviceNames!=null){
-                tvDevice.setText("设备总数："+deviceIds.size());
-                // 创建一个设备列表的适配器
-                //System.out.println("设备列表界面"+deviceIds);
-                //System.out.println("设备列表界面"+deviceNames);
-                DeviceListAdapter adapter = new DeviceListAdapter(mActivity,deviceIds,deviceNames);
-                deviceListview.setAdapter(adapter);
-            }
 
         }
     }

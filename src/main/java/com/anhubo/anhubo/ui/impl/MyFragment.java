@@ -1,21 +1,42 @@
 package com.anhubo.anhubo.ui.impl;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseFragment;
+import com.anhubo.anhubo.bean.MyFragmentBean;
+import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.Login_Register.AnhubaoDeal;
 import com.anhubo.anhubo.ui.activity.Login_Register.Login_Message;
 import com.anhubo.anhubo.ui.activity.MyDetial.InvateActivity;
+import com.anhubo.anhubo.ui.activity.MyDetial.PersonMsgActivity;
 import com.anhubo.anhubo.ui.activity.MyDetial.SettingActivity;
 import com.anhubo.anhubo.ui.activity.WelcomeActivity;
+import com.anhubo.anhubo.ui.activity.unitDetial.Check_Device_Activity;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.google.gson.Gson;
+import com.yolanda.nohttp.BitmapBinary;
+import com.yolanda.nohttp.rest.RequestQueue;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.BitmapCallback;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.Call;
 
 /**
  * Created by Administrator on 2016/10/8.
@@ -23,10 +44,21 @@ import com.anhubo.anhubo.utils.ToastUtils;
 public class MyFragment extends BaseFragment {
 
 
+    private static final int REQUESTCODE = 0;
     private LinearLayout llMyDetial;
     private LinearLayout llInvate;
     private LinearLayout llSetting;
     private TextView tvLogOut;
+    private CircleImageView image;
+    private Bitmap mBitmap;
+    private String img;
+    private String age;
+    private String sex;
+    private String name;
+    private TextView tvMyName;
+    private TextView tvMyGebder;
+    private TextView tvMyAge;
+    private MyFragmentBean bean;
 
     @Override
     public void initTitleBar() {
@@ -43,6 +75,10 @@ public class MyFragment extends BaseFragment {
     @Override
     public void initView() {
         // 找控件
+        image = findView(R.id.profile_image);
+        tvMyName = findView(R.id.tv_my_name);
+        tvMyGebder = findView(R.id.tv_my_gebder);
+        tvMyAge = findView(R.id.tv_my_age);
         llMyDetial = findView(R.id.ll_My_Detial);
         llInvate = findView(R.id.ll_invate);
         llSetting = findView(R.id.ll_setting);
@@ -61,13 +97,69 @@ public class MyFragment extends BaseFragment {
     @Override
     public void initData() {
 
+        /*Personal/get_us_info*/
+        String uid = SpUtils.getStringParam(mActivity, Keys.UID);
+        Map<String, String> params = new HashMap<>();
+        params.put("uid", uid);
+
+
+        String url = Urls.Url_My_GetUserInfo;
+
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
+
+
+        String imgurl = SpUtils.getStringParam(mActivity, Keys.IMGURL);
+        if(!TextUtils.isEmpty(imgurl)){
+            setHeaderIcon(imgurl);
+        }
+    }
+    class MyStringCallback extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+
+            System.out.println("MyFragment+++===界面失败"+e.getMessage());
+
+            ToastUtils.showToast(mActivity, "网络有问题，请检查");
+        }
+
+        @Override
+        public void onResponse(String response) {
+            //System.out.println("哈哈哈"+response);
+            bean = new Gson().fromJson(response, MyFragmentBean.class);
+            if(bean !=null){
+                age = bean.data.age;
+                sex = bean.data.sex;
+                img = bean.data.img;
+                name = bean.data.name;
+                String businessName =  bean.data.business_name;
+                String phone = bean.data.phone;
+                String qqName = bean.data.qq_name;
+                String weiboName = bean.data.weibo_name;
+                String weixinName = bean.data.weixin_name;
+                /**设置头像的显示内容*/
+                setData();
+
+
+            }
+        }
+    }
+    /**设置头像的显示内容*/
+    private void setData() {
+        setHeaderIcon(img);
+        tvMyName.setText(name);
+        tvMyAge.setText(age);
+        tvMyGebder.setText(sex);
     }
 
     @Override
     public void processClick(View v) {
         switch (v.getId()) {
             case R.id.ll_My_Detial:
-
+                enterPersonMsg();
                 break;
             case R.id.ll_invate:
                 // 邀请
@@ -85,24 +177,82 @@ public class MyFragment extends BaseFragment {
         }
 
     }
-    /**进入设置界面*/
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        String imgurl = null;
+        if (intent != null && requestCode == REQUESTCODE) {
+            switch (resultCode) {
+                case 1:
+                    imgurl = intent.getStringExtra(Keys.HEADERICON);
+                    //SpUtils.putParam(mActivity,Keys.IMGURL,imgurl);
+                    break;
+            }
+        }
+        if (!TextUtils.isEmpty(imgurl)) {
+            setHeaderIcon(imgurl);
+        }
+    }
+    /**设置头像的方法*/
+    private void setHeaderIcon(String imgurl) {
+        OkHttpUtils
+                .get()//
+                .url(imgurl)//
+                .tag(this)//
+                .build()//
+                .connTimeOut(15000)
+                .readTimeOut(15000)
+                .writeTimeOut(15000)
+                .execute(new BitmapCallback() {
+                    @Override
+                    public void onError(Call call, Exception e) {
+
+                        System.out.println("MyFragment获取头像+++==="+e.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        mBitmap = bitmap;
+                        image.setImageBitmap(bitmap);
+                    }
+                });
+    }
+
+    /**
+     * 进入个人信息界面
+     */
+    private void enterPersonMsg() {
+        Intent intent = new Intent(mActivity, PersonMsgActivity.class);
+        intent.putExtra(Keys.MYBEAN, bean);
+        startActivityForResult(intent, REQUESTCODE);
+    }
+
+    /**
+     * 进入设置界面
+     */
     private void enterSetting() {
         startActivity(new Intent(mActivity, SettingActivity.class));
     }
 
-    /**进入邀请界面*/
+    /**
+     * 进入邀请界面
+     */
     private void enterInvate() {
         Intent intent = new Intent(mActivity, InvateActivity.class);
         startActivity(intent);
     }
-    /**登出方法*/
+
+    /**
+     * 登出方法
+     */
     private void logOut() {
         // 保存参数
-        SpUtils.putParam(mActivity, Keys.UID,null);
-        SpUtils.putParam(mActivity,Keys.BUSINESSID,null);
-        SpUtils.putParam(mActivity,Keys.BULIDINGID,null);
-        SpUtils.putParam(mActivity,Keys.BUILDINGNAME,null);
-        SpUtils.putParam(mActivity,Keys.BUSINESSNAME,null);
+        SpUtils.putParam(mActivity, Keys.UID, null);
+        SpUtils.putParam(mActivity, Keys.BUSINESSID, null);
+        SpUtils.putParam(mActivity, Keys.BULIDINGID, null);
+        SpUtils.putParam(mActivity, Keys.BUILDINGNAME, null);
+        SpUtils.putParam(mActivity, Keys.BUSINESSNAME, null);
         //跳转到主页面
         startActivity(new Intent(mActivity, Login_Message.class));
         getActivity().finish();

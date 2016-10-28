@@ -90,4 +90,9 @@ public class DisplayUtil {
     public static int getColor(int id) {
         return getResources().getColor(id);
     }
+
+
+
+
+
 }

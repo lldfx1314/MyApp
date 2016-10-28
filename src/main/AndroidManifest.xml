@@ -84,6 +84,7 @@
         <activity android:name=".ui.activity.MyDetial.InvateActivity" />
         <activity android:name=".ui.activity.MyDetial.SettingActivity" />
         <activity android:name=".ui.activity.MyDetial.AboutWeActivity" />
+        <activity android:name=".ui.activity.MyDetial.PersonMsgActivity" />
 
 
         <!--欢迎界面-->

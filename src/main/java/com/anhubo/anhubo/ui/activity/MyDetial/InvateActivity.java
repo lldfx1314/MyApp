@@ -19,6 +19,7 @@ public class InvateActivity extends BaseActivity {
     @InjectView(R.id.wv_invate)
     WebView wvInvate;
     private String url;
+    private String newUrl;
 
     @Override
     protected int getContentViewId() {
@@ -36,8 +37,8 @@ public class InvateActivity extends BaseActivity {
         super.initEvents();
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
         url = Urls.Url_MyInvare;
-        url = url+"?uid="+uid;
-        wvInvate.loadUrl(url);
+        newUrl = url+"?uid="+uid;
+        wvInvate.loadUrl(newUrl);
 
         wvInvate.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) { //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
