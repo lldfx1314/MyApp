@@ -34,6 +34,7 @@ public class HomeActivity extends BaseActivity {
     private ArrayList<Fragment> list;
     private long exitTime = 0;
     private long exitTime1 = 0;
+    private long exitTime2 = 0;
 
     @Override
     protected void initConfig() {
