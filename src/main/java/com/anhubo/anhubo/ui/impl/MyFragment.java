@@ -50,7 +50,7 @@ public class MyFragment extends BaseFragment {
     private LinearLayout llSetting;
     private TextView tvLogOut;
     private CircleImageView image;
-    private Bitmap mBitmap;
+    public static Bitmap mBitmap;
     private String img;
     private String age;
     private String sex;

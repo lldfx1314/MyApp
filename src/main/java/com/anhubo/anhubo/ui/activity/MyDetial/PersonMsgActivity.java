@@ -24,6 +24,7 @@ import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.MyFragmentBean;
 import com.anhubo.anhubo.bean.My_HeaderIconBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.ui.impl.MyFragment;
 import com.anhubo.anhubo.utils.ImageTools;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
@@ -138,7 +139,9 @@ public class PersonMsgActivity extends BaseActivity {
     @Override
     protected void initEvents() {
         super.initEvents();
-
+        // 获取到MyFragment里的Bitmap对象
+        Bitmap mBitmap = MyFragment.mBitmap;
+        ivHeaderIcon.setImageBitmap(mBitmap);
         // 给每个控件先设置初始内容
         setInitialData();
 
@@ -149,7 +152,9 @@ public class PersonMsgActivity extends BaseActivity {
      */
     private void setInitialData() {
         if (!TextUtils.isEmpty(img)) {
-            setHeaderIcon(img);
+            //设置头像显示,这种方式效率较低，体验不好
+            //setHeaderIcon(img);
+
         }
         if (!TextUtils.isEmpty(name)) {
             etMyUsername.setText(name);
