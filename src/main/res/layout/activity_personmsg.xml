@@ -73,7 +73,8 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="10dp">
-
+                <!--android:focusable="true"
+                  android:focusableInTouchMode="true"-->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -86,10 +87,11 @@
                     android:id="@+id/et_my_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="5dp"
                     android:layout_marginRight="10dp"
                     android:background="@null"
+                    android:paddingLeft="5dp"
                     android:singleLine="true"
+                    android:imeOptions="actionDone|actionSend"
                     android:textColor="@color/gray"
                     android:textSize="16sp" />
 

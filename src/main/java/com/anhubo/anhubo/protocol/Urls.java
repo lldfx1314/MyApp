@@ -84,4 +84,6 @@ public interface Urls {
     String Url_UpLoadingHeaderIcon = UrlBase +"Personal/save_pic";
     /**我的，获取用户信息*/
     String Url_My_GetUserInfo = UrlBase +"Personal/get_us_info";
+    /**修改姓名*/
+    String Url_My_Name = UrlBase +"Personal/change_name";
 }

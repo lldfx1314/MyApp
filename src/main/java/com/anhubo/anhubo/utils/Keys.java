@@ -79,10 +79,8 @@ public interface Keys {
     String INVATE = "invate";
     /**头像保存成功，给上个页面传值*/
     String HEADERICON = "headericon";
-    /**我的界面保存头像url*/
-    String IMGURL = "imgurl";
-    /**我的界面传递图片给个人信息*/
-    String BITMAP = "bitmap";
     /**我的界面传递图片给个人信息*/
     String MYBEAN = "mybean";
+    /**给我的界面传递名字*/
+    String NEWNAME = "NEWNAME";
 }

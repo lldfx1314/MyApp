@@ -2,32 +2,23 @@ package com.anhubo.anhubo.ui.impl;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseFragment;
 import com.anhubo.anhubo.bean.MyFragmentBean;
 import com.anhubo.anhubo.protocol.Urls;
-import com.anhubo.anhubo.ui.activity.Login_Register.AnhubaoDeal;
 import com.anhubo.anhubo.ui.activity.Login_Register.Login_Message;
 import com.anhubo.anhubo.ui.activity.MyDetial.InvateActivity;
 import com.anhubo.anhubo.ui.activity.MyDetial.PersonMsgActivity;
 import com.anhubo.anhubo.ui.activity.MyDetial.SettingActivity;
-import com.anhubo.anhubo.ui.activity.WelcomeActivity;
-import com.anhubo.anhubo.ui.activity.unitDetial.Check_Device_Activity;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.google.gson.Gson;
-import com.yolanda.nohttp.BitmapBinary;
-import com.yolanda.nohttp.rest.RequestQueue;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -59,6 +50,7 @@ public class MyFragment extends BaseFragment {
     private TextView tvMyGebder;
     private TextView tvMyAge;
     private MyFragmentBean bean;
+    public static String name1;
 
     @Override
     public void initTitleBar() {
@@ -97,7 +89,6 @@ public class MyFragment extends BaseFragment {
     @Override
     public void initData() {
 
-        /*Personal/get_us_info*/
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
@@ -110,18 +101,13 @@ public class MyFragment extends BaseFragment {
                 .params(params)//
                 .build()//
                 .execute(new MyStringCallback());
-
-
-        String imgurl = SpUtils.getStringParam(mActivity, Keys.IMGURL);
-        if(!TextUtils.isEmpty(imgurl)){
-            setHeaderIcon(imgurl);
-        }
     }
+
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
 
-            System.out.println("MyFragment+++===界面失败"+e.getMessage());
+            System.out.println("MyFragment+++===界面失败" + e.getMessage());
 
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
         }
@@ -130,26 +116,31 @@ public class MyFragment extends BaseFragment {
         public void onResponse(String response) {
             //System.out.println("哈哈哈"+response);
             bean = new Gson().fromJson(response, MyFragmentBean.class);
-            if(bean !=null){
+            if (bean != null) {
                 age = bean.data.age;
                 sex = bean.data.sex;
                 img = bean.data.img;
                 name = bean.data.name;
-                String businessName =  bean.data.business_name;
+                String businessName = bean.data.business_name;
                 String phone = bean.data.phone;
                 String qqName = bean.data.qq_name;
                 String weiboName = bean.data.weibo_name;
                 String weixinName = bean.data.weixin_name;
-                /**设置头像的显示内容*/
+                /**设置头像、姓名、年龄、性别的显示内容*/
                 setData();
 
 
             }
         }
     }
-    /**设置头像的显示内容*/
+
+    /**
+     * 设置头像的显示内容
+     */
     private void setData() {
+        // 头像
         setHeaderIcon(img);
+        //姓名、年龄、性别
         tvMyName.setText(name);
         tvMyAge.setText(age);
         tvMyGebder.setText(sex);
@@ -178,23 +169,33 @@ public class MyFragment extends BaseFragment {
 
     }
 
+    /***/
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        String imgurl = null;
         if (intent != null && requestCode == REQUESTCODE) {
             switch (resultCode) {
-                case 1:
-                    imgurl = intent.getStringExtra(Keys.HEADERICON);
-                    //SpUtils.putParam(mActivity,Keys.IMGURL,imgurl);
+                case 1:// 保存头像后返回的url，显示更改后的头像
+                    String imgurl = intent.getStringExtra(Keys.HEADERICON);
+                    if (!TextUtils.isEmpty(imgurl)) {
+                        setHeaderIcon(imgurl);
+                    }
+                    break;
+                case 2:// 保存头像后返回的url，显示更改后的头像
+                    String newName = intent.getStringExtra(Keys.NEWNAME);
+                    if (!TextUtils.isEmpty(newName)) {
+                        name1 = newName;
+                        tvMyName.setText(newName);
+                    }
                     break;
             }
         }
-        if (!TextUtils.isEmpty(imgurl)) {
-            setHeaderIcon(imgurl);
-        }
+
     }
-    /**设置头像的方法*/
+
+    /**
+     * 设置头像的方法
+     */
     private void setHeaderIcon(String imgurl) {
         OkHttpUtils
                 .get()//
@@ -208,7 +209,7 @@ public class MyFragment extends BaseFragment {
                     @Override
                     public void onError(Call call, Exception e) {
 
-                        System.out.println("MyFragment获取头像+++==="+e.getMessage());
+                        System.out.println("MyFragment获取头像+++===" + e.getMessage());
                     }
 
                     @Override

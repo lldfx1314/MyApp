@@ -2,6 +2,7 @@ package com.anhubo.anhubo.ui.activity.MyDetial;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -9,10 +10,16 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,12 +28,14 @@ import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
+import com.anhubo.anhubo.bean.MyAlterNameBean;
 import com.anhubo.anhubo.bean.MyFragmentBean;
 import com.anhubo.anhubo.bean.My_HeaderIconBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.impl.MyFragment;
 import com.anhubo.anhubo.utils.ImageTools;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.PopBirthHelper;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.ShowBottonDialog;
@@ -44,7 +53,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import okhttp3.Call;
@@ -106,7 +114,12 @@ public class PersonMsgActivity extends BaseActivity {
     private String qqName;
     private String weiboName;
     private String weixinName;
-
+    private String uid;
+    private Handler handler = new Handler();
+    private PopBirthHelper popBirthHelper;
+    private String newTime;
+    private InputMethodManager imm;
+    private String newName;
 
     @Override
     protected void initConfig() {
@@ -139,12 +152,30 @@ public class PersonMsgActivity extends BaseActivity {
     @Override
     protected void initEvents() {
         super.initEvents();
+        // 屏蔽键盘的弹起
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         // 获取到MyFragment里的Bitmap对象
         Bitmap mBitmap = MyFragment.mBitmap;
-        ivHeaderIcon.setImageBitmap(mBitmap);
+        if (mBitmap != null) {
+            ivHeaderIcon.setImageBitmap(mBitmap);
+        }
+        String name1 = MyFragment.name1;
+        if (!TextUtils.isEmpty(name1)) {
+            etMyUsername.setText(name1);
+        }
+
         // 给每个控件先设置初始内容
         setInitialData();
+        popBirthHelper = new PopBirthHelper(mActivity);
+        popBirthHelper.setOnClickOkListener(new PopBirthHelper.OnClickOkListener() {
+            @Override
+            public void onClickOk(String time) {
+                //ToastUtils.showLongToast(mActivity,birthday);
 
+                tvMyAge.setText(time);
+                newTime = time;
+            }
+        });
     }
 
     /**
@@ -183,25 +214,43 @@ public class PersonMsgActivity extends BaseActivity {
 
     @OnClick({R.id.ll_psHeaderIcon, R.id.ll_psUsername, R.id.ll_psAge, R.id.ll_psGender, R.id.ll_psPhone, R.id.ll_pspwd, R.id.ll_psCertification, R.id.ll_psUnit, R.id.ll_psWeChat})
     public void onClick(View view) {
+        // 获取uid
+
+        uid = SpUtils.getStringParam(mActivity, Keys.UID);
+        System.out.println("111uid是+++===" + uid);
         switch (view.getId()) {
             case R.id.ll_psHeaderIcon:
+                // 弹出对话框
                 showDialog();
                 break;
             case R.id.ll_psUsername:
+                /**修改用户名*/
+                alterName();
                 break;
             case R.id.ll_psAge:
+                // 年龄弹窗
+                popBirthHelper.show(llPsAge);
                 break;
             case R.id.ll_psGender:
+                // 性别弹窗
+
                 break;
             case R.id.ll_psPhone:
+                //手机号码
                 break;
             case R.id.ll_pspwd:
+                // 密码修改
+
                 break;
             case R.id.ll_psCertification:
+                // 实名认证
+
                 break;
             case R.id.ll_psUnit:
+                // 所属单位
                 break;
             case R.id.ll_psWeChat:
+                //微信
                 break;
             case R.id.btn_popDialog_takephoto:
                 // 拍照
@@ -213,6 +262,93 @@ public class PersonMsgActivity extends BaseActivity {
                 isClick = false;
                 getPhoto();
                 break;
+        }
+    }
+
+
+
+    /**
+     * 修改用户名
+     */
+    private void alterName() {
+        // 先弹出键盘,让焦点在输入框上
+        etMyUsername.requestFocus();
+        imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
+
+        etMyUsername.addTextChangedListener(new TextWatcher() {
+
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                /**
+                 * 延迟线程，看是否还有下一个字符输入
+                 */
+                Runnable delayRun = new Runnable() {
+
+                    @Override
+                    public void run() {
+                        //在这里调用服务器的接口，获取数据
+                        uploadName();
+                        etMyUsername.clearFocus();
+                        ToastUtils.showToast(mActivity, "保存成功");
+                        Intent intent = new Intent();
+                        intent.putExtra(Keys.NEWNAME, newName);
+                        setResult(2, intent);
+                    }
+                };
+                if(delayRun!=null){
+                    //每次editText有变化的时候，则移除上次发出的延迟线程
+                    handler.removeCallbacks(delayRun);
+                }
+                newName = s.toString();
+
+                //延迟800ms，如果不再输入字符，则执行该线程的run方法
+                handler.postDelayed(delayRun, 2000);
+            }
+        });
+
+    }
+
+
+    private void uploadName() {
+        String url = Urls.Url_My_Name;
+        Map<String, String> params = new HashMap<>();
+        params.put("uid", uid);
+        params.put("name", newName);
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback2());
+    }
+
+    class MyStringCallback2 extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+
+        }
+
+        @Override
+        public void onResponse(String response) {
+            //System.out.println("PersonMsgActivity+界面修改用户名" + response);
+            MyAlterNameBean bean = new Gson().fromJson(response, MyAlterNameBean.class);
+            if(bean!=null){
+                int code = bean.code;
+                if(code == 0){
+                    ToastUtils.showToast(mActivity,"修改成功");
+                }
+            }
         }
     }
 
@@ -250,9 +386,9 @@ public class PersonMsgActivity extends BaseActivity {
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
         File file = null;
         if (isClick) {
-            file = filePhoto01;
+            file = filePhoto01;//相机照片
         } else {
-            file = filePhoto02;
+            file = filePhoto02;//相册照片
         }
         if (file == null || !file.exists()) {
             ToastUtils.showLongToast(mActivity, "请先拍照或者获取图库图片");
@@ -269,10 +405,10 @@ public class PersonMsgActivity extends BaseActivity {
                 .url(url)//
                 .params(params)//
                 .build()//
-                .execute(new MyStringCallback());
+                .execute(new MyStringCallback1());
     }
 
-    class MyStringCallback extends StringCallback {
+    class MyStringCallback1 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
             System.out.println("PersonMsgActivity+++===界面失败" + e.getMessage());
