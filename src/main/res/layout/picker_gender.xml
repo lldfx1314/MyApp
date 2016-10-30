@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#FFFFFF"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="请选择租房时长"
+            android:text="请选择您的性别"
             android:textColor="@color/text_gray"
             android:textSize="15sp"
             />
@@ -52,27 +52,9 @@
 
 
         <com.anhubo.anhubo.pickerview.LoopView
-            android:id="@+id/loopView1"
+            android:id="@+id/loopView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"/>
-        <com.anhubo.anhubo.pickerview.LoopView
-            android:id="@+id/loopViewYear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"/>
-
-        <com.anhubo.anhubo.pickerview.LoopView
-            android:id="@+id/loopView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"/>
-
-        <com.anhubo.anhubo.pickerview.LoopView
-            android:id="@+id/loopViewMonth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"/>
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

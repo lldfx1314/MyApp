@@ -235,7 +235,7 @@ public class DatePackerUtil {
     public static List<String> getYearList() {
         List<String> NList = new ArrayList<>();
 
-        for (int i = 0; i < 101; i++) {
+        for (int i = 0; i < 51; i++) {
             NList.add(i+"");
         }
         return NList;
@@ -283,11 +283,20 @@ public class DatePackerUtil {
         }
         return Month;
     }
-
+    /**员工人数*/
     public static List<String> getList() {
         List<String> numbers = new ArrayList<>();
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 500; i++) {
             numbers.add(String.valueOf(i));
+        }
+        return numbers;
+    }
+    /**员工人数*/
+    public static List<String> getListGender() {
+        List<String> numbers = new ArrayList<>();
+        String[] arr = new String[]{"保密","男","女"};
+        for (int i = 0; i < arr.length; i++) {
+            numbers.add(arr[i]);
         }
         return numbers;
     }

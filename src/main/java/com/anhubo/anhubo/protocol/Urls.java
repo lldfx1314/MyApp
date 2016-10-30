@@ -86,4 +86,6 @@ public interface Urls {
     String Url_My_GetUserInfo = UrlBase +"Personal/get_us_info";
     /**修改姓名*/
     String Url_My_Name = UrlBase +"Personal/change_name";
+    /**修改性别*/
+    String Url_My_Gender = UrlBase +"Personal/change";
 }

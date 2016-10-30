@@ -20,9 +20,9 @@ import java.util.List;
 
 
 /**
- * Created by baiyuliang on 2015-11-24.
+ * Created by LUOLI on 2015-11-24.
  */
-public class PopOneHelper {
+public class PopGenderHelper {
 
     private Context context;
     private PopupWindow pop;
@@ -32,9 +32,9 @@ public class PopOneHelper {
     private List<String> listItem;
     private String str;
 
-    public PopOneHelper(Context context) {
+    public PopGenderHelper(Context context) {
         this.context = context;
-        view = View.inflate(context,R.layout.picker_one, null);
+        view = View.inflate(context,R.layout.picker_gender, null);
         pop = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         initPop();
     }
@@ -55,12 +55,12 @@ public class PopOneHelper {
         if (listItem!=null) {
             loopView.setList(listItem);
             loopView.setNotLoop();
-            loopView.setCurrentItem(10);
+            loopView.setCurrentItem(0);
             loopView.setListener(new LoopListener() {
                 @Override
                 public void onItemSelect(int item) {
                     if (TextUtils.isEmpty(str)) {
-                        str = 10+"";
+                        str = "保密";
                         return;
                     }
                     str = listItem.get(item);

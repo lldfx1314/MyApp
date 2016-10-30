@@ -89,11 +89,13 @@ public class MyFragment extends BaseFragment {
     @Override
     public void initData() {
 
+
+
+
+        /**我的界面第一次请求网络*/
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
-
-
         String url = Urls.Url_My_GetUserInfo;
 
         OkHttpUtils.post()//

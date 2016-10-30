@@ -16,9 +16,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,14 +26,17 @@ import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
+import com.anhubo.anhubo.bean.MyAlterGenderBean;
 import com.anhubo.anhubo.bean.MyAlterNameBean;
 import com.anhubo.anhubo.bean.MyFragmentBean;
 import com.anhubo.anhubo.bean.My_HeaderIconBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.impl.MyFragment;
+import com.anhubo.anhubo.utils.DatePackerUtil;
 import com.anhubo.anhubo.utils.ImageTools;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.PopBirthHelper;
+import com.anhubo.anhubo.utils.PopGenderHelper;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.ShowBottonDialog;
@@ -117,9 +118,9 @@ public class PersonMsgActivity extends BaseActivity {
     private String uid;
     private Handler handler = new Handler();
     private PopBirthHelper popBirthHelper;
-    private String newTime;
     private InputMethodManager imm;
     private String newName;
+    private PopGenderHelper popGenderHelper;
 
     @Override
     protected void initConfig() {
@@ -155,17 +156,26 @@ public class PersonMsgActivity extends BaseActivity {
         // 屏蔽键盘的弹起
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         // 获取到MyFragment里的Bitmap对象
+
+        // 给每个控件先设置初始内容
+        setInitialData();
+
         Bitmap mBitmap = MyFragment.mBitmap;
         if (mBitmap != null) {
             ivHeaderIcon.setImageBitmap(mBitmap);
         }
+        /**获取我的界面传过来的姓名，显示*/
         String name1 = MyFragment.name1;
         if (!TextUtils.isEmpty(name1)) {
             etMyUsername.setText(name1);
         }
-
-        // 给每个控件先设置初始内容
-        setInitialData();
+        /**年龄弹窗的显示*/
+        alterAge();
+        /**性别弹窗*/
+        alterGender();
+    }
+    /**年龄弹窗的显示*/
+    private void alterAge() {
         popBirthHelper = new PopBirthHelper(mActivity);
         popBirthHelper.setOnClickOkListener(new PopBirthHelper.OnClickOkListener() {
             @Override
@@ -173,9 +183,52 @@ public class PersonMsgActivity extends BaseActivity {
                 //ToastUtils.showLongToast(mActivity,birthday);
 
                 tvMyAge.setText(time);
-                newTime = time;
             }
         });
+    }
+    /**性别弹窗*/
+    private void alterGender() {
+        popGenderHelper = new PopGenderHelper(this);
+        popGenderHelper.setListItem(DatePackerUtil.getListGender());
+        popGenderHelper.setOnClickOkListener(new PopGenderHelper.OnClickOkListener() {
+
+            @Override
+            public void onClickOk(String str) {
+                tvMyGender.setText(str);
+                // 走网络，提交性别
+                String url = Urls.Url_My_Gender;
+                HashMap<String, String> params = new HashMap<>();
+                params.put("uid", uid);
+                params.put("sex", str);
+                OkHttpUtils.post()//
+                        .url(url)//
+                        .params(params)//
+                        .build()//
+                        .execute(new MyStringCallback4());
+            }
+        });
+    }
+    /**上传性别*/
+    class MyStringCallback4 extends StringCallback{
+        @Override
+        public void onError(Call call, Exception e) {
+            ToastUtils.showToast(mActivity, "网络有问题，请检查");
+        }
+
+        @Override
+        public void onResponse(String response) {
+            //System.out.println("PersonMsgActivity+++界面上传性别"+response);
+            MyAlterGenderBean bean = new Gson().fromJson(response, MyAlterGenderBean.class);
+            if(bean!=null){
+                int code = bean.code;
+                String msg = bean.msg;
+                if(code != 0){
+                    ToastUtils.showToast(mActivity,msg);
+                }else{
+                    ToastUtils.showToast(mActivity,"性别修改成功");
+                }
+            }
+        }
     }
 
     /**
@@ -185,7 +238,6 @@ public class PersonMsgActivity extends BaseActivity {
         if (!TextUtils.isEmpty(img)) {
             //设置头像显示,这种方式效率较低，体验不好
             //setHeaderIcon(img);
-
         }
         if (!TextUtils.isEmpty(name)) {
             etMyUsername.setText(name);
@@ -215,25 +267,28 @@ public class PersonMsgActivity extends BaseActivity {
     @OnClick({R.id.ll_psHeaderIcon, R.id.ll_psUsername, R.id.ll_psAge, R.id.ll_psGender, R.id.ll_psPhone, R.id.ll_pspwd, R.id.ll_psCertification, R.id.ll_psUnit, R.id.ll_psWeChat})
     public void onClick(View view) {
         // 获取uid
-
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
-        System.out.println("111uid是+++===" + uid);
+        //System.out.println("111uid是+++===" + uid);
         switch (view.getId()) {
             case R.id.ll_psHeaderIcon:
-                // 弹出对话框
+                /**弹出拍照对话框*/
                 showDialog();
                 break;
             case R.id.ll_psUsername:
                 /**修改用户名*/
                 alterName();
                 break;
+            case R.id.et_my_username:
+                /**修改用户名*/
+                alterName();
+                break;
             case R.id.ll_psAge:
-                // 年龄弹窗
+                /**年龄弹窗*/
                 popBirthHelper.show(llPsAge);
                 break;
             case R.id.ll_psGender:
-                // 性别弹窗
-
+                /**性别弹窗*/
+                popGenderHelper.show(llPsGender);
                 break;
             case R.id.ll_psPhone:
                 //手机号码
@@ -266,15 +321,28 @@ public class PersonMsgActivity extends BaseActivity {
     }
 
 
+    /**
+     * 延迟线程，看是否还有下一个字符输入
+     */
+    private Runnable delayRun = new Runnable() {
+
+        @Override
+        public void run() {
+            //在这里调用服务器的接口，获取数据
+            uploadName();
+        }
+    };
 
     /**
      * 修改用户名
      */
     private void alterName() {
         // 先弹出键盘,让焦点在输入框上
-        etMyUsername.requestFocus();
+        etMyUsername.requestFocus();// 获取焦点
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
+
+        //监听输入框的动态变化
 
         etMyUsername.addTextChangedListener(new TextWatcher() {
 
@@ -286,41 +354,23 @@ public class PersonMsgActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if (delayRun != null) {
+                    //每次editText有变化的时候，则移除上次发出的延迟线程
+                    handler.removeCallbacks(delayRun);
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                /**
-                 * 延迟线程，看是否还有下一个字符输入
-                 */
-                Runnable delayRun = new Runnable() {
-
-                    @Override
-                    public void run() {
-                        //在这里调用服务器的接口，获取数据
-                        uploadName();
-                        etMyUsername.clearFocus();
-                        ToastUtils.showToast(mActivity, "保存成功");
-                        Intent intent = new Intent();
-                        intent.putExtra(Keys.NEWNAME, newName);
-                        setResult(2, intent);
-                    }
-                };
-                if(delayRun!=null){
-                    //每次editText有变化的时候，则移除上次发出的延迟线程
-                    handler.removeCallbacks(delayRun);
-                }
                 newName = s.toString();
-
-                //延迟800ms，如果不再输入字符，则执行该线程的run方法
-                handler.postDelayed(delayRun, 2000);
+                //延迟5s，如果不再输入字符，则执行该线程的run方法
+                handler.postDelayed(delayRun, 5000);
             }
         });
 
     }
 
-
+    /**上传名字*/
     private void uploadName() {
         String url = Urls.Url_My_Name;
         Map<String, String> params = new HashMap<>();
@@ -332,21 +382,30 @@ public class PersonMsgActivity extends BaseActivity {
                 .build()//
                 .execute(new MyStringCallback2());
     }
-
+    /**上传用户*/
     class MyStringCallback2 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-
+            ToastUtils.showToast(mActivity, "网络有问题，请检查");
         }
 
         @Override
         public void onResponse(String response) {
             //System.out.println("PersonMsgActivity+界面修改用户名" + response);
             MyAlterNameBean bean = new Gson().fromJson(response, MyAlterNameBean.class);
-            if(bean!=null){
+            if (bean != null) {
                 int code = bean.code;
-                if(code == 0){
-                    ToastUtils.showToast(mActivity,"修改成功");
+                String msg = bean.msg;
+                if (code != 0) {
+                    ToastUtils.showToast(mActivity, msg);
+                }else {
+                    ToastUtils.showToast(mActivity, "修改成功");
+                    // 每次更改成功后要通知我的界面也要改变显示内容
+                    Intent intent = new Intent();
+                    intent.putExtra(Keys.NEWNAME, newName);
+                    setResult(2, intent);
+                    // 失去焦点
+                    //etMyUsername.clearFocus();
                 }
             }
         }
@@ -407,7 +466,7 @@ public class PersonMsgActivity extends BaseActivity {
                 .build()//
                 .execute(new MyStringCallback1());
     }
-
+    /**上传头像*/
     class MyStringCallback1 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {

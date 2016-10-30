@@ -3,6 +3,7 @@ package com.anhubo.anhubo.utils;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +70,7 @@ public class PopDateHelper {
         final LoopView loopViewMonth = (LoopView) view.findViewById(R.id.loopViewMonth);
         loopView1.setIsViewYear(false);//不显示年
         loopView1.setList(listDate);
-        loopView1.setNotLoop();
+        //loopView1.setNotLoop();
         loopView1.setCurrentItem(1);
 
         loopViewYear.setList(listYear);
@@ -82,18 +83,27 @@ public class PopDateHelper {
 
 
         loopView2.setList(listTime);
-        loopView2.setNotLoop();
+        //loopView2.setNotLoop();
         loopView2.setCurrentItem(0);
 
         loopView1.setListener(new LoopListener() {
             @Override
             public void onItemSelect(int item) {
+
+                if (TextUtils.isEmpty(year)) {
+                    year = "1";
+                    return;
+                }
                 year =listDate.get(item);
             }
         });
         loopView2.setListener(new LoopListener() {
             @Override
             public void onItemSelect(int item) {
+                if (TextUtils.isEmpty(month)) {
+                    month = "0";
+                    return;
+                }
                 month = listTime.get(item);
             }
         });
