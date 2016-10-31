@@ -50,7 +50,9 @@ public class MyFragment extends BaseFragment {
     private TextView tvMyGebder;
     private TextView tvMyAge;
     private MyFragmentBean bean;
-    public static String name1;
+    public static String name_new;
+    public static String gender_new;
+    public static String age_new;
 
     @Override
     public void initTitleBar() {
@@ -183,11 +185,28 @@ public class MyFragment extends BaseFragment {
                         setHeaderIcon(imgurl);
                     }
                     break;
-                case 2:// 保存头像后返回的url，显示更改后的头像
+                case 2:// 更改姓名后返回的url，显示更改后的姓名
                     String newName = intent.getStringExtra(Keys.NEWNAME);
                     if (!TextUtils.isEmpty(newName)) {
-                        name1 = newName;
+                        name_new = newName;
+
                         tvMyName.setText(newName);
+                    }
+                    break;
+                case 3:// 更改年龄后返回的url，显示更改后的年龄
+                    String newAge = intent.getStringExtra(Keys.NEWAGE);
+                    if (!TextUtils.isEmpty(newAge)) {
+                        age_new = newAge;
+
+                        tvMyAge.setText(newAge);
+                    }
+                    break;
+
+                case 4:// 更改性别后返回的url，显示更改后的性别
+                    String newGender = intent.getStringExtra(Keys.NEWGENDER);
+                    if (!TextUtils.isEmpty(newGender)) {
+                        gender_new = newGender;
+                        tvMyGebder.setText(newGender);
                     }
                     break;
             }

@@ -16,6 +16,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
+import com.anhubo.anhubo.bean.MyAlterAgeBean;
 import com.anhubo.anhubo.bean.MyAlterGenderBean;
 import com.anhubo.anhubo.bean.MyAlterNameBean;
 import com.anhubo.anhubo.bean.MyFragmentBean;
@@ -49,7 +51,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -64,6 +69,7 @@ import okhttp3.Call;
 public class PersonMsgActivity extends BaseActivity {
     private static final int PICTURE = 0;
     private static final int CAMERA = 1;
+    private static final int REQUEST_ALTER_PWD = 2;
     @InjectView(R.id.ll_psHeaderIcon)
     LinearLayout llPsHeaderIcon;
     @InjectView(R.id.ll_psUsername)
@@ -121,6 +127,8 @@ public class PersonMsgActivity extends BaseActivity {
     private InputMethodManager imm;
     private String newName;
     private PopGenderHelper popGenderHelper;
+    private String newGender;
+    private String newAge;
 
     @Override
     protected void initConfig() {
@@ -151,11 +159,83 @@ public class PersonMsgActivity extends BaseActivity {
     }
 
     @Override
+    protected void onLoadDatas() {
+
+    }
+
+    @OnClick({R.id.ll_psHeaderIcon, R.id.ll_psUsername, R.id.et_my_username, R.id.ll_psAge, R.id.ll_psGender, R.id.ll_psPhone, R.id.ll_pspwd, R.id.ll_psCertification, R.id.ll_psUnit, R.id.ll_psWeChat})
+    public void onClick(View view) {
+        // 获取uid
+        uid = SpUtils.getStringParam(mActivity, Keys.UID);
+        //System.out.println("111uid是+++===" + uid);
+        switch (view.getId()) {
+            case R.id.ll_psHeaderIcon:
+                /**弹出拍照对话框*/
+                showDialog();
+                break;
+            case R.id.ll_psUsername:
+                /**修改用户名*/
+                alterName();
+                break;
+            case R.id.et_my_username:
+                break;
+            case R.id.ll_psAge:
+                /**年龄弹窗*/
+                popBirthHelper.show(llPsAge);
+                break;
+            case R.id.ll_psGender:
+                /**性别弹窗*/
+                popGenderHelper.show(llPsGender);
+                break;
+            case R.id.ll_psPhone:
+                //手机号码
+                break;
+            case R.id.ll_pspwd:
+                // 密码修改
+                alterPwd();
+                break;
+            case R.id.ll_psCertification:
+                // 实名认证
+
+                break;
+            case R.id.ll_psUnit:
+                // 所属单位
+                break;
+            case R.id.ll_psWeChat:
+                //微信
+                break;
+            case R.id.btn_popDialog_takephoto:
+                // 拍照
+                isClick = true;
+                takePhoto();
+                break;
+            case R.id.btn_popDialog_photo:
+                // 相册
+                isClick = false;
+                getPhoto();
+                break;
+        }
+    }
+
+
+    @Override
     protected void initEvents() {
         super.initEvents();
-        // 屏蔽键盘的弹起
-        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        // 获取到MyFragment里的Bitmap对象
+
+        //设置etMyUsername的点击事件
+        etMyUsername.setOnTouchListener(new View.OnTouchListener() {
+            //按住和松开的标识
+            int touch_flag = 0;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                touch_flag++;
+                if (touch_flag == 2) {
+                    alterName();
+                }
+                return false;
+            }
+        });
 
         // 给每个控件先设置初始内容
         setInitialData();
@@ -165,28 +245,39 @@ public class PersonMsgActivity extends BaseActivity {
             ivHeaderIcon.setImageBitmap(mBitmap);
         }
         /**获取我的界面传过来的姓名，显示*/
-        String name1 = MyFragment.name1;
-        if (!TextUtils.isEmpty(name1)) {
-            etMyUsername.setText(name1);
+        String name_new = MyFragment.name_new;
+        if (!TextUtils.isEmpty(name_new)) {
+            etMyUsername.setText(name_new);
+        }
+        /**获取我的界面传过来的年龄，显示*/
+        String age_new = MyFragment.age_new;
+        if (!TextUtils.isEmpty(age_new)) {
+            tvMyAge.setText(age_new);
+        }
+        /**获取我的界面传过来的性别，显示*/
+        String gender_new = MyFragment.gender_new;
+        if (!TextUtils.isEmpty(gender_new)) {
+            tvMyGender.setText(gender_new);
         }
         /**年龄弹窗的显示*/
         alterAge();
         /**性别弹窗*/
         alterGender();
     }
-    /**年龄弹窗的显示*/
-    private void alterAge() {
-        popBirthHelper = new PopBirthHelper(mActivity);
-        popBirthHelper.setOnClickOkListener(new PopBirthHelper.OnClickOkListener() {
-            @Override
-            public void onClickOk(String time) {
-                //ToastUtils.showLongToast(mActivity,birthday);
 
-                tvMyAge.setText(time);
-            }
-        });
+    /**
+     * ****************************************************************************
+     * 密码修改
+     */
+    private void alterPwd() {
+        Intent intent = new Intent(mActivity, AlterPwdActivity.class);
+        startActivityForResult(intent,REQUEST_ALTER_PWD);
     }
-    /**性别弹窗*/
+
+    /**
+     * ****************************************************************************
+     * 性别弹窗
+     */
     private void alterGender() {
         popGenderHelper = new PopGenderHelper(this);
         popGenderHelper.setListItem(DatePackerUtil.getListGender());
@@ -195,6 +286,7 @@ public class PersonMsgActivity extends BaseActivity {
             @Override
             public void onClickOk(String str) {
                 tvMyGender.setText(str);
+                newGender = str;
                 // 走网络，提交性别
                 String url = Urls.Url_My_Gender;
                 HashMap<String, String> params = new HashMap<>();
@@ -208,28 +300,162 @@ public class PersonMsgActivity extends BaseActivity {
             }
         });
     }
-    /**上传性别*/
-    class MyStringCallback4 extends StringCallback{
+
+    /**
+     * 上传性别
+     */
+    class MyStringCallback4 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
+
+            System.out.println("PersonMsgActivity+++界面上传性别===" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
             //System.out.println("PersonMsgActivity+++界面上传性别"+response);
             MyAlterGenderBean bean = new Gson().fromJson(response, MyAlterGenderBean.class);
-            if(bean!=null){
+            if (bean != null) {
                 int code = bean.code;
                 String msg = bean.msg;
-                if(code != 0){
-                    ToastUtils.showToast(mActivity,msg);
-                }else{
-                    ToastUtils.showToast(mActivity,"性别修改成功");
+                if (code != 0) {
+                    ToastUtils.showToast(mActivity, msg);
+                } else {
+                    //ToastUtils.showToast(mActivity,"性别修改成功");
+                    // 每次更改成功后要通知我的界面也要改变显示内容
+                    Intent intent = new Intent();
+                    intent.putExtra(Keys.NEWGENDER, newGender);
+                    setResult(4, intent);
                 }
             }
         }
     }
+
+    /**
+     * ****************************************************************************
+     * 年龄弹窗的显示
+     */
+    private void alterAge() {
+        popBirthHelper = new PopBirthHelper(mActivity);
+        popBirthHelper.setOnClickOkListener(new PopBirthHelper.OnClickOkListener() {
+            @Override
+            public void onClickOk(String time) {
+
+                try {
+
+                    //此处是获得的年龄
+                    //由出生日期获得年龄***
+                    newAge = String.valueOf(getAge(parse(time)));
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (Integer.parseInt(newAge) >= 0) {
+                    tvMyAge.setText(newAge);
+                    // 拿到年龄,上传到网络
+                    uploadAge(time);
+                } else {
+                    ToastUtils.showToast(mActivity, "您所选日期大于当前时间");
+                }
+
+            }
+
+
+        });
+    }
+
+    /**
+     * 把年龄上传到网络
+     *
+     * @param time
+     */
+    private void uploadAge(String time) {
+        // 走网络，提交性别
+        String url = Urls.Url_My_Age;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("uid", uid);
+        params.put("birthday", time);
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback3());
+    }
+
+    class MyStringCallback3 extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+            ToastUtils.showToast(mActivity, "网络有问题，请检查");
+            System.out.println("PersonMsgActivity+++界面上传年龄===" + e.getMessage());
+        }
+
+        @Override
+        public void onResponse(String response) {
+            MyAlterAgeBean bean = new Gson().fromJson(response, MyAlterAgeBean.class);
+            if (bean != null) {
+                int code = bean.code;
+                String msg = bean.msg;
+                if (code != 0) {
+                    ToastUtils.showToast(mActivity, msg);
+                } else {
+
+                    ToastUtils.showToast(mActivity, "年龄修改成功");
+                    Intent intent = new Intent();
+                    intent.putExtra(Keys.NEWAGE, newAge);
+                    setResult(3, intent);
+                }
+            }
+        }
+    }
+
+    //出生日期字符串转化成Date对象
+    public Date parse(String strDate) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        return sdf.parse(strDate);
+    }
+
+
+    //由出生日期获得年龄
+    public int getAge(Date birthDay) {
+        //获取当前系统时间
+        Calendar cal = Calendar.getInstance();
+        //如果出生日期大于当前时间，则抛出异常
+
+        try {
+
+            //取出系统当前时间的年、月、日部分
+            int yearNow = cal.get(Calendar.YEAR);
+            int monthNow = cal.get(Calendar.MONTH);
+            int dayOfMonthNow = cal.get(Calendar.DAY_OF_MONTH);
+
+            //将日期设置为出生日期
+            cal.setTime(birthDay);
+            //取出出生日期的年、月、日部分
+            int yearBirth = cal.get(Calendar.YEAR);
+            int monthBirth = cal.get(Calendar.MONTH);
+            int dayOfMonthBirth = cal.get(Calendar.DAY_OF_MONTH);
+            //当前年份与出生年份相减，初步计算年龄
+            int age = yearNow - yearBirth;
+            //当前月份与出生日期的月份相比，如果月份小于出生月份，则年龄上减1，表示不满多少周岁
+            if (monthNow <= monthBirth) {
+                //如果月份相等，在比较日期，如果当前日，小于出生日，也减1，表示不满多少周岁
+                if (monthNow == monthBirth) {
+                    if (dayOfMonthNow < dayOfMonthBirth) age--;
+                } else {
+                    age--;
+                }
+            }
+            return age;
+        } catch (Exception e) {
+            if (cal.before(birthDay)) {
+                ToastUtils.showToast(mActivity, "您所选日期大于当前时间");
+            }
+            return 0;
+        }
+    }
+
 
     /**
      * 给每个控件先设置初始内容
@@ -259,67 +485,6 @@ public class PersonMsgActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onLoadDatas() {
-
-    }
-
-    @OnClick({R.id.ll_psHeaderIcon, R.id.ll_psUsername, R.id.ll_psAge, R.id.ll_psGender, R.id.ll_psPhone, R.id.ll_pspwd, R.id.ll_psCertification, R.id.ll_psUnit, R.id.ll_psWeChat})
-    public void onClick(View view) {
-        // 获取uid
-        uid = SpUtils.getStringParam(mActivity, Keys.UID);
-        //System.out.println("111uid是+++===" + uid);
-        switch (view.getId()) {
-            case R.id.ll_psHeaderIcon:
-                /**弹出拍照对话框*/
-                showDialog();
-                break;
-            case R.id.ll_psUsername:
-                /**修改用户名*/
-                alterName();
-                break;
-            case R.id.et_my_username:
-                /**修改用户名*/
-                alterName();
-                break;
-            case R.id.ll_psAge:
-                /**年龄弹窗*/
-                popBirthHelper.show(llPsAge);
-                break;
-            case R.id.ll_psGender:
-                /**性别弹窗*/
-                popGenderHelper.show(llPsGender);
-                break;
-            case R.id.ll_psPhone:
-                //手机号码
-                break;
-            case R.id.ll_pspwd:
-                // 密码修改
-
-                break;
-            case R.id.ll_psCertification:
-                // 实名认证
-
-                break;
-            case R.id.ll_psUnit:
-                // 所属单位
-                break;
-            case R.id.ll_psWeChat:
-                //微信
-                break;
-            case R.id.btn_popDialog_takephoto:
-                // 拍照
-                isClick = true;
-                takePhoto();
-                break;
-            case R.id.btn_popDialog_photo:
-                // 相册
-                isClick = false;
-                getPhoto();
-                break;
-        }
-    }
-
 
     /**
      * 延迟线程，看是否还有下一个字符输入
@@ -328,12 +493,13 @@ public class PersonMsgActivity extends BaseActivity {
 
         @Override
         public void run() {
-            //在这里调用服务器的接口，获取数据
+            // 上传更改后的姓名
             uploadName();
         }
     };
 
     /**
+     * ****************************************************************************
      * 修改用户名
      */
     private void alterName() {
@@ -341,9 +507,17 @@ public class PersonMsgActivity extends BaseActivity {
         etMyUsername.requestFocus();// 获取焦点
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
+        if (imm.isActive()) {
+            // 获取焦点,先设置光标遇到最后，然后监听输入框的动态变化
+            etMyUsername.setSelection(etMyUsername.length());
+            listenetMyUsername();
+        }
+    }
 
-        //监听输入框的动态变化
-
+    /**
+     * 监听输入框的动态变化
+     */
+    private void listenetMyUsername() {
         etMyUsername.addTextChangedListener(new TextWatcher() {
 
 
@@ -363,14 +537,15 @@ public class PersonMsgActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 newName = s.toString();
-                //延迟5s，如果不再输入字符，则执行该线程的run方法
-                handler.postDelayed(delayRun, 5000);
+                //延迟2s，如果不再输入字符，则执行该线程的run方法，取消输入框的焦点
+                handler.postDelayed(delayRun, 2000);
             }
         });
-
     }
 
-    /**上传名字*/
+    /**
+     * 上传名字
+     */
     private void uploadName() {
         String url = Urls.Url_My_Name;
         Map<String, String> params = new HashMap<>();
@@ -382,11 +557,15 @@ public class PersonMsgActivity extends BaseActivity {
                 .build()//
                 .execute(new MyStringCallback2());
     }
-    /**上传用户*/
+
+    /**
+     * 上传用户
+     */
     class MyStringCallback2 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
+            System.out.println("PersonMsgActivity+++界面上传name===" + e.getMessage());
         }
 
         @Override
@@ -398,14 +577,13 @@ public class PersonMsgActivity extends BaseActivity {
                 String msg = bean.msg;
                 if (code != 0) {
                     ToastUtils.showToast(mActivity, msg);
-                }else {
-                    ToastUtils.showToast(mActivity, "修改成功");
+                } else {
+                    //ToastUtils.showToast(mActivity, "修改成功");
                     // 每次更改成功后要通知我的界面也要改变显示内容
                     Intent intent = new Intent();
                     intent.putExtra(Keys.NEWNAME, newName);
                     setResult(2, intent);
-                    // 失去焦点
-                    //etMyUsername.clearFocus();
+
                 }
             }
         }
@@ -466,11 +644,14 @@ public class PersonMsgActivity extends BaseActivity {
                 .build()//
                 .execute(new MyStringCallback1());
     }
-    /**上传头像*/
+
+    /**
+     * 上传头像
+     */
     class MyStringCallback1 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            System.out.println("PersonMsgActivity+++===界面失败" + e.getMessage());
+            System.out.println("PersonMsgActivity+++界面上传头像===" + e.getMessage());
 
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
 

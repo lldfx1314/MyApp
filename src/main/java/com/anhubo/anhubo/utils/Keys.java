@@ -83,4 +83,8 @@ public interface Keys {
     String MYBEAN = "mybean";
     /**给我的界面传递名字*/
     String NEWNAME = "NEWNAME";
+    /**给我的界面传递性别*/
+    String NEWGENDER = "newGender";
+    /**给我的界面传递年龄*/
+    String NEWAGE = "newage";
 }

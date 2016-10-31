@@ -13,7 +13,8 @@
     <color name="toolBarColour">#7595FE</color>
     <color name="bg_title">#5E84FF</color>
     <color name="reg_login_bg">#242730</color>
-    <color name="text_gray">#505058</color>
+    <color name="text_gray">#505058</color>#ABABAB
+    <color name="text_gray1">#ABABAB</color>
     <color name="btn_blue">#E7EFFF</color>
     <!---->
     <color name="unit_top">#1D212F</color>

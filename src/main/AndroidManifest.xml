@@ -85,6 +85,7 @@
         <activity android:name=".ui.activity.MyDetial.SettingActivity" />
         <activity android:name=".ui.activity.MyDetial.AboutWeActivity" />
         <activity android:name=".ui.activity.MyDetial.PersonMsgActivity" />
+        <activity android:name=".ui.activity.MyDetial.AlterPwdActivity" />
 
 
         <!--欢迎界面-->

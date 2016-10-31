@@ -73,7 +73,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="8dp"
                     android:layout_toRightOf="@+id/view"
-                    android:text="80岁"
+                    android:text="保密"
                     android:textColor="@color/bg_upload"
                     android:textSize="18sp" />
             </RelativeLayout>
@@ -159,13 +159,6 @@
         android:paddingTop="10dp"
         android:text="退出登录"
         android:textColor="@color/dot_red"
-        android:textSize="20sp" />
-
-    <!--<View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:background="@color/gray" />-->
+        android:textSize="18sp" />
 
 </LinearLayout>
