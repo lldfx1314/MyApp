@@ -86,6 +86,9 @@
         <activity android:name=".ui.activity.MyDetial.AboutWeActivity" />
         <activity android:name=".ui.activity.MyDetial.PersonMsgActivity" />
         <activity android:name=".ui.activity.MyDetial.AlterPwdActivity" />
+        <activity android:name=".ui.activity.MyDetial.CertificationActivity" />
+        <activity android:name=".ui.activity.MyDetial.IdCardActivity" />
+        <activity android:name=".ui.activity.MyDetial.EngineerActivity" />
 
 
         <!--欢迎界面-->

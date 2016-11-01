@@ -43,6 +43,16 @@ public class Utils{
         return m.matches();
 
     }
+
+    /**身份证是否正确*/
+    public static final boolean isRightIdcard(String pwd) {
+        String regular_Idcard ="^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X)$";
+                Pattern p = Pattern.compile(regular_Idcard);
+        Matcher m = p.matcher(pwd);
+        return m.matches();
+
+    }
+
     /**更改获取验证码的TextView显示的内容*/
     public static void setSecurityTextView(final TextView textView) {
         CountDownTimer countDownTimer = new CountDownTimer(60 * 1000, 1000) {

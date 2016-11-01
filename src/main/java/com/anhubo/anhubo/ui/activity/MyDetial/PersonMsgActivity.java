@@ -41,6 +41,7 @@ import com.anhubo.anhubo.utils.PopBirthHelper;
 import com.anhubo.anhubo.utils.PopGenderHelper;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.view.ConfirmPopWindow;
 import com.anhubo.anhubo.view.ShowBottonDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -69,7 +70,6 @@ import okhttp3.Call;
 public class PersonMsgActivity extends BaseActivity {
     private static final int PICTURE = 0;
     private static final int CAMERA = 1;
-    private static final int REQUEST_ALTER_PWD = 2;
     @InjectView(R.id.ll_psHeaderIcon)
     LinearLayout llPsHeaderIcon;
     @InjectView(R.id.ll_psUsername)
@@ -196,7 +196,7 @@ public class PersonMsgActivity extends BaseActivity {
                 break;
             case R.id.ll_psCertification:
                 // 实名认证
-
+                certification();
                 break;
             case R.id.ll_psUnit:
                 // 所属单位
@@ -265,13 +265,24 @@ public class PersonMsgActivity extends BaseActivity {
         alterGender();
     }
 
+
+    /**
+     * ****************************************************************************
+     * 实名认证
+     */
+    private void certification() {
+        Intent intent = new Intent(mActivity, CertificationActivity.class);
+        startActivity(intent);
+
+    }
+
     /**
      * ****************************************************************************
      * 密码修改
      */
     private void alterPwd() {
         Intent intent = new Intent(mActivity, AlterPwdActivity.class);
-        startActivityForResult(intent,REQUEST_ALTER_PWD);
+        startActivity(intent);
     }
 
     /**
@@ -356,6 +367,7 @@ public class PersonMsgActivity extends BaseActivity {
                     // 拿到年龄,上传到网络
                     uploadAge(time);
                 } else {
+                    //new ConfirmPopWindow(mActivity).showDialog(llPsAge,"年龄","您所选日期大于当前时间");
                     ToastUtils.showToast(mActivity, "您所选日期大于当前时间");
                 }
 

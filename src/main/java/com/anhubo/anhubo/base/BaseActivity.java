@@ -24,6 +24,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
+import com.anhubo.anhubo.view.ConfirmPopWindow;
+import com.anhubo.anhubo.view.ShowBottonDialog;
 
 
 import butterknife.ButterKnife;
@@ -69,6 +71,17 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         initEvents();
         onLoadDatas();
         initFinishReceiver();
+        //initDialog();
+
+    }
+
+    private  void initDialog(){
+        /*// 创建一个对象
+        View view = View.inflate(mActivity, R.layout.confirm_dialog, null);
+        View btnCancel = view.findViewById(R.id.btn_cancel);//取消按钮
+        ConfirmPopWindow confirmPopWindow = new ConfirmPopWindow(mActivity);
+        //显示对话框
+        dialog = confirmPopWindow.showDialog();*/
     }
 
 

@@ -1,9 +1,7 @@
-package com.anhubo.anhubo.ui.activity.unitDetial;
+package com.anhubo.anhubo.ui.activity.MyDetial;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -13,20 +11,24 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
+import com.anhubo.anhubo.bean.IdCardBean;
 import com.anhubo.anhubo.bean.MsgPerfectLowerBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.ImageTools;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.ShowBottonDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -36,51 +38,55 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import okhttp3.Call;
 
 /**
- * Created by Administrator on 2016/10/17.
+ * Created by LUOLI on 2016/11/1.
  */
-public class UploadingActivity2 extends BaseActivity {
-
+public class IdCardActivity extends BaseActivity {
     private static final int CAMERA = 0;
     private static final int PICTURE = 1;
-    @InjectView(R.id.ll_card01)
-    LinearLayout llCard01;
-    @InjectView(R.id.iv_showCardFront02)
-    ImageView ivShowCardFront02;
-    @InjectView(R.id.ll_card02)
-    LinearLayout llCard02;
-    @InjectView(R.id.iv_showCardBehind02)
-    ImageView ivShowCardBehind02;
-    @InjectView(R.id.btn_unloading02)
-    Button btnUnloading02;
+    @InjectView(R.id.et_idcard_name)
+    EditText etIdcardName;
+    @InjectView(R.id.et_idcard_phone)
+    EditText etIdcardPhone;
+    @InjectView(R.id.iv_card1)
+    ImageView ivCard1;
+    @InjectView(R.id.iv_card2)
+    ImageView ivCard2;
+    @InjectView(R.id.tv_submit_idcard)
+    TextView tvSubmitIdcard;
+    private String name;
+    private String idcardPhone;
+    private boolean isClick = false;//判断是正面还是反面
+    private boolean isClick1 = false;// 判断是拍照还是相册
     private Dialog dialog;
     private Button btnTakephoto;
     private Button btnPhoto;
-    private String imgName;
-    private boolean isClick = false;//判断是正面还是反面
-    private boolean isClick1 = false;// 判断是拍照还是相册
-    private File filePhoto02;
     private File filePhoto01;
+    private File filePhoto02;
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_uploading2;
+        return R.layout.activity_idcard;
     }
 
     @Override
     protected void initViews() {
-        setTopBarDesc("法人身份证");
+        setTopBarDesc("身份证认证");
+    }
+
+    @Override
+    protected void initEvents() {
+        super.initEvents();
 
     }
 
@@ -89,23 +95,42 @@ public class UploadingActivity2 extends BaseActivity {
 
     }
 
-    @OnClick({R.id.ll_card01, R.id.ll_card02, R.id.btn_unloading02})
+    @OnClick({R.id.iv_card1, R.id.iv_card2, R.id.tv_submit_idcard})
     public void onClick(View view) {
+        /**获取输入的内容*/
+        getInputData();
+
         switch (view.getId()) {
-            case R.id.ll_card01:
+            case R.id.iv_card1:
                 // 身份证正面 底部弹出对话框
                 isClick = true;
                 showDialog();
                 break;
-            case R.id.ll_card02:
+            case R.id.iv_card2:
                 // 身份证背面 底部弹出对话框
                 isClick = false;
                 showDialog();
-
                 break;
-            case R.id.btn_unloading02:
-                // 走网络
-                upLoading();
+            case R.id.tv_submit_idcard:
+                // 对输入的信息做判断
+                if (TextUtils.isEmpty(name)) {
+                    ToastUtils.showToast(mActivity, "请输入姓名");
+                    return;
+                }
+                // 身份证认证
+                if (!TextUtils.isEmpty(idcardPhone)) {
+                    boolean iscardPhone = Utils.isRightIdcard(idcardPhone);
+                    if (!iscardPhone) {
+                        ToastUtils.showToast(mActivity, "请输入正确的身份证号码");
+                        return;
+                    }
+                } else {
+                    ToastUtils.showToast(mActivity, "请输入身份证号码");
+                    return;
+                }
+
+                /**身份证号码*/
+                submit();
                 break;
             case R.id.btn_popDialog_takephoto:
                 // 拍照
@@ -120,13 +145,13 @@ public class UploadingActivity2 extends BaseActivity {
         }
     }
 
-    /**
-     * 拿到拍到的照片去上传
-     */
 
-    private void upLoading() {
+    /**
+     * 身份证号码
+     */
+    private void submit() {
         // 获取
-        String businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
+        String uid = SpUtils.getStringParam(mActivity, Keys.UID);
         File file1 = null;
         File file2 = null;
 
@@ -154,17 +179,20 @@ public class UploadingActivity2 extends BaseActivity {
         }
         isClick = !isClick;
 
-        if (file1==null||file2==null||!file1.exists()||!file2.exists()) {
+        if (file1 == null || !file1.exists()) {
             ToastUtils.showLongToast(mActivity, "请先拍照或者获取图库图片");
             return;
         }
-        /*if (!file2.exists()) {
+        if (file2 == null || !file2.exists()) {
+            ToastUtils.showLongToast(mActivity, "请先拍照或者获取图库图片");
+            return;
+        }
 
-            ToastUtils.showLongToast(mActivity, "图片不存在");
-        }*/
         Map<String, String> params = new HashMap<>();
-        params.put("business_id", businessid);
-        String url = Urls.Url_UpLoading02;
+        params.put("uid", uid);
+        params.put("card_num", idcardPhone);
+        params.put("true_name", name);
+        String url = Urls.Url_IdCard;
 
         OkHttpUtils.post()//
                 .addFile("file1", "file01.png", file1)//
@@ -173,8 +201,6 @@ public class UploadingActivity2 extends BaseActivity {
                 .params(params)//
                 .build()//
                 .execute(new MyStringCallback());
-
-
     }
 
     private Handler handler = new Handler();
@@ -184,28 +210,32 @@ public class UploadingActivity2 extends BaseActivity {
         public void onError(Call call, Exception e) {
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
 
-            System.out.println("UploadingActivity2+++===界面失败" + e.getMessage());
+            System.out.println("IdCardActivity+++===界面失败" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
-            MsgPerfectLowerBean lowerBean = new Gson().fromJson(response, MsgPerfectLowerBean.class);
-            int code = lowerBean.code;
-            final String msg = lowerBean.msg;
-            if (code != 0) {
-                ToastUtils.showToast(mActivity, "上传失败");
-            } else {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        ToastUtils.showToast(mActivity, "上传成功");
-                        Intent intent = new Intent();
+            //System.out.println(response);
+            IdCardBean bean = new Gson().fromJson(response, IdCardBean.class);
+            if (bean != null) {
+                int code = bean.code;
+                final String msg = bean.msg;
+                if (code != 0) {
+                    ToastUtils.showToast(mActivity, "上传失败");
+                } else {
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ToastUtils.showToast(mActivity, "上传成功");
+                        /*Intent intent = new Intent();
                         intent.putExtra(Keys.ISCLICK2, true);
-                        setResult(2, intent);
-                        finish();
-                    }
-                }, 2000);
+                        setResult(2, intent);*/
+                            finish();
+                        }
+                    }, 2000);
+                }
             }
+
         }
     }
 
@@ -269,21 +299,19 @@ public class UploadingActivity2 extends BaseActivity {
                 //为防止原始图片过大导致内存溢出，这里先缩小原图显示，然后释放原始Bitmap占用的内存
                 Bitmap bitmap = ImageTools.zoomBitmap(photo, photo.getWidth() / 5, photo.getHeight() / 5);
                 if (isClick) {
-                    llCard01.setVisibility(View.GONE);
-                    //显示图片
-                    ivShowCardFront02.setImageBitmap(bitmap);
+                    //显示正面图片
+                    ivCard1.setImageBitmap(bitmap);
                 } else {
-                    llCard02.setVisibility(View.GONE);
-                    //显示图片
-                    ivShowCardBehind02.setImageBitmap(bitmap);
+                    //显示反面图片
+                    ivCard2.setImageBitmap(bitmap);
                 }
 
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
 
-        c.close();
+            c.close();
         }
 
     }
@@ -333,49 +361,12 @@ public class UploadingActivity2 extends BaseActivity {
             }
         }
         if (isClick) {
-            llCard01.setVisibility(View.GONE);
-            //显示图片
-            ivShowCardFront02.setImageBitmap(bitmap);
+            //显示正面图片
+            ivCard1.setImageBitmap(bitmap);
         } else {
-            llCard02.setVisibility(View.GONE);
-            //显示图片
-            ivShowCardBehind02.setImageBitmap(bitmap);
+            //显示反面图片
+            ivCard2.setImageBitmap(bitmap);
         }
-    }
-
-    /**
-     * 保存图片到本应用下
-     **/
-    private void savePicture(String fileName, Bitmap bitmap) {
-
-        FileOutputStream fos = null;
-        try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新内容写入会被覆盖
-            fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);// 把图片写入指定文件夹中
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (null != fos) {
-                    fos.close();
-                    fos = null;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * 创建图片不同的文件名
-     **/
-    private String createPhotoFileName() {
-        String fileName = "";
-        Date date = new Date(System.currentTimeMillis());  //系统当前时间
-        SimpleDateFormat dateFormat = new SimpleDateFormat("'IMG'_yyyyMMdd_HHmmss");
-        fileName = dateFormat.format(date) + ".jpg";
-        return fileName;
     }
 
     /**
@@ -399,4 +390,11 @@ public class UploadingActivity2 extends BaseActivity {
     }
 
 
+    /**
+     * 获取输入的内容
+     */
+    private void getInputData() {
+        name = etIdcardName.getText().toString().trim();
+        idcardPhone = etIdcardPhone.getText().toString().trim();
+    }
 }

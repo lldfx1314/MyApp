@@ -1,6 +1,5 @@
 package com.anhubo.anhubo.ui.activity.MyDetial;
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
-import com.anhubo.anhubo.bean.MyAlterNameBean;
 import com.anhubo.anhubo.bean.MyAlterPwdBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
@@ -22,7 +20,6 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.HashMap;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import okhttp3.Call;

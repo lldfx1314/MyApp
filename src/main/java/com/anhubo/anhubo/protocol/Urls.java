@@ -92,4 +92,8 @@ public interface Urls {
     String Url_My_Age = UrlBase +"Personal/birthday";
     /**修改密码*/
     String Url_My_AlterPwd = UrlBase +"Personal/change_pwd";
+    /**身份证认证*/
+    String Url_IdCard = UrlBase +"Personal/save_true";
+    /**证件认证*/
+    String Url_Engineer = UrlBase +"Personal/indent";
 }
