@@ -365,29 +365,34 @@ public class MsgPerfectActivity extends BaseActivity {
 
     private void getData() {
         String url = Urls.Url_GetUsePro;
-        MyRequestResultListener2 requestResultListener = new MyRequestResultListener2();
-        NetUtil.requestData(url, null, MsgPerfect_UsePro_Bean.class, requestResultListener, 0);
+
+
+
+        OkHttpUtils.post()//
+                .url(url)
+                .build()//
+                .execute(new MyStringCallback3());
     }
 
-    class MyRequestResultListener2 implements RequestResultListener<MsgPerfect_UsePro_Bean> {
+    class MyStringCallback3 extends StringCallback{
+
         @Override
-        public void onRequestFinish(MsgPerfect_UsePro_Bean bean, int what) {
-            if (bean != null) {
+        public void onError(Call call, Exception e) {
+
+            System.out.println("MsgPerfectActivity+++===界面没获取到数据");
+        }
+
+        @Override
+        public void onResponse(String response) {
+            MsgPerfect_UsePro_Bean bean = new Gson().fromJson(response, MsgPerfect_UsePro_Bean.class);
+            if(bean!=null){
                 showData(bean);
                 // 设置第一个适配器
                 setAdapterOne();
-
-            } else {
-                System.out.println("DeviceName_Activity+++===没拿到bean对象");
             }
-
-        }
-
-        @Override
-        public void showJsonStr(String str, int what) {
-            //System.out.println("MsgPerfectActivity+++===" + str);
         }
     }
+
 
     private void setAdapterOne() {
         // 拿到数据后调用构造把数据传过去

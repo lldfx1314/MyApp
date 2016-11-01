@@ -2,10 +2,12 @@ package com.anhubo.anhubo.ui.activity.MyDetial;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,19 +16,30 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anhubo.anhubo.R;
+import com.anhubo.anhubo.adapter.EngineerAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
+import com.anhubo.anhubo.bean.EngineerBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.utils.DisplayUtil;
 import com.anhubo.anhubo.utils.ImageTools;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.ShowBottonDialog;
+import com.anhubo.anhubo.view.ShowDialogEngineer;
+import com.anhubo.anhubo.view.ShowDialogTop;
+import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -34,6 +47,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
@@ -71,6 +85,10 @@ public class EngineerActivity extends BaseActivity {
     private boolean isClick1 = false;// 判断是拍照还是相册
     private File filePhoto02;
     private File filePhoto01;
+    private ListView listView;
+    private ArrayList<String> list;
+    private PopupWindow popupWindow;
+    private String str;
 
     @Override
     protected int getContentViewId() {
@@ -121,7 +139,7 @@ public class EngineerActivity extends BaseActivity {
                     return;
                 }
                 // 评级
-                if (TextUtils.isEmpty(engineerGrade)) {
+                if (TextUtils.isEmpty(str)) {
                     ToastUtils.showToast(mActivity, "请选择证书等级");
                     return;
                 }
@@ -149,7 +167,54 @@ public class EngineerActivity extends BaseActivity {
 
     /**评级弹出*/
     private void showPopupwindow() {
+        list = new ArrayList<>();
+        String[] arr = new String[]{"建（构）筑物消防员初级","建（构）筑物消防员中级","建（构）筑物消防员高级","建（构）筑物消防员技师",
+                "建（构）筑物消防员高级技师","注册消防工程师高级","注册消防工程师一级","注册消防工程师二级"};
+        for (int i = 0; i < arr.length; i++) {
+            list.add(arr[i]);
+        }
+        View view = View.inflate(mActivity, R.layout.engineer_dialog, null);
 
+        listView = (ListView) view.findViewById(R.id.lv_engineer);
+        setAdapter(view);
+    }
+
+    private void setAdapter(View view) {
+        EngineerAdapter adapter = new EngineerAdapter(mActivity,list);
+        listView.setAdapter(adapter);
+        // 创建一个PopuWidow对象
+        popupWindow = new PopupWindow(view, 520, 350);
+        //控制键盘是否可以获得焦点
+        popupWindow.setFocusable(true);
+        // 设置允许在外点击消失
+        popupWindow.setOutsideTouchable(true);
+
+        // 这个是为了点击“返回Back”也能使其消失，并且并不会影响你的背景
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+
+        WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        // 显示的位置为:屏幕的宽度的一半-PopupWindow的高度的一半
+        int xPos = windowManager.getDefaultDisplay().getWidth() / 2
+                - popupWindow.getWidth() / 2;
+
+        popupWindow.showAsDropDown(tvEngineerGrade);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view,
+                                    int position, long id) {
+
+                TextView tvEngineer = (TextView) view.findViewById(R.id.tv_engineer);
+                str = tvEngineer.getText().toString().trim();
+                tvEngineerGrade.setText(str);
+                //关闭popupWindow
+                if (popupWindow != null) {
+                    popupWindow.dismiss();
+                    popupWindow = null;
+                }
+            }
+        });
     }
 
     /**
@@ -198,7 +263,7 @@ public class EngineerActivity extends BaseActivity {
         params.put("uid", uid);
         params.put("re_num", engineerPhone);
         params.put("name", engineerName);
-        params.put("cer_hie", engineerGrade);
+        params.put("cer_hie", str);
         String url = Urls.Url_Engineer;
 
         OkHttpUtils.post()//
@@ -223,7 +288,7 @@ public class EngineerActivity extends BaseActivity {
         @Override
         public void onResponse(String response) {
             System.out.println(response);
-            /*EngineerBean bean = new Gson().fromJson(response, EngineerBean.class);
+            EngineerBean bean = new Gson().fromJson(response, EngineerBean.class);
             if (bean != null) {
                 int code = bean.code;
                 final String msg = bean.msg;
@@ -234,14 +299,14 @@ public class EngineerActivity extends BaseActivity {
                         @Override
                         public void run() {
                             ToastUtils.showToast(mActivity, "上传成功");
-                        *//*Intent intent = new Intent();
+                        /*Intent intent = new Intent();
                         intent.putExtra(Keys.ISCLICK2, true);
-                        setResult(2, intent);*//*
+                        setResult(2, intent);*/
                             finish();
                         }
                     }, 2000);
                 }
-            }*/
+            }
 
         }
     }
@@ -391,7 +456,6 @@ public class EngineerActivity extends BaseActivity {
     private void getInputData() {
 
         engineerName = etEngineerName.getText().toString().trim();
-        engineerGrade = tvEngineerGrade.getText().toString().trim();
         engineerPhone = etEngineerPhone.getText().toString().trim();
     }
 }
