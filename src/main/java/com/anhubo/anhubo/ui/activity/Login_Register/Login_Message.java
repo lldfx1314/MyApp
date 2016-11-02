@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
@@ -43,6 +44,7 @@ public class Login_Message extends BaseActivity {
     private String securityCode;
     private boolean isLegal;
     private String token;
+    private ImageButton ibWeichat;
 
 
     @Override
@@ -76,7 +78,8 @@ public class Login_Message extends BaseActivity {
         btnLoginPwd = (Button) findViewById(R.id.btn_loginPwd);
         // 注册
         btnLoginRegister = (Button) findViewById(R.id.btn_login_register);
-
+        // 微信登录
+        ibWeichat = (ImageButton) findViewById(R.id.ib_weichat);
     }
 
     @Override
@@ -88,6 +91,7 @@ public class Login_Message extends BaseActivity {
         btnLoginMsg.setOnClickListener(this);
         btnLoginPwd.setOnClickListener(this);
         btnLoginRegister.setOnClickListener(this);
+        ibWeichat.setOnClickListener(this);
         // 监听号码输入框状态，控制机右边小圆叉
         etLoginMsgphoneNumber.addTextChangedListener(new InputWatcher(btnLoginMsgphoneNumber, etLoginMsgphoneNumber));
     }
@@ -118,6 +122,9 @@ public class Login_Message extends BaseActivity {
                 break;
             case R.id.btn_login_register://跳到注册
                 goToActivity(RegisterActivity.class);
+                break;
+            case R.id.ib_weichat://跳到微信界面
+//                    WEICHAT
                 break;
         }
 

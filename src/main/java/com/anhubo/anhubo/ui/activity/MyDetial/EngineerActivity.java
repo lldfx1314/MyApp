@@ -183,7 +183,7 @@ public class EngineerActivity extends BaseActivity {
         EngineerAdapter adapter = new EngineerAdapter(mActivity,list);
         listView.setAdapter(adapter);
         // 创建一个PopuWidow对象
-        popupWindow = new PopupWindow(view, 520, 350);
+        popupWindow = new PopupWindow(view, DisplayUtil.dp2px(mActivity,270), DisplayUtil.dp2px(mActivity,130));
         //控制键盘是否可以获得焦点
         popupWindow.setFocusable(true);
         // 设置允许在外点击消失
