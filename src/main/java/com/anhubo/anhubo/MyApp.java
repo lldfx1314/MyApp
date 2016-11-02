@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
 import com.yolanda.nohttp.NoHttp;
 import com.yolanda.nohttp.rest.RequestQueue;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -18,11 +20,16 @@ public class MyApp extends Application {
     private static Context context;
     private static Handler handler;
     private static RequestQueue requestQueue;	// NoHttp的请求列表
-
+    {
+        PlatformConfig.setWeixin("wx368b75520f5563b1", "ebf8da8d9862308a026173fa8cf4313a");
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        // 友盟
+        UMShareAPI.get(this);
+
         mInstance=MyApp.this;
         context = this;
         handler = new Handler();

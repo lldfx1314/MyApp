@@ -23,13 +23,36 @@
     <uses-permission android:name="android.permission.FLASHLIGHT" />
 
 
+
+    <!--友盟-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.SET_DEBUG_APP" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+
+
     <application
         android:name=".MyApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        >
+
         <activity android:name=".ui.activity.HomeActivity"></activity>
         <!--Nfc扫描界面-->
         <activity android:name=".ui.activity.unitDetial.NfcScanActivity">
@@ -60,8 +83,13 @@
         <activity android:name=".ui.activity.Login_Register.PwdRegisterActivity" />
         <activity android:name=".ui.activity.Login_Register.AnhubaoDeal" />
         <activity android:name=".ui.activity.Login_Register.Login_Pwd" />
-        <activity android:name=".ui.activity.Login_Register.Login_Message" />
+        <activity android:name=".ui.activity.Login_Register.Login_Message" >
 
+        </activity>
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="561cae6ae0f55abd990035bf" >
+        </meta-data>
         <!--单位界面-->
         <activity android:name=".ui.activity.unitDetial.Add_Device_Activity" />
         <activity android:name=".ui.activity.unitDetial.DeviceName_Activity" />
@@ -89,6 +117,18 @@
         <activity android:name=".ui.activity.MyDetial.CertificationActivity" />
         <activity android:name=".ui.activity.MyDetial.IdCardActivity" />
         <activity android:name=".ui.activity.MyDetial.EngineerActivity" />
+
+
+        <!--微信-->
+        <activity
+            android:name="com.anhubo.anhubo.wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <!-- alipay callback-->
+
 
 
         <!--欢迎界面-->

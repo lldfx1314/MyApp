@@ -1,12 +1,14 @@
 package com.anhubo.anhubo.ui.activity.Login_Register;
 
 import android.content.Intent;
+import android.telecom.Call;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
@@ -21,12 +23,16 @@ import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.google.gson.Gson;
+import com.umeng.socialize.UMAuthListener;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UmengTool;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.HashMap;
+import java.util.Map;
 
-import okhttp3.Call;
 
 /**
  * Created by Administrator on 2016/9/27.
@@ -55,7 +61,6 @@ public class Login_Message extends BaseActivity {
     }
 
 
-
     @Override
     protected int getContentViewId() {
         return R.layout.login_msg_activity;
@@ -63,6 +68,7 @@ public class Login_Message extends BaseActivity {
 
     @Override
     protected void initViews() {
+        
         // 找控件
         // 输入手机号
         etLoginMsgphoneNumber = (EditText) findViewById(R.id.et_loginMsg_phoneNmber);
@@ -104,7 +110,7 @@ public class Login_Message extends BaseActivity {
     @Override
     public void onClick(View v) {
         getInputData();
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_msgLogin_phoneNumber://号码小圆叉
                 etLoginMsgphoneNumber.setText("");
                 break;
@@ -124,14 +130,43 @@ public class Login_Message extends BaseActivity {
                 goToActivity(RegisterActivity.class);
                 break;
             case R.id.ib_weichat://跳到微信界面
-//                    WEICHAT
+                UMShareAPI mShareAPI = UMShareAPI.get(Login_Message.this);
+                mShareAPI.doOauthVerify(Login_Message.this, SHARE_MEDIA.WEIXIN, umAuthListener);//授权
+                mShareAPI.getPlatformInfo(mActivity, SHARE_MEDIA.WEIXIN, umAuthListener);
                 break;
         }
 
     }
-    /**当用户点击密码登录时携带本页面里的手机号到另一个界面*/
+
+    private UMAuthListener umAuthListener = new UMAuthListener() {
+        @Override
+        public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+            ToastUtils.showToast(mActivity,"授权成功");
+
+            
+
+
+        }
+        
+
+        @Override
+        public void onError(SHARE_MEDIA platform, int action, Throwable t) {
+            ToastUtils.showToast(mActivity,"授权失败");
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform, int action) {
+            ToastUtils.showToast(mActivity,"授权取消");
+        }
+    };
+
+
+
+    /**
+     * 当用户点击密码登录时携带本页面里的手机号到另一个界面
+     */
     private void goToLoginPwd() {
-        if(etLoginMsgphoneNumber!=null) {
+        if (etLoginMsgphoneNumber != null) {
             Intent intent = new Intent(Login_Message.this, Login_Pwd.class);
             //System.out.println("要传递的uid+++===+++" + uid);
             intent.putExtra(Keys.PHONE, phoneNumber);
@@ -139,27 +174,28 @@ public class Login_Message extends BaseActivity {
         }
     }
 
-    /**调用接口登录的方法*/
+    /**
+     * 调用接口登录的方法
+     */
     private void login() {
         if (TextUtils.isEmpty(phoneNumber)) {
             ToastUtils.showToast(mActivity, "手机号码不能为空");
             return;
         }
-        if(!Utils.judgePhoneNumber(phoneNumber)){
-            ToastUtils.showToast(mActivity,"请输入正确的手机号码");
+        if (!Utils.judgePhoneNumber(phoneNumber)) {
+            ToastUtils.showToast(mActivity, "请输入正确的手机号码");
             return;
         }
         if (TextUtils.isEmpty(securityCode)) {
             ToastUtils.showToast(mActivity, "请输入验证码");
             return;
         }
-        if (securityCode.length()!=4) {
-            ToastUtils.showToast(mActivity,"验证码长度为4");
+        if (securityCode.length() != 4) {
+            ToastUtils.showToast(mActivity, "验证码长度为4");
             return;
         }
         login_OKHttp();
     }
-
 
 
     private void login_OKHttp() {
@@ -179,16 +215,21 @@ public class Login_Message extends BaseActivity {
     }
 
     class MyStringCallback2 extends StringCallback {
-        @Override
+        /*@Override
         public void onError(Call call, Exception e) {
 
+            System.out.println("Login_Message+++===没拿到数据" + e.getMessage());
+        }*/
+
+        @Override
+        public void onError(okhttp3.Call call, Exception e) {
             System.out.println("Login_Message+++===没拿到数据" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
             Login_Bean bean = new Gson().fromJson(response, Login_Bean.class);
-            if(bean!=null) {
+            if (bean != null) {
                 // 获取到数据
                 String code = bean.code;
                 String msg = bean.msg;
@@ -200,12 +241,12 @@ public class Login_Message extends BaseActivity {
                 String businessName = data.business_name;
 
                 // 根据code值判断跳转到那个界面
-                switch (code){
+                switch (code) {
                     case "101"://网络错误
-                        ToastUtils.showToast(mActivity,msg);
+                        ToastUtils.showToast(mActivity, msg);
                         break;
                     case "102"://验证码错误
-                        ToastUtils.showToast(mActivity,msg);
+                        ToastUtils.showToast(mActivity, msg);
                         break;
                     case "104"://该手机号码没注册，携带输入的手机号跳转到密码注册界面
                         goToPwdRegisterActivity();
@@ -220,45 +261,48 @@ public class Login_Message extends BaseActivity {
                     case "0":// 登录成功，携带返回的参数跳转到单位界面，同时存一下把uid等参数保存到本地
 
                         // 保存参数
-                        SpUtils.putParam(mActivity,Keys.UID,uid);
-                        SpUtils.putParam(mActivity,Keys.BUSINESSID,businessId);
-                        SpUtils.putParam(mActivity,Keys.BULIDINGID,buildingId);
-                        SpUtils.putParam(mActivity,Keys.BUILDINGNAME,buildingName);
-                        SpUtils.putParam(mActivity,Keys.BUSINESSNAME,businessName);
+                        SpUtils.putParam(mActivity, Keys.UID, uid);
+                        SpUtils.putParam(mActivity, Keys.BUSINESSID, businessId);
+                        SpUtils.putParam(mActivity, Keys.BULIDINGID, buildingId);
+                        SpUtils.putParam(mActivity, Keys.BUILDINGNAME, buildingName);
+                        SpUtils.putParam(mActivity, Keys.BUSINESSNAME, businessName);
                         //跳转到主页面
                         enterHome();
                         break;
                 }
 
-            }else{
+            } else {
                 System.out.println("Login_Message+++===没拿到bean对象");
             }
         }
     }
 
 
-
-        /**携带输入的手机号跳转到密码注册界面*/
-        private void goToPwdRegisterActivity() {
-            if (phoneNumber !=null) {
-                Intent intent = new Intent(Login_Message.this, PwdRegisterActivity.class);
-                intent.putExtra(Keys.PHONE, phoneNumber);
-                startActivity(intent);
-            } else {
-                ToastUtils.showToast(mActivity, "网络错误，请重试");
-            }
+    /**
+     * 携带输入的手机号跳转到密码注册界面
+     */
+    private void goToPwdRegisterActivity() {
+        if (phoneNumber != null) {
+            Intent intent = new Intent(Login_Message.this, PwdRegisterActivity.class);
+            intent.putExtra(Keys.PHONE, phoneNumber);
+            startActivity(intent);
+        } else {
+            ToastUtils.showToast(mActivity, "网络错误，请重试");
         }
+    }
 
-        /**携带参数跳转到注册的第二个界面*/
-        private void goTo_Activity(String uid) {
-            if (uid !=null) {
-                Intent intent = new Intent(Login_Message.this, RegisterActivity2.class);
-                intent.putExtra(Keys.UID, uid);
-                startActivity(intent);
-            } else {
-                ToastUtils.showToast(mActivity, "网络错误，请重试");
-            }
+    /**
+     * 携带参数跳转到注册的第二个界面
+     */
+    private void goTo_Activity(String uid) {
+        if (uid != null) {
+            Intent intent = new Intent(Login_Message.this, RegisterActivity2.class);
+            intent.putExtra(Keys.UID, uid);
+            startActivity(intent);
+        } else {
+            ToastUtils.showToast(mActivity, "网络错误，请重试");
         }
+    }
 
 
     private void enterHome() {
@@ -299,7 +343,7 @@ public class Login_Message extends BaseActivity {
 
         } else {
             // 为空，则弹吐司提示用户
-            ToastUtils.showToast(mActivity,"网络有误，请稍后再点");
+            ToastUtils.showToast(mActivity, "网络有误，请稍后再点");
 
         }
     }
@@ -324,9 +368,14 @@ public class Login_Message extends BaseActivity {
     }
 
     class MyStringCallback1 extends StringCallback {
-        @Override
+        /*@Override
         public void onError(Call call, Exception e) {
 
+
+        }*/
+
+        @Override
+        public void onError(okhttp3.Call call, Exception e) {
             System.out.println("Login_Message+++验证码===没拿到数据" + e.getMessage());
         }
 
@@ -350,26 +399,34 @@ public class Login_Message extends BaseActivity {
 
 
     }
+
     class MyStringCallback extends StringCallback {
-        @Override
+       /* @Override
         public void onError(Call call, Exception e) {
+
+        }*/
+
+        @Override
+        public void onError(okhttp3.Call call, Exception e) {
             System.out.println("Login_Message+++token===没拿到数据" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
             Security_Token_Bean bean = new Gson().fromJson(response, Security_Token_Bean.class);
-            if(bean!=null) {
+            if (bean != null) {
                 // 拿到checkCompleteBean，获取token
                 token = bean.data.token;
-            }else{
+            } else {
                 System.out.println("Login_Message+++===没拿到bean对象");
 
             }
         }
     }
 
-    /**获取输入的内容*/
+    /**
+     * 获取输入的内容
+     */
     private void getInputData() {
         //手机号
         phoneNumber = etLoginMsgphoneNumber.getText().toString().trim();

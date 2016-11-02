@@ -113,7 +113,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="90dp"
             android:background="@android:color/transparent"
             android:text="第三方登录"
             android:textColor="#A5A7AA"
@@ -129,9 +129,19 @@
             android:id="@+id/ib_weichat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
+            android:padding="3dp"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/wechat" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:text="微信"
+            android:textColor="#A5A7AA"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
