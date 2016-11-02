@@ -3,6 +3,7 @@ package com.anhubo.anhubo.ui.activity.Login_Register;
 import android.content.Intent;
 import android.telecom.Call;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +33,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -68,7 +70,7 @@ public class Login_Message extends BaseActivity {
 
     @Override
     protected void initViews() {
-        
+
         // 找控件
         // 输入手机号
         etLoginMsgphoneNumber = (EditText) findViewById(R.id.et_loginMsg_phoneNmber);
@@ -132,7 +134,7 @@ public class Login_Message extends BaseActivity {
             case R.id.ib_weichat://跳到微信界面
                 UMShareAPI mShareAPI = UMShareAPI.get(Login_Message.this);
                 mShareAPI.doOauthVerify(Login_Message.this, SHARE_MEDIA.WEIXIN, umAuthListener);//授权
-                mShareAPI.getPlatformInfo(mActivity, SHARE_MEDIA.WEIXIN, umAuthListener);
+                //mShareAPI.getPlatformInfo(mActivity, SHARE_MEDIA.WEIXIN, umAuthListener);
                 break;
         }
 
@@ -141,25 +143,56 @@ public class Login_Message extends BaseActivity {
     private UMAuthListener umAuthListener = new UMAuthListener() {
         @Override
         public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-            ToastUtils.showToast(mActivity,"授权成功");
+            ToastUtils.showToast(mActivity, "授权成功");
 
-            
+            //转换为set
+
+            Set<String> keySet = data.keySet();
+
+            //遍历循环，得到里面的key值----用户名，头像....
+
+            for (String string : keySet) {
+                //打印下
+                //System.out.println("==========11111111111==========string111111111"+string);
+                /*unionid scope  expires_in access_token openid  refresh_token*/
+            }
+
+            //得到key值得话，可以直接的到value
+
+            String name = data.get("unionid");
+            String scope = data.get("scope");
+            String expires_in = data.get("expires_in");
+            String access_token = data.get("access_token");
+            String openid = data.get("openid");
+            String refresh_token = data.get("refresh_token");
+
+           /* oSjg1wZ7SRVJ_epOqeCF_6pshAy4
+              snsapi_userinfo
+              7200
+              pTXRmTCfA55ggJjJt46dGZBxqivfFUxVrUBWj41ekjpCTWzdx96D-WlChPWqnGPSjbeWJpEp8fUCHDEVDObrnjMx37pD_PjKpdepskIZUU8
+              oXrpsxI4RveVzrbI4_hMMz5AIAVc
+              Ah9tv79GaIu7-EE1y25SgwlLd5EtY2DcOllEcj0JwO4h7M2xIImLz4Qb0y5RcsTNFEDBQkX0oHdEvWUWxGAeT4WRBxY9piRfcLHuR3sQtXE*/
+            System.out.println("==========111112==" + name);
+            System.out.println("==========11111==" + scope);
+            System.out.println("==========11111111111==========2222222222222==" + expires_in);
+            System.out.println("==========11111111111==========2222222222222==" + access_token);
+            System.out.println("==========11111111111==========2222222222222==" + openid);
+            System.out.println("==========11111111111==========2222222222222==" + refresh_token);
 
 
         }
-        
+
 
         @Override
         public void onError(SHARE_MEDIA platform, int action, Throwable t) {
-            ToastUtils.showToast(mActivity,"授权失败");
+            ToastUtils.showToast(mActivity, "授权失败");
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform, int action) {
-            ToastUtils.showToast(mActivity,"授权取消");
+            ToastUtils.showToast(mActivity, "授权取消");
         }
     };
-
 
 
     /**
