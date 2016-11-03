@@ -25,6 +25,7 @@
         android:background="@drawable/edit_text"
         android:enabled="false"
         android:gravity="center"
+        android:textColor="@color/text_gray"
         android:text="腾讯众创空间"
         />
     <!--楼层-->

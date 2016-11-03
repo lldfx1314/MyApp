@@ -32,6 +32,7 @@ import com.anhubo.anhubo.bean.MyAlterGenderBean;
 import com.anhubo.anhubo.bean.MyAlterNameBean;
 import com.anhubo.anhubo.bean.MyFragmentBean;
 import com.anhubo.anhubo.bean.My_HeaderIconBean;
+import com.anhubo.anhubo.bean.PersonMsgBindBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.impl.MyFragment;
 import com.anhubo.anhubo.utils.DatePackerUtil;
@@ -44,6 +45,9 @@ import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.ConfirmPopWindow;
 import com.anhubo.anhubo.view.ShowBottonDialog;
 import com.google.gson.Gson;
+import com.umeng.socialize.UMAuthListener;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -59,6 +63,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -110,7 +115,6 @@ public class PersonMsgActivity extends BaseActivity {
     private boolean isClick = false;
     private File filePhoto01;
     private File filePhoto02;
-    private Bitmap bitmap2;
     private boolean isShow;
     private String age;
     private String sex;
@@ -129,6 +133,7 @@ public class PersonMsgActivity extends BaseActivity {
     private PopGenderHelper popGenderHelper;
     private String newGender;
     private String newAge;
+    private String screenname;
 
     @Override
     protected void initConfig() {
@@ -146,6 +151,10 @@ public class PersonMsgActivity extends BaseActivity {
             weiboName = bean.data.weibo_name;
             weixinName = bean.data.weixin_name;
         }
+        // 进来页面后取出微信昵称
+        screenname = SpUtils.getStringParam(mActivity, Keys.SCREENNAME, null);
+
+
     }
 
     @Override
@@ -156,7 +165,12 @@ public class PersonMsgActivity extends BaseActivity {
     @Override
     protected void initViews() {
         setTopBarDesc("个人信息");
+        if(!TextUtils.isEmpty(screenname)){
+            tvMyWechat.setText(screenName);
+        }
     }
+
+
 
     @Override
     protected void onLoadDatas() {
@@ -203,6 +217,9 @@ public class PersonMsgActivity extends BaseActivity {
                 break;
             case R.id.ll_psWeChat:
                 //微信
+                UMShareAPI mShareAPI = UMShareAPI.get(mActivity);
+                mShareAPI.doOauthVerify(mActivity, SHARE_MEDIA.WEIXIN, umAuthListener);//授权
+                mShareAPI.getPlatformInfo(mActivity, SHARE_MEDIA.WEIXIN, umAuthListener1);//获取用户信息
                 break;
             case R.id.btn_popDialog_takephoto:
                 // 拍照
@@ -263,6 +280,138 @@ public class PersonMsgActivity extends BaseActivity {
         alterAge();
         /**性别弹窗*/
         alterGender();
+    }
+
+
+    private String profileImageUrl;
+    private String screenName;
+    /**
+     * 微信绑定
+     */
+    private UMAuthListener umAuthListener1 = new UMAuthListener() {
+        @Override
+        public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+            if (map != null) {
+                //转换为set
+
+                Set<String> keySet = map.keySet();
+
+                //遍历循环，得到里面的key值----用户名，头像....
+
+                for (String string : keySet) {
+                    //打印下
+                    //System.out.println("==========11111111111=="+string);
+                    // 打印完获取到的信息在下面
+                   /* unionid profile_image_url country screen_name access_token city gender province
+                    language expires_in refresh_token openid*/
+                    //我需要的 uid unionid 头像 profile_image_url   姓名  screen_name
+                }
+                profileImageUrl = map.get("profile_image_url");
+                screenName = map.get("screen_name");
+
+            }
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media, int i) {
+
+        }
+    };
+
+    private String unionid;
+    private UMAuthListener umAuthListener = new UMAuthListener() {
+        @Override
+        public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+            //ToastUtils.showToast(mActivity, "授权成功");
+
+            //转换为set
+
+            Set<String> keySet = data.keySet();
+
+            //遍历循环，得到里面的key值----用户名，头像....
+
+            for (String string : keySet) {
+                //打印下
+                //System.out.println("==========11111111111==========string111111111"+string);
+                /*unionid scope  expires_in access_token openid  refresh_token*/
+            }
+
+            //得到key值得话，可以直接的到value
+
+            unionid = data.get("unionid");
+
+            /**微信授权后走的微信登录接口*/
+            String url = Urls.Url_BindWEIXIN;
+            // 封装请求参数
+            HashMap<String, String> params = new HashMap<String, String>();
+            /*newUnionid = map.get("unionid");
+                profileImageUrl = map.get("profile_image_url");
+                screenName*/
+            params.put("uid", uid);
+            params.put("third_type", 2 + "");
+            params.put("unique_name", screenName);
+            params.put("unique_id", unionid);
+            params.put("pic_url", profileImageUrl);
+
+            OkHttpUtils.post()//
+                    .url(url)//
+                    .params(params)//
+                    .build()//
+                    .execute(new MyStringCallback5());
+        }
+
+
+        @Override
+        public void onError(SHARE_MEDIA platform, int action, Throwable t) {
+            ToastUtils.showToast(mActivity, "授权失败");
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform, int action) {
+            ToastUtils.showToast(mActivity, "授权取消");
+        }
+    };
+
+    class MyStringCallback5 extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+            ToastUtils.showToast(mActivity, "网络有问题，请检查");
+
+            System.out.println("PersonMsgActivity+++界面绑定微信===" + e.getMessage());
+        }
+
+        @Override
+        public void onResponse(String response) {
+//            System.out.println("绑定微信"+response);
+            PersonMsgBindBean bean = new Gson().fromJson(response, PersonMsgBindBean.class);
+            if (bean != null) {
+                int code = bean.code;
+                if (code == 0) {
+                    boolean isShowForWEIXIN = SpUtils.getBooleanParam(mActivity, Keys.ISSHOWFORWEIXIN, false);
+                    if (!isShowForWEIXIN) {
+                        // 代表用户没设置过自己的头像，因此显示自己的微信头像
+                        setHeaderIcon(profileImageUrl);
+                        //System.out.println("1111199999998888");
+                        // 设置完后通知我的界面也改变显示内容
+                        Intent intent = new Intent();
+                        intent.putExtra(Keys.HEADERICON_WEIXIN, profileImageUrl);
+                        setResult(5, intent);
+                    }
+
+                    tvMyWechat.setText(screenName);
+                    // 把微信名也要记录下来，下次进来的时候显示
+                    SpUtils.putParam(mActivity,Keys.SCREENNAME,"screenName");
+
+
+                }
+
+            }
+        }
     }
 
 
@@ -412,7 +561,7 @@ public class PersonMsgActivity extends BaseActivity {
                     ToastUtils.showToast(mActivity, msg);
                 } else {
 
-                    ToastUtils.showToast(mActivity, "年龄修改成功");
+                    //ToastUtils.showToast(mActivity, "年龄修改成功");
                     Intent intent = new Intent();
                     intent.putExtra(Keys.NEWAGE, newAge);
                     setResult(3, intent);
@@ -631,6 +780,8 @@ public class PersonMsgActivity extends BaseActivity {
      * 拿到拍到的照片去上传
      */
     private void upLoading() {
+
+
         // 获取
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
         File file = null;
@@ -681,6 +832,8 @@ public class PersonMsgActivity extends BaseActivity {
                     ToastUtils.showToast(mActivity, msg);
                 } else {
                     // code = 0，保存成功
+                    // 记录绑定微信后是否显示微信的头像
+                    SpUtils.putParam(mActivity,Keys.ISSHOWFORWEIXIN,true);
                     ToastUtils.showToast(mActivity, "保存成功");
                     Intent intent = new Intent();
                     intent.putExtra(Keys.HEADERICON, img1);

@@ -228,6 +228,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:background="@drawable/right_arrow" />
 
             </LinearLayout>
@@ -344,6 +345,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:background="@drawable/right_arrow" />
 
             </LinearLayout>
@@ -375,6 +377,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:textColor="@color/gray"
+                    android:text="未绑定"
                     android:textSize="16sp" />
 
                 <ImageView

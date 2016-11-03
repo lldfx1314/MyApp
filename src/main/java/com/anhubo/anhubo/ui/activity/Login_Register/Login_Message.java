@@ -133,12 +133,14 @@ public class Login_Message extends BaseActivity {
                 goToLoginPwd();
                 break;
             case R.id.btn_login_register://跳到注册
-                goToActivity(RegisterActivity.class);
+                Intent intent = new Intent(mActivity, RegisterActivity.class);
+                intent.putExtra(Keys.LOGINFORZHUCE,"LoginforZhuce");
+                startActivity(intent);
                 break;
             case R.id.ib_weichat://跳到微信界面
                 UMShareAPI mShareAPI = UMShareAPI.get(Login_Message.this);
                 mShareAPI.doOauthVerify(Login_Message.this, SHARE_MEDIA.WEIXIN, umAuthListener);//授权
-                mShareAPI.getPlatformInfo(mActivity, SHARE_MEDIA.WEIXIN, umAuthListener1);
+                mShareAPI.getPlatformInfo(mActivity, SHARE_MEDIA.WEIXIN, umAuthListener1);//获取用户信息
                 break;
         }
 
@@ -162,7 +164,7 @@ public class Login_Message extends BaseActivity {
                     language expires_in refresh_token openid*/
                     //我需要的 uid unionid 头像 profile_image_url   姓名  screen_name
                 }
-                newUnionid = map.get("uid");
+                newUnionid = map.get("unionid");
                 profile_image_url = map.get("profile_image_url");
                 screen_name = map.get("screen_name");
 
@@ -183,7 +185,7 @@ public class Login_Message extends BaseActivity {
     private UMAuthListener umAuthListener = new UMAuthListener() {
         @Override
         public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-            ToastUtils.showToast(mActivity, "授权成功");
+            //ToastUtils.showToast(mActivity, "授权成功");
 
             //转换为set
 
@@ -200,8 +202,6 @@ public class Login_Message extends BaseActivity {
             //得到key值得话，可以直接的到value
 
             unionid = data.get("unionid");
-            System.out.println("unionid+++新旧值比对======"+unionid);
-            System.out.println("newunionid新旧值比对+++==="+newUnionid);
 
             /**微信授权后走的微信登录接口*/
             String url = Urls.Url_LoginWEIXIN;
@@ -237,7 +237,7 @@ public class Login_Message extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-            System.out.println("微信登录" + response);
+            //System.out.println("微信登录" + response);
             Login_Bean bean = new Gson().fromJson(response, Login_Bean.class);
             if (bean != null) {
                 String code = bean.code;
@@ -265,10 +265,11 @@ public class Login_Message extends BaseActivity {
                 } else if (exict == 2) {
                     // 去注册uid unionid 头像 profile_image_url   姓名  screen_name
                     Intent intent = new Intent(mActivity, RegisterActivity.class);
-                    intent.putExtra(Keys.UNIONID,"unionid");
-                    intent.putExtra(Keys.PROFILE_IMAGE_URL,"profile_image_url");
-                    intent.putExtra(Keys.SCREEN_NAME,"screen_name");
-                    System.out.println("22222222+unionid="+unionid+"222+profile_image_url+"+profile_image_url+"222screen_name+"+screen_name);
+                    intent.putExtra(Keys.WEIXINFORZHUCE,"weixinforzhuce");
+                    intent.putExtra(Keys.UNIONID,unionid);
+                    intent.putExtra(Keys.PROFILE_IMAGE_URL,profile_image_url);
+                    intent.putExtra(Keys.SCREEN_NAME,screen_name);
+                    //System.out.println("22222222+unionid="+unionid+"222+profile_image_url+"+profile_image_url+"222screen_name+"+screen_name);
                     startActivity(intent);
                 }
 

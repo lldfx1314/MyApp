@@ -91,9 +91,6 @@ public class MyFragment extends BaseFragment {
     @Override
     public void initData() {
 
-
-
-
         /**我的界面第一次请求网络*/
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
         Map<String, String> params = new HashMap<>();
@@ -142,8 +139,16 @@ public class MyFragment extends BaseFragment {
      * 设置头像的显示内容
      */
     private void setData() {
+        boolean booleanParam = SpUtils.getBooleanParam(mActivity, Keys.ISSHOWFORWEIXIN, false);
+        String weixin_img = SpUtils.getStringParam(mActivity, "weixinImg");
         // 头像
-        setHeaderIcon(img);
+        if (!TextUtils.isEmpty(img)) {
+            // 用户自己设置过头像，就显示自己的头像
+            setHeaderIcon(img);
+        }else if(!booleanParam&&!TextUtils.isEmpty(weixin_img)){
+            // 用户自己没设置过就显示，并且绑定微信的话，就显示微信的头像
+            setHeaderIcon(weixin_img);
+        }
         //姓名、年龄、性别
         tvMyName.setText(name);
         tvMyAge.setText(age);
@@ -207,6 +212,14 @@ public class MyFragment extends BaseFragment {
                     if (!TextUtils.isEmpty(newGender)) {
                         gender_new = newGender;
                         tvMyGebder.setText(newGender);
+                    }
+                    break;
+                case 5:// 更改头像后返回的url，显示更改后的头像
+                    String headericon_weixin = intent.getStringExtra(Keys.HEADERICON_WEIXIN);
+                    // 这里得把微信的头像地址保存起来
+                    SpUtils.putParam(mActivity,"weixinImg",headericon_weixin);
+                    if (!TextUtils.isEmpty(headericon_weixin)) {
+                        setHeaderIcon(headericon_weixin);
                     }
                     break;
             }
@@ -275,6 +288,14 @@ public class MyFragment extends BaseFragment {
         SpUtils.putParam(mActivity, Keys.BULIDINGID, null);
         SpUtils.putParam(mActivity, Keys.BUILDINGNAME, null);
         SpUtils.putParam(mActivity, Keys.BUSINESSNAME, null);
+
+
+        SpUtils.putParam(mActivity, Keys.HEADERICON_WEIXIN, null);// 清楚微信头像
+        SpUtils.putParam(mActivity, Keys.ISSHOWFORWEIXIN, false);// 清楚是否显示微信头像的记录
+        SpUtils.putParam(mActivity, "weixinImg", null);// 清楚微信头像
+        SpUtils.putParam(mActivity, Keys.SCREENNAME, null);// 清楚微信昵称
+
+
         //跳转到主页面
         startActivity(new Intent(mActivity, Login_Message.class));
         getActivity().finish();

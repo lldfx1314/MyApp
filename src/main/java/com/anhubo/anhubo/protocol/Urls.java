@@ -98,4 +98,6 @@ public interface Urls {
     String Url_Engineer = UrlBase +"Personal/indent";
     /**微信登录*/
     String Url_LoginWEIXIN = UrlBase +"Personal/third_part_login";
+    /**正常登录绑定微信*/
+    String Url_BindWEIXIN = UrlBase +"Personal/bind_third";
 }

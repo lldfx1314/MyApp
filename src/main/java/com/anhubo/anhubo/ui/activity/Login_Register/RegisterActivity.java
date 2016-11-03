@@ -58,6 +58,11 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private Button btnRegPwdIsVisible;
     private TextView tvDeal;
     private Button btnRegPwdX;
+    private String unionid;
+    private String imageUrl;
+    private String weixinName;
+    private String weixinforzhuce;
+    private String loginforzhuce;
 
 
     @Override
@@ -65,6 +70,13 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         super.initConfig();
         // 第一次请求获取验证的token
         getToken();
+
+        loginforzhuce = getIntent().getStringExtra(Keys.LOGINFORZHUCE);
+        weixinforzhuce = getIntent().getStringExtra(Keys.WEIXINFORZHUCE);
+
+        unionid = getIntent().getStringExtra(Keys.UNIONID);
+        imageUrl = getIntent().getStringExtra(Keys.PROFILE_IMAGE_URL);
+        weixinName = getIntent().getStringExtra(Keys.SCREEN_NAME);
     }
 
     @Override
@@ -258,9 +270,79 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             ToastUtils.showToast(mActivity, "请先阅读协议");
             return;
         }
-        // 再次请求网络，获取uid
-        getUId();
+
+
+        if (!TextUtils.isEmpty(loginforzhuce)) {
+            // 再次请求网络，获取uid
+            //System.out.println("=======正常注册=======");
+            getUId();
+        }else if(!TextUtils.isEmpty(weixinforzhuce)){
+            //System.out.println("=======微信注册=======");
+            getUId_weixin();
+        }
     }
+    /**
+     * 网络请求
+     * 微信注册的网络请求
+     */
+    private void getUId_weixin() {
+        String url = Urls.Url_Enter_RegisterActivity2;
+        // 封装请求参数
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("telphone", phoneNumber);
+        params.put("verify_code", securityCode);
+        params.put("password", pwd);
+        params.put("users_qrcode", inviteCode);
+
+        params.put("third_type", 2 + "");//第三方类型
+        params.put("pic_url", imageUrl);// 头像
+        params.put("unique_id", unionid);// 微信uid
+        params.put("third_name", weixinName);// 微信昵称
+
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback3());
+    }
+
+    class MyStringCallback3 extends StringCallback{
+        @Override
+        public void onError(Call call, Exception e) {
+            System.out.println("RegisterActivity+++===微信没拿到数据" + e.getMessage());
+        }
+
+        @Override
+        public void onResponse(String response) {
+            //System.out.println("1111111122222222"+response);
+            Register1_Bean register1Bean = new Gson().fromJson(response, Register1_Bean.class);
+            if (register1Bean != null) {
+                String code = register1Bean.code;
+                //System.out.println(code);
+                String msg = register1Bean.msg;
+                //System.out.println(msg);
+                int uid = register1Bean.data.uid;
+                //System.out.println("uid+++===" + uid);
+                switch (code) {
+                    case "0":// 注册成功
+                        // 进入注册的第二个界面
+                        enterRegisterActivity2(uid);
+                        break;
+                    case "102":// 验证码错误
+                        ToastUtils.showToast(mActivity, msg);
+                        break;
+                    case "103":// 邀请码错误
+                        ToastUtils.showToast(mActivity, msg);
+                        break;
+                    case "108":// 该手机号码已注册
+                        ToastUtils.showToast(mActivity, msg);
+                        break;
+
+                }
+            }
+        }
+    }
+
 
     /**
      * 网络请求
@@ -398,6 +480,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 .build()//
                 .execute(new MyStringCallback2());
     }
+
     class MyStringCallback2 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
@@ -424,6 +507,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 .build()//
                 .execute(new MyStringCallback1());
     }
+
     class MyStringCallback1 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {

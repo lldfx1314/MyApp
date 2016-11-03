@@ -176,6 +176,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      */
     public void goToActivity(Class clas){
         Intent intent = new Intent(this,clas);
+
         startActivity(intent);
     }
 

@@ -44,7 +44,7 @@ public class Unit2Study extends BaseActivity {
     protected void initEvents() {
         // 获取uid拼接参数
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
-        System.out.println("uid是==========" + uid);
+        //System.out.println("uid是==========" + uid);
         String newUrl = url + "?uid=" + uid;
 
         WebSettings settings = wvStudy.getSettings();

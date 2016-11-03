@@ -34,7 +34,7 @@ public class Build_CltMsgActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
-
+        setTopBarDesc("完善基础信息");
     }
 
     @Override

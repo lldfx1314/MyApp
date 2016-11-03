@@ -92,6 +92,14 @@ public interface Keys {
     String PROFILE_IMAGE_URL = "profile_image_url";
     String SCREEN_NAME = "screen_name";
 
-
-
+    /**正常登录界面跳到注册界面*/
+    String LOGINFORZHUCE = "loginforzhuce";
+    /**微信登录界面跳到注册界面*/
+    String WEIXINFORZHUCE = "weixinforzhuce";
+    /**微信绑定后显示头像并传到我的界面*/
+    String HEADERICON_WEIXIN = "headericon_weixin";
+    /**微信绑定后记录*/
+    String ISSHOWFORWEIXIN = "isShowForWEIXIN";
+    /**微信的昵称*/
+    String SCREENNAME = "screenName";
 }
