@@ -96,4 +96,6 @@ public interface Urls {
     String Url_IdCard = UrlBase +"Personal/save_true";
     /**证件认证*/
     String Url_Engineer = UrlBase +"Personal/indent";
+    /**微信登录*/
+    String Url_LoginWEIXIN = UrlBase +"Personal/third_part_login";
 }

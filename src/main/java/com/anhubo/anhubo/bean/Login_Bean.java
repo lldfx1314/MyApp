@@ -16,5 +16,6 @@ public class Login_Bean {
         public String building_id;
         public String business_name;
         public String building_name;
+        public int exict;
     }
 }

@@ -53,6 +53,10 @@ public class Login_Message extends BaseActivity {
     private boolean isLegal;
     private String token;
     private ImageButton ibWeichat;
+    private String profile_image_url;
+    private String screen_name;
+    private String newUnionid;
+    private String unionid;
 
 
     @Override
@@ -134,11 +138,47 @@ public class Login_Message extends BaseActivity {
             case R.id.ib_weichat://跳到微信界面
                 UMShareAPI mShareAPI = UMShareAPI.get(Login_Message.this);
                 mShareAPI.doOauthVerify(Login_Message.this, SHARE_MEDIA.WEIXIN, umAuthListener);//授权
-                //mShareAPI.getPlatformInfo(mActivity, SHARE_MEDIA.WEIXIN, umAuthListener);
+                mShareAPI.getPlatformInfo(mActivity, SHARE_MEDIA.WEIXIN, umAuthListener1);
                 break;
         }
 
     }
+
+    private UMAuthListener umAuthListener1 = new UMAuthListener() {
+        @Override
+        public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+            if (map != null) {
+                //转换为set
+
+                Set<String> keySet = map.keySet();
+
+                //遍历循环，得到里面的key值----用户名，头像....
+
+                for (String string : keySet) {
+                    //打印下
+                    //System.out.println("==========11111111111=="+string);
+                    // 打印完获取到的信息在下面
+                   /* unionid profile_image_url country screen_name access_token city gender province
+                    language expires_in refresh_token openid*/
+                    //我需要的 uid unionid 头像 profile_image_url   姓名  screen_name
+                }
+                newUnionid = map.get("uid");
+                profile_image_url = map.get("profile_image_url");
+                screen_name = map.get("screen_name");
+
+            }
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media, int i) {
+
+        }
+    };
 
     private UMAuthListener umAuthListener = new UMAuthListener() {
         @Override
@@ -159,27 +199,22 @@ public class Login_Message extends BaseActivity {
 
             //得到key值得话，可以直接的到value
 
-            String name = data.get("unionid");
-            String scope = data.get("scope");
-            String expires_in = data.get("expires_in");
-            String access_token = data.get("access_token");
-            String openid = data.get("openid");
-            String refresh_token = data.get("refresh_token");
+            unionid = data.get("unionid");
+            System.out.println("unionid+++新旧值比对======"+unionid);
+            System.out.println("newunionid新旧值比对+++==="+newUnionid);
 
-           /* oSjg1wZ7SRVJ_epOqeCF_6pshAy4
-              snsapi_userinfo
-              7200
-              pTXRmTCfA55ggJjJt46dGZBxqivfFUxVrUBWj41ekjpCTWzdx96D-WlChPWqnGPSjbeWJpEp8fUCHDEVDObrnjMx37pD_PjKpdepskIZUU8
-              oXrpsxI4RveVzrbI4_hMMz5AIAVc
-              Ah9tv79GaIu7-EE1y25SgwlLd5EtY2DcOllEcj0JwO4h7M2xIImLz4Qb0y5RcsTNFEDBQkX0oHdEvWUWxGAeT4WRBxY9piRfcLHuR3sQtXE*/
-            System.out.println("==========111112==" + name);
-            System.out.println("==========11111==" + scope);
-            System.out.println("==========11111111111==========2222222222222==" + expires_in);
-            System.out.println("==========11111111111==========2222222222222==" + access_token);
-            System.out.println("==========11111111111==========2222222222222==" + openid);
-            System.out.println("==========11111111111==========2222222222222==" + refresh_token);
+            /**微信授权后走的微信登录接口*/
+            String url = Urls.Url_LoginWEIXIN;
+            // 封装请求参数
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("reg_mode", 2 + "");
+            params.put("unique_id", unionid);
 
-
+            OkHttpUtils.post()//
+                    .url(url)//
+                    .params(params)//
+                    .build()//
+                    .execute(new MyStringCallback3());
         }
 
 
@@ -193,6 +228,53 @@ public class Login_Message extends BaseActivity {
             ToastUtils.showToast(mActivity, "授权取消");
         }
     };
+
+    class MyStringCallback3 extends StringCallback {
+        @Override
+        public void onError(okhttp3.Call call, Exception e) {
+            System.out.println("Login_Message+++微信登录===没拿到数据" + e.getMessage());
+        }
+
+        @Override
+        public void onResponse(String response) {
+            System.out.println("微信登录" + response);
+            Login_Bean bean = new Gson().fromJson(response, Login_Bean.class);
+            if (bean != null) {
+                String code = bean.code;
+                String msg = bean.msg;
+                Login_Bean.Data data = bean.data;
+                String uid = data.uid;
+                String businessId = data.business_id;
+                String buildingId = data.building_id;
+                String buildingName = data.building_name;
+                String businessName = data.business_name;
+                int exict = data.exict;
+                if (exict == 1) {
+                    // 正常登录
+
+                    SpUtils.putParam(mActivity, Keys.UID, uid);
+                    SpUtils.putParam(mActivity, Keys.BUSINESSID, businessId);
+                    SpUtils.putParam(mActivity, Keys.BULIDINGID, buildingId);
+                    SpUtils.putParam(mActivity, Keys.BUILDINGNAME, buildingName);
+                    SpUtils.putParam(mActivity, Keys.BUSINESSNAME, businessName);
+                    //跳转到主页面
+                    enterHome();
+                } else if (exict == 0) {
+                    // 注册的第二步
+                    goTo_Activity(uid);
+                } else if (exict == 2) {
+                    // 去注册uid unionid 头像 profile_image_url   姓名  screen_name
+                    Intent intent = new Intent(mActivity, RegisterActivity.class);
+                    intent.putExtra(Keys.UNIONID,"unionid");
+                    intent.putExtra(Keys.PROFILE_IMAGE_URL,"profile_image_url");
+                    intent.putExtra(Keys.SCREEN_NAME,"screen_name");
+                    System.out.println("22222222+unionid="+unionid+"222+profile_image_url+"+profile_image_url+"222screen_name+"+screen_name);
+                    startActivity(intent);
+                }
+
+            }
+        }
+    }
 
 
     /**

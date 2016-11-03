@@ -87,4 +87,11 @@ public interface Keys {
     String NEWGENDER = "newGender";
     /**给我的界面传递年龄*/
     String NEWAGE = "newage";
+    /**微信登录界面跳转到注册界面的三个信息*/
+    String UNIONID = "unionid";
+    String PROFILE_IMAGE_URL = "profile_image_url";
+    String SCREEN_NAME = "screen_name";
+
+
+
 }
