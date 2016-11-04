@@ -103,6 +103,10 @@
         <activity android:name=".ui.activity.unitDetial.UnitMsgCenterActivity" />
         <activity android:name=".ui.activity.unitDetial.QrScanActivity" />
         <activity android:name=".ui.activity.unitDetial.DeviceList" />
+        <!--反馈-->
+        <activity android:name=".ui.activity.unitDetial.FeedbackActivity" />
+        <activity android:name=".ui.activity.unitDetial.FeedbackSuccessActivity" />
+
 
         <!--建筑界面-->
         <activity android:name=".ui.activity.buildDetial.Build_CltMsgActivity"/>

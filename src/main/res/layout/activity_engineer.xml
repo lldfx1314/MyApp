@@ -161,30 +161,32 @@
                 android:layout_marginBottom="15dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
+                android:scaleType="fitXY"
                 android:background="@drawable/card" />
 
             <ImageView
                 android:id="@+id/iv_engineer2"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:scaleType="fitXY"
                 android:background="@drawable/card" />
 
         </LinearLayout>
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_submit_engineer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:background="@color/backgroud_white"
-        android:enabled="true"
-        android:gravity="center"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
-        android:text="提交"
-        android:textColor="@color/blue"
-        android:textSize="16sp" />
+    android:id="@+id/tv_submit_engineer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="15dp"
+    android:background="@color/backgroud_white"
+    android:enabled="true"
+    android:gravity="center"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp"
+    android:text="提交"
+    android:textColor="@color/blue"
+    android:textSize="16sp" />
 
 
 </LinearLayout>

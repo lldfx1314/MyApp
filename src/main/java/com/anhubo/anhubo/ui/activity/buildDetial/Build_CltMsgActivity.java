@@ -1,11 +1,8 @@
 package com.anhubo.anhubo.ui.activity.buildDetial;
 
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.TextPaint;
-import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.TextView;
@@ -13,11 +10,8 @@ import android.widget.TextView;
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.protocol.Urls;
-import com.anhubo.anhubo.ui.activity.Login_Register.AnhubaoDeal;
 import com.anhubo.anhubo.utils.DisplayUtil;
-import com.anhubo.anhubo.utils.Keys;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
@@ -41,7 +35,7 @@ public class Build_CltMsgActivity extends BaseActivity {
     protected void initEvents() {
         super.initEvents();
         // 利用富文本是其中的网址变色
-        String msg = "完善建筑信息，请到www.anhubo.com，登录\r\n个人中心进行完善";
+        String msg = "完善建筑信息，请到www.anhubo.com，登\r\n录个人中心进行完善";
         SpannableString ss = new SpannableString(msg);
         String url = Urls.Url_Deal;
         MyURLSpan myURLSpan = new MyURLSpan(url);

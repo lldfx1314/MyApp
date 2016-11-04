@@ -195,8 +195,9 @@ public class Check_Device_Activity extends BaseActivity {
         switch (v.getId()){
             case R.id.check_more:
             // 更多的点击事件
-
-
+                Intent intent = new Intent(mActivity, FeedbackActivity.class);
+                intent.putExtra(Keys.DeviceId,deviceId);
+                startActivity(intent);
             break;
             case R.id.check_complete:
                 // 检查完成的点击事件

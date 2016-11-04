@@ -221,12 +221,12 @@ public class EngineerActivity extends BaseActivity {
      * 提交证书编号
      */
     private void submit() {
-// 获取
+        // 获取
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
         File file1 = null;
         File file2 = null;
 
-        // 正面
+        // 照片1
         if (isClick1) {
             // 照相
             file1 = filePhoto01;
@@ -239,7 +239,7 @@ public class EngineerActivity extends BaseActivity {
 
         /**正面和反面个走个的*/
 
-        //反面
+        //照片2
         if (isClick1) {
             // 照相
             file2 = filePhoto01;

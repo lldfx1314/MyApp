@@ -109,17 +109,16 @@ public class UploadingActivity2 extends BaseActivity {
                 break;
             case R.id.btn_popDialog_takephoto:
                 // 拍照
-                isClick1 = true;
                 takePhoto();
                 break;
             case R.id.btn_popDialog_photo:
                 // 相册
-                isClick1 = false;
                 getPhoto();
                 break;
         }
     }
-
+    File file1 = null;
+    File file2 = null;
     /**
      * 拿到拍到的照片去上传
      */
@@ -127,35 +126,11 @@ public class UploadingActivity2 extends BaseActivity {
     private void upLoading() {
         // 获取
         String businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
-        File file1 = null;
-        File file2 = null;
 
-        // 正面
-        if (isClick1) {
-            // 照相
-            file1 = filePhoto01;
 
-        } else {
-            //相册
-            file1 = filePhoto02;
-        }
-        isClick = !isClick;
-
-        /**正面和反面个走个的*/
-
-        //反面
-        if (isClick1) {
-            // 照相
-            file2 = filePhoto01;
-
-        } else {
-            //相册
-            file2 = filePhoto02;
-        }
-        isClick = !isClick;
 
         if (file1==null||file2==null||!file1.exists()||!file2.exists()) {
-            ToastUtils.showLongToast(mActivity, "请先拍照或者获取图库图片");
+            ToastUtils.showToast(mActivity, "请先拍照或者获取图库图片");
             return;
         }
         /*if (!file2.exists()) {
@@ -269,13 +244,18 @@ public class UploadingActivity2 extends BaseActivity {
                 //为防止原始图片过大导致内存溢出，这里先缩小原图显示，然后释放原始Bitmap占用的内存
                 Bitmap bitmap = ImageTools.zoomBitmap(photo, photo.getWidth() / 5, photo.getHeight() / 5);
                 if (isClick) {
+                    // 身份证正面
                     llCard01.setVisibility(View.GONE);
                     //显示图片
                     ivShowCardFront02.setImageBitmap(bitmap);
+                    file1 = filePhoto02;
+
                 } else {
+                    // 身份证背面
                     llCard02.setVisibility(View.GONE);
                     //显示图片
                     ivShowCardBehind02.setImageBitmap(bitmap);
+                    file2 = filePhoto02;
                 }
 
             }
@@ -336,10 +316,12 @@ public class UploadingActivity2 extends BaseActivity {
             llCard01.setVisibility(View.GONE);
             //显示图片
             ivShowCardFront02.setImageBitmap(bitmap);
+            file1 = filePhoto01;
         } else {
             llCard02.setVisibility(View.GONE);
             //显示图片
             ivShowCardBehind02.setImageBitmap(bitmap);
+            file2 = filePhoto01;
         }
     }
 

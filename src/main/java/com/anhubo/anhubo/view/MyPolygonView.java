@@ -42,7 +42,7 @@ public class MyPolygonView extends View {
 
     //-------------多边形相关-------------
     //n边形个数
-    private int num = 7;
+    private int num = 6;
     //两个多边形之间的半径
     private int r = DisplayUtil.dp2px(getContext(),14);
     //n边形顶点坐标

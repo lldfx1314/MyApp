@@ -102,4 +102,8 @@ public interface Keys {
     String ISSHOWFORWEIXIN = "isShowForWEIXIN";
     /**微信的昵称*/
     String SCREENNAME = "screenName";
+    /**传递deviceId*/
+    String DeviceId = "deviceId";
+    /**传递分数*/
+    String USERADDSCORE = "userAddScore";
 }

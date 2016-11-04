@@ -20,6 +20,7 @@ import com.anhubo.anhubo.bean.BuildThreeBean;
 import com.anhubo.anhubo.bean.MyPolygonBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.buildDetial.Build_CltMsgActivity;
+import com.anhubo.anhubo.ui.activity.unitDetial.FeedbackActivity;
 import com.anhubo.anhubo.utils.DisplayUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
@@ -77,7 +78,7 @@ public class BuildFragment extends BaseFragment {
         //设置返回键隐藏
         iv_basepager_left.setVisibility(View.GONE);
         //设置铅笔键显示
-        //ivTopBarleftBuildPen.setVisibility(View.VISIBLE);
+        ivTopBarleftBuildPen.setVisibility(View.VISIBLE);
 
         tv_basepager_title.setText("建筑");
         // 设置title的背景颜色
@@ -283,7 +284,7 @@ public class BuildFragment extends BaseFragment {
 
                 // 遍历集合，把元素添加到数组里面
                 for (int i = 0; i < list.size(); i++) {
-                    arrScores[i] = Integer.parseInt(list.get(i)) * 7 / 100;
+                    arrScores[i] = Integer.parseInt(list.get(i)) * 6 / 100;
                 }
                 if (arrScores.length == 6) {
                     myPolygonView.setDataModel(getPolygonData());
@@ -298,13 +299,13 @@ public class BuildFragment extends BaseFragment {
     @Override
     public void processClick(View v) {
         switch (v.getId()) {
-            case R.id.ivTopBarleft_build_pen:
-                ToastUtils.showLongToast(mActivity, "编辑");
+            case R.id.ivTopBarleft_build_pen:// 编辑
+                startActivity(new Intent(mActivity,  FeedbackActivity.class));
                 break;
-            case R.id.tv_build_frag_02_msg:
+            case R.id.tv_build_frag_02_msg:// 完善基础信息
                 startActivity(new Intent(mActivity, Build_CltMsgActivity.class));
                 break;
-            case R.id.tv_build_frag_02_test:
+            case R.id.tv_build_frag_02_test:// 测试
                 ToastUtils.showLongToast(mActivity, "测试");
                 break;
             case R.id.rl_build_01:

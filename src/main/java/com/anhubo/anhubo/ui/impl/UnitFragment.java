@@ -250,7 +250,7 @@ public class UnitFragment extends BaseFragment {
                 list.add(5, subScore3);
                 // 遍历集合，把元素添加到数组里面
                 for (int i = 0; i < list.size(); i++) {
-                    arrScores[i] = Integer.parseInt(list.get(i)) * 7 / 100;
+                    arrScores[i] = Integer.parseInt(list.get(i)) * 6 / 100;
                 }
                 if (arrScores.length == 6) {
                     myPolygonView.setDataModel(getPolygonData());

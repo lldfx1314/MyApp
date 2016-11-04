@@ -40,10 +40,10 @@
             android:id="@+id/ivTopBarleft_build_pen"
             android:layout_width="38dp"
             android:layout_height="38dp"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_gravity="center"
+            android:paddingRight="15dp"
             android:visibility="gone"
-            android:paddingLeft="15dp"
             android:src="@drawable/build_pen"/>
 
         <TextView
