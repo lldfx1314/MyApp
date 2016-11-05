@@ -396,7 +396,6 @@ public class PersonMsgActivity extends BaseActivity {
                     if (!isShowForWEIXIN) {
                         // 代表用户没设置过自己的头像，因此显示自己的微信头像
                         setHeaderIcon(profileImageUrl);
-                        //System.out.println("1111199999998888");
                         // 设置完后通知我的界面也改变显示内容
                         Intent intent = new Intent();
                         intent.putExtra(Keys.HEADERICON_WEIXIN, profileImageUrl);

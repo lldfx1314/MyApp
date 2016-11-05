@@ -133,10 +133,7 @@ public class UploadingActivity2 extends BaseActivity {
             ToastUtils.showToast(mActivity, "请先拍照或者获取图库图片");
             return;
         }
-        /*if (!file2.exists()) {
 
-            ToastUtils.showLongToast(mActivity, "图片不存在");
-        }*/
         Map<String, String> params = new HashMap<>();
         params.put("business_id", businessid);
         String url = Urls.Url_UpLoading02;

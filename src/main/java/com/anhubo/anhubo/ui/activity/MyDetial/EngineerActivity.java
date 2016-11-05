@@ -154,12 +154,10 @@ public class EngineerActivity extends BaseActivity {
                 break;
             case R.id.btn_popDialog_takephoto:
                 // 拍照
-                isClick1 = true;
                 takePhoto();
                 break;
             case R.id.btn_popDialog_photo:
                 // 相册
-                isClick1 = false;
                 getPhoto();
                 break;
         }
@@ -216,39 +214,16 @@ public class EngineerActivity extends BaseActivity {
             }
         });
     }
-
+    File file1 = null;
+    File file2 = null;
     /**
      * 提交证书编号
      */
     private void submit() {
         // 获取
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
-        File file1 = null;
-        File file2 = null;
 
-        // 照片1
-        if (isClick1) {
-            // 照相
-            file1 = filePhoto01;
 
-        } else {
-            //相册
-            file1 = filePhoto02;
-        }
-        isClick = !isClick;
-
-        /**正面和反面个走个的*/
-
-        //照片2
-        if (isClick1) {
-            // 照相
-            file2 = filePhoto01;
-
-        } else {
-            //相册
-            file2 = filePhoto02;
-        }
-        isClick = !isClick;
 
         if (file1 == null || !file1.exists()) {
             ToastUtils.showLongToast(mActivity, "请先拍照或者获取图库图片");
@@ -287,7 +262,7 @@ public class EngineerActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-            System.out.println(response);
+            //System.out.println(response);
             EngineerBean bean = new Gson().fromJson(response, EngineerBean.class);
             if (bean != null) {
                 int code = bean.code;
@@ -299,9 +274,7 @@ public class EngineerActivity extends BaseActivity {
                         @Override
                         public void run() {
                             ToastUtils.showToast(mActivity, "上传成功");
-                        /*Intent intent = new Intent();
-                        intent.putExtra(Keys.ISCLICK2, true);
-                        setResult(2, intent);*/
+
                             finish();
                         }
                     }, 2000);
@@ -371,11 +344,15 @@ public class EngineerActivity extends BaseActivity {
                 //为防止原始图片过大导致内存溢出，这里先缩小原图显示，然后释放原始Bitmap占用的内存
                 Bitmap bitmap = ImageTools.zoomBitmap(photo, photo.getWidth() / 5, photo.getHeight() / 5);
                 if (isClick) {
-                    //显示正面图片
+                    //显示图片1
                     ivEngineer1.setImageBitmap(bitmap);
+                    // 给图片一赋值
+                    file1 = filePhoto02;
                 } else {
-                    //显示反面图片
+                    //显示图片2
                     ivEngineer2.setImageBitmap(bitmap);
+//                    给图片二赋值
+                    file2 = filePhoto02;
                 }
 
             }
@@ -422,11 +399,15 @@ public class EngineerActivity extends BaseActivity {
             }
         }
         if (isClick) {
-            //显示正面图片
+            //显示图片一
             ivEngineer1.setImageBitmap(bitmap);
+            // 给图片1赋值
+            file1 = filePhoto01;
         } else {
-            //显示反面图片
+            //显示图片二
             ivEngineer2.setImageBitmap(bitmap);
+            // 给图片1赋值
+            file2 = filePhoto01;
         }
     }
 

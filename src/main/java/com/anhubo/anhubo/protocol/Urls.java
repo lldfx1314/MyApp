@@ -102,4 +102,6 @@ public interface Urls {
     String Url_BindWEIXIN = UrlBase +"Personal/bind_third";
     /**问题反馈*/
     String Url_FeedBack = UrlBase +"Issue/add_issue";
+    /**微信分享*/
+    String Url_MyShare = UrlBase +"Personal/share";
 }

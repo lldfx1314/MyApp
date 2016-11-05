@@ -134,17 +134,17 @@ public class IdCardActivity extends BaseActivity {
                 break;
             case R.id.btn_popDialog_takephoto:
                 // 拍照
-                isClick1 = true;
                 takePhoto();
                 break;
             case R.id.btn_popDialog_photo:
                 // 相册
-                isClick1 = false;
                 getPhoto();
                 break;
         }
     }
 
+    File file1 = null;
+    File file2 = null;
 
     /**
      * 身份证号码
@@ -152,32 +152,6 @@ public class IdCardActivity extends BaseActivity {
     private void submit() {
         // 获取
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
-        File file1 = null;
-        File file2 = null;
-
-        // 正面
-        if (isClick1) {
-            // 照相
-            file1 = filePhoto01;
-
-        } else {
-            //相册
-            file1 = filePhoto02;
-        }
-        isClick = !isClick;
-
-        /**正面和反面个走个的*/
-
-        //反面
-        if (isClick1) {
-            // 照相
-            file2 = filePhoto01;
-
-        } else {
-            //相册
-            file2 = filePhoto02;
-        }
-        isClick = !isClick;
 
         if (file1 == null || !file1.exists()) {
             ToastUtils.showLongToast(mActivity, "请先拍照或者获取图库图片");
@@ -227,9 +201,7 @@ public class IdCardActivity extends BaseActivity {
                         @Override
                         public void run() {
                             ToastUtils.showToast(mActivity, "上传成功");
-                        /*Intent intent = new Intent();
-                        intent.putExtra(Keys.ISCLICK2, true);
-                        setResult(2, intent);*/
+
                             finish();
                         }
                     }, 2000);
@@ -301,9 +273,13 @@ public class IdCardActivity extends BaseActivity {
                 if (isClick) {
                     //显示正面图片
                     ivCard1.setImageBitmap(bitmap);
+                    // 给正面图片赋值
+                    file1 = filePhoto02;
                 } else {
                     //显示反面图片
                     ivCard2.setImageBitmap(bitmap);
+                    // 给背面图片赋值
+                    file2 = filePhoto02;
                 }
 
             }
@@ -316,17 +292,7 @@ public class IdCardActivity extends BaseActivity {
 
     }
 
-    /**
-     * 获取文件路径
-     **/
-    public String uri2filePath(Uri uri) {
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String path = cursor.getString(column_index);
-        return path;
-    }
+
 
     /**
      * 显示照相机照片
@@ -363,9 +329,13 @@ public class IdCardActivity extends BaseActivity {
         if (isClick) {
             //显示正面图片
             ivCard1.setImageBitmap(bitmap);
+            // 给正面图片赋值
+            file1 = filePhoto01;
         } else {
             //显示反面图片
             ivCard2.setImageBitmap(bitmap);
+            // 给背面图片赋值
+            file2 = filePhoto01;
         }
     }
 
