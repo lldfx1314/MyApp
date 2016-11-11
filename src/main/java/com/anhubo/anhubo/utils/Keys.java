@@ -75,8 +75,7 @@ public interface Keys {
     String DEVICECHECKEDNUM = "DEVICECHECKEDNUM";
     /**添加的设备总数，用来做缓存*/
     String DEVICESNUM = "DEVICESNUM";
-    /**邀请*/
-    String INVATE = "invate";
+
     /**头像保存成功，给上个页面传值*/
     String HEADERICON = "headericon";
     /**我的界面传递图片给个人信息*/
@@ -98,12 +97,11 @@ public interface Keys {
     String WEIXINFORZHUCE = "weixinforzhuce";
     /**微信绑定后显示头像并传到我的界面*/
     String HEADERICON_WEIXIN = "headericon_weixin";
-    /**微信绑定后记录*/
-    String ISSHOWFORWEIXIN = "isShowForWEIXIN";
+
     /**微信的昵称*/
     String SCREENNAME = "screenName";
+    /**微信头像的url*/
+    String WEIXINIMG = "weixinImg";
     /**传递deviceId*/
     String DeviceId = "deviceId";
-    /**传递分数*/
-    String USERADDSCORE = "userAddScore";
 }

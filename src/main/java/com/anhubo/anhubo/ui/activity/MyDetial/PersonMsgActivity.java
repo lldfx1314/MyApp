@@ -134,6 +134,7 @@ public class PersonMsgActivity extends BaseActivity {
     private String newGender;
     private String newAge;
     private String screenname;
+    public static boolean isSetHeadIcon = false;// 记录自己是否设置过头像
 
     @Override
     protected void initConfig() {
@@ -166,7 +167,7 @@ public class PersonMsgActivity extends BaseActivity {
     protected void initViews() {
         setTopBarDesc("个人信息");
         if(!TextUtils.isEmpty(screenname)){
-            tvMyWechat.setText(screenName);
+            tvMyWechat.setText(screenname);
         }
     }
 
@@ -392,19 +393,20 @@ public class PersonMsgActivity extends BaseActivity {
             if (bean != null) {
                 int code = bean.code;
                 if (code == 0) {
-                    boolean isShowForWEIXIN = SpUtils.getBooleanParam(mActivity, Keys.ISSHOWFORWEIXIN, false);
-                    if (!isShowForWEIXIN) {
+                    if (!isSetHeadIcon) {
                         // 代表用户没设置过自己的头像，因此显示自己的微信头像
                         setHeaderIcon(profileImageUrl);
+
+
+
                         // 设置完后通知我的界面也改变显示内容
                         Intent intent = new Intent();
                         intent.putExtra(Keys.HEADERICON_WEIXIN, profileImageUrl);
                         setResult(5, intent);
                     }
-
                     tvMyWechat.setText(screenName);
                     // 把微信名也要记录下来，下次进来的时候显示
-                    SpUtils.putParam(mActivity,Keys.SCREENNAME,"screenName");
+                    SpUtils.putParam(mActivity,Keys.SCREENNAME,screenName);
 
 
                 }
@@ -622,8 +624,7 @@ public class PersonMsgActivity extends BaseActivity {
      */
     private void setInitialData() {
         if (!TextUtils.isEmpty(img)) {
-            //设置头像显示,这种方式效率较低，体验不好
-            //setHeaderIcon(img);
+            isSetHeadIcon = true;
         }
         if (!TextUtils.isEmpty(name)) {
             etMyUsername.setText(name);
@@ -765,6 +766,9 @@ public class PersonMsgActivity extends BaseActivity {
             }
         }
         if (isShow) {
+            // 记录头像已经设置过
+            isSetHeadIcon = true;
+
             // 说明图片已经显示，上传头像到网络
             upLoading();
             isShow = false;
@@ -831,8 +835,7 @@ public class PersonMsgActivity extends BaseActivity {
                     ToastUtils.showToast(mActivity, msg);
                 } else {
                     // code = 0，保存成功
-                    // 记录绑定微信后是否显示微信的头像
-                    SpUtils.putParam(mActivity,Keys.ISSHOWFORWEIXIN,true);
+
                     ToastUtils.showToast(mActivity, "保存成功");
                     Intent intent = new Intent();
                     intent.putExtra(Keys.HEADERICON, img1);

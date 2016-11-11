@@ -139,8 +139,8 @@ public class MyFragment extends BaseFragment {
      * 设置头像的显示内容
      */
     private void setData() {
-        boolean booleanParam = SpUtils.getBooleanParam(mActivity, Keys.ISSHOWFORWEIXIN, false);
-        String weixin_img = SpUtils.getStringParam(mActivity, "weixinImg");
+        boolean booleanParam = PersonMsgActivity.isSetHeadIcon;
+        String weixin_img = SpUtils.getStringParam(mActivity, Keys.WEIXINIMG);
         // 头像
         if (!TextUtils.isEmpty(img)) {
             // 用户自己设置过头像，就显示自己的头像
@@ -217,7 +217,7 @@ public class MyFragment extends BaseFragment {
                 case 5:// 更改头像后返回的url，显示更改后的头像
                     String headericon_weixin = intent.getStringExtra(Keys.HEADERICON_WEIXIN);
                     // 这里得把微信的头像地址保存起来
-                    SpUtils.putParam(mActivity,"weixinImg",headericon_weixin);
+                    SpUtils.putParam(mActivity,Keys.WEIXINIMG,headericon_weixin);
                     if (!TextUtils.isEmpty(headericon_weixin)) {
                         setHeaderIcon(headericon_weixin);
                     }
@@ -290,10 +290,9 @@ public class MyFragment extends BaseFragment {
         SpUtils.putParam(mActivity, Keys.BUSINESSNAME, null);
 
 
-        SpUtils.putParam(mActivity, Keys.HEADERICON_WEIXIN, null);// 清楚微信头像
-        SpUtils.putParam(mActivity, Keys.ISSHOWFORWEIXIN, false);// 清楚是否显示微信头像的记录
-        SpUtils.putParam(mActivity, "weixinImg", null);// 清楚微信头像
-        SpUtils.putParam(mActivity, Keys.SCREENNAME, null);// 清楚微信昵称
+        SpUtils.putParam(mActivity, Keys.HEADERICON_WEIXIN, null);// 清除微信头像
+        SpUtils.putParam(mActivity, Keys.WEIXINIMG, null);// 清除微信头像
+        SpUtils.putParam(mActivity, Keys.SCREENNAME, null);// 清除微信昵称
 
 
         //跳转到主页面

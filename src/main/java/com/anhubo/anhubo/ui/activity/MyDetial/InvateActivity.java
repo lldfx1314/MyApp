@@ -1,5 +1,8 @@
 package com.anhubo.anhubo.ui.activity.MyDetial;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -65,7 +68,6 @@ public class InvateActivity extends BaseActivity {
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
         url = Urls.Url_MyInvare;
         newUrl_invate = url + "?uid=" + uid;
-        System.out.println("3333uid"+uid);
         url_weixin = "http://anhubo.com/s/html/InviteShare.html";
 
         WebSettings settings = wvInvate.getSettings();
@@ -96,7 +98,15 @@ public class InvateActivity extends BaseActivity {
         @JavascriptInterface
         public void clickqrcode(String qrcode) {
 
-
+            ClipboardManager clipboardManager = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+            // 将内容set到剪贴板
+            clipboardManager.setPrimaryClip(ClipData.newPlainText(null, qrcode));
+            ToastUtils.showToast(mActivity,"复制成功");
+            if (clipboardManager.hasPrimaryClip()){
+                // 获取内容
+                CharSequence text = clipboardManager.getPrimaryClip().getItemAt(0).getText();
+                //System.out.println("+++---==="+text);
+            }
         }
 
         /**
@@ -167,7 +177,7 @@ public class InvateActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-            System.out.println("11111朋友圈111111" + response);
+            //System.out.println("11111朋友圈111111" + response);
             MyshareBean bean = new Gson().fromJson(response, MyshareBean.class);
 
             if (bean != null) {
@@ -213,7 +223,7 @@ public class InvateActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-            System.out.println("11111微信111111" + response);
+            //System.out.println("11111微信111111" + response);
             MyshareBean bean = new Gson().fromJson(response, MyshareBean.class);
             if (bean != null) {
                 int code = bean.code;
