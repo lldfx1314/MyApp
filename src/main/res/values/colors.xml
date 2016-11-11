@@ -36,4 +36,5 @@
     <color name="cornercolor">#FF8C00</color>
     <color name="textcolor">#FFFFFF</color>
     <color name="nfc_gray">#B6B6B6</color>
+    <color name="rl_gray">#DEDEDE</color>
 </resources>

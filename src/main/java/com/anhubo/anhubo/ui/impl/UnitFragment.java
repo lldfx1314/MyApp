@@ -3,6 +3,7 @@ package com.anhubo.anhubo.ui.impl;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -21,6 +22,7 @@ import com.anhubo.anhubo.bean.MyPolygonBean;
 import com.anhubo.anhubo.bean.SesameItemModel;
 import com.anhubo.anhubo.bean.SesameModel;
 import com.anhubo.anhubo.bean.UnitBean;
+import com.anhubo.anhubo.bean.Unit_PlanBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.unitDetial.MsgPerfectActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.QrScanActivity;
@@ -40,6 +42,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import okhttp3.Call;
 
@@ -79,6 +82,16 @@ public class UnitFragment extends BaseFragment {
     private UnitBean.Data data;
     private SesameCreditPanel scp;
     private Dialog dialog;
+    private TextView tvNoPlan1;
+    private TextView tvNoPlan2;
+    private int code;
+    private String planName;
+    private String status;
+    private String planId;
+    private String maxEachMoney;
+    private String maxPlanEnsure;
+    private String planMoneyLast;
+    private List<Unit_PlanBean.Data.Certs> certs;
 
 
     @Override
@@ -130,13 +143,17 @@ public class UnitFragment extends BaseFragment {
         dotStudy = view.findViewById(R.id.dot_study);
         dotCheck = view.findViewById(R.id.dot_check);
         dotDrill = view.findViewById(R.id.dot_drill);
+        // 提示没有任何保障计划
+        tvNoPlan1 = (TextView) view.findViewById(R.id.tv_no_plan1);
+        tvNoPlan2 = (TextView) view.findViewById(R.id.tv_no_plan2);
         //先隐藏小圆点
         dotStudy.setVisibility(View.GONE);
         dotCheck.setVisibility(View.GONE);
         dotDrill.setVisibility(View.GONE);
-        lvUnit.addHeaderView(view);
-        UnitAdapter adapter = new UnitAdapter(this);
-        lvUnit.setAdapter(adapter);
+        lvUnit.addHeaderView(view,null,true);
+        lvUnit.setHeaderDividersEnabled(false);
+        //互保计划获取数据
+        getPlanData();
 
     }
 
@@ -197,19 +214,86 @@ public class UnitFragment extends BaseFragment {
         }
     }
 
-
     @Override
     public void initData() {
+
     }
 
-    class MyStringCallback extends StringCallback {
+    /**
+     * 互保计划获取数据
+     */
+    private void getPlanData() {
+
+
+        String uid = SpUtils.getStringParam(mActivity, Keys.UID);
+        //　互保计划　请求网络
+
+        String url = Urls.Url_Unit_Plan;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("uid", uid);
+
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback1());
+    }
+
+
+    /**
+     * 互保计划
+     */
+    class MyStringCallback1 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            System.out.println("UnitFragment界面+++===没拿到数据" + e.getMessage());
+            System.out.println("UnitFragment界面+++互保计划===没拿到数据" + e.getMessage());
+            tvNoPlan1.setVisibility(View.VISIBLE);
+            lvUnit.setDividerHeight(0);
         }
 
         @Override
         public void onResponse(String response) {
+            System.out.println("互保计划++" + response);
+            Unit_PlanBean bean = new Gson().fromJson(response, Unit_PlanBean.class);
+            if (bean != null) {
+                code = bean.code;
+                String msg = bean.msg;
+                certs = bean.data.certs;
+            }
+            UnitAdapter adapter = new UnitAdapter(mActivity, certs);
+            // 没有任何保障时显示提示信息，并且不显示ListView的分割线
+            if (code == 0 ) {
+                if(certs.size() == 0){
+                    tvNoPlan1.setVisibility(View.VISIBLE);
+                    lvUnit.setDividerHeight(0);
+                }else{
+                    tvNoPlan2.setVisibility(View.VISIBLE);
+                    tvNoPlan2.setText("动态保障凭证");
+                }
+
+
+            } else {
+                tvNoPlan1.setVisibility(View.VISIBLE);
+                lvUnit.setDividerHeight(0);
+            }
+
+            lvUnit.setAdapter(adapter);
+        }
+    }
+
+
+    /**
+     * 分数、级别的网络请求
+     */
+    class MyStringCallback extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+            System.out.println("UnitFragment界面+++分数、级别===没拿到数据" + e.getMessage());
+        }
+
+        @Override
+        public void onResponse(String response) {
+            //System.out.println(response);
             UnitBean bean = new Gson().fromJson(response, UnitBean.class);
             list = new ArrayList<>();
             // 创建一个数组

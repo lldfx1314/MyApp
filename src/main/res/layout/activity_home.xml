@@ -15,14 +15,14 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:color/darker_gray"/>
+        android:background="@color/gray"/>
     <RadioGroup
         android:id="@+id/rg_home_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="8dp"
-        android:paddingBottom="5dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
         android:background="@android:color/transparent">
 
         <RadioButton

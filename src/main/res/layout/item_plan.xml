@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp"
+    android:paddingTop="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_planName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="计划名称"
+            android:textColor="@color/gray"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_planStatus"
+            android:layout_width="wrap_content"
+            android:layout_height=  "wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="筹备期"
+            android:textColor="@color/gray"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!--最高保障金-->
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="105dp"
+            android:layout_alignParentLeft="true">
+
+        <RelativeLayout
+            android:id="@+id/rl_heigh_security"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:background="@drawable/rl_gray">
+        <TextView
+            android:id="@+id/tv_heigh_security"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:text="5463"
+            android:textSize="15sp"
+            android:textColor="@color/gray"/>
+
+            <ImageView
+                android:id="@+id/iv_heigh_security"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/heigh_security_gray"
+                />
+        </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="最高保障金"
+                android:textColor="@color/gray"
+                android:textSize="15sp"/>
+        </RelativeLayout>
+
+        <!--最高分摊额-->
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="105dp"
+            android:layout_centerInParent="true">
+
+            <RelativeLayout
+                android:id="@+id/rl_heigh_sharing"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:background="@drawable/rl_gray">
+                <TextView
+                    android:id="@+id/tv_height_sharing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:text="3000"
+                    android:textSize="15sp"
+                    android:textColor="@color/gray"/>
+
+                <ImageView
+                    android:id="@+id/iv_heigh_sharing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/heigh_sharing_gray"
+                    />
+            </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="最高分摊额"
+                android:textColor="@color/gray"
+                android:textSize="15sp"/>
+        </RelativeLayout>
+        <!--预付保障金-->
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="105dp"
+            android:layout_alignParentRight="true">
+
+            <RelativeLayout
+                android:id="@+id/rl_prepay_money"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/rl_gray">
+                <TextView
+                    android:id="@+id/tv_prepay_money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:text="3000"
+                    android:textSize="15sp"
+                    android:textColor="@color/gray"/>
+
+                <ImageView
+                    android:id="@+id/iv_prepay_money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/prepay_money_gray"
+                    />
+            </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="预付保障金"
+                android:textColor="@color/gray"
+                android:textSize="15sp"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+</LinearLayout>
