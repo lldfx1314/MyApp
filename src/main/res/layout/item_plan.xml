@@ -18,7 +18,7 @@
             android:layout_alignParentLeft="true"
             android:text="计划名称"
             android:textColor="@color/gray"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_planStatus"
@@ -27,12 +27,12 @@
             android:layout_alignParentRight="true"
             android:text="筹备期"
             android:textColor="@color/gray"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -46,8 +46,8 @@
 
         <RelativeLayout
             android:id="@+id/rl_heigh_security"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="78dp"
+            android:layout_height="78dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:background="@drawable/rl_gray">
@@ -56,15 +56,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
-            android:text="5463"
-            android:textSize="15sp"
+            android:layout_marginTop="18dp"
+            android:text="0"
+            android:textSize="12sp"
             android:textColor="@color/gray"/>
 
             <ImageView
                 android:id="@+id/iv_heigh_security"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="10dp"
@@ -79,7 +79,7 @@
                 android:layout_centerHorizontal="true"
                 android:text="最高保障金"
                 android:textColor="@color/gray"
-                android:textSize="15sp"/>
+                android:textSize="14sp"/>
         </RelativeLayout>
 
         <!--最高分摊额-->
@@ -90,8 +90,8 @@
 
             <RelativeLayout
                 android:id="@+id/rl_heigh_sharing"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="78dp"
+                android:layout_height="78dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:background="@drawable/rl_gray">
@@ -100,15 +100,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="15dp"
-                    android:text="3000"
-                    android:textSize="15sp"
+                    android:layout_marginTop="18dp"
+                    android:text="0"
+                    android:textSize="12sp"
                     android:textColor="@color/gray"/>
 
                 <ImageView
                     android:id="@+id/iv_heigh_sharing"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="10dp"
@@ -123,7 +123,7 @@
                 android:layout_centerHorizontal="true"
                 android:text="最高分摊额"
                 android:textColor="@color/gray"
-                android:textSize="15sp"/>
+                android:textSize="14sp"/>
         </RelativeLayout>
         <!--预付保障金-->
         <RelativeLayout
@@ -135,23 +135,23 @@
                 android:id="@+id/rl_prepay_money"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="78dp"
+                android:layout_height="78dp"
                 android:background="@drawable/rl_gray">
                 <TextView
                     android:id="@+id/tv_prepay_money"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="15dp"
-                    android:text="3000"
-                    android:textSize="15sp"
+                    android:layout_marginTop="18dp"
+                    android:text="0"
+                    android:textSize="12sp"
                     android:textColor="@color/gray"/>
 
                 <ImageView
                     android:id="@+id/iv_prepay_money"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="10dp"
@@ -166,7 +166,7 @@
                 android:layout_centerHorizontal="true"
                 android:text="预付保障金"
                 android:textColor="@color/gray"
-                android:textSize="15sp"/>
+                android:textSize="14sp"/>
         </RelativeLayout>
 
     </RelativeLayout>

@@ -8,16 +8,16 @@
         android:id="@+id/tv_bili"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:gravity="center_horizontal"
         android:text="本建筑单位三色预警比例"
         android:textColor="@color/gray"
-        android:textSize="16sp"/>
+        android:textSize="14sp"/>
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="65dp"
         android:layout_marginTop="5dp"
         android:orientation="horizontal"
         android:paddingLeft="15dp"

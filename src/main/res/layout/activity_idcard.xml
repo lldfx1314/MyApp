@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:text="姓名"
             android:textColor="@color/text_gray1"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <EditText
             android:id="@+id/et_idcard_name"
@@ -39,7 +39,7 @@
             android:paddingTop="8dp"
             android:textColor="@color/gray"
             android:textColorHint="@color/gray"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:text="身份证认证"
             android:textColor="@color/text_gray1"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <EditText
             android:id="@+id/et_idcard_phone"
@@ -73,7 +73,7 @@
             android:paddingTop="8dp"
             android:textColor="@color/gray"
             android:textColorHint="@color/gray"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
     </LinearLayout>
 
 
@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:text="证件照片"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -111,7 +111,7 @@
                 android:paddingTop="8dp"
                 android:text="请上传身份证正反面的清晰照片"
                 android:textColor="@color/gray"
-                android:textSize="14sp" />
+                android:textSize="13sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -151,7 +151,7 @@
         android:paddingTop="10dp"
         android:text="提交"
         android:textColor="@color/blue"
-        android:textSize="16sp" />
+        android:textSize="14sp" />
 
 
 </LinearLayout>

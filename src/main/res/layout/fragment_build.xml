@@ -79,7 +79,7 @@
             android:enabled="true"
             android:text="完善基础信息>>"
             android:textColor="@color/tv_gray"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:visibility="gone" />
 
         <TextView
@@ -93,7 +93,7 @@
             android:enabled="true"
             android:text="测试>>"
             android:textColor="@color/tv_gray"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:visibility="gone" />
 
     </RelativeLayout>

@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:text="姓名"
             android:textColor="@color/text_gray1"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <EditText
             android:id="@+id/et_engineer_name"
@@ -39,7 +39,7 @@
             android:paddingTop="8dp"
             android:textColor="@color/gray"
             android:textColorHint="@color/gray"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:text="证书等级"
             android:textColor="@color/text_gray1"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_engineer_grade"
@@ -72,7 +72,7 @@
             android:paddingLeft="15dp"
             android:paddingTop="8dp"
             android:textColor="@color/gray"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"
@@ -96,7 +96,7 @@
             android:layout_height="wrap_content"
             android:text="证书编号"
             android:textColor="@color/text_gray1"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <EditText
             android:id="@+id/et_engineer_phone"
@@ -110,7 +110,7 @@
             android:paddingTop="8dp"
             android:textColor="@color/gray"
             android:textColorHint="@color/gray"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -134,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:text="证件照片"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -146,7 +146,7 @@
                 android:paddingTop="8dp"
                 android:text="请上传消防工程师证件内页和封面的清晰照片"
                 android:textColor="@color/gray"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -186,7 +186,7 @@
     android:paddingTop="10dp"
     android:text="提交"
     android:textColor="@color/blue"
-    android:textSize="16sp" />
+    android:textSize="14sp" />
 
 
 </LinearLayout>

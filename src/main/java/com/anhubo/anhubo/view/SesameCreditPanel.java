@@ -62,11 +62,11 @@ public class SesameCreditPanel extends View {
     /**
      * 进度条底色的起始位置
      */
-    private int startAngle = 130;
+    private int startAngle = 132;
     /**
      * 进度条底色的结束位置
      */
-    private int sweepAngle = 280;
+    private int sweepAngle = 278;
     // 圆心
     private PointF centerPoint = new PointF();
     private SesameModel dataModel;
@@ -125,9 +125,9 @@ public class SesameCreditPanel extends View {
         if (dataModel != null && dataModel.getSesameItemModels() != null && dataModel.getSesameItemModels().size() != 0) {
             viewWidth = w;
             viewHeight = h;
-            progressRaduis = (w / 2) * 7 / 9;
+            progressRaduis = (w / 2) * 9 / 12;
             // 设置中心点
-            centerPoint.set(viewWidth / 2, viewHeight / 2 * 17 / 16);
+            centerPoint.set(viewWidth / 2, viewHeight / 2 * 25 / 24);
             sesameJiFen = String.valueOf(dataModel.getTotalMin());
             //System.out.println("dataModel.getTotalMin() = " + dataModel.getTotalMin() + ", String.valueOf(dataModel.getTotalMin()) = " + String.valueOf(dataModel.getTotalMin()));
             //sesameJiFen = String.valueOf(dataModel.getUserTotal());

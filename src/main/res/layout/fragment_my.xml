@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="160dp"
         android:background="@color/bg_title"
         android:orientation="vertical">
 
@@ -36,31 +36,30 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
-                android:text="mobile-6679"
+                android:text="mobile-0000"
                 android:textColor="@color/bg_upload"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="20dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:id="@+id/tv_my_gebder"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
                     android:text="保密"
                     android:textColor="@color/bg_upload"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
 
                 <View
                     android:id="@+id/view"
                     android:layout_width="1dp"
-                    android:layout_height="12dp"
-                    android:layout_centerVertical="true"
+                    android:layout_height="8dp"
+                    android:layout_centerInParent="true"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:layout_toRightOf="@+id/tv_my_gebder"
@@ -71,11 +70,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
                     android:layout_toRightOf="@+id/view"
                     android:text="保密"
                     android:textColor="@color/bg_upload"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -96,17 +94,18 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
             android:layout_weight="1"
             android:drawableLeft="@drawable/invate"
             android:drawablePadding="15dp"
             android:text="邀请注册"
+            android:gravity="center_vertical"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="10dp"
+            android:layout_height="12dp"
             android:background="@drawable/right_arrow" />
 
     </LinearLayout>
@@ -132,17 +131,18 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
             android:layout_weight="1"
             android:drawableLeft="@drawable/setting"
             android:drawablePadding="15dp"
             android:text="设置"
+            android:gravity="center_vertical"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="10dp"
+            android:layout_height="12dp"
             android:background="@drawable/right_arrow" />
 
     </LinearLayout>
@@ -159,6 +159,6 @@
         android:paddingTop="10dp"
         android:text="退出登录"
         android:textColor="@color/dot_red"
-        android:textSize="18sp" />
+        android:textSize="16sp" />
 
 </LinearLayout>

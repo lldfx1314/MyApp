@@ -1,7 +1,14 @@
 package com.anhubo.anhubo.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Parcel;
+import android.text.SpannableString;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.URLSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -12,8 +19,13 @@ import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.bean.Unit_PlanBean;
+import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.ui.activity.Login_Register.AnhubaoDeal;
 import com.anhubo.anhubo.ui.impl.UnitFragment;
+import com.anhubo.anhubo.utils.DisplayUtil;
+import com.anhubo.anhubo.utils.Keys;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -30,6 +42,7 @@ public class UnitAdapter extends BaseAdapter {
     private String maxEachMoney;
     private String maxPlanEnsure;
     private String planMoneyLast;
+    private SpannableString ss;
 
     public UnitAdapter(Context context, List<Unit_PlanBean.Data.Certs> certs) {
         this.mContext = context;
@@ -60,16 +73,23 @@ public class UnitAdapter extends BaseAdapter {
         } else {
             hold = (ViewHolder) convertView.getTag();
         }
+        System.out.println("position+++==="+position);
         //获取到一组信息
         Unit_PlanBean.Data.Certs cert = certs.get(position);
+        // 获取详细信息
+
         planName = cert.plan_name;
         status = cert.status;
         planId = cert.plan_id;
-        maxEachMoney = cert.max_each_money;
         maxPlanEnsure = cert.max_plan_ensure;
+        System.out.println("maxPlanEnsure+++==="+maxPlanEnsure);
+        maxEachMoney = cert.max_each_money;
+        System.out.println("maxEachMoney+++==="+maxEachMoney);
         planMoneyLast = cert.plan_money_last;
+        System.out.println("planMoneyLast+++==="+planMoneyLast);
         // 把这些信息赋值给相应的控件
         if (TextUtils.equals("运行期", status)) {
+            // 设置运行期对应的样式
             hold.ivHeighSecurity.setBackgroundResource(R.drawable.heigh_security);
             hold.ivHeighSharing.setBackgroundResource(R.drawable.heigh_sharing);
             hold.ivPrepayMoney.setBackgroundResource(R.drawable.prepay_money);
@@ -91,40 +111,90 @@ public class UnitAdapter extends BaseAdapter {
         if (TextUtils.equals(planMoneyLast, "")) {
             hold.tvPrepayMoney.setText(0 + "");
         }
-        if(!TextUtils.isEmpty(maxPlanEnsure)||!TextUtils.isEmpty(maxEachMoney)||!TextUtils.isEmpty(planMoneyLast)){
-            Double heighSecurity = Double.parseDouble(maxPlanEnsure)/10000;
-            Double heighSharing = Double.parseDouble(maxEachMoney)/10000;
-            Double prepayMoney = Double.parseDouble(planMoneyLast)/10000;
+        //如果不过万，就在小数后保留2位，并且四舍五入
+        DecimalFormat df2  = new DecimalFormat("###.00");
+        // 最高保障额
+        if (!TextUtils.isEmpty(maxPlanEnsure)) {
 
-            // 最高保障额
+            Double heighSecurity = Double.parseDouble(maxPlanEnsure) / 10000;
             if (heighSecurity < 1) {
-                hold.tvHeighSecurity.setText(maxPlanEnsure);
+                // 不过万
+                double parseDouble = Double.parseDouble(maxPlanEnsure.substring(0, 8));
+                hold.tvHeighSecurity.setText(df2.format(parseDouble));
             } else if (heighSecurity >= 1) {
-                hold.tvHeighSecurity.setText(heighSecurity+"万");
+                // 过万
+                String str = String.valueOf(heighSecurity);
+                if (str.length() >= 7) {
+                    setWan(str.substring(0, 7) + "万");
+                    hold.tvHeighSecurity.setText(ss);
+                } else {
+                    setWan(str + "万");
+                    hold.tvHeighSecurity.setText(ss);
+                }
             }
 
+        }
+        // 最高分摊额
+        if (!TextUtils.isEmpty(maxEachMoney)) {
+            Double heighSharing = Double.parseDouble(maxEachMoney) / 10000;
 
-            // 最高分摊额
             if (heighSharing < 1) {
-                hold.tvHeighSecurity.setText(maxEachMoney);
-            } else if (heighSecurity >= 1) {
-                hold.tvHeighSecurity.setText(heighSharing+"万");
-            }
-            // 预付保障金
-            if (heighSecurity < 1) {
-                hold.tvHeighSecurity.setText(planMoneyLast);
-            } else if (heighSecurity >= 1) {
-                hold.tvHeighSecurity.setText(prepayMoney+"万");
+                double parseDouble = Double.parseDouble(maxEachMoney.substring(0, 8));
+                hold.tvHeighSharing.setText(df2.format(parseDouble));
+            } else if (heighSharing >= 1) {
+                String str = String.valueOf(heighSharing);
+                if (str.length() >= 7) {
+                    setWan(str.substring(0, 7) + "万");
+                    hold.tvHeighSharing.setText(ss);
+                } else {
+                    setWan(str + "万");
+                    hold.tvHeighSharing.setText(ss);
+                }
             }
         }
+        // 预付保障金
+        if (!TextUtils.isEmpty(planMoneyLast)) {
+            Double prepayMoney = Double.parseDouble(planMoneyLast) / 10000;
 
+            if (prepayMoney < 1) {
 
+                double parseDouble = Double.parseDouble(planMoneyLast.substring(0, 8));
+                hold.tvPrepayMoney.setText(df2.format(parseDouble));
+            } else if (prepayMoney >= 1) {
 
+                String str = String.valueOf(prepayMoney);
+                if (str.length() >= 7) {
+                    setWan(str.substring(0, 7) + "万");
+                    hold.tvPrepayMoney.setText(ss);
+                } else {
+                    setWan(str + "万");
 
+                    hold.tvPrepayMoney.setText(ss);
+                }
+
+            }
+        }
         return convertView;
-
     }
+    /**设置万字大小*/
+    private void setWan(String string){
 
+        ss = new SpannableString(string);
+        MyURLSpan myURLSpan = new MyURLSpan(string);
+        ss.setSpan(myURLSpan, string.length()-1, string.length(), SpannableString.SPAN_EXCLUSIVE_INCLUSIVE);
+    }
+    class MyURLSpan extends URLSpan {
+
+
+        public MyURLSpan(String url) {
+            super(url);
+        }
+
+        @Override
+        public void updateDrawState(TextPaint ds) {
+            ds.setTextSize(DisplayUtil.sp2px(mContext,10));
+        }
+    }
 
     static class ViewHolder {
         // 计划名和时期

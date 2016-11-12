@@ -53,9 +53,11 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         >
 
-        <activity android:name=".ui.activity.HomeActivity"></activity>
+        <activity android:name=".ui.activity.HomeActivity"
+            android:screenOrientation="portrait"></activity>
         <!--Nfc扫描界面-->
-        <activity android:name=".ui.activity.unitDetial.NfcScanActivity">
+        <activity android:name=".ui.activity.unitDetial.NfcScanActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.nfca.action.NDEF_DISCOVERED" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -76,51 +78,80 @@
         </activity>
         <activity
             android:name=".ui.activity.unitDetial.Check_Device_Activity"
-            android:theme="@style/progress_dialog_theme" />
+            android:theme="@style/progress_dialog_theme"
+            android:screenOrientation="portrait"/>
         <!--登录注册-->
-        <activity android:name=".ui.activity.Login_Register.RegisterActivity" />
-        <activity android:name=".ui.activity.Login_Register.RegisterActivity2" />
-        <activity android:name=".ui.activity.Login_Register.PwdRegisterActivity" />
-        <activity android:name=".ui.activity.Login_Register.AnhubaoDeal" />
-        <activity android:name=".ui.activity.Login_Register.Login_Pwd" />
-        <activity android:name=".ui.activity.Login_Register.Login_Message" >
-
+        <activity android:name=".ui.activity.Login_Register.RegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.Login_Register.RegisterActivity2"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.Login_Register.PwdRegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.Login_Register.AnhubaoDeal"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.Login_Register.Login_Pwd"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.Login_Register.Login_Message"
+            android:screenOrientation="portrait">
         </activity>
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="561cae6ae0f55abd990035bf" >
         </meta-data>
         <!--单位界面-->
-        <activity android:name=".ui.activity.unitDetial.Add_Device_Activity" />
-        <activity android:name=".ui.activity.unitDetial.DeviceName_Activity" />
-        <activity android:name=".ui.activity.unitDetial.Unit2Study" />
-        <activity android:name=".ui.activity.unitDetial.UnitMenuActivity" />
-        <activity android:name=".ui.activity.unitDetial.MsgPerfectActivity" />
-        <activity android:name=".ui.activity.unitDetial.UploadingActivity1" />
-        <activity android:name=".ui.activity.unitDetial.UploadingActivity2" />
-        <activity android:name=".ui.activity.unitDetial.UploadingActivity3" />
-        <activity android:name=".ui.activity.unitDetial.UploadingActivity4" />
-        <activity android:name=".ui.activity.unitDetial.UnitMsgCenterActivity" />
-        <activity android:name=".ui.activity.unitDetial.QrScanActivity" />
-        <activity android:name=".ui.activity.unitDetial.DeviceList" />
+        <activity android:name=".ui.activity.unitDetial.Add_Device_Activity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.DeviceName_Activity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.Unit2Study"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.UnitMenuActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.MsgPerfectActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.UploadingActivity1"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.UploadingActivity2"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.UploadingActivity3"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.UploadingActivity4"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.UnitMsgCenterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.QrScanActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.DeviceList"
+            android:screenOrientation="portrait"/>
         <!--反馈-->
-        <activity android:name=".ui.activity.unitDetial.FeedbackActivity" />
-        <activity android:name=".ui.activity.unitDetial.FeedbackSuccessActivity" />
+        <activity android:name=".ui.activity.unitDetial.FeedbackActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.FeedbackSuccessActivity"
+            android:screenOrientation="portrait"/>
 
 
         <!--建筑界面-->
-        <activity android:name=".ui.activity.buildDetial.Build_CltMsgActivity"/>
+        <activity android:name=".ui.activity.buildDetial.Build_CltMsgActivity"
+            android:screenOrientation="portrait"/>
 
 
         <!--我的界面-->
-        <activity android:name=".ui.activity.MyDetial.InvateActivity" />
-        <activity android:name=".ui.activity.MyDetial.SettingActivity" />
-        <activity android:name=".ui.activity.MyDetial.AboutWeActivity" />
-        <activity android:name=".ui.activity.MyDetial.PersonMsgActivity" />
-        <activity android:name=".ui.activity.MyDetial.AlterPwdActivity" />
-        <activity android:name=".ui.activity.MyDetial.CertificationActivity" />
-        <activity android:name=".ui.activity.MyDetial.IdCardActivity" />
-        <activity android:name=".ui.activity.MyDetial.EngineerActivity" />
+        <activity android:name=".ui.activity.MyDetial.InvateActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.MyDetial.SettingActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.MyDetial.AboutWeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.MyDetial.PersonMsgActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.MyDetial.AlterPwdActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.MyDetial.CertificationActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.MyDetial.IdCardActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.MyDetial.EngineerActivity"
+            android:screenOrientation="portrait"/>
 
 
         <!--微信-->
@@ -136,7 +167,8 @@
 
 
         <!--欢迎界面-->
-        <activity android:name=".ui.activity.WelcomeActivity">
+        <activity android:name=".ui.activity.WelcomeActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
 
-            app:qrcv_animTime="1000"
+            app:qrcv_animTime="500"
             app:qrcv_barCodeTipText="将条码放入框内，即可自动扫描"
             app:qrcv_barcodeRectHeight="140dp"
             app:qrcv_borderColor="@android:color/transparent"
@@ -48,15 +48,13 @@
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="245dp"
             android:layout_height="5dp"
-            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="220dp" />
+            android:layout_marginTop="350dp" />
 
         <RelativeLayout
             android:id="@+id/rl_qrNumber"
-            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="160dp"
+            android:layout_marginTop="360dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <TextView
@@ -92,8 +90,8 @@
 
         <Button
             android:id="@+id/btn_light"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginTop="15dp"
             android:layout_marginRight="15dp"
             android:layout_alignParentRight="true"
@@ -103,9 +101,9 @@
             android:id="@+id/btn_nfcScan"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginBottom="80dp"
+            android:layout_marginTop="410dp"
             android:layout_marginLeft="45dp"
             android:background="@drawable/btn_qr_shap"
             android:text="NFC扫描"
@@ -115,9 +113,9 @@
             android:id="@+id/btn_completeCheck"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="80dp"
+            android:layout_marginTop="410dp"
             android:layout_marginRight="45dp"
             android:background="@drawable/btn_qr_shap"
             android:text="完成检查"

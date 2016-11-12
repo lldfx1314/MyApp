@@ -150,7 +150,9 @@ public class UnitFragment extends BaseFragment {
         dotStudy.setVisibility(View.GONE);
         dotCheck.setVisibility(View.GONE);
         dotDrill.setVisibility(View.GONE);
+        // 添加头布局
         lvUnit.addHeaderView(view,null,true);
+        // 去掉头布局的分割线
         lvUnit.setHeaderDividersEnabled(false);
         //互保计划获取数据
         getPlanData();
@@ -262,7 +264,7 @@ public class UnitFragment extends BaseFragment {
             }
             UnitAdapter adapter = new UnitAdapter(mActivity, certs);
             // 没有任何保障时显示提示信息，并且不显示ListView的分割线
-            if (code == 0 ) {
+            if (code == 0 &&certs!=null) {
                 if(certs.size() == 0){
                     tvNoPlan1.setVisibility(View.VISIBLE);
                     lvUnit.setDividerHeight(0);
@@ -270,7 +272,6 @@ public class UnitFragment extends BaseFragment {
                     tvNoPlan2.setVisibility(View.VISIBLE);
                     tvNoPlan2.setText("动态保障凭证");
                 }
-
 
             } else {
                 tvNoPlan1.setVisibility(View.VISIBLE);
