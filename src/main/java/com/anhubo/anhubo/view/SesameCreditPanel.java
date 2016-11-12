@@ -55,18 +55,18 @@ public class SesameCreditPanel extends View {
     /**
      * 进度条的宽度
      */
-    private int progressStroke = 4;
+    private int progressStroke = DisplayUtil.dp2px(getContext(),1);
 
     private int mTikeCount = 31;
     private int mItemcount = 6;
     /**
      * 进度条底色的起始位置
      */
-    private int startAngle = 132;
+    private int startAngle = 126;
     /**
      * 进度条底色的结束位置
      */
-    private int sweepAngle = 278;
+    private int sweepAngle = 288;
     // 圆心
     private PointF centerPoint = new PointF();
     private SesameModel dataModel;
@@ -252,7 +252,6 @@ public class SesameCreditPanel extends View {
         progressRectF = new RectF(centerPoint.x - progressRaduis, centerPoint.y - progressRaduis, centerPoint.x + progressRaduis, centerPoint.y + progressRaduis);
         // 仪表盘上面的进度条
         canvas.drawArc(progressRectF, startAngle, sweepAngle, false, panelPaint);
-        // 画最外层的数字
         //仪表盘上面的小进度（画笔颜色为白色，宽度是4，在画笔里面设置）
         canvas.drawArc(progressRectF, startAngle, progressSweepAngle, false, progressPaint);
         // 仪表盘上面的小进度的小圆点（画笔颜色为白色）
@@ -262,7 +261,7 @@ public class SesameCreditPanel extends View {
 
                 (float) (centerPoint.y + progressRaduis
 
-                        * Math.sin((startAngle + progressSweepAngle) * 3.14 / 180)), 6, progressDotPaint);
+                        * Math.sin((startAngle + progressSweepAngle) * 3.14 / 180)), DisplayUtil.dp2px(getContext(),2), progressDotPaint);
 
         canvas.save();
         //旋转-110度,即坐标系270度位置  即垂直方向,便于计算

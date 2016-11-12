@@ -1,33 +1,23 @@
 package com.anhubo.anhubo.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Parcel;
 import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.bean.Unit_PlanBean;
-import com.anhubo.anhubo.protocol.Urls;
-import com.anhubo.anhubo.ui.activity.Login_Register.AnhubaoDeal;
-import com.anhubo.anhubo.ui.impl.UnitFragment;
 import com.anhubo.anhubo.utils.DisplayUtil;
-import com.anhubo.anhubo.utils.Keys;
 
 import java.text.DecimalFormat;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Created by LUOLI on 2016/10/24.
@@ -82,11 +72,8 @@ public class UnitAdapter extends BaseAdapter {
         status = cert.status;
         planId = cert.plan_id;
         maxPlanEnsure = cert.max_plan_ensure;
-        System.out.println("maxPlanEnsure+++==="+maxPlanEnsure);
         maxEachMoney = cert.max_each_money;
-        System.out.println("maxEachMoney+++==="+maxEachMoney);
         planMoneyLast = cert.plan_money_last;
-        System.out.println("planMoneyLast+++==="+planMoneyLast);
         // 把这些信息赋值给相应的控件
         if (TextUtils.equals("运行期", status)) {
             // 设置运行期对应的样式

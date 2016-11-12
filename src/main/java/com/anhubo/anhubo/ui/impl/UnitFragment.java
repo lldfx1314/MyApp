@@ -3,7 +3,6 @@ package com.anhubo.anhubo.ui.impl;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -255,7 +254,7 @@ public class UnitFragment extends BaseFragment {
 
         @Override
         public void onResponse(String response) {
-            System.out.println("互保计划++" + response);
+            //System.out.println("互保计划++" + response);
             Unit_PlanBean bean = new Gson().fromJson(response, Unit_PlanBean.class);
             if (bean != null) {
                 code = bean.code;
