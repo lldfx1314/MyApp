@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <include layout="@layout/layout_top_bar"></include>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/bg_upload"
+        >
+
+        <LinearLayout
+            android:id="@+id/ll_takePhoto03"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/take_photo"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="点击图标开始拍照"
+                android:textColor="@color/upload_photo"
+                android:textSize="16sp"
+                />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_showPhoto03"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
+    <Button
+        android:id="@+id/btn_unloading03"
+        style="@style/btn_msg_perfect"
+        android:text="提交"/>
+
+
+</LinearLayout>

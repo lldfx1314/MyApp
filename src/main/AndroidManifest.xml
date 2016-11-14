@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.anhubo.anhubo">
+
+    <uses-sdk android:minSdkVersion="10" />
+    <!-- NFC权限声明 -->
+    <uses-permission android:name="android.permission.NFC" />
+    <!-- 限制NFC的安装设备 -->
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
+    <!--添加拍照和读写卡的权限-->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!--二维码扫描权限-->
+    <!-- <uses-permission android:name="android.permission.CAMERA"/>-->
+    <!--震动权限-->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!--打开摄像头灯的权限-->
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
+
+
+    <!--友盟-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.SET_DEBUG_APP" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+
+
+    <application
+        android:name=".MyApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        >
+
+        <activity android:name=".ui.activity.HomeActivity"
+            android:screenOrientation="portrait"></activity>
+        <!--Nfc扫描界面-->
+        <activity android:name=".ui.activity.unitDetial.NfcScanActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.nfca.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="mime/type" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/nfc_tech_filter" />
+            <intent-filter>
+                <action android:name="android.nfc.action.TAG_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.unitDetial.Check_Device_Activity"
+            android:theme="@style/progress_dialog_theme"
+            android:screenOrientation="portrait"/>
+        <!--登录注册-->
+        <activity android:name=".ui.activity.Login_Register.RegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.Login_Register.RegisterActivity2"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.Login_Register.PwdRegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.Login_Register.AnhubaoDeal"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.Login_Register.Login_Pwd"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.Login_Register.Login_Message"
+            android:screenOrientation="portrait">
+        </activity>
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="561cae6ae0f55abd990035bf" >
+        </meta-data>
+        <!--单位界面-->
+        <activity android:name=".ui.activity.unitDetial.Add_Device_Activity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.DeviceName_Activity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.Unit2Study"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.UnitMenuActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.MsgPerfectActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.UploadingActivity1"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.UploadingActivity2"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.UploadingActivity3"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.UploadingActivity4"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.UnitMsgCenterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.QrScanActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.DeviceList"
+            android:screenOrientation="portrait"/>
+        <!--反馈-->
+        <activity android:name=".ui.activity.unitDetial.FeedbackActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.FeedbackSuccessActivity"
+            android:screenOrientation="portrait"/>
+
+
+        <!--建筑界面-->
+        <activity android:name=".ui.activity.buildDetial.Build_CltMsgActivity"
+            android:screenOrientation="portrait"/>
+
+
+        <!--我的界面-->
+        <activity android:name=".ui.activity.MyDetial.InvateActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.MyDetial.SettingActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.MyDetial.AboutWeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.MyDetial.PersonMsgActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.MyDetial.AlterPwdActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.MyDetial.CertificationActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.MyDetial.IdCardActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.MyDetial.EngineerActivity"
+            android:screenOrientation="portrait"/>
+
+
+        <!--微信-->
+        <activity
+            android:name="com.anhubo.anhubo.wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <!-- alipay callback-->
+
+
+
+        <!--欢迎界面-->
+        <activity android:name=".ui.activity.WelcomeActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>

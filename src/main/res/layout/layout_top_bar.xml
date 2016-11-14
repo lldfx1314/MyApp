@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/ll_Top"
+              android:fitsSystemWindows="true"
+              android:clipToPadding="true"
+              android:layout_width="match_parent"
+              android:layout_height="50dp"
+              android:background="@color/bg_title"
+              android:orientation="horizontal">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+
+            android:id="@+id/ivTopBarLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:paddingLeft="18dp"
+            android:paddingRight="22dp"
+            android:src="@drawable/left"
+            android:background="@drawable/left_select"/>
+
+        <ImageView
+            android:id="@+id/ivTopBarleft_unit_menu"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:paddingLeft="15dp"
+            android:src="@drawable/unit_menu"/>
+
+        <ImageView
+            android:id="@+id/ivTopBarleft_build_pen"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingRight="15dp"
+            android:visibility="gone"
+            android:src="@drawable/build_pen"/>
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/backgroud_white"
+            android:textSize="16sp"/>
+
+        <!--<net.lucode.hackware.magicindicator.MagicIndicator
+            android:layout_marginBottom="5dp"
+            android:visibility="gone"
+            android:id="@+id/magic_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>-->
+
+        <ImageView
+            android:id="@+id/ivTopBarRight_unit_msg"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone"
+            android:paddingRight="15dp"
+            android:src="@drawable/unit_msg"/>
+
+        <TextView
+            android:id="@+id/tvTopBarRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingRight="15dp"
+            android:enabled="true"
+            android:visibility="gone"
+            android:background="@null"
+            android:textSize="16sp"
+            android:textColor="@color/backgroud_white"
+            android:text="列表"
+            />
+
+    </RelativeLayout>
+</LinearLayout>
