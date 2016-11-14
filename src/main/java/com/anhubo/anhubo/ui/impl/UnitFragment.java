@@ -50,7 +50,7 @@ import okhttp3.Call;
  */
 public class UnitFragment extends BaseFragment {
 
-
+    /**进度条*/
     private ListView lvUnit;
     private RelativeLayout rlUnit01;
     private RelativeLayout rlUnit02;
