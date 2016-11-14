@@ -63,7 +63,6 @@ public class UnitAdapter extends BaseAdapter {
         } else {
             hold = (ViewHolder) convertView.getTag();
         }
-        System.out.println("position+++==="+position);
         //获取到一组信息
         Unit_PlanBean.Data.Certs cert = certs.get(position);
         // 获取详细信息

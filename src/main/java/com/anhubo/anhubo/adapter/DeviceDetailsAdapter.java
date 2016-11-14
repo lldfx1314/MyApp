@@ -1,6 +1,7 @@
 package com.anhubo.anhubo.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
+import com.anhubo.anhubo.ui.activity.unitDetial.Check_Device_Activity;
 
 import java.util.List;
 
@@ -18,15 +20,13 @@ public class DeviceDetailsAdapter extends BaseAdapter {
 
     public Context mContext;
     public List mList;
+    private String isId;
+    private String isContent;
 
-    public DeviceDetailsAdapter() {
-
-    }
-
-
-    public DeviceDetailsAdapter(Context context, List<String> list) {
+    public DeviceDetailsAdapter(Context context, List<String> list, String isId, String isContent) {
         this.mContext = context;
         this.mList = list;
+
     }
 
     @Override
@@ -48,6 +48,7 @@ public class DeviceDetailsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
+        // 检查项
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = View.inflate(mContext, R.layout.item_listview, null);
@@ -57,6 +58,8 @@ public class DeviceDetailsAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+
+
         // 获取数据
         String str = (String) mList.get(position);
         // 填充数据

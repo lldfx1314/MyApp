@@ -52,7 +52,7 @@
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="12dp"
-                    android:background="@drawable/right_arrow" />
+                    android:background="@drawable/arrow_right" />
 
             </LinearLayout>
             <!--用户名-->
@@ -98,7 +98,7 @@
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="12dp"
-                    android:background="@drawable/right_arrow" />
+                    android:background="@drawable/arrow_right" />
 
             </LinearLayout>
 
@@ -142,7 +142,7 @@
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="12dp"
-                    android:background="@drawable/right_arrow" />
+                    android:background="@drawable/arrow_right" />
 
             </LinearLayout>
 
@@ -185,7 +185,7 @@
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="12dp"
-                    android:background="@drawable/right_arrow" />
+                    android:background="@drawable/arrow_right" />
 
             </LinearLayout>
 
@@ -229,7 +229,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
-                    android:background="@drawable/right_arrow" />
+                    android:background="@drawable/arrow_right" />
 
             </LinearLayout>
 
@@ -272,7 +272,7 @@
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="12dp"
-                    android:background="@drawable/right_arrow" />
+                    android:background="@drawable/arrow_right" />
 
             </LinearLayout>
 
@@ -303,7 +303,7 @@
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="12dp"
-                    android:background="@drawable/right_arrow" />
+                    android:background="@drawable/arrow_right" />
 
             </LinearLayout>
 
@@ -346,7 +346,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
-                    android:background="@drawable/right_arrow" />
+                    android:background="@drawable/arrow_right" />
 
             </LinearLayout>
             <!--微信-->
@@ -383,7 +383,7 @@
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="12dp"
-                    android:background="@drawable/right_arrow" />
+                    android:background="@drawable/arrow_right" />
 
             </LinearLayout>
 

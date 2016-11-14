@@ -3,7 +3,8 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical">
+              android:orientation="vertical"
+    android:background="@color/bg_upload">
 
     <include layout="@layout/layout_top_bar"></include>
 
@@ -77,7 +78,7 @@
             <EditText
                 android:id="@+id/et_add_area"
                 style="@style/editTextStyle"
-                android:hint="设备所在单位区域"/>
+                android:hint="区域(选填)"/>
         </LinearLayout>
 
         <!-- 设备位置 -->
@@ -96,7 +97,7 @@
             <EditText
                 android:id="@+id/et_add_name"
                 style="@style/editTextStyle"
-                android:hint="设备所在详细位置"
+                android:hint="命名设备位置"
                 />
         </LinearLayout>
 
@@ -117,7 +118,7 @@
             <EditText
                 android:id="@+id/et_add_type"
                 style="@style/editTextStyle"
-                android:drawableRight="@drawable/right_arrow"
+                android:drawableRight="@drawable/arrow_right"
                 android:enabled="true"
                 android:focusable="false"
                 android:hint="选择设备名称"
@@ -155,7 +156,7 @@
                     android:layout_weight="1"
                     android:text="（设备与NFC拍一起）"
                     android:textColor="@color/gray"
-                    android:textSize="16sp"/>
+                    android:textSize="14sp"/>
                <!-- <EditText
                     style="@style/editTextStyle"
                     android:enabled="true"
@@ -170,8 +171,10 @@
         android:id="@+id/add_complete_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@color/backgroud_white"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/bg_button"
         android:gravity="center"
         android:text="提交"
         android:textColor="@color/blue"

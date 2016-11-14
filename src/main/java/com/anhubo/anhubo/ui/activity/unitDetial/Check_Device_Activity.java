@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
@@ -62,6 +63,10 @@ public class Check_Device_Activity extends BaseActivity {
     private String uid;
     private String businessid;
     private String scanType;
+    private String isId;
+    private String isContent;
+    private TextView checkTime;
+    private RelativeLayout checkFeedback;
 
     @Override
     protected void initConfig() {
@@ -112,6 +117,10 @@ public class Check_Device_Activity extends BaseActivity {
         dateFlag = deviceInfo.data.require_date_flag;
         // 拿到问题集合
         require_list = deviceInfo.data.require_list;
+        // 拿到问题id
+        isId = deviceInfo.data.is_id;
+        // 拿到问题内容
+        isContent = deviceInfo.data.is_content;
         //System.out.println("哈哈哈哈哈哈哈+++==="+require_list);
     }
 
@@ -127,9 +136,11 @@ public class Check_Device_Activity extends BaseActivity {
         deviceName = (TextView) findViewById(R.id.tv_check_device);
         btnCheckMore = (Button) findViewById(R.id.check_more);// 更多
         btnCheckComplete = (Button) findViewById(R.id.check_complete);//检查完成
-
+        // 出厂日期、待处理反馈
+        checkTime = (TextView) findViewById(R.id.tv_check_time);
+        checkFeedback = (RelativeLayout) findViewById(R.id.rl_check_feedback);
         // 获取适配器对象
-        adapter = new DeviceDetailsAdapter(this, require_list);
+        adapter = new DeviceDetailsAdapter(this, require_list,isId,isContent);
 
     }
 
@@ -138,6 +149,18 @@ public class Check_Device_Activity extends BaseActivity {
     @Override
     protected void initEvents() {
         super.initEvents();
+        // 处理出厂日期、待处理反馈
+        checkFeedback.setOnClickListener(this);
+        checkTime.setOnClickListener(this);
+        if(!TextUtils.isEmpty(isContent)){
+            checkFeedback.setVisibility(View.VISIBLE);
+
+        }
+
+
+
+
+
         // 显示 设备名称
         if (isGetDeviceInfo) {
             deviceName.setText(device_type_name);
@@ -202,6 +225,16 @@ public class Check_Device_Activity extends BaseActivity {
             case R.id.check_complete:
                 // 检查完成的点击事件
                 checkComplete();
+                break;
+            case R.id.tv_check_time:
+                // 时间
+
+                break;
+            case R.id.rl_check_feedback:
+                // 待处理反馈
+                Intent intent1 = new Intent(mActivity, Pending_FeedbackActivity.class);
+                intent1.putExtra(Keys.IsId,isId);
+                startActivity(intent1);
                 break;
         }
     }

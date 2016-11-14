@@ -87,7 +87,7 @@
                 />
 
         </RelativeLayout>
-
+        <!--闪光灯-->
         <Button
             android:id="@+id/btn_light"
             android:layout_width="20dp"

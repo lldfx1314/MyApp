@@ -106,4 +106,6 @@ public interface Urls {
     String Url_MyShare = UrlBase +"Personal/share";
     /**单位下的互保计划*/
     String Url_Unit_Plan = UrlBase +"Plan/plan_certs";
+    /**待处理反馈界面处理页*/
+    String Url_Check_Pending_FeedBack = UrlBase +"Issue/issue_detail";
 }

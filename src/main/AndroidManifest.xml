@@ -128,6 +128,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.unitDetial.FeedbackSuccessActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.unitDetial.Pending_FeedbackActivity"
+            android:screenOrientation="portrait"/>
 
 
         <!--建筑界面-->

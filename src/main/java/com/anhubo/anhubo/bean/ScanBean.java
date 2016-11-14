@@ -16,6 +16,8 @@ public class ScanBean extends BaseEntity implements Serializable{
         public int device_exist;
         public String device_id;
         public int require_date_flag;
+        public String is_id;
+        public String is_content;
         public List<String> require_list;
     }
 }

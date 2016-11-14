@@ -37,4 +37,5 @@
     <color name="textcolor">#FFFFFF</color>
     <color name="nfc_gray">#B6B6B6</color>
     <color name="rl_gray">#DEDEDE</color>
+    <color name="black_new">#000000</color>
 </resources>

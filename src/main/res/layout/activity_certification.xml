@@ -34,7 +34,7 @@
         <ImageView
             android:layout_width="10dp"
             android:layout_height="12dp"
-            android:background="@drawable/right_arrow" />
+            android:background="@drawable/arrow_right" />
 
     </LinearLayout>
 
@@ -68,7 +68,7 @@
         <ImageView
             android:layout_width="10dp"
             android:layout_height="12dp"
-            android:background="@drawable/right_arrow" />
+            android:background="@drawable/arrow_right" />
 
     </LinearLayout>
 </LinearLayout>

@@ -104,4 +104,6 @@ public interface Keys {
     String WEIXINIMG = "weixinImg";
     /**传递deviceId*/
     String DeviceId = "deviceId";
+    /**待处理反馈isid*/
+    String IsId = "isId";
 }

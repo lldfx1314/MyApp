@@ -1,5 +1,6 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -61,7 +62,7 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     private String deviceId;
     private String buildingname;
     private String businessname;
-
+    private File file1 = null;
 
     @Override
     protected void initConfig() {
@@ -124,7 +125,7 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if (intent != null){
+        if (intent != null) {
             switch (requestCode) {
                 case REQUEST_CODE:
                     String str = intent.getStringExtra(Keys.STR);
@@ -134,7 +135,9 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
                     break;
                 case CAMERA:
                     // 从相机界面返回
-                    showPhoto01(intent);
+                    if (resultCode == Activity.RESULT_OK) {
+                        showPhoto01(intent);
+                    }
                     break;
                 default:
                     break;
@@ -177,6 +180,7 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         }
         //显示图片
         iv.setImageBitmap(bitmap);
+        file1 = filePhoto;
     }
 
 
@@ -211,6 +215,7 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         // 点击完成的时候获取输入框内的内容，调用接口，使用post方法把数据添加到后台
         getInputData();
 
+
         if (TextUtils.isEmpty(build)) {
             ToastUtils.showToast(mActivity, "建筑物不能为空");
             return;
@@ -220,31 +225,41 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
             return;
         }
         if (TextUtils.isEmpty(area)) {
-            ToastUtils.showToast(mActivity, "所在区域不能为空");
+            ToastUtils.showToast(mActivity, "区域不能为空");
+            return;
+        }
+        if (TextUtils.isEmpty(devicePlace)) {
+            ToastUtils.showToast(mActivity, "设备位置不能为空");
+            return;
+        }
+        if (TextUtils.isEmpty(deviceName)) {
+            ToastUtils.showToast(mActivity, "设备名称不能为空");
             return;
         }
 
+
         //System.out.println("添加界面+++==="+uid);
-        File file = filePhoto;
-        if (!file.exists()) {
-            ToastUtils.showToast(mActivity, "文件不存在，请修改文件路径");
+
+        if (file1 == null) {
+            ToastUtils.showToast(mActivity, "请拍照");
             return;
+        } else {
+            String url = Urls.Url_Add;
+            Map<String, String> params = new HashMap<>();
+            params.put("uid", uid);
+            params.put("qrcode", cardnumber);
+            params.put("building_name", build);// 所属建筑
+            params.put("business_name", unit);//所属单位
+            params.put("area_name", area);//所属区域
+            params.put("type", devicePlace);// 设备位置
+            params.put("name", deviceName);// 设备名称
+            OkHttpUtils.post()//
+                    .addFile("file", "file01.png", file1)//
+                    .url(url)//
+                    .params(params)//
+                    .build()//
+                    .execute(new MyStringCallback());
         }
-        String url = Urls.Url_Add;
-        Map<String, String> params = new HashMap<>();
-        params.put("uid", uid);
-        params.put("qrcode", cardnumber);
-        params.put("building_name", build);// 所属建筑
-        params.put("business_name", unit);//所属单位
-        params.put("area_name", area);//所属区域
-        params.put("type", deviceName);// 设备位置
-        params.put("name", devicePlace);// 设备名称
-        OkHttpUtils.post()//
-                .addFile("file", "file01.png", file)//
-                .url(url)//
-                .params(params)//
-                .build()//
-                .execute(new MyStringCallback());
 
 
     }

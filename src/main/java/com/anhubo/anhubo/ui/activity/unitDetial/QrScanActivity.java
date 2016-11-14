@@ -240,6 +240,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         String url = Urls.Url_Check;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("device_id", cardNumber);
+        params.put("version", "1.1.0");
         OkHttpUtils.post()//
                 .url(url)//
                 .params(params)//
@@ -257,6 +258,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
 
         @Override
         public void onResponse(String response) {
+            //System.out.println("查询"+response);
             ScanBean bean = new Gson().fromJson(response, ScanBean.class);
             if (bean != null) {
                 parseMessage(bean);
