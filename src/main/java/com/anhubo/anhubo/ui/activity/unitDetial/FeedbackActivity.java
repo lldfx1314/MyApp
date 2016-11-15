@@ -168,18 +168,18 @@ public class FeedbackActivity extends BaseActivity {
         }
 
         if (file1 == null || !file1.exists()) {
-            ToastUtils.showToast(mActivity, "请至少拍一张图片");
+            ToastUtils.showToast(mActivity, "请拍第一张图片");
             return;
         }
-        if (file1 == null || !file1.exists()) {
+        if (file2 == null || !file2.exists()) {
             ToastUtils.showToast(mActivity, "请拍第二张图片");
             return;
         }
-        if (file1 == null || !file1.exists()) {
+        if (file2 == null || !file2.exists()) {
             ToastUtils.showToast(mActivity, "请拍第三张图片");
             return;
         }
-
+        progressBar.setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<>();
 
         params.put("uid", uid);
@@ -211,6 +211,7 @@ public class FeedbackActivity extends BaseActivity {
             System.out.println("反馈界面+++===" + response);
             FeedBackBean bean = new Gson().fromJson(response, FeedBackBean.class);
             if (bean != null) {
+                progressBar.setVisibility(View.GONE);
                 int code = bean.code;
                 String msg = bean.msg;
                 userAddScore = bean.data.user_add_score;
@@ -236,7 +237,7 @@ public class FeedbackActivity extends BaseActivity {
         }
 
         if (file1 == null || !file1.exists()) {
-            ToastUtils.showToast(mActivity, "请至少拍一张图片");
+            ToastUtils.showToast(mActivity, "请拍第一张图片");
             return;
         }
         if (file2 == null || !file2.exists()) {
@@ -248,6 +249,7 @@ public class FeedbackActivity extends BaseActivity {
             return;
         }
 
+        progressBar.setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         params.put("issue_content", feedContent);
@@ -279,6 +281,7 @@ public class FeedbackActivity extends BaseActivity {
             //System.out.println("反馈界面+++===" + response);
             FeedBackBean bean = new Gson().fromJson(response, FeedBackBean.class);
             if (bean != null) {
+                progressBar.setVisibility(View.GONE);
                 int code = bean.code;
                 String msg = bean.msg;
                 userAddScore = bean.data.user_add_score;

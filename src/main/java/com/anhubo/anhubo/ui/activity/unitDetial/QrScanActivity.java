@@ -1,7 +1,12 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
+import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +24,7 @@ import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -33,6 +39,7 @@ import okhttp3.Call;
 
 public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate {
     private static final String TAG = QrScanActivity.class.getSimpleName();
+    private static final int CAMERAPERMISSION = 0;
     @InjectView(R.id.zxingview)
     ZXingView mQRCodeView;
     @InjectView(R.id.proBar)
@@ -60,6 +67,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     private int deviceCheckedNum;
     private String devicesNum;
     private static final int REQUESTSCAN = 1;
+    private AlertDialog mDialog;
 
     @Override
     protected void initConfig() {
@@ -151,6 +159,9 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                     } else {
                         ToastUtils.showToast(mActivity, "bean为空");
                     }
+                    break;
+                case CAMERAPERMISSION:
+                    mDialog.dismiss();
                     break;
             }
         }
@@ -250,7 +261,6 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     }
 
 
-
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
@@ -315,8 +325,50 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
 
     @Override
     public void onScanQRCodeOpenCameraError() {
-        ToastUtils.showToast(mActivity,"请到设置在打开权限");
+        //ToastUtils.showToast(mActivity,"请到设置里面打开权限");
+        dialog();
         Log.e(TAG, "打开相机出错");
+    }
+
+    /*
+     * Dialog对话框提示用户去设置界面打开权限
+     */
+    protected void dialog() {
+
+
+        mDialog = new AlertDialog(mActivity);
+        mDialog
+                .builder()
+                .setTitle("提示")
+                .setMsg("前往系统设置的应用列表里打开安互保的相机权限？")
+                .setCancelable(false)
+                .setPositiveButton("确认", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 打开系统设置界面
+                        Intent localIntent = new Intent();
+                        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        if (Build.VERSION.SDK_INT >= 9) {
+                            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                            localIntent.setData(Uri.fromParts("package", getPackageName(), null));
+                        } else if (Build.VERSION.SDK_INT <= 8) {
+                            localIntent.setAction(Intent.ACTION_VIEW);
+                            localIntent.setClassName("com.android.settings","com.android.settings.InstalledAppDetails");
+                            localIntent.putExtra("com.android.settings.ApplicationPkgName", getPackageName());
+                        }
+                        startActivityForResult(localIntent,CAMERAPERMISSION);
+                        /*Intent intent = new Intent(Settings.ACTION_APPLICATION_SETTINGS);
+                        startActivityForResult(intent, CAMERAPERMISSION);*/
+                        mDialog.dismiss();
+                    }
+                }).setNegativeButton("取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        }).show();
+
+
     }
 
     private boolean isLight = false;

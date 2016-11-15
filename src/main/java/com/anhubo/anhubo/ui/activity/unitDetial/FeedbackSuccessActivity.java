@@ -37,7 +37,7 @@ public class FeedbackSuccessActivity extends BaseActivity {
     @Override
     protected void initViews() {
         setTopBarDesc("反馈成功");
-
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -54,7 +54,12 @@ public class FeedbackSuccessActivity extends BaseActivity {
                 view.loadUrl(url);
                 return true;
             }
-
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                // 当页面加载完成后调用,在此隐藏进度条
+                progressBar.setVisibility(View.GONE);
+                super.onPageFinished(view, url);
+            }
         });
         // 加载界面
         wvFeedback.loadUrl(newUrl);
@@ -70,10 +75,5 @@ public class FeedbackSuccessActivity extends BaseActivity {
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.inject(this);
-    }
+
 }

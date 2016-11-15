@@ -3,7 +3,7 @@
 <corners android:radius="2dp"/>
 <solid android:color="@color/bg_upload"/>
 <stroke
-    android:color="@color/btn_gray"
+    android:color="@color/blue"
     android:width="0.5dp"/>
 <corners android:radius="5dp"/>
 

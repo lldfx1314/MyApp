@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/top_title"
-        layout="@layout/layout_top_bar"></include>
+        layout="@layout/layout_top_bar"/>
     <!--状态布局-->
     <com.anhubo.anhubo.view.StateLayout
         android:id="@+id/stateLayout"
@@ -74,7 +74,6 @@
                     android:layout_width="95dp"
                     android:layout_height="95dp"
                     android:layout_marginRight="25dp"
-                    android:background="@drawable/card"
                     android:scaleType="fitXY" />
             </RelativeLayout>
 
@@ -88,7 +87,6 @@
                     android:layout_width="95dp"
                     android:layout_height="95dp"
                     android:layout_marginRight="25dp"
-                    android:background="@drawable/card"
                     android:scaleType="fitXY" />
             </RelativeLayout>
 
@@ -102,7 +100,6 @@
                     android:layout_width="95dp"
                     android:layout_height="95dp"
                     android:layout_marginRight="25dp"
-                    android:background="@drawable/card"
                     android:scaleType="fitXY" />
             </RelativeLayout>
 
@@ -171,26 +168,26 @@
             android:layout_marginTop="30dp">
 
             <Button
-                android:id="@+id/btn_nfcScan"
+                android:id="@+id/btn_noDeal"
                 android:layout_width="140dp"
                 android:layout_height="40dp"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="15dp"
                 android:background="@drawable/btn_pend_shap"
-                android:text="NFC扫描"
+                android:text="暂不处理"
                 android:textColor="@color/blue" />
 
             <Button
-                android:id="@+id/btn_completeCheck"
+                android:id="@+id/btn_complete_Deal"
                 android:layout_width="140dp"
                 android:layout_height="40dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="15dp"
                 android:background="@drawable/btn_pend_shap"
-                android:text="完成检查"
+                android:text="处理完成"
                 android:textColor="@color/blue" />
         </RelativeLayout>
 
     </LinearLayout>
-
+    <include layout="@layout/loading"></include>
 </RelativeLayout>

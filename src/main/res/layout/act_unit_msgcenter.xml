@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-    <include layout="@layout/layout_top_bar"/>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include
+        android:id="@+id/top_title"
+        layout="@layout/layout_top_bar"/>
+    <include layout="@layout/loading"></include>
     <com.anhubo.anhubo.view.RefreshListview
         android:id="@+id/lv_unit_msgCenter"
+        android:layout_below="@+id/top_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </com.anhubo.anhubo.view.RefreshListview>
 
 
 
-</LinearLayout>
+</RelativeLayout>

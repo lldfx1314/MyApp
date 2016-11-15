@@ -56,6 +56,7 @@ public class DeviceList extends BaseActivity {
         deviceIds = new ArrayList<>();
         deviceNames = new ArrayList<>();
         // 先获取网络数据
+        progressBar.setVisibility(View.VISIBLE);
         String url = Urls.Device_List;
         Map<String, String> params = new HashMap<>();
         params.put("business_id", businessid);
@@ -77,6 +78,7 @@ public class DeviceList extends BaseActivity {
             //System.out.println("单位列表界面+++==="+response);
             DeviceListBean listBean = new Gson().fromJson(response, DeviceListBean.class);
             if(listBean!=null){
+                progressBar.setVisibility(View.GONE);
                 List<DeviceListBean.Data.Devices> devices = listBean.data.devices;
                 for (int i = 0; i < devices.size(); i++) {
                     DeviceListBean.Data.Devices device = devices.get(i);

@@ -233,6 +233,7 @@ public class NfcScanActivity extends BaseActivity {
      * 这是检查的网络请求获取数据的方法，使用Post
      */
     private void getData() {
+        progressBar.setVisibility(View.VISIBLE);
         String url = Urls.Url_Check;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("device_id", cardNumber);
@@ -287,7 +288,7 @@ public class NfcScanActivity extends BaseActivity {
      */
     private void parseMessage(ScanBean scanBean) {
         int isExist = scanBean.data.device_exist;//设备号是否在后台存在
-
+        progressBar.setVisibility(View.GONE);
 
         //设备ID
         deviceId = scanBean.data.device_id;

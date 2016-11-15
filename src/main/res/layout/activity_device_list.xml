@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/layout_top_bar"></include>
+    <include android:id="@+id/top_title"
+        layout="@layout/layout_top_bar"></include>
 
     <TextView
         android:id="@+id/tv_device"
+        android:layout_below="@+id/top_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#F7F7F7"
@@ -17,10 +19,11 @@
 
     <ListView
         android:id="@+id/device_Listview"
+        android:layout_below="@+id/tv_device"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="15dp"
         android:background="@color/backgroud_white"/>
+    <include layout="@layout/loading"/>
 
-
-</LinearLayout>
+</RelativeLayout>

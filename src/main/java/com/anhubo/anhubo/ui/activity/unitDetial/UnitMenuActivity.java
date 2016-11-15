@@ -89,6 +89,7 @@ public class UnitMenuActivity extends BaseActivity {
      * 获取网络数据
      */
     private void getData() {
+        progressBar.setVisibility(View.VISIBLE);
         String url = Urls.Url_studyRecord;
         HashMap<String, String> params = new HashMap<>();
         params.put("business_id", businessId);
@@ -131,6 +132,7 @@ public class UnitMenuActivity extends BaseActivity {
         public void onResponse(String response) {
             StudyBean bean = new Gson().fromJson(response, StudyBean.class);
             if (bean != null) {
+                progressBar.setVisibility(View.GONE);
                 processData(bean);
                 isLoadMore = false;
                 // 恢复加载更多状态

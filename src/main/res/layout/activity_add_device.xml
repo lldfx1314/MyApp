@@ -87,7 +87,7 @@
             <EditText
                 android:id="@+id/et_add_area"
                 style="@style/editTextStyle"
-                android:hint="区域(选填)"/>
+                android:hint="设备所在区域"/>
         </LinearLayout>
 
         <!-- 设备位置 -->

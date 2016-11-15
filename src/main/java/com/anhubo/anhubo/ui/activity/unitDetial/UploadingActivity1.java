@@ -129,11 +129,12 @@ public class UploadingActivity1 extends BaseActivity {
             ToastUtils.showLongToast(mActivity, "请先拍照或者获取图库图片");
             return;
         }
+
+
+        progressBar.setVisibility(View.VISIBLE);
+        String url = Urls.Url_UpLoading01;
         Map<String, String> params = new HashMap<>();
         params.put("business_id", businessid);
-
-
-        String url = Urls.Url_UpLoading01;
 
         OkHttpUtils.post()//
                 .addFile("file", "file01.png", file)//
@@ -161,6 +162,7 @@ public class UploadingActivity1 extends BaseActivity {
 
             MsgPerfectLicenseBean licenseBean = new Gson().fromJson(response, MsgPerfectLicenseBean.class);
             if (licenseBean != null) {
+                progressBar.setVisibility(View.GONE);
                 int code = licenseBean.code;
                 final String msg = licenseBean.msg;
                 if (code != 0) {

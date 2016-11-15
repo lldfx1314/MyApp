@@ -98,6 +98,7 @@ public class UnitMsgCenterActivity extends BaseActivity {
     }
 
     private void getData() {
+        progressBar.setVisibility(View.VISIBLE);
         String url = Urls.Url_UnitMsgCenter;
         HashMap<String, String> params = new HashMap<>();
         params.put("uid", uid);
@@ -126,6 +127,7 @@ public class UnitMsgCenterActivity extends BaseActivity {
         public void onResponse(String response) {
             UnitMsgCenterBean bean = new Gson().fromJson(response, UnitMsgCenterBean.class);
             if (bean != null) {
+                progressBar.setVisibility(View.GONE);
                 processData(bean);
                 isLoadMore = false;
                 // 恢复加载更多状态

@@ -41,7 +41,7 @@ public class DeviceName_Activity extends BaseActivity {
 
     @Override
     protected void initConfig() {
-        getData();
+
     }
 
 
@@ -60,6 +60,7 @@ public class DeviceName_Activity extends BaseActivity {
         morelist = (ListView) findViewById(R.id.lv_dev_name02);
         // 设置状态栏显示的提示内容
         setTopBarDesc("设备名称");
+        getData();
     }
 
     @Override
@@ -80,7 +81,7 @@ public class DeviceName_Activity extends BaseActivity {
 
 
     private void getData() {
-
+        progressBar.setVisibility(View.VISIBLE);
         String url = Urls.Url_GetDevName;
 
         OkHttpUtils.post()//
@@ -99,6 +100,7 @@ public class DeviceName_Activity extends BaseActivity {
         public void onResponse(String response) {
             DeviceNameBean bean = new Gson().fromJson(response, DeviceNameBean.class);
             if (bean != null) {
+                progressBar.setVisibility(View.GONE);
                 showData(bean);
                 // 设置第一个适配器
                 setAdapterOne();
