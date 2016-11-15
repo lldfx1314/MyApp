@@ -16,7 +16,6 @@ import butterknife.InjectView;
 public class AnhubaoDeal extends BaseActivity {
     @InjectView(R.id.webView)
     WebView webView;
-
     private String url;
 
     @Override
@@ -33,30 +32,30 @@ public class AnhubaoDeal extends BaseActivity {
     protected void initViews() {
         // 设置状态栏显示的提示内容
         setTopBarDesc("安互保协议");
-
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     protected void initEvents() {
         url = getIntent().getStringExtra(Keys.ANHUBAODEAL);
         webView.loadUrl(url);
-       /* WebSettings settings = webView.getSettings();
-        settings.setJavaScriptEnabled(true);
-        settings.setJavaScriptCanOpenWindowsAutomatically(true);
-        settings.setSupportMultipleWindows(true);*/
+
         webView.setWebViewClient(new WebViewClient() {
-            public boolean shouldOverrideUrlLoading(WebView view, String url)
-            { //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
+            public boolean shouldOverrideUrlLoading(WebView view, String url) { //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
                 view.loadUrl(url);
                 return true;
             }
-
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                // 当页面加载完成后调用,在此隐藏进度条
+                progressBar.setVisibility(View.GONE);
+                super.onPageFinished(view, url);
+            }
         });
     }
 
     @Override
     protected void onLoadDatas() {
-
 
 
     }
@@ -65,5 +64,6 @@ public class AnhubaoDeal extends BaseActivity {
     public void onClick(View v) {
 
     }
+
 
 }

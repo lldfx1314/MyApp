@@ -3,7 +3,6 @@ package com.anhubo.anhubo.ui.activity.MyDetial;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,12 +11,10 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.anhubo.anhubo.MyApp;
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.MyshareBean;
 import com.anhubo.anhubo.protocol.Urls;
-import com.anhubo.anhubo.utils.DisplayUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
@@ -37,6 +34,7 @@ import okhttp3.Call;
 public class InvateActivity extends BaseActivity {
     @InjectView(R.id.wv_invate)
     WebView wvInvate;
+
     private String url;
     private String newUrl_invate;
     private String uid;
@@ -59,6 +57,7 @@ public class InvateActivity extends BaseActivity {
     protected void initViews() {
         // 设置状态栏显示的提示内容
         setTopBarDesc("邀请");
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -78,6 +77,12 @@ public class InvateActivity extends BaseActivity {
                 view.loadUrl(url);
                 return true;
             }
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                // 当页面加载完成后调用,在此隐藏进度条
+                progressBar.setVisibility(View.GONE);
+                super.onPageFinished(view, url);
+            }
 
         });
         wvInvate.addJavascriptInterface(new MyJavaScriptInterface(), "ADAPP");
@@ -85,6 +90,8 @@ public class InvateActivity extends BaseActivity {
     }
 
     Handler handler = new Handler();
+
+
 
     class MyJavaScriptInterface {
 
@@ -98,11 +105,11 @@ public class InvateActivity extends BaseActivity {
         @JavascriptInterface
         public void clickqrcode(String qrcode) {
 
-            ClipboardManager clipboardManager = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             // 将内容set到剪贴板
             clipboardManager.setPrimaryClip(ClipData.newPlainText(null, qrcode));
-            ToastUtils.showToast(mActivity,"复制成功");
-            if (clipboardManager.hasPrimaryClip()){
+            ToastUtils.showToast(mActivity, "复制成功");
+            if (clipboardManager.hasPrimaryClip()) {
                 // 获取内容
                 CharSequence text = clipboardManager.getPrimaryClip().getItemAt(0).getText();
                 //System.out.println("+++---==="+text);

@@ -238,12 +238,11 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         }
 
 
-        //System.out.println("添加界面+++==="+uid);
-
         if (file1 == null) {
             ToastUtils.showToast(mActivity, "请拍照");
             return;
         } else {
+            progressBar.setVisibility(View.VISIBLE);
             String url = Urls.Url_Add;
             Map<String, String> params = new HashMap<>();
             params.put("uid", uid);
@@ -276,6 +275,8 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
             if (!TextUtils.isEmpty(response)) {
                 Add_Device_Bean addDeviceBean = new Gson().fromJson(response, Add_Device_Bean.class);
                 if (addDeviceBean != null) {
+
+                    progressBar.setVisibility(View.GONE);
                     deviceId = addDeviceBean.data.device_id;
                     ToastUtils.showToast(mActivity, "添加成功");
                     finish();

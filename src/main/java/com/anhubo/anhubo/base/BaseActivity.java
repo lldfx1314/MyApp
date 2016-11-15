@@ -21,12 +21,10 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
-import com.anhubo.anhubo.view.ConfirmPopWindow;
-import com.anhubo.anhubo.view.ShowBottonDialog;
-
 
 import butterknife.ButterKnife;
 
@@ -44,6 +42,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected LinearLayout llTop;
     protected TextView tvToptitle;
     protected TextView tvTopBarRight;
+    protected RelativeLayout progressBar;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -67,11 +66,18 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         // 加载标题栏的布局
         initTitleView();// 找到标题栏布局
         initTitleBar();//设置标题栏的具体事件
+        initProgressBar();//初始化加载进度条
         initViews();
         initEvents();
         onLoadDatas();
         initFinishReceiver();
         //initDialog();
+
+    }
+
+
+    private void initProgressBar() {
+        progressBar = (RelativeLayout) findViewById(R.id.rl_progress);
 
     }
 

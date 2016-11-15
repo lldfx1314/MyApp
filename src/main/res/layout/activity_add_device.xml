@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical"
-    android:background="@color/bg_upload">
+              android:background="@color/bg_upload">
 
-    <include layout="@layout/layout_top_bar"></include>
+    <include android:id="@+id/top_title"
+        layout="@layout/layout_top_bar"></include>
+    <LinearLayout
+        android:layout_below="@+id/top_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/bg_upload">
+
 
     <TextView
         android:layout_width="match_parent"
@@ -44,6 +51,7 @@
         </LinearLayout>
         <!-- 所属单位 -->
         <View style="@style/viewStyle"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,6 +72,7 @@
 
         <!-- 所属区域 -->
         <View style="@style/viewStyle"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -83,6 +92,7 @@
 
         <!-- 设备位置 -->
         <View style="@style/viewStyle"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -150,6 +160,7 @@
                     android:layout_height="25dp"
                     android:background="@drawable/bg_iv"
                     android:src="@drawable/photo"/>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -157,11 +168,11 @@
                     android:text="（设备与NFC拍一起）"
                     android:textColor="@color/gray"
                     android:textSize="14sp"/>
-               <!-- <EditText
-                    style="@style/editTextStyle"
-                    android:enabled="true"
-                    android:focusable="false"
-                    android:hint="（设备与NFC拍一起）"/>-->
+                <!-- <EditText
+                     style="@style/editTextStyle"
+                     android:enabled="true"
+                     android:focusable="false"
+                     android:hint="（设备与NFC拍一起）"/>-->
 
             </LinearLayout>
         </LinearLayout>
@@ -171,12 +182,14 @@
         android:id="@+id/add_complete_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/bg_button"
         android:gravity="center"
         android:text="提交"
         android:textColor="@color/blue"
         />
-</LinearLayout>
+    </LinearLayout>
+    <include layout="@layout/loading"/>
+</RelativeLayout>

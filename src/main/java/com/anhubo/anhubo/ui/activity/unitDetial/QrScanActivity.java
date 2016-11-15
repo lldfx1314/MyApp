@@ -49,7 +49,6 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     TextView tvSmallQrNumber;
     @InjectView(R.id.rl_qrNumber)
     RelativeLayout rlQrNumber;
-
     private String ndIntent;
     private String checkIntent;
     private String exerciseIntent;
@@ -237,6 +236,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
      * 这是检查的网络请求获取数据的方法，使用Post
      */
     private void getData() {
+        progressBar.setVisibility(View.VISIBLE);
         String url = Urls.Url_Check;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("device_id", cardNumber);
@@ -248,6 +248,8 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                 .execute(new MyStringCallback());
 
     }
+
+
 
     class MyStringCallback extends StringCallback {
         @Override
@@ -273,6 +275,8 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
      * 拿到数据后判断设备ID是否绑定而跳转到相应界面
      */
     private void parseMessage(ScanBean scanBean) {
+
+        progressBar.setVisibility(View.GONE);
         int isExist = scanBean.data.device_exist;//设备号是否在后台存在
         //设备ID
         deviceId = scanBean.data.device_id;
@@ -311,6 +315,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
 
     @Override
     public void onScanQRCodeOpenCameraError() {
+        ToastUtils.showToast(mActivity,"请到设置在打开权限");
         Log.e(TAG, "打开相机出错");
     }
 
