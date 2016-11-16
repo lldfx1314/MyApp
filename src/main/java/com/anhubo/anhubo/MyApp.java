@@ -36,7 +36,7 @@ public class MyApp extends Application {
         NoHttp.initialize(this);	// 初始化NoHttp
         requestQueue = NoHttp.newRequestQueue();	// 创建一个请求队列
         // OkHttp
-        OkHttpUtils.getInstance().debug("OkHttpUtils").setConnectTimeout(100000, TimeUnit.MILLISECONDS);
+        OkHttpUtils.getInstance().debug("OkHttpUtils").setConnectTimeout(10000, TimeUnit.MILLISECONDS);
         //使用https，但是默认信任全部证书
         OkHttpUtils.getInstance().setCertificates();
     }

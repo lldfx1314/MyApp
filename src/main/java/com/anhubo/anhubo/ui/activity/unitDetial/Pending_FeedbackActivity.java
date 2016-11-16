@@ -15,6 +15,7 @@ import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
@@ -26,6 +27,8 @@ import com.anhubo.anhubo.utils.ImageTools;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.view.AlertDialog;
+import com.anhubo.anhubo.view.IssuePhotoView;
 import com.anhubo.anhubo.view.ShowBottonDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -52,18 +55,18 @@ import okhttp3.Call;
  */
 public class Pending_FeedbackActivity extends BaseActivity {
 
-    private static final int CAMERA = 0;
-    private static final int PICTURE = 1;
+    private static final int CAMERA = 1;
+    private static final int PICTURE = 0;
     @InjectView(R.id.tv_issue_time)
     TextView tvIssueTime;
     @InjectView(R.id.tv_issue_detail)
-    TextView tvIssueDetail;
+    TextView tvIssueDetail;/*
     @InjectView(R.id.iv_issue1)
     ImageView ivIssue1;
     @InjectView(R.id.iv_issue2)
     ImageView ivIssue2;
     @InjectView(R.id.iv_issue3)
-    ImageView ivIssue3;
+    ImageView ivIssue3;*/
     @InjectView(R.id.iv_pend_photo1)
     ImageView ivPendPhoto1;
     @InjectView(R.id.iv_pend_photo2)
@@ -74,6 +77,8 @@ public class Pending_FeedbackActivity extends BaseActivity {
     Button btnNoDeal;
     @InjectView(R.id.btn_complete_Deal)
     Button btnCompleteDeal;
+    @InjectView(R.id.rl_issue_photo)
+    RelativeLayout rlIssuePhoto;
     private String isId;
     private String str_photo;
     private boolean isClick;
@@ -85,6 +90,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
     private File file2;
     private File file3;
     private File filePhoto02;
+    private String uid;
 
     @Override
     protected void initConfig() {
@@ -105,6 +111,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
     @Override
     protected void initEvents() {
         super.initEvents();
+        uid = SpUtils.getStringParam(mActivity, Keys.UID);
         // 这里是完成的点击事件
         progressBar.setVisibility(View.VISIBLE);
         String url = Urls.Url_Check_Pending_FeedBack;
@@ -117,7 +124,6 @@ public class Pending_FeedbackActivity extends BaseActivity {
                 .build()//
                 .execute(new MyStringCallback());
     }
-
 
 
     @OnClick({R.id.iv_pend_photo1, R.id.iv_pend_photo2, R.id.iv_pend_photo3, R.id.btn_noDeal, R.id.btn_complete_Deal})
@@ -142,7 +148,16 @@ public class Pending_FeedbackActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_complete_Deal:
-                submit();
+                if (file1 != null && file2 != null && file3 != null) {
+                    submit3();
+                } else if (file1 != null && file2 != null) {
+                    submit2();
+                } else if (file1 != null) {
+                    submit1();
+                } else {
+                    // 至少拍一张图片
+                    dialog();
+                }
                 break;
             case R.id.btn_popDialog_takephoto:
                 // 拍照
@@ -157,20 +172,23 @@ public class Pending_FeedbackActivity extends BaseActivity {
         }
     }
 
-    private void submit() {
-        if (file1 == null || !file1.exists()) {
-            ToastUtils.showToast(mActivity, "请拍第一张图片");
-            return;
-        }
-        if (file1 == null || !file1.exists()) {
-            ToastUtils.showToast(mActivity, "请拍第二张图片");
-            return;
-        }
-        if (file1 == null || !file1.exists()) {
-            ToastUtils.showToast(mActivity, "请拍第三张图片");
-            return;
-        }
-        String uid = SpUtils.getStringParam(mActivity, Keys.UID);
+    /**
+     * 弹窗提示
+     */
+    private void dialog() {
+        new AlertDialog(mActivity).builder()
+                .setTitle("提示")
+                .setMsg("请至少拍一张照片")
+                .setCancelable(false)
+                .show();
+    }
+
+    /**
+     * 1张图片
+     */
+    private void submit1() {
+
+
         progressBar.setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<>();
 
@@ -181,34 +199,85 @@ public class Pending_FeedbackActivity extends BaseActivity {
 
 
         OkHttpUtils.post()//
-                .addFile("file", "file01.png", file1)//
+                .addFile("file1", "file01.png", file1)//
                 .url(url)//
                 .params(params)//
                 .build()//
                 .execute(new MyStringCallback1());
     }
 
+    /**
+     * 2张图片
+     */
+    private void submit2() {
+
+
+        progressBar.setVisibility(View.VISIBLE);
+        Map<String, String> params = new HashMap<>();
+        params.put("uid", uid);
+        params.put("is_id", isId);
+
+
+        String url = Urls.Url_FeedBack;
+
+        OkHttpUtils.post()//
+                .addFile("file1", "file01.png", file1)//
+                .addFile("file2", "file02.png", file2)//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
+    }
+
+    /**
+     * 3张图片
+     */
+    private void submit3() {
+
+        progressBar.setVisibility(View.VISIBLE);
+        Map<String, String> params = new HashMap<>();
+        params.put("uid", uid);
+        params.put("is_id", isId);
+
+
+        String url = Urls.Url_FeedBack;
+
+        OkHttpUtils.post()//
+                .addFile("file1", "file01.png", file1)//
+                .addFile("file2", "file02.png", file2)//
+                .addFile("file3", "file03.png", file3)//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
+    }
+
+
     class MyStringCallback1 extends StringCallback {
 
         @Override
         public void onError(Call call, Exception e) {
-
-            System.out.println("FeedbackActivity界面提交+++===失败");
+            progressBar.setVisibility(View.GONE);
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("网络有问题，请检查")
+                    .setCancelable(false).show();
+            System.out.println("FeedbackActivity界面提交+++===失败" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
-                progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
             System.out.println("待反馈界面+++===" + response);
-            /*FeedBackBean bean = new Gson().fromJson(response, FeedBackBean.class);
+            FeedBackBean bean = new Gson().fromJson(response, FeedBackBean.class);
             if (bean != null) {
                 int code = bean.code;
                 String msg = bean.msg;
-                userAddScore = bean.data.user_add_score;
-                // 打开反馈成功界面
-                Intent intent = new Intent(mActivity, FeedbackSuccessActivity.class);
-                startActivity(intent);
-            }*/
+                // 返回到上个页面
+                Intent intent = new Intent();
+                setResult(1, intent);
+                finish();
+            }
         }
     }
 
@@ -216,7 +285,11 @@ public class Pending_FeedbackActivity extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-
+            progressBar.setVisibility(View.GONE);
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("网络有问题，请检查")
+                    .setCancelable(false).show();
             System.out.println("Pending_FeedbackActivity+++===没拿到数据" + e.getMessage());
         }
 
@@ -235,20 +308,38 @@ public class Pending_FeedbackActivity extends BaseActivity {
                 tvIssueTime.setText("反馈时间： " + isTime);
                 tvIssueDetail.setText(isContent);
                 // 对图片做判断
-                for (int i = 0; i < isPic.size(); i++) {
+                int size = isPic.size();
+                if (size > 0) {
+                    System.out.println("11111111112222222223333333333");
+                    IssuePhotoView view = new IssuePhotoView(mActivity);
+                    rlIssuePhoto.addView(view);
 
+                    if (size == 1) {
+                        for (int i = 0; i < isPic.size(); i++) {
+                            view.setHeaderIcon(view.ivIssue1, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
+                        }
+                    } else if (size == 2) {
+                        for (int i = 0; i < isPic.size(); i++) {
+                            if (i == 0) {
+                                view.setHeaderIcon(view.ivIssue1, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
+                            } else if (i == 1) {
+                                view.setHeaderIcon(view.ivIssue2, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
 
-                    if (isPic.size() == 1) {
-                        setHeaderIcon(ivIssue1, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
-                    } else if (isPic.size() == 2) {
-                        setHeaderIcon(ivIssue1, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
-                        setHeaderIcon(ivIssue2, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
-                    } else if (isPic.size() == 3) {
-                        setHeaderIcon(ivIssue1, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
-                        setHeaderIcon(ivIssue2, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
-                        setHeaderIcon(ivIssue3, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
+                            }
+                        }
+                    } else if (size == 3) {
+                        for (int i = 0; i < isPic.size(); i++) {
+                            if (i == 0) {
+                                view.setHeaderIcon(view.ivIssue1, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
+                            } else if (i == 1) {
+
+                                view.setHeaderIcon(view.ivIssue2, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
+                            } else if (i == 2) {
+
+                                view.setHeaderIcon(view.ivIssue3, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
+                            }
+                        }
                     }
-
                 }
             }
         }
@@ -258,6 +349,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
     protected void onLoadDatas() {
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -364,7 +456,6 @@ public class Pending_FeedbackActivity extends BaseActivity {
             //显示图片
             if (TextUtils.equals(str_photo, 1 + "")) {
                 ivPendPhoto1.setImageBitmap(bitmap);
-
                 // 图片一
                 file1 = filePhoto01;
 
@@ -430,16 +521,18 @@ public class Pending_FeedbackActivity extends BaseActivity {
         btnPhoto.setOnClickListener(this);
     }
 
-    /**设置照片*/
+    /**
+     * 设置照片
+     */
     private void setHeaderIcon(final ImageView iv, String imgurl) {
         OkHttpUtils
                 .get()//
                 .url(imgurl)//
                 .tag(this)//
                 .build()//
-                .connTimeOut(15000)
-                .readTimeOut(15000)
-                .writeTimeOut(15000)
+                .connTimeOut(10000)
+                .readTimeOut(10000)
+                .writeTimeOut(10000)
                 .execute(new BitmapCallback() {
                     @Override
                     public void onError(Call call, Exception e) {

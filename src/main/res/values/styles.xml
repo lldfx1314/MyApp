@@ -156,11 +156,12 @@
         <item name="android:windowExitAnimation">@anim/dialog_out_anim</item>
     </style>
 
-
+    <!--顶部部对话框进入的动画-->
     <style name="animstyle">
         <item name="android:windowEnterAnimation">@anim/topdialog_in_anim</item>
         <item name="android:windowExitAnimation">@anim/topdialog_out_anim</item>
     </style>
+
 
     <!-- 这是***样式 -->
 <!--<style name="名字">

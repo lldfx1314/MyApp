@@ -10,6 +10,7 @@ import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.RefreshListview;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -126,6 +127,11 @@ public class UnitMenuActivity extends BaseActivity {
         @Override
         public void onError(Call call, Exception e) {
             System.out.println("UnitMenuActivity+++===没拿到数据" + e.getMessage());
+            progressBar.setVisibility(View.GONE);
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("网络有问题，请检查")
+                    .setCancelable(false).show();
         }
 
         @Override

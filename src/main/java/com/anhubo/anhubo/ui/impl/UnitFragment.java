@@ -311,7 +311,7 @@ public class UnitFragment extends BaseFragment {
                 sumScore = Integer.parseInt(data.sum_score.replace(".00", ""));
                 if (isLoading) {
                     // 动态的添加自定义控件，设置数据
-                    scp = new SesameCreditPanel(getContext());
+                    scp = new SesameCreditPanel(mActivity);
                     scp.setDataModel(getData(sumScore, grade, datatime));
                     scp.setEnabled(true);
                     scp.setClickable(true);

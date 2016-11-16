@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -20,8 +21,10 @@ import com.anhubo.anhubo.bean.CheckComplete_Bean;
 import com.anhubo.anhubo.bean.ScanBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.PopBirthHelper;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -39,6 +42,7 @@ import okhttp3.Call;
  */
 public class Check_Device_Activity extends BaseActivity {
 
+    private static final int REQUIRECODE = 1;
     private ListView ck_ListView;
     private TextView deviceName;
     public static final String TAG = "Check_Device_Activity.class";
@@ -58,7 +62,7 @@ public class Check_Device_Activity extends BaseActivity {
     /* 用来记录存在问题的选项，0表示没问题，1表示有问题*/
     private int isProblem = 0;
     /*用来记录对应的position位是否被点击*/
-    private Map<Integer,Boolean> map = new HashMap<>();
+    private Map<Integer, Boolean> map = new HashMap<>();
     private int dateFlag;
     private String uid;
     private String businessid;
@@ -67,6 +71,9 @@ public class Check_Device_Activity extends BaseActivity {
     private String isContent;
     private TextView checkTime;
     private RelativeLayout checkFeedback;
+    private TextView tvIssueDes;
+    private PopBirthHelper popBirthHelper;
+    private String startTime = "";
 
     @Override
     protected void initConfig() {
@@ -91,17 +98,17 @@ public class Check_Device_Activity extends BaseActivity {
         // 初始化completeList
         completeList = new ArrayList<>();
         // 创建一个数组，五个数全是0
-        int[] arr = new int[]{0,0,0,0,0};
+        int[] arr = new int[]{0, 0, 0, 0, 0};
         for (int i = 0; i < arr.length; i++) {
 
             completeList.add(arr[i]);
         }
         // 为map集合设置默认的值，每个item默认没被点击过
-        map.put(0,false);
-        map.put(1,false);
-        map.put(2,false);
-        map.put(3,false);
-        map.put(4,false);
+        map.put(0, false);
+        map.put(1, false);
+        map.put(2, false);
+        map.put(3, false);
+        map.put(4, false);
         //System.out.println(map.toString());
     }
 
@@ -138,27 +145,36 @@ public class Check_Device_Activity extends BaseActivity {
         btnCheckComplete = (Button) findViewById(R.id.check_complete);//检查完成
         // 出厂日期、待处理反馈
         checkTime = (TextView) findViewById(R.id.tv_check_time);
+        //待处理反馈
         checkFeedback = (RelativeLayout) findViewById(R.id.rl_check_feedback);
+        // 问题描述
+        tvIssueDes = (TextView) findViewById(R.id.tv_issue_des);
         // 获取适配器对象
-        adapter = new DeviceDetailsAdapter(this, require_list,isId,isContent);
+        adapter = new DeviceDetailsAdapter(this, require_list, isId, isContent);
 
     }
 
 
-    /**事件的处理*/
+    /**
+     * 事件的处理
+     */
     @Override
     protected void initEvents() {
         super.initEvents();
         // 处理出厂日期、待处理反馈
         checkFeedback.setOnClickListener(this);
         checkTime.setOnClickListener(this);
-        if(!TextUtils.isEmpty(isContent)){
-            checkFeedback.setVisibility(View.VISIBLE);
-
+        // 出厂时间的弹窗
+        alterTime();
+        // 时间
+        if (dateFlag == 1) {
+            checkTime.setVisibility(View.VISIBLE);
         }
-
-
-
+        // 问题描述
+        if (!TextUtils.isEmpty(isContent)) {
+            checkFeedback.setVisibility(View.VISIBLE);
+            tvIssueDes.setText(isContent);
+        }
 
 
         // 显示 设备名称
@@ -177,12 +193,12 @@ public class Check_Device_Activity extends BaseActivity {
                 ImageView imageView = (ImageView) view.findViewById(R.id.iv_check_device);
                 // 获取当前position对应位置的点击记录
                 Boolean isClick = map.get(position);
-                if(!isClick) {
+                if (!isClick) {
                     // 表示这个问题存在
                     imageView.setImageResource(R.drawable.fuxuan_input01);
                     // 存在问题就设置为1;
                     isProblem = 1;
-                }else{
+                } else {
                     // 这个问题不存在
                     imageView.setImageResource(R.drawable.fuxuan_input02);
                     isProblem = 0;
@@ -190,7 +206,8 @@ public class Check_Device_Activity extends BaseActivity {
 
                 // 将对应position位置改为对应的boolean值和值
                 map.put(position, !isClick);
-                completeList.set(position,isProblem);
+                completeList.set(position, isProblem);
+
             }
 
         });
@@ -208,6 +225,41 @@ public class Check_Device_Activity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data != null) {
+            switch (requestCode) {
+                case REQUIRECODE:
+                    if (checkFeedback != null && resultCode == 1) {
+
+                        checkFeedback.setVisibility(View.GONE);
+                    }
+                    break;
+            }
+        }
+    }
+
+    private void alterTime() {
+        popBirthHelper = new PopBirthHelper(mActivity);
+        popBirthHelper.setOnClickOkListener(new PopBirthHelper.OnClickOkListener() {
+            @Override
+            public void onClickOk(String time) {
+
+                if (!TextUtils.isEmpty(time)) {
+                    startTime = time;
+                    // 拿到年龄,上传到网络
+                    //uploadAge(time);
+                } else {
+                    ToastUtils.showToast(mActivity, "您所选日期大于当前时间");
+                }
+
+            }
+
+
+        });
+    }
+
     /**
      * 点击事件
      */
@@ -215,26 +267,31 @@ public class Check_Device_Activity extends BaseActivity {
     public void onClick(View v) {
 
         // 设置按钮的点击事件
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.check_more:
-            // 更多的点击事件
+                // 更多的点击事件
                 Intent intent = new Intent(mActivity, FeedbackActivity.class);
-                intent.putExtra(Keys.DeviceId,deviceId);
+                intent.putExtra(Keys.DeviceId, deviceId);
                 startActivity(intent);
-            break;
+                break;
             case R.id.check_complete:
                 // 检查完成的点击事件
-                checkComplete();
+                if (!TextUtils.isEmpty(startTime)) {
+                    checkComplete();
+
+                } else {
+                    checkComplete1();
+                }
                 break;
             case R.id.tv_check_time:
                 // 时间
-
+                popBirthHelper.show(checkTime);
                 break;
             case R.id.rl_check_feedback:
                 // 待处理反馈
                 Intent intent1 = new Intent(mActivity, Pending_FeedbackActivity.class);
-                intent1.putExtra(Keys.IsId,isId);
-                startActivity(intent1);
+                intent1.putExtra(Keys.IsId, isId);
+                startActivityForResult(intent1, REQUIRECODE);
                 break;
         }
     }
@@ -246,15 +303,18 @@ public class Check_Device_Activity extends BaseActivity {
         completeList.clear();
     }
 
-    /**检查完成的点击事件，请求网络*/
+    /**
+     * 检查完成的点击事件，请求网络
+     */
     private void checkComplete() {
         // 这里是完成的点击事件
         String url = Urls.Url_Check_Complete;
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("uid",uid); //这是uid,登录后改成真正的用户
-        params.put("device_id",deviceId);
-        params.put("device_result",completeList.toString());//选择后的集合
-        params.put("business_id",businessid);//这是business_id,登录后改成真正的business_id
+        params.put("uid", uid); //这是uid,登录后改成真正的用户
+        params.put("device_id", deviceId);
+        params.put("device_result", completeList.toString());//选择后的集合
+        params.put("business_id", businessid);//这是business_id,登录后改成真正的business_id
+        params.put("start_time", startTime);
 
         OkHttpUtils.post()//
                 .url(url)//
@@ -262,26 +322,46 @@ public class Check_Device_Activity extends BaseActivity {
                 .build()//
                 .execute(new MyStringCallback());
     }
+    private void checkComplete1() {
+        // 这里是完成的点击事件
+        String url = Urls.Url_Check_Complete;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("uid", uid); //这是uid,登录后改成真正的用户
+        params.put("device_id", deviceId);
+        params.put("device_result", completeList.toString());//选择后的集合
+        params.put("business_id", businessid);//这是business_id,登录后改成真正的business_id
+
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
+    }
+
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-
+            progressBar.setVisibility(View.GONE);
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("网络有问题，请检查")
+                    .setCancelable(false).show();
             System.out.println("Check_Device_Activity+++===没拿到数据" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
             CheckComplete_Bean bean = new Gson().fromJson(response, CheckComplete_Bean.class);
-            if(bean!=null){
-                ToastUtils.showToast(mActivity,"检查完成");
+            if (bean != null) {
+                ToastUtils.showToast(mActivity, "检查完成");
 
-                if(TextUtils.equals(scanType,"nfcscan")){
+                if (TextUtils.equals(scanType, "nfcscan")) {
                     // 把数据传给nfc界面
                     Intent intentNfC = new Intent();
                     intentNfC.putExtra(Keys.CHECKCOMPLETE_BEAN, bean);
                     setResult(1, intentNfC);
                     finish();
-                }else if(TextUtils.equals(scanType,"qrscan")){
+                } else if (TextUtils.equals(scanType, "qrscan")) {
                     // 把数据传给Qr界面
                     Intent intentScan = new Intent();
                     intentScan.putExtra(Keys.CHECKCOMPLETE_BEAN, bean);
@@ -290,13 +370,23 @@ public class Check_Device_Activity extends BaseActivity {
                 }
 
 
-
-            }else {
+            } else {
                 System.out.println("Check_Device_Activity+++===没获取到bean对象");
             }
         }
     }
-
+    /**当用户按下返回键的时候退出此页面到二维码扫描界面回复扫码的功能*/
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent();
+            intent.putExtra(Keys.QRchart, true);
+            setResult(2, intent);
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     @Override
     public void onAttachedToWindow() {

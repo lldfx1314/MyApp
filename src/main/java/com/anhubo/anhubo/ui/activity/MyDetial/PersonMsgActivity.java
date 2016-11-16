@@ -945,9 +945,9 @@ public class PersonMsgActivity extends BaseActivity {
                 .url(imgurl)//
                 .tag(this)//
                 .build()//
-                .connTimeOut(15000)
-                .readTimeOut(15000)
-                .writeTimeOut(15000)
+                .connTimeOut(10000)
+                .readTimeOut(10000)
+                .writeTimeOut(10000)
                 .execute(new BitmapCallback() {
                     @Override
                     public void onError(Call call, Exception e) {

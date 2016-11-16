@@ -15,7 +15,7 @@ public class FindFragment extends BaseFragment {
     public void initTitleBar() {
         //设置菜单键隐藏
         iv_basepager_left.setVisibility(View.GONE);
-        tv_basepager_title.setText("发现界面");
+        tv_basepager_title.setText("发现");
 
     }
 

@@ -27,6 +27,7 @@ import com.anhubo.anhubo.utils.ImageTools;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.ShowBottonDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -66,7 +67,6 @@ public class UploadingActivity3 extends BaseActivity {
     private String imgName;
     private File filePhoto02;
     private File filePhoto01;
-    private boolean isClick = false;
     @Override
     protected int getContentViewId() {
         return R.layout.activity_uploading3;
@@ -97,13 +97,10 @@ public class UploadingActivity3 extends BaseActivity {
                 break;
             case R.id.btn_popDialog_takephoto:
                 // 拍照
-                isClick = true;
                 takePhoto();
                 break;
             case R.id.btn_popDialog_photo:
                 // 相册
-                isClick = false;
-
                 getPhoto();
                 break;
         }
@@ -113,26 +110,27 @@ public class UploadingActivity3 extends BaseActivity {
      * 拿到拍到的照片去上传
      */
 
-
+    private File newFile = null;
     private void upLoading() {
+
         // 获取
         String businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
-        File file = null;
-        if (isClick) {
-            file = filePhoto01;
-        } else {
-            file = filePhoto02;
-        }
-        if (file==null||!file.exists()) {
-            ToastUtils.showLongToast(mActivity, "请先拍照或者获取图库图片");
+
+
+        if (newFile==null) {
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("亲，请拍取消防审批同意开业通知照片")
+                    .setCancelable(false).show();
             return;
         }
+        progressBar.setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<>();
         params.put("business_id", businessid);
         String url = Urls.Url_UpLoading03;
 
         OkHttpUtils.post()//
-                .addFile("file", "file03.png", file)//
+                .addFile("file", "file03.png", newFile)//
                 .url(url)//
                 .params(params)//
                 .build()//
@@ -146,7 +144,11 @@ public class UploadingActivity3 extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            ToastUtils.showToast(mActivity, "网络有问题，请检查");
+            progressBar.setVisibility(View.GONE);
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("网络有问题，请检查")
+                    .setCancelable(false).show();
 
             System.out.println("UploadingActivity3+++===界面失败"+e.getMessage());
         }
@@ -164,6 +166,7 @@ public class UploadingActivity3 extends BaseActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        progressBar.setVisibility(View.GONE);
                         ToastUtils.showToast(mActivity, "上传成功");
                         Intent intent = new Intent();
                         intent.putExtra(Keys.ISCLICK3, true);
@@ -230,7 +233,7 @@ public class UploadingActivity3 extends BaseActivity {
                 llTakePhoto03.setVisibility(View.GONE);
                 //显示图片
                 ivShowPhoto03.setImageBitmap(bitmap);
-
+                newFile = filePhoto02;
             }
         }catch (Exception e) {
             e.printStackTrace();
@@ -240,52 +243,7 @@ public class UploadingActivity3 extends BaseActivity {
         }
 
     }
-    /**
-     * 获取文件路径
-     **/
-    public String uri2filePath(Uri uri) {
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String path = cursor.getString(column_index);
-        return path;
-    }
-    /**
-     * 保存图片到本应用下
-     **/
-    private void savePicture(String fileName, Bitmap bitmap) {
 
-        FileOutputStream fos = null;
-        try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新内容写入会被覆盖
-            fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);// 把图片写入指定文件夹中
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (null != fos) {
-                    fos.close();
-                    fos = null;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
-    /**
-     * 创建图片不同的文件名
-     **/
-    private String createPhotoFileName() {
-        String fileName = "";
-        Date date = new Date(System.currentTimeMillis());  //系统当前时间
-        SimpleDateFormat dateFormat = new SimpleDateFormat("'IMG'_yyyyMMdd_HHmmss");
-        fileName = dateFormat.format(date) + ".jpg";
-        return fileName;
-    }
 
     private void showPhoto01(Intent data) {
         String sdState = Environment.getExternalStorageState();
@@ -319,6 +277,7 @@ public class UploadingActivity3 extends BaseActivity {
         llTakePhoto03.setVisibility(View.GONE);
         //显示图片
         ivShowPhoto03.setImageBitmap(bitmap);
+        newFile = filePhoto01;
     }
 
     /**

@@ -179,7 +179,4 @@ public class AlertDialog {
 		dialog.show();
 	}
 
-	public void dismiss(){
-		dialog.cancel();
-	}
 }

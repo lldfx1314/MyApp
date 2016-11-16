@@ -235,13 +235,7 @@ public class SesameCreditPanel extends View {
         }
     }
 
-    /**
-     * 根据进度条旋转的角度设置动态显示的颜色
-     */
-    private void drawBackground(Canvas canvas) {
-        int startColor = computeGradientColor(startGradientColor, endGradientColor, progressSweepAngle, progressTotalSweepAngle);
-        canvas.drawColor(startColor);
-    }
+
 
     /**
      * 绘制仪表盘
@@ -321,16 +315,7 @@ public class SesameCreditPanel extends View {
         }
     }
 
-    /**
-     * 根据当前进度条变化的角度与总角度计算两个颜色的变化期间的颜色值
-     */
-    private int computeGradientColor(int startColor, int endColor, float curAngle, float totalAngle) {
-        int r, g, b;
-        r = (int) (Color.red(startColor) + (Color.red(endColor) - Color.red(startColor)) * curAngle / totalAngle);
-        g = (int) (Color.green(startColor) + (Color.green(endColor) - Color.green(startColor)) * curAngle / totalAngle);
-        b = (int) (Color.blue(startColor) + (Color.blue(endColor) - Color.blue(startColor)) * curAngle / totalAngle);
-        return Color.rgb(r, g, b);
-    }
+
 
     public void setDataModel(SesameModel datadataModel) {
         this.dataModel = datadataModel;

@@ -6,52 +6,58 @@
     <include
         android:id="@+id/top_title"
         layout="@layout/layout_top_bar"></include>
-    <include layout="@layout/loading" />
 
-    <RelativeLayout
-        android:id="@+id/rlup1"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/top_title"
-        android:layout_marginTop="30dp"
-        android:background="@color/bg_upload">
+        android:orientation="vertical">
 
 
-        <LinearLayout
-            android:id="@+id/ll_takePhoto01"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:orientation="vertical">
+        <RelativeLayout
+            android:id="@+id/rlup1"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/bg_upload">
+
+
+            <LinearLayout
+                android:id="@+id/ll_takePhoto01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/take_photo" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="点击图标开始拍照"
+                    android:textColor="@color/upload_photo"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/take_photo" />
+                android:id="@+id/iv_showPhoto01"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="点击图标开始拍照"
-                android:textColor="@color/upload_photo"
-                android:textSize="16sp" />
-        </LinearLayout>
+        </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/iv_showPhoto01"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        <Button
+            android:id="@+id/btn_unloading01"
+            style="@style/btn_msg_perfect"
+            android:text="提交" />
+    </LinearLayout>
 
-    </RelativeLayout>
-
-    <Button
-        android:id="@+id/btn_unloading01"
-        style="@style/btn_msg_perfect"
-        android:layout_below="@+id/rlup1"
-        android:text="提交" />
-
+    <include layout="@layout/loading" />
 
 
 </RelativeLayout>

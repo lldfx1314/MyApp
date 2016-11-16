@@ -21,6 +21,7 @@ import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -267,6 +268,11 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         @Override
         public void onError(Call call, Exception e) {
             System.out.println("Add_Device_Activity+++===获取数据失败+++===" + e.getMessage());
+            progressBar.setVisibility(View.GONE);
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("网络有问题，请检查")
+                    .setCancelable(false).show();
         }
 
         @Override

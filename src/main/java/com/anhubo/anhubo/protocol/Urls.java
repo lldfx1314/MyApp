@@ -109,5 +109,5 @@ public interface Urls {
     /**待处理反馈界面处理页*/
     String Url_Check_Pending_FeedBack = UrlBase +"Issue/issue_detail";
     /**待处理反馈界面提交*/
-    String Url_PendFeedBack =  UrlBase +"Device/deal_issue";
+    String Url_PendFeedBack =  UrlBase +"Issue/deal_issue";
 }

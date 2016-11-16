@@ -27,6 +27,7 @@ import com.anhubo.anhubo.utils.ImageTools;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.ShowBottonDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -124,16 +125,25 @@ public class UploadingActivity2 extends BaseActivity {
      */
 
     private void upLoading() {
+
         // 获取
         String businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
 
-
-
-        if (file1==null||file2==null||!file1.exists()||!file2.exists()) {
-            ToastUtils.showToast(mActivity, "请先拍照或者获取图库图片");
+        if (file1==null) {
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("亲，必须拍取法人身份证正面照片")
+                    .setCancelable(false).show();
             return;
         }
-
+        if (file2==null) {
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("亲，必须拍取法人身份证背面照片")
+                    .setCancelable(false).show();
+            return;
+        }
+        progressBar.setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<>();
         params.put("business_id", businessid);
         String url = Urls.Url_UpLoading02;
@@ -154,7 +164,11 @@ public class UploadingActivity2 extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            ToastUtils.showToast(mActivity, "网络有问题，请检查");
+            progressBar.setVisibility(View.GONE);
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("网络有问题，请检查")
+                    .setCancelable(false).show();
 
             System.out.println("UploadingActivity2+++===界面失败" + e.getMessage());
         }
@@ -170,6 +184,7 @@ public class UploadingActivity2 extends BaseActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        progressBar.setVisibility(View.GONE);
                         ToastUtils.showToast(mActivity, "上传成功");
                         Intent intent = new Intent();
                         intent.putExtra(Keys.ISCLICK2, true);

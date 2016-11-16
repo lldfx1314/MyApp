@@ -9,6 +9,7 @@ import android.os.Vibrator;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -39,7 +40,6 @@ import okhttp3.Call;
 
 public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate {
     private static final String TAG = QrScanActivity.class.getSimpleName();
-    private static final int CAMERAPERMISSION = 0;
     @InjectView(R.id.zxingview)
     ZXingView mQRCodeView;
     @InjectView(R.id.proBar)
@@ -67,7 +67,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     private int deviceCheckedNum;
     private String devicesNum;
     private static final int REQUESTSCAN = 1;
-    private AlertDialog mDialog;
+    private boolean isPermission;
 
     @Override
     protected void initConfig() {
@@ -88,6 +88,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     protected void initViews() {
         // 设置扫描二维码的代理
         mQRCodeView.setDelegate(this);
+
         // 设置标题栏提示内容
         setTopBarDesc("检查");
 
@@ -109,7 +110,9 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
 
         }
         tvTopBarRight.setOnClickListener(this);
+
     }
+
 
     @Override
     protected void initEvents() {
@@ -138,7 +141,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
             switch (requestCode) {
                 case REQUESTSCAN:
                     if (resultCode == 1) {
-
+                        mQRCodeView.startSpot();
                         CheckComplete_Bean bean = (CheckComplete_Bean) intent.getSerializableExtra(Keys.CHECKCOMPLETE_BEAN);
                         // 拿到序列化对象就可以获取里面数据进行展示了
                         if (bean != null) {
@@ -156,12 +159,12 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                             tvBigQrNumber.setText(deviceCheckedNum + "");
                             tvSmallQrNumber.setText(devicesNum);
                         }
-                    } else {
-                        ToastUtils.showToast(mActivity, "bean为空");
+                    } else if (resultCode == 2) {
+                        boolean qRchart = intent.getBooleanExtra(Keys.QRchart, true);
+                        if (qRchart) {
+                            mQRCodeView.startSpot();
+                        }
                     }
-                    break;
-                case CAMERAPERMISSION:
-                    mDialog.dismiss();
                     break;
             }
         }
@@ -174,6 +177,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         mQRCodeView.startCamera();
         mQRCodeView.startSpotAndShowRect();
     }
+
 
     @Override
     protected void onStop() {
@@ -206,6 +210,15 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         processData(cardNumber);
 
     }
+    /*public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getRepeatCount() == 0) {
+            mQRCodeView.startSpot();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }*/
 
     /**
      * 拿到数据后做相应的操作
@@ -264,7 +277,11 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-
+            progressBar.setVisibility(View.GONE);
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("网络有问题，请检查")
+                    .setCancelable(false).show();
             System.out.println("QrScanActivity+++===没拿到数据" + e.getMessage());
         }
 
@@ -285,7 +302,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
      * 拿到数据后判断设备ID是否绑定而跳转到相应界面
      */
     private void parseMessage(ScanBean scanBean) {
-
+        mQRCodeView.stopSpot();
         progressBar.setVisibility(View.GONE);
         int isExist = scanBean.data.device_exist;//设备号是否在后台存在
         //设备ID
@@ -325,8 +342,11 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
 
     @Override
     public void onScanQRCodeOpenCameraError() {
-        //ToastUtils.showToast(mActivity,"请到设置里面打开权限");
-        dialog();
+        System.out.println("请到设置里面打开权限");
+        isPermission = !isPermission;
+        if (isPermission) {
+            dialog();
+        }
         Log.e(TAG, "打开相机出错");
     }
 
@@ -335,10 +355,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
      */
     protected void dialog() {
 
-
-        mDialog = new AlertDialog(mActivity);
-        mDialog
-                .builder()
+        new AlertDialog(mActivity).builder()
                 .setTitle("提示")
                 .setMsg("前往系统设置的应用列表里打开安互保的相机权限？")
                 .setCancelable(false)
@@ -346,25 +363,22 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                     @Override
                     public void onClick(View v) {
                         // 打开系统设置界面
-                        Intent localIntent = new Intent();
-                        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Intent intent = new Intent();
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         if (Build.VERSION.SDK_INT >= 9) {
-                            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
-                            localIntent.setData(Uri.fromParts("package", getPackageName(), null));
+                            intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                            intent.setData(Uri.fromParts("package", getPackageName(), null));
                         } else if (Build.VERSION.SDK_INT <= 8) {
-                            localIntent.setAction(Intent.ACTION_VIEW);
-                            localIntent.setClassName("com.android.settings","com.android.settings.InstalledAppDetails");
-                            localIntent.putExtra("com.android.settings.ApplicationPkgName", getPackageName());
+                            intent.setAction(Intent.ACTION_VIEW);
+                            intent.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
+                            intent.putExtra("com.android.settings.ApplicationPkgName", getPackageName());
                         }
-                        startActivityForResult(localIntent,CAMERAPERMISSION);
-                        /*Intent intent = new Intent(Settings.ACTION_APPLICATION_SETTINGS);
-                        startActivityForResult(intent, CAMERAPERMISSION);*/
-                        mDialog.dismiss();
+                        startActivity(intent);
+
                     }
                 }).setNegativeButton("取消", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDialog.dismiss();
             }
         }).show();
 

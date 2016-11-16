@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -29,6 +30,7 @@ import com.anhubo.anhubo.utils.ImageTools;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.ShowBottonDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -73,7 +75,7 @@ public class FeedbackActivity extends BaseActivity {
     private File filePhoto02;
     private String str_photo;
     private boolean isClick;
-    private String feedContent;
+    private String feedContent = "";
     private String deviceId;
     private File file1;
     private File file2;
@@ -136,9 +138,27 @@ public class FeedbackActivity extends BaseActivity {
             case R.id.tv_submit_feedback:// 提交按钮
                 /**提交反馈*/
                 if (!TextUtils.isEmpty(deviceId)) {
-                    submit1();
+                    // 有deviceId
+                    if (file1!=null&&file2!=null&&file3!=null) {
+                        submit3();
+                    }else if(file1!=null&&file2!=null){
+                        submit2();
+                    }else if(file1!=null){
+                        submit1();
+                    }else {
+                        submit();
+                    }
                 } else {
-                    submit2();
+                    // 无deviceId
+                    if (file1!=null&&file2!=null&&file3!=null) {
+                        submitnoId3();
+                    }else if(file1!=null&&file2!=null){
+                        submitnoId2();
+                    }else if(file1!=null){
+                        submitnoId1();
+                    }else {
+                        submitnoId();
+                    }
                 }
 
                 break;
@@ -155,30 +175,84 @@ public class FeedbackActivity extends BaseActivity {
         }
 
     }
-
     /**
-     * 无deviceid提交反馈
+     * 无deviceid提交反馈 无图片
      */
-    private void submit2() {
+    private void submitnoId() {
 
         // 问题描述
         if (TextUtils.isEmpty(feedContent)) {
-            ToastUtils.showToast(mActivity, "请输入问题");
+            // 弹窗提示问题和照片至少得有一个
+            dialog();
             return;
         }
 
-        if (file1 == null || !file1.exists()) {
-            ToastUtils.showToast(mActivity, "请拍第一张图片");
-            return;
-        }
-        if (file2 == null || !file2.exists()) {
-            ToastUtils.showToast(mActivity, "请拍第二张图片");
-            return;
-        }
-        if (file2 == null || !file2.exists()) {
-            ToastUtils.showToast(mActivity, "请拍第三张图片");
-            return;
-        }
+
+        progressBar.setVisibility(View.VISIBLE);
+        Map<String, String> params = new HashMap<>();
+
+        params.put("uid", uid);
+        params.put("issue_content", feedContent);
+
+        String url = Urls.Url_FeedBack;
+
+
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback1());
+    }
+    /**
+     * 无deviceid提交反馈 1张图片
+     */
+    private void submitnoId1() {
+
+
+        progressBar.setVisibility(View.VISIBLE);
+        Map<String, String> params = new HashMap<>();
+
+        params.put("uid", uid);
+        params.put("issue_content", feedContent);
+
+        String url = Urls.Url_FeedBack;
+
+
+        OkHttpUtils.post()//
+                .addFile("file1", "file01.png", file1)//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback1());
+    }
+    /**
+     * 无deviceid提交反馈 2张图片
+     */
+    private void submitnoId2() {
+
+        progressBar.setVisibility(View.VISIBLE);
+        Map<String, String> params = new HashMap<>();
+
+        params.put("uid", uid);
+        params.put("issue_content", feedContent);
+
+        String url = Urls.Url_FeedBack;
+
+
+        OkHttpUtils.post()//
+                .addFile("file1", "file01.png", file1)//
+                .addFile("file2", "file02.png", file2)//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback1());
+    }
+    /**
+     * 无deviceid提交反馈 3张图片
+     */
+    private void submitnoId3() {
+
+
         progressBar.setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<>();
 
@@ -202,7 +276,11 @@ public class FeedbackActivity extends BaseActivity {
 
         @Override
         public void onError(Call call, Exception e) {
-
+            progressBar.setVisibility(View.GONE);
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("网络有问题，请检查")
+                    .setCancelable(false).show();
             System.out.println("FeedbackActivity界面+++===失败");
         }
 
@@ -221,33 +299,45 @@ public class FeedbackActivity extends BaseActivity {
             }
         }
     }
-
+    /**弹窗提示*/
+    private void dialog(){
+        new AlertDialog(mActivity).builder()
+                .setTitle("提示")
+                .setMsg("请填写问题或者至少拍一张照片")
+                .setCancelable(false)
+                .show();
+    }
     /**
-     * 有deviceid提交反馈
+     * 有deviceid提交反馈  无图片
      */
-    private void submit1() {
-
-
+    private void submit() {
 
 
         // 问题描述
         if (TextUtils.isEmpty(feedContent)) {
-            ToastUtils.showToast(mActivity, "请输入问题");
+            // 弹窗提示问题和照片至少得有一个
+            dialog();
             return;
         }
+        progressBar.setVisibility(View.VISIBLE);
+        Map<String, String> params = new HashMap<>();
+        params.put("uid", uid);
+        params.put("issue_content", feedContent);
+        params.put("device_id", deviceId);
 
-        if (file1 == null || !file1.exists()) {
-            ToastUtils.showToast(mActivity, "请拍第一张图片");
-            return;
-        }
-        if (file2 == null || !file2.exists()) {
-            ToastUtils.showToast(mActivity, "请拍第二张图片");
-            return;
-        }
-        if (file3 == null || !file3.exists()) {
-            ToastUtils.showToast(mActivity, "请拍第三张图片");
-            return;
-        }
+
+        String url = Urls.Url_FeedBack;
+
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
+    }
+    /**
+     * 有deviceid提交反馈 1张图片
+     */
+    private void submit1() {
 
         progressBar.setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<>();
@@ -259,9 +349,53 @@ public class FeedbackActivity extends BaseActivity {
         String url = Urls.Url_FeedBack;
 
         OkHttpUtils.post()//
-                .addFile("file", "file01.png", file1)//
-                .addFile("file", "file02.png", file2)//
-                .addFile("file", "file03.png", file3)//
+                .addFile("file1", "file01.png", file1)//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
+    }
+    /**
+     * 有deviceid提交反馈 2张图片
+     */
+    private void submit2() {
+
+
+        progressBar.setVisibility(View.VISIBLE);
+        Map<String, String> params = new HashMap<>();
+        params.put("uid", uid);
+        params.put("issue_content", feedContent);
+        params.put("device_id", deviceId);
+
+
+        String url = Urls.Url_FeedBack;
+
+        OkHttpUtils.post()//
+                .addFile("file1", "file01.png", file1)//
+                .addFile("file2", "file02.png", file2)//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
+    }
+    /**
+     * 有deviceid提交反馈  3张图片
+     */
+    private void submit3() {
+
+        progressBar.setVisibility(View.VISIBLE);
+        Map<String, String> params = new HashMap<>();
+        params.put("uid", uid);
+        params.put("issue_content", feedContent);
+        params.put("device_id", deviceId);
+
+
+        String url = Urls.Url_FeedBack;
+
+        OkHttpUtils.post()//
+                .addFile("file1", "file01.png", file1)//
+                .addFile("file2", "file02.png", file2)//
+                .addFile("file3", "file03.png", file3)//
                 .url(url)//
                 .params(params)//
                 .build()//
@@ -272,7 +406,11 @@ public class FeedbackActivity extends BaseActivity {
 
         @Override
         public void onError(Call call, Exception e) {
-
+            progressBar.setVisibility(View.GONE);
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("网络有问题，请检查")
+                    .setCancelable(false).show();
             System.out.println("FeedbackActivity界面+++===失败");
         }
 
