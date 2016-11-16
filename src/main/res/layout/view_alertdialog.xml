@@ -15,8 +15,8 @@
         android:layout_marginTop="15dp"
         android:gravity="center"
         android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textSize="18sp" />
+    <!--android:textStyle="bold"-->
 
     <TextView
         android:id="@+id/txt_msg"
@@ -64,8 +64,7 @@
             android:background="@drawable/alertdialog_right_selector"
             android:gravity="center"
             android:textColor="@color/actionsheet_blue"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textSize="16sp"/>
     </LinearLayout>
 
 </LinearLayout>

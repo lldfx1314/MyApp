@@ -1,15 +1,10 @@
 package com.anhubo.anhubo.ui.impl;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,7 +29,6 @@ import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.MyPolygonView;
 import com.anhubo.anhubo.view.SesameCreditPanel;
-import com.anhubo.anhubo.view.ShowLoadingDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -402,22 +396,7 @@ public class UnitFragment extends BaseFragment {
 
     }
 
-    /**
-     * 弹出加载的动画
-     */
-    private void showDialog() {
-        View view = View.inflate(mActivity, R.layout.loading_layout, null);
-        View btnLoading = view.findViewById(R.id.btn_loading);
-        ImageView ivLoading = (ImageView) view.findViewById(R.id.iv_loading);
 
-        Animation operatingAnim = AnimationUtils.loadAnimation(mActivity, R.anim.progress_loading);
-        LinearInterpolator lin = new LinearInterpolator();
-        operatingAnim.setInterpolator(lin);
-        ivLoading.startAnimation(operatingAnim);
-        //ivLoading.clearAnimation();清除动画
-        ShowLoadingDialog loadingDialog = new ShowLoadingDialog((Activity) mActivity, view, btnLoading);
-        dialog = loadingDialog.show();
-    }
 
     /**
      * 获取多边形的数据

@@ -18,16 +18,13 @@ import com.anhubo.anhubo.bean.MsgPerfectBean;
 import com.anhubo.anhubo.bean.MsgPerfectMemberBean;
 import com.anhubo.anhubo.bean.MsgPerfectUseProBean;
 import com.anhubo.anhubo.bean.MsgPerfect_UsePro_Bean;
-import com.anhubo.anhubo.protocol.RequestResultListener;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.DatePackerUtil;
 import com.anhubo.anhubo.utils.Keys;
-import com.anhubo.anhubo.utils.NetUtil;
 import com.anhubo.anhubo.utils.PopOneHelper;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
-import com.anhubo.anhubo.view.LoadLayout;
 import com.anhubo.anhubo.view.ShowDialogTop;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -108,7 +105,6 @@ public class MsgPerfectActivity extends BaseActivity {
             public void onClickOk(String str) {
                 tvMsgPer05.setText(str);
                 // 走网络，提交员工数
-                progressBar.setVisibility(View.VISIBLE);
                 String url = Urls.Url_MsgPerfect_Member;
                 HashMap<String, String> params = new HashMap<>();
                 params.put("business_id", businessId);
@@ -151,7 +147,6 @@ public class MsgPerfectActivity extends BaseActivity {
     class MyStringCallback1 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            progressBar.setVisibility(View.GONE);
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -163,7 +158,6 @@ public class MsgPerfectActivity extends BaseActivity {
         public void onResponse(String response) {
             MsgPerfectMemberBean bean = new Gson().fromJson(response, MsgPerfectMemberBean.class);
             if (bean != null) {
-                progressBar.setVisibility(View.GONE);
                 int code = bean.code;
                 String msg = bean.msg;
                 ToastUtils.showLongToast(mActivity, msg);

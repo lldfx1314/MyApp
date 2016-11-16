@@ -14,6 +14,7 @@ import com.anhubo.anhubo.ui.impl.FindFragment;
 import com.anhubo.anhubo.ui.impl.MyFragment;
 import com.anhubo.anhubo.ui.impl.UnitFragment;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.NoScrollViewPager;
 
 import java.util.ArrayList;
@@ -122,6 +123,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            //dialog();
             exit();
             return false;
         }
@@ -132,10 +134,29 @@ public class HomeActivity extends BaseActivity {
 
         if ((System.currentTimeMillis() - exitTime) > 2000) {
             ToastUtils.showLongToast(mActivity,"再按一次退出程序");
+
             exitTime = System.currentTimeMillis();
         } else {
             finish();
             System.exit(0);
         }
+    }
+
+    private void dialog() {
+        new AlertDialog(mActivity).builder()
+                .setTitle("提示")
+                .setMsg("按确认键退出应用")
+                .setCancelable(false)
+                .setPositiveButton("确认", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+
+                    }
+                }).setNegativeButton("取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        }).show();
     }
 }

@@ -112,9 +112,11 @@ public class UnitAdapter extends BaseAdapter {
                 String str = String.valueOf(heighSecurity);
                 if (str.length() >= 7) {
                     setWan(str.substring(0, 7) + "万");
+                    hold.tvHeighSecurity.setHorizontallyScrolling(true);
                     hold.tvHeighSecurity.setText(ss);
                 } else {
                     setWan(str + "万");
+                    hold.tvHeighSecurity.setHorizontallyScrolling(true);
                     hold.tvHeighSecurity.setText(ss);
                 }
             }
@@ -131,9 +133,11 @@ public class UnitAdapter extends BaseAdapter {
                 String str = String.valueOf(heighSharing);
                 if (str.length() >= 7) {
                     setWan(str.substring(0, 7) + "万");
+                    hold.tvHeighSharing.setHorizontallyScrolling(true);
                     hold.tvHeighSharing.setText(ss);
                 } else {
                     setWan(str + "万");
+                    hold.tvHeighSharing.setHorizontallyScrolling(true);
                     hold.tvHeighSharing.setText(ss);
                 }
             }
@@ -151,10 +155,11 @@ public class UnitAdapter extends BaseAdapter {
                 String str = String.valueOf(prepayMoney);
                 if (str.length() >= 7) {
                     setWan(str.substring(0, 7) + "万");
+                    hold.tvPrepayMoney.setHorizontallyScrolling(true);
                     hold.tvPrepayMoney.setText(ss);
                 } else {
                     setWan(str + "万");
-
+                    hold.tvPrepayMoney.setHorizontallyScrolling(true);
                     hold.tvPrepayMoney.setText(ss);
                 }
 
@@ -178,7 +183,7 @@ public class UnitAdapter extends BaseAdapter {
 
         @Override
         public void updateDrawState(TextPaint ds) {
-            ds.setTextSize(DisplayUtil.sp2px(mContext,10));
+            ds.setTextSize(DisplayUtil.sp2px(mContext,8));
         }
     }
 

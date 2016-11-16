@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_upload"
-    android:orientation="vertical">
+    android:background="@color/bg_upload">
 
-    <include layout="@layout/layout_top_bar"></include>
+    <include
+        android:id="@+id/top_title"
+        layout="@layout/layout_top_bar"></include>
 
     <ScrollView
+        android:layout_below="@+id/top_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -88,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:background="@null"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="10dp"
                     android:singleLine="true"
                     android:enabled="true"
                     android:imeOptions="actionDone|actionSend"
@@ -135,7 +137,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:text="30"
+                    android:text="保密"
                     android:textColor="@color/gray"
                     android:textSize="14sp" />
 
@@ -178,7 +180,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:text="男"
+                    android:text="保密"
                     android:textColor="@color/gray"
                     android:textSize="14sp" />
 
@@ -221,7 +223,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:text="15620606679"
+                    android:text=""
                     android:textColor="@color/gray"
                     android:textSize="14sp" />
 
@@ -390,4 +392,5 @@
 
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+    <include layout="@layout/loading"></include>
+</RelativeLayout>
