@@ -81,14 +81,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     }
 
-    private  void initDialog(){
-        /*// 创建一个对象
-        View view = View.inflate(mActivity, R.layout.confirm_dialog, null);
-        View btnCancel = view.findViewById(R.id.btn_cancel);//取消按钮
-        ConfirmPopWindow confirmPopWindow = new ConfirmPopWindow(mActivity);
-        //显示对话框
-        dialog = confirmPopWindow.showDialog();*/
-    }
+
 
 
     /**

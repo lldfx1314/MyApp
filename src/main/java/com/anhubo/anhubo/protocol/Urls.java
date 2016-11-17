@@ -110,4 +110,8 @@ public interface Urls {
     String Url_Check_Pending_FeedBack = UrlBase +"Issue/issue_detail";
     /**待处理反馈界面提交*/
     String Url_PendFeedBack =  UrlBase +"Issue/deal_issue";
+    /**发现，反馈*/
+    String Url_FindFeed = "http://anhubo.com/s/html/feedBackSchedule.html";
+    /**发现，公告*/
+    String Url_FindNotice = "http://115.28.56.139//s/html/afficheList.html";
 }

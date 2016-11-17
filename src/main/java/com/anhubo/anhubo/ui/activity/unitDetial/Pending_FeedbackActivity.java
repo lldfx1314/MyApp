@@ -12,10 +12,12 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
@@ -28,7 +30,6 @@ import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
-import com.anhubo.anhubo.view.IssuePhotoView;
 import com.anhubo.anhubo.view.ShowBottonDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -45,7 +46,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import okhttp3.Call;
@@ -60,13 +60,13 @@ public class Pending_FeedbackActivity extends BaseActivity {
     @InjectView(R.id.tv_issue_time)
     TextView tvIssueTime;
     @InjectView(R.id.tv_issue_detail)
-    TextView tvIssueDetail;/*
+    TextView tvIssueDetail;
     @InjectView(R.id.iv_issue1)
     ImageView ivIssue1;
     @InjectView(R.id.iv_issue2)
     ImageView ivIssue2;
     @InjectView(R.id.iv_issue3)
-    ImageView ivIssue3;*/
+    ImageView ivIssue3;
     @InjectView(R.id.iv_pend_photo1)
     ImageView ivPendPhoto1;
     @InjectView(R.id.iv_pend_photo2)
@@ -77,8 +77,11 @@ public class Pending_FeedbackActivity extends BaseActivity {
     Button btnNoDeal;
     @InjectView(R.id.btn_complete_Deal)
     Button btnCompleteDeal;
-    @InjectView(R.id.rl_issue_photo)
-    RelativeLayout rlIssuePhoto;
+    @InjectView(R.id.tv_issue_photo)
+    TextView tvIssuePhoto;
+
+    @InjectView(R.id.ll_issue_photo)
+    LinearLayout llIssuePhoto;
     private String isId;
     private String str_photo;
     private boolean isClick;
@@ -310,36 +313,36 @@ public class Pending_FeedbackActivity extends BaseActivity {
                 // 对图片做判断
                 int size = isPic.size();
                 if (size > 0) {
-                    System.out.println("11111111112222222223333333333");
-                    IssuePhotoView view = new IssuePhotoView(mActivity);
-                    rlIssuePhoto.addView(view);
+
 
                     if (size == 1) {
                         for (int i = 0; i < isPic.size(); i++) {
-                            view.setHeaderIcon(view.ivIssue1, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
+                            setHeaderIcon(ivIssue1, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
                         }
                     } else if (size == 2) {
                         for (int i = 0; i < isPic.size(); i++) {
                             if (i == 0) {
-                                view.setHeaderIcon(view.ivIssue1, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
+                                setHeaderIcon(ivIssue1, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
                             } else if (i == 1) {
-                                view.setHeaderIcon(view.ivIssue2, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
+                                setHeaderIcon(ivIssue2, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
 
                             }
                         }
                     } else if (size == 3) {
                         for (int i = 0; i < isPic.size(); i++) {
                             if (i == 0) {
-                                view.setHeaderIcon(view.ivIssue1, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
+                                setHeaderIcon(ivIssue1, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
                             } else if (i == 1) {
-
-                                view.setHeaderIcon(view.ivIssue2, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
+                                setHeaderIcon(ivIssue2, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
                             } else if (i == 2) {
-
-                                view.setHeaderIcon(view.ivIssue3, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
+                                setHeaderIcon(ivIssue3, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
                             }
                         }
                     }
+                }else{
+                    // 动态改变空间的高度
+                    tvIssuePhoto.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,0));
+                    llIssuePhoto.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,0));
                 }
             }
         }
@@ -545,5 +548,16 @@ public class Pending_FeedbackActivity extends BaseActivity {
                         iv.setImageBitmap(bitmap);
                     }
                 });
+    }
+    /**当用户按下返回键的时候退出此页面到二维码扫描界面回复扫码的功能*/
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent();
+            setResult(2, intent);
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

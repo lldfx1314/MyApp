@@ -1,7 +1,6 @@
 package com.anhubo.anhubo.adapter;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -9,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
-import com.anhubo.anhubo.ui.activity.unitDetial.Check_Device_Activity;
 
 import java.util.List;
 

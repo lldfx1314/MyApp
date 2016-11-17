@@ -48,20 +48,16 @@
             android:text=""
             android:textColor="@color/black"
             android:textSize="12sp" />
-    <RelativeLayout
-        android:id="@+id/rl_issue_photo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-    </RelativeLayout>
-        <!--<TextView
+        <TextView
+            android:id="@+id/tv_issue_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:text="问题照片"
             android:textColor="#ee000000"
             android:textSize="15sp" />
-        &lt;!&ndash;问题照片&ndash;&gt;
+        <!--问题照片-->
         <LinearLayout
             android:id="@+id/ll_issue_photo"
             android:layout_width="match_parent"
@@ -110,7 +106,7 @@
             </RelativeLayout>
 
 
-        </LinearLayout>-->
+        </LinearLayout>
         <!--拍摄照片-->
         <LinearLayout
             android:layout_width="wrap_content"

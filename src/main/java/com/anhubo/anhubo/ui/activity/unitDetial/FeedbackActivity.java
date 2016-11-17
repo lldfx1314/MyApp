@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -609,5 +610,6 @@ public class FeedbackActivity extends BaseActivity {
 
         feedContent = etFeedback.getText().toString().trim();
     }
+
 
 }

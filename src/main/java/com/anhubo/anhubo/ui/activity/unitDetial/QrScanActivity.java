@@ -1,5 +1,6 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,26 +12,36 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.anhubo.anhubo.R;
+import com.anhubo.anhubo.adapter.DeviceDetailsAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.CheckComplete_Bean;
 import com.anhubo.anhubo.bean.ScanBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.PopBirthHelper;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
+import com.anhubo.anhubo.view.ShowBottonDialog;
+import com.anhubo.anhubo.view.ShowCheckDeviceDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -40,6 +51,8 @@ import okhttp3.Call;
 
 public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate {
     private static final String TAG = QrScanActivity.class.getSimpleName();
+    private static final int REQUESTSCAN = 1;
+    private static final int REQUIRECODE = 2;
     @InjectView(R.id.zxingview)
     ZXingView mQRCodeView;
     @InjectView(R.id.proBar)
@@ -66,8 +79,32 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     private boolean isGetCkeckInfo = false;
     private int deviceCheckedNum;
     private String devicesNum;
-    private static final int REQUESTSCAN = 1;
     private boolean isPermission;
+    private Dialog dialog;
+    private ListView ck_ListView;
+    private TextView deviceName;
+    private Button btnCheckMore;
+    private Button btnCheckComplete;
+    private TextView checkTime;
+    private RelativeLayout checkFeedback;
+    private TextView tvIssueDes;
+    private DeviceDetailsAdapter adapter;
+    private PopBirthHelper popBirthHelper;
+    private String startTime;
+    private String device_type_name;
+    private int dateFlag;
+    private List<String> require_list;
+    private String isId;
+    private String isContent;
+    private boolean isGetDeviceInfo = false;
+    // 选择完成后的有问题的集合
+    private ArrayList<Integer> completeList;
+    /* 用来记录存在问题的选项，0表示没问题，1表示有问题*/
+    private int isProblem = 0;
+    /*用来记录对应的position位是否被点击*/
+    private Map<Integer, Boolean> map = new HashMap<>();
+    private String uid;
+    private String businessid;
 
     @Override
     protected void initConfig() {
@@ -76,6 +113,24 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         ndIntent = getIntent().getStringExtra(Keys.NEWDEVICE);
         checkIntent = getIntent().getStringExtra(Keys.CHECK);
         exerciseIntent = getIntent().getStringExtra(Keys.EXERCISE);
+        // 获取uid
+        uid = SpUtils.getStringParam(mActivity, Keys.UID);
+        businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
+
+        // 初始化completeList
+        completeList = new ArrayList<>();
+        // 创建一个数组，五个数全是0
+        int[] arr = new int[]{0, 0, 0, 0, 0};
+        for (int i = 0; i < arr.length; i++) {
+
+            completeList.add(arr[i]);
+        }
+        // 为map集合设置默认的值，每个item默认没被点击过
+        map.put(0, false);
+        map.put(1, false);
+        map.put(2, false);
+        map.put(3, false);
+        map.put(4, false);
     }
 
 
@@ -110,13 +165,15 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
 
         }
         tvTopBarRight.setOnClickListener(this);
-
+        // 出厂时间的弹窗
+        alterTime();
     }
 
 
     @Override
     protected void initEvents() {
         super.initEvents();
+        // 获取是否保存过进度，如果保存了就显示进度
         String deviceCheckedNum = SpUtils.getStringParam(mActivity, Keys.DEVICECHECKEDNUM);
         String devicesNum = SpUtils.getStringParam(mActivity, Keys.DEVICESNUM);
         if (!TextUtils.isEmpty(deviceCheckedNum) && !TextUtils.isEmpty(deviceCheckedNum)) {
@@ -126,6 +183,8 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
             tvBigQrNumber.setText(deviceCheckedNum + "");
             tvSmallQrNumber.setText(devicesNum);
         }
+
+
     }
 
     @Override
@@ -139,31 +198,14 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         if (intent != null) {
 
             switch (requestCode) {
-                case REQUESTSCAN:
-                    if (resultCode == 1) {
-                        mQRCodeView.startSpot();
-                        CheckComplete_Bean bean = (CheckComplete_Bean) intent.getSerializableExtra(Keys.CHECKCOMPLETE_BEAN);
-                        // 拿到序列化对象就可以获取里面数据进行展示了
-                        if (bean != null) {
-                            // 获取到数据
-                            deviceCheckedNum = bean.data.device_checked_num;
-                            devicesNum = bean.data.devices_num;
-                            // 把这俩数据保存起来
-                            SpUtils.putParam(mActivity, Keys.DEVICECHECKEDNUM, deviceCheckedNum + "");
-                            SpUtils.putParam(mActivity, Keys.DEVICESNUM, devicesNum);
 
+                case REQUIRECODE:
+                    // 待反馈界面
+                    if (checkFeedback != null && resultCode == 1) {
 
-                            //动态的设置进度条
-                            proBar.setMax(Integer.parseInt(devicesNum));
-                            proBar.setProgress(deviceCheckedNum);
-                            tvBigQrNumber.setText(deviceCheckedNum + "");
-                            tvSmallQrNumber.setText(devicesNum);
-                        }
+                        checkFeedback.setVisibility(View.GONE);
                     } else if (resultCode == 2) {
-                        boolean qRchart = intent.getBooleanExtra(Keys.QRchart, true);
-                        if (qRchart) {
-                            mQRCodeView.startSpot();
-                        }
+                        mQRCodeView.stopSpot();
                     }
                     break;
             }
@@ -210,15 +252,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         processData(cardNumber);
 
     }
-    /*public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        if (keyCode == KeyEvent.KEYCODE_BACK
-                && event.getRepeatCount() == 0) {
-            mQRCodeView.startSpot();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }*/
 
     /**
      * 拿到数据后做相应的操作
@@ -244,13 +278,19 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                 isEnter = true;
                 String lastNumber = cardNumber.substring(cardNumber.length() - 1, cardNumber.length());
                 if (Integer.parseInt(lastNumber) == 1) {
-                    Toast.makeText(mActivity, "演练结束", Toast.LENGTH_LONG).show();
+                    new AlertDialog(mActivity).builder()
+                            .setTitle("提示")
+                            .setMsg("演练结束")
+                            .setCancelable(false).show();
                 } else {
-                    Toast.makeText(mActivity, "您已到达" + lastNumber + "层", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(mActivity, "您已到达" + lastNumber + "层", Toast.LENGTH_LONG).show();
+                    new AlertDialog(mActivity).builder()
+                            .setTitle("提示")
+                            .setMsg("您已到达" + lastNumber + "层")
+                            .setCancelable(false).show();
                 }
                 /***********演练**************************/
             } else {
-                //isEnter = false;
             }
 
         }
@@ -302,11 +342,12 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
      * 拿到数据后判断设备ID是否绑定而跳转到相应界面
      */
     private void parseMessage(ScanBean scanBean) {
-        mQRCodeView.stopSpot();
+
         progressBar.setVisibility(View.GONE);
         int isExist = scanBean.data.device_exist;//设备号是否在后台存在
         //设备ID
         deviceId = scanBean.data.device_id;
+        showInfo(scanBean);
         if (isExist == 0) {
             // 跳转到新增页面
             if (TextUtils.equals(deviceId, cardNumber)) {
@@ -319,14 +360,152 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
             }
 
         } else if (isExist == 1) {
-            // 跳转到修改页面
-            Intent intent = new Intent(QrScanActivity.this, Check_Device_Activity.class);
-            intent.putExtra(Keys.DEVICEINFO, scanBean);
-            intent.putExtra(Keys.SCAN_TYPE, "qrscan");
-            startActivityForResult(intent, REQUESTSCAN);
+            // 弹出对话框
+            showCheckDeviceDialog();
         } else {
             ToastUtils.showToast(mActivity, scanBean.msg);
         }
+    }
+
+    /**
+     * 拿到信息获取设备的相关信息
+     */
+    private void showInfo(ScanBean scanBean) {
+        // 获取到设备名
+        device_type_name = scanBean.data.device_type_name;
+        // 获取到设备Id
+        deviceId = scanBean.data.device_id;
+        // 获取到时间标记
+        dateFlag = scanBean.data.require_date_flag;
+        // 拿到问题集合
+        require_list = scanBean.data.require_list;
+        // 拿到问题id
+        isId = scanBean.data.is_id;
+        // 拿到问题内容
+        isContent = scanBean.data.is_content;
+    }
+
+    private void showCheckDeviceDialog() {
+        // 创建一个对象
+        View view = View.inflate(mActivity, R.layout.activity_check_device, null);
+        //显示对话框
+        ShowCheckDeviceDialog checkDeviceDialog = new ShowCheckDeviceDialog(mActivity, view);
+        checkDeviceDialog.setListenerDialog(new ShowCheckDeviceDialog.ClickListenerDialog() {
+
+            @Override
+            public void popup() {
+            // 停止二维码扫描
+                mQRCodeView.stopSpot();
+            }
+
+        });
+
+        dialog = checkDeviceDialog.show();
+        // 按返回键对话框下去后打开二维码扫描
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                // 打开二维码扫描
+                mQRCodeView.startSpot();
+            }
+        });
+        // 找控件
+        ck_ListView = (ListView) view.findViewById(R.id.check_listView);
+        deviceName = (TextView) view.findViewById(R.id.tv_check_device);
+        btnCheckMore = (Button) view.findViewById(R.id.check_more);// 更多
+        btnCheckComplete = (Button) view.findViewById(R.id.check_complete);//检查完成
+        // 出厂日期
+        checkTime = (TextView) view.findViewById(R.id.tv_check_time);
+        //待处理反馈
+        checkFeedback = (RelativeLayout) view.findViewById(R.id.rl_check_feedback);
+        // 问题描述
+        tvIssueDes = (TextView) view.findViewById(R.id.tv_issue_des);
+        // 获取适配器对象
+        adapter = new DeviceDetailsAdapter(this, require_list, isId, isContent);
+        // 处理出厂日期、待处理反馈
+        checkFeedback.setOnClickListener((View.OnClickListener) mActivity);
+        checkTime.setOnClickListener((View.OnClickListener) mActivity);
+        // 事件处理
+        event();
+    }
+
+    /**
+     * 事件处理
+     */
+    private void event() {
+
+
+        // 时间
+        if (dateFlag == 1) {
+            checkTime.setVisibility(View.VISIBLE);
+        }
+        // 问题描述
+        if (!TextUtils.isEmpty(isContent)) {
+            checkFeedback.setVisibility(View.VISIBLE);
+            tvIssueDes.setText(isContent);
+        }
+
+
+        // 显示 设备名称
+        if (isGetDeviceInfo) {
+            deviceName.setText(device_type_name);
+        } else {
+            deviceName.setText("没有数据");
+            isGetDeviceInfo = false;
+        }
+        // 给listView设置适配器对象
+        ck_ListView.setAdapter(adapter);
+        // 设置listView的监听
+        ck_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ImageView imageView = (ImageView) view.findViewById(R.id.iv_check_device);
+                // 获取当前position对应位置的点击记录
+                Boolean isClick = map.get(position);
+                if (!isClick) {
+                    // 表示这个问题存在
+                    imageView.setImageResource(R.drawable.fuxuan_input01);
+                    // 存在问题就设置为1;
+                    isProblem = 1;
+                } else {
+                    // 这个问题不存在
+                    imageView.setImageResource(R.drawable.fuxuan_input02);
+                    isProblem = 0;
+                }
+
+                // 将对应position位置改为对应的boolean值和值
+                map.put(position, !isClick);
+                completeList.set(position, isProblem);
+
+            }
+
+        });
+
+        // 设置按钮的点击事件
+        btnCheckMore.setOnClickListener(this);
+        btnCheckComplete.setOnClickListener(this);
+
+    }
+
+    private void alterTime() {
+        popBirthHelper = new PopBirthHelper(mActivity);
+        popBirthHelper.setOnClickOkListener(new PopBirthHelper.OnClickOkListener() {
+            @Override
+            public void onClickOk(String time) {
+
+                if (!TextUtils.isEmpty(time)) {
+                    startTime = time;
+                    // 拿到年龄,上传到网络
+                    //uploadAge(time);
+                } else {
+                    ToastUtils.showToast(mActivity, "您所选日期大于当前时间");
+                }
+
+            }
+
+
+        });
     }
 
     /**
@@ -342,15 +521,15 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
 
     @Override
     public void onScanQRCodeOpenCameraError() {
-        System.out.println("请到设置里面打开权限");
         isPermission = !isPermission;
         if (isPermission) {
+            // Dialog对话框提示用户去设置界面打开权限
             dialog();
         }
-        Log.e(TAG, "打开相机出错");
+        //Log.e(TAG, "打开相机出错");
     }
 
-    /*
+    /**
      * Dialog对话框提示用户去设置界面打开权限
      */
     protected void dialog() {
@@ -411,6 +590,108 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                 }
                 isLight = !isLight;
                 break;
+            case R.id.check_more:
+                // 更多的点击事件
+                Intent intent = new Intent(mActivity, FeedbackActivity.class);
+                intent.putExtra(Keys.DeviceId, deviceId);
+                startActivity(intent);
+                break;
+            case R.id.check_complete:
+                // 检查完成的点击事件
+                if (!TextUtils.isEmpty(startTime)) {
+                    checkComplete();
+
+                } else {
+                    checkComplete1();
+                }
+                break;
+            case R.id.tv_check_time:
+                // 时间
+                popBirthHelper.show(checkTime);
+                break;
+            case R.id.rl_check_feedback:
+                // 待处理反馈
+                Intent intent1 = new Intent(mActivity, Pending_FeedbackActivity.class);
+                intent1.putExtra(Keys.IsId, isId);
+                startActivityForResult(intent1, REQUIRECODE);
+                break;
+        }
+    }
+
+    /**
+     * 检查完成的点击事件，请求网络
+     */
+    private void checkComplete() {
+
+        // 这里是完成的点击事件
+        String url = Urls.Url_Check_Complete;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("uid", uid); //这是uid,登录后改成真正的用户
+        params.put("device_id", deviceId);
+        params.put("device_result", completeList.toString());//选择后的集合
+        params.put("business_id", businessid);//这是business_id,登录后改成真正的business_id
+        params.put("start_time", startTime);
+
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback1());
+    }
+
+    private void checkComplete1() {
+        // 这里是完成的点击事件
+        String url = Urls.Url_Check_Complete;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("uid", uid); //这是uid,登录后改成真正的用户
+        params.put("device_id", deviceId);
+        params.put("device_result", completeList.toString());//选择后的集合
+        params.put("business_id", businessid);//这是business_id,登录后改成真正的business_id
+
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback1());
+    }
+
+    class MyStringCallback1 extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+            progressBar.setVisibility(View.GONE);
+
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("网络有问题，请检查")
+                    .setCancelable(false).show();
+
+            System.out.println("QrScanActivity+++完成===没拿到数据" + e.getMessage());
+        }
+
+        @Override
+        public void onResponse(String response) {
+            CheckComplete_Bean bean = new Gson().fromJson(response, CheckComplete_Bean.class);
+            if (bean != null) {
+                ToastUtils.showToast(mActivity, "检查完成");
+                // 完成后打开二维码扫描
+                mQRCodeView.startSpot();
+                dialog.dismiss();
+                // 获取到数据
+                deviceCheckedNum = bean.data.device_checked_num;
+                devicesNum = bean.data.devices_num;
+                // 把这俩数据保存起来
+                SpUtils.putParam(mActivity, Keys.DEVICECHECKEDNUM, deviceCheckedNum + "");
+                SpUtils.putParam(mActivity, Keys.DEVICESNUM, devicesNum);
+
+
+                //动态的设置进度条
+                proBar.setMax(Integer.parseInt(devicesNum));
+                proBar.setProgress(deviceCheckedNum);
+                tvBigQrNumber.setText(deviceCheckedNum + "");
+                tvSmallQrNumber.setText(devicesNum);
+            } else {
+                System.out.println("QrScanActivity+++完成===没获取到bean对象");
+            }
         }
     }
 
@@ -441,6 +722,5 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
 
 
     }
-
 
 }
