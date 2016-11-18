@@ -175,11 +175,7 @@ public class MsgPerfectActivity extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            progressBar.setVisibility(View.GONE);
-            new AlertDialog(mActivity).builder()
-                    .setTitle("提示")
-                    .setMsg("网络有问题，请检查")
-                    .setCancelable(false).show();
+
             System.out.println("MsgPerfectActivity+++首次加载网络===没拿到数据" + e.getMessage());
         }
 

@@ -1,6 +1,5 @@
 package com.anhubo.anhubo.ui.activity.DiscoveryDetial;
 
-import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -12,7 +11,6 @@ import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**

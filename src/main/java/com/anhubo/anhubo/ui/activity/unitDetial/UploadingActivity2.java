@@ -23,6 +23,7 @@ import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.MsgPerfectLowerBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.utils.ImageFactory;
 import com.anhubo.anhubo.utils.ImageTools;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
@@ -37,6 +38,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -68,11 +70,7 @@ public class UploadingActivity2 extends BaseActivity {
     private Dialog dialog;
     private Button btnTakephoto;
     private Button btnPhoto;
-    private String imgName;
     private boolean isClick = false;//判断是正面还是反面
-    private boolean isClick1 = false;// 判断是拍照还是相册
-    private File filePhoto02;
-    private File filePhoto01;
 
     @Override
     protected int getContentViewId() {
@@ -118,8 +116,10 @@ public class UploadingActivity2 extends BaseActivity {
                 break;
         }
     }
+
     File file1 = null;
     File file2 = null;
+
     /**
      * 拿到拍到的照片去上传
      */
@@ -129,14 +129,14 @@ public class UploadingActivity2 extends BaseActivity {
         // 获取
         String businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
 
-        if (file1==null) {
+        if (file1 == null) {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("亲，必须拍取法人身份证正面照片")
                     .setCancelable(false).show();
             return;
         }
-        if (file2==null) {
+        if (file2 == null) {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("亲，必须拍取法人身份证背面照片")
@@ -244,29 +244,27 @@ public class UploadingActivity2 extends BaseActivity {
         c.moveToFirst();
         int columnIndex = c.getColumnIndex(filePathColumns[0]);
         String imagePath = c.getString(columnIndex);
-        filePhoto02 = new File(imagePath);
-        Bitmap photo = BitmapFactory.decodeFile(imagePath);
+
+
+        Bitmap photo = ImageFactory.ratio(imagePath, 120f, 240f);
         try {
-
-            /*imgName = createPhotoFileName();
-            //写一个方法将此文件保存到本应用下面啦
-            savePicture(imgName, photo);*/
-
             if (photo != null) {
-                //为防止原始图片过大导致内存溢出，这里先缩小原图显示，然后释放原始Bitmap占用的内存
-                Bitmap bitmap = ImageTools.zoomBitmap(photo, photo.getWidth() / 5, photo.getHeight() / 5);
+                // 把本文件压缩后缓存到本地文件里面
+                savePicture(photo, "photo02");
+                File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
                 if (isClick) {
                     // 身份证正面
                     llCard01.setVisibility(View.GONE);
                     //显示图片
-                    ivShowCardFront02.setImageBitmap(bitmap);
+                    ivShowCardFront02.setImageBitmap(photo);
+
                     file1 = filePhoto02;
 
                 } else {
                     // 身份证背面
                     llCard02.setVisibility(View.GONE);
                     //显示图片
-                    ivShowCardBehind02.setImageBitmap(bitmap);
+                    ivShowCardBehind02.setImageBitmap(photo);
                     file2 = filePhoto02;
                 }
 
@@ -275,22 +273,11 @@ public class UploadingActivity2 extends BaseActivity {
             e.printStackTrace();
         }finally {
 
-        c.close();
+            c.close();
         }
-
     }
 
-    /**
-     * 获取文件路径
-     **/
-    public String uri2filePath(Uri uri) {
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String path = cursor.getString(column_index);
-        return path;
-    }
+
 
     /**
      * 显示照相机照片
@@ -310,10 +297,10 @@ public class UploadingActivity2 extends BaseActivity {
         File file = new File("/sdcard/photo_anhubo/");
         file.mkdirs();
         String filename = file.getPath() + name;
-        filePhoto01 = new File(filename);//图片的文件
+        //filePhoto01 = new File(filename);//图片的文件
         try {
             fout = new FileOutputStream(filename);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fout);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fout);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -324,6 +311,8 @@ public class UploadingActivity2 extends BaseActivity {
                 e.printStackTrace();
             }
         }
+        savePicture(bitmap, "photo01");
+        File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
         if (isClick) {
             llCard01.setVisibility(View.GONE);
             //显示图片
@@ -334,6 +323,30 @@ public class UploadingActivity2 extends BaseActivity {
             //显示图片
             ivShowCardBehind02.setImageBitmap(bitmap);
             file2 = filePhoto01;
+        }
+    }
+    /**
+     * 保存图片到本应用下
+     **/
+    private void savePicture(Bitmap bitmap, String fileName) {
+
+        FileOutputStream fos = null;
+        try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新写入内容会被覆盖
+            //fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
+            OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() + "/" + fileName);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);// 把图片写入指定文件夹中
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != fos) {
+                    fos.close();
+                    fos = null;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

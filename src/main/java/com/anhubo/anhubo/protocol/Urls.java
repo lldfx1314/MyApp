@@ -5,14 +5,11 @@ package com.anhubo.anhubo.protocol;
  * Created by Administrator on 2016/9/22.
  */
 public interface Urls {
-    String UrlBase = "http://115.28.56.139/api/";
-    //String UrlBase = "http://anhubo.com/api/";
+    //String UrlBase = "http://115.28.56.139/api/";
+    String UrlBase = "http://anhubo.com/api/";
     /**新增界面的接口*/
     String Url_Add = UrlBase+"Device/add_device_info";
-    /**
-     * 这个是新增界面去掉图片文件的接口
-     */
-    //String Url_Add = UrlBase + "Device/add_device_info_an";
+
     /**
      * 扫描界面的接口
      */

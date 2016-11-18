@@ -48,7 +48,7 @@ public class ShowCheckDeviceDialog {
 		dialog.setCanceledOnTouchOutside(false);
 		dialog.show();
         boolean showing = dialog.isShowing();
-        if(showing){
+        if(showing&&listenerDialog!=null){
             listenerDialog.popup();
         }
 

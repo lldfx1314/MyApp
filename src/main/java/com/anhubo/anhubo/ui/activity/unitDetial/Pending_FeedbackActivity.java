@@ -325,7 +325,6 @@ public class Pending_FeedbackActivity extends BaseActivity {
                                 setHeaderIcon(ivIssue1, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
                             } else if (i == 1) {
                                 setHeaderIcon(ivIssue2, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
-
                             }
                         }
                     } else if (size == 3) {

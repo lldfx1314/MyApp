@@ -105,6 +105,8 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     private Map<Integer, Boolean> map = new HashMap<>();
     private String uid;
     private String businessid;
+    private View viewFeed;
+    private View viewTime;
 
     @Override
     protected void initConfig() {
@@ -330,6 +332,8 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
             //System.out.println("查询"+response);
             ScanBean bean = new Gson().fromJson(response, ScanBean.class);
             if (bean != null) {
+                // 获取到数据置为true
+                isGetDeviceInfo = true;
                 parseMessage(bean);
             } else {
                 System.out.println("QrScanActivity+++===没获取bean对象");
@@ -347,7 +351,9 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         int isExist = scanBean.data.device_exist;//设备号是否在后台存在
         //设备ID
         deviceId = scanBean.data.device_id;
+        // 获取数据
         showInfo(scanBean);
+
         if (isExist == 0) {
             // 跳转到新增页面
             if (TextUtils.equals(deviceId, cardNumber)) {
@@ -394,7 +400,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
 
             @Override
             public void popup() {
-            // 停止二维码扫描
+                // 停止二维码扫描
                 mQRCodeView.stopSpot();
             }
 
@@ -417,8 +423,12 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         btnCheckComplete = (Button) view.findViewById(R.id.check_complete);//检查完成
         // 出厂日期
         checkTime = (TextView) view.findViewById(R.id.tv_check_time);
+        // 出厂日期分割线
+        viewTime = view.findViewById(R.id.view_time);
         //待处理反馈
         checkFeedback = (RelativeLayout) view.findViewById(R.id.rl_check_feedback);
+        //待处理反馈分割线
+        viewFeed = view.findViewById(R.id.view_feed);
         // 问题描述
         tvIssueDes = (TextView) view.findViewById(R.id.tv_issue_des);
         // 获取适配器对象
@@ -439,9 +449,11 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         // 时间
         if (dateFlag == 1) {
             checkTime.setVisibility(View.VISIBLE);
+            viewTime.setVisibility(View.VISIBLE);
         }
         // 问题描述
         if (!TextUtils.isEmpty(isContent)) {
+            viewFeed.setVisibility(View.VISIBLE);
             checkFeedback.setVisibility(View.VISIBLE);
             tvIssueDes.setText(isContent);
         }
@@ -643,8 +655,9 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         // 这里是完成的点击事件
         String url = Urls.Url_Check_Complete;
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("uid", uid); //这是uid,登录后改成真正的用户
+        params.put("uid", uid); //这是uid
         params.put("device_id", deviceId);
+
         params.put("device_result", completeList.toString());//选择后的集合
         params.put("business_id", businessid);//这是business_id,登录后改成真正的business_id
 

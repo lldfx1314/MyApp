@@ -25,6 +25,7 @@ import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.MsgPerfectRentingBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.utils.ImageFactory;
 import com.anhubo.anhubo.utils.ImageTools;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.PopBirthHelper;
@@ -41,6 +42,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -283,21 +285,20 @@ public class UploadingActivity4 extends BaseActivity {
         c.moveToFirst();
         int columnIndex = c.getColumnIndex(filePathColumns[0]);
         String imagePath = c.getString(columnIndex);
-        filePhoto02 = new File(imagePath);
-        Bitmap photo = BitmapFactory.decodeFile(imagePath);
+        Bitmap photo = ImageFactory.ratio(imagePath,120f,240f);
         try {
 
-            /*imgName = createPhotoFileName();
-            //写一个方法将此文件保存到本应用下面啦
-            savePicture(imgName, photo);*/
+
 
             if (photo != null) {
-                //为防止原始图片过大导致内存溢出，这里先缩小原图显示，然后释放原始Bitmap占用的内存
-                Bitmap bitmap = ImageTools.zoomBitmap(photo, photo.getWidth() / 5, photo.getHeight() / 5);
 
                 llTakePhoto04.setVisibility(View.GONE);
                 //显示图片
-                ivShowPhoto04.setImageBitmap(bitmap);
+                ivShowPhoto04.setImageBitmap(photo);
+
+                // 把本文件压缩后缓存到本地文件里面
+                savePicture(photo,"photo02");
+                File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
                 newFile = filePhoto02;
             }
         } catch (Exception e) {
@@ -340,9 +341,35 @@ public class UploadingActivity4 extends BaseActivity {
         llTakePhoto04.setVisibility(View.GONE);
         //显示图片
         ivShowPhoto04.setImageBitmap(bitmap);
+        // 把本文件压缩后缓存到本地文件里面
+        savePicture(bitmap,"photo01");
+        File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
         newFile = filePhoto01;
     }
+    /**
+     * 保存图片到本应用下
+     **/
+    private void savePicture(Bitmap bitmap,String fileName) {
 
+        FileOutputStream fos = null;
+        try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新写入内容会被覆盖
+            //fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
+            OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() +"/"+fileName);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);// 把图片写入指定文件夹中
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != fos) {
+                    fos.close();
+                    fos = null;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
     /**
      * 弹出对话框
      */

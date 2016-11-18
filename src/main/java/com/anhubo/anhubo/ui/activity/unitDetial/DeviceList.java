@@ -85,13 +85,16 @@ public class DeviceList extends BaseActivity {
             if(listBean!=null){
                 progressBar.setVisibility(View.GONE);
                 List<DeviceListBean.Data.Devices> devices = listBean.data.devices;
-                for (int i = 0; i < devices.size(); i++) {
-                    DeviceListBean.Data.Devices device = devices.get(i);
-                    String deviceId = device.device_id;
-                    deviceIds.add(deviceId);
-                    String deviceName = device.device_name;
-                    deviceNames.add(deviceName);
+                if(devices!=null&&!devices.isEmpty()){
+                    for (int i = 0; i < devices.size(); i++) {
+                        DeviceListBean.Data.Devices device = devices.get(i);
+                        String deviceId = device.device_id;
+                        deviceIds.add(deviceId);
+                        String deviceName = device.device_name;
+                        deviceNames.add(deviceName);
+                    }
                 }
+
                 if(deviceIds!=null&&deviceNames!=null){
                     tvDevice.setText("设备总数："+deviceIds.size());
                     // 创建一个设备列表的适配器
