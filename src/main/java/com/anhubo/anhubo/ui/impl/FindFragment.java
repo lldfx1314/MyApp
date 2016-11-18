@@ -9,19 +9,15 @@ import com.anhubo.anhubo.base.BaseFragment;
 import com.anhubo.anhubo.ui.activity.DiscoveryDetial.FeedActivity;
 import com.anhubo.anhubo.ui.activity.DiscoveryDetial.NoticeActivity;
 
-import butterknife.InjectView;
-import butterknife.OnClick;
-
 /**
  * Created by Administrator on 2016/10/8.
  */
 public class FindFragment extends BaseFragment {
 
 
-    @InjectView(R.id.rl_notice)
     RelativeLayout rlNotice;
-    @InjectView(R.id.rl_feedback)
     RelativeLayout rlFeedback;
+
 
     @Override
     public void initTitleBar() {
@@ -38,12 +34,15 @@ public class FindFragment extends BaseFragment {
 
     @Override
     public void initView() {
-
+        rlNotice = findView(R.id.rl_notice);
+        rlFeedback = findView(R.id.rl_feedback);
     }
 
     @Override
     public void initListener() {
-
+        // 设置监听
+        rlNotice.setOnClickListener(this);
+        rlFeedback.setOnClickListener(this);
     }
 
     @Override
@@ -53,19 +52,12 @@ public class FindFragment extends BaseFragment {
 
     @Override
     public void processClick(View view) {
-
-    }
-
-
-
-    @OnClick({R.id.rl_notice, R.id.rl_feedback})
-    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rl_notice:
-                startActivity(new Intent(mActivity,NoticeActivity.class));
+                startActivity(new Intent(mActivity, NoticeActivity.class));
                 break;
             case R.id.rl_feedback:
-                startActivity(new Intent(mActivity,FeedActivity.class));
+                startActivity(new Intent(mActivity, FeedActivity.class));
                 break;
         }
     }

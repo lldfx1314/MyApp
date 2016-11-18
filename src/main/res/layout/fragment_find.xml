@@ -21,7 +21,6 @@
                 android:layout_height="wrap_content">
 
                 <com.anhubo.anhubo.view.RatioImageView
-                    android:id="@+id/riv_notice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:src="@drawable/notice" />
@@ -57,7 +56,6 @@
                 android:layout_height="wrap_content">
 
                 <com.anhubo.anhubo.view.RatioImageView
-                    android:id="@+id/riv_feedback"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:src="@drawable/feedback" />
