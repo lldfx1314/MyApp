@@ -107,6 +107,7 @@ public class UnitFragment extends BaseFragment {
 
     @Override
     public void initView() {
+
         // 统计图
         rlUnit01 = findView(R.id.rl_unit_01);
         rlUnit02 = findView(R.id.rl_unit_02);
@@ -225,6 +226,7 @@ public class UnitFragment extends BaseFragment {
 
         String url = Urls.Url_Unit_Plan;
         HashMap<String, String> params = new HashMap<>();
+
         params.put("uid", uid);
 
         OkHttpUtils.post()//

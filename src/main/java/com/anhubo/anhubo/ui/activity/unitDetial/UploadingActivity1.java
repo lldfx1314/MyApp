@@ -86,7 +86,8 @@ public class UploadingActivity1 extends BaseActivity {
 
     @Override
     protected void onLoadDatas() {
-
+        /*String s = null;
+        System.out.println(s.equals("any string"));*/
     }
 
 

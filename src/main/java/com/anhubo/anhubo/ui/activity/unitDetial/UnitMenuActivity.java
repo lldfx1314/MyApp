@@ -19,6 +19,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.InjectView;
 import okhttp3.Call;
@@ -34,11 +35,13 @@ public class UnitMenuActivity extends BaseActivity {
     private int pager;
     private List<StudyBean.Data.Records> records;
     private StudyBean.Data.Records record;
-    private List<StudyBean.Data.Records.Record_list> recordList;
-    private StudyBean.Data.Records.Record_list recordDetails;
-    private ArrayList<String> listUserName;
-    private ArrayList<String> listTypeId;
+    private ArrayList<StudyBean.Data.Records.Record_list> recordList;
+    private HashMap<String, ArrayList<StudyBean.Data.Records.Record_list>> recordMap;
     private ArrayList<String> listTime;
+    private HashMap<String,String> userNameMap;
+    private ArrayList<String> listuserName;
+    private ArrayList<String> listTypeId;
+    private StudyBean.Data.Records.Record_list recordDetails;
     private int page;
     private boolean isLoadMore = false;
     private UnitMenuAdapter menuAdapter;
@@ -50,8 +53,6 @@ public class UnitMenuActivity extends BaseActivity {
         businessId = SpUtils.getStringParam(mActivity, Keys.BUSINESSID).trim();
         // 定义一个数，记录页数
         pager = 0;
-
-
     }
 
     @Override
@@ -68,13 +69,14 @@ public class UnitMenuActivity extends BaseActivity {
     protected void initEvents() {
         super.initEvents();
 
+
+        recordMap = new HashMap<>();
         // 创建一个集合用来存放time
         listTime = new ArrayList<>();
-
-        listUserName = new ArrayList<>();
+        listuserName = new ArrayList<>();
+        userNameMap = new HashMap<>();
         // 创建一个集合用来存放typeId
         listTypeId = new ArrayList<>();
-
         // 监听listview的滑动监听
         lvStudy.setOnRefreshingListener(new MyOnRefreshingListener());
     }
@@ -136,6 +138,7 @@ public class UnitMenuActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
+            System.out.println("执行记录++"+response);
             StudyBean bean = new Gson().fromJson(response, StudyBean.class);
             if (bean != null) {
                 progressBar.setVisibility(View.GONE);
@@ -163,22 +166,34 @@ public class UnitMenuActivity extends BaseActivity {
             // 拿到一条信息记录
             record = records.get(i);
             String time = record.time;
-
-            listTime.add(time);
+            // 把每个记录的时间添加到map集合里面
+            //timeMap.put(i,time);
             // 拿到详细记录的集合
-            recordList = record.record_list;
-            //  遍历集合
-            for (int j = 0; j < recordList.size(); j++) {
-                // 获取到每条详细记录
-                recordDetails = recordList.get(j);
-                String typeId = recordDetails.type_id;
-                String userName = recordDetails.user_name;
-                listTypeId.add(typeId);
-                listUserName.add(userName);
+            recordList = (ArrayList<StudyBean.Data.Records.Record_list>) record.record_list;
+            // 把每个记录添加到map集合里面
+            recordMap.put(time,recordList);
+
+            for (Map.Entry<String, ArrayList<StudyBean.Data.Records.Record_list>> entry: recordMap.entrySet()) {
+                String timeList = entry.getKey();
+                listTime.add(timeList);
+                recordList = entry.getValue();
+                //  遍历集合
+                for (int j = 0; j < recordList.size(); j++) {
+                    // 获取到每条详细记录
+                    recordDetails = recordList.get(j);
+                    String typeId = recordDetails.type_id;
+                    String userName = recordDetails.user_name;
+                    listTypeId.add(typeId);
+                    listuserName.add(userName);
+                    userNameMap.put(userName,time);
+                }
+
             }
+
+
             if(!isLoadMore){
                 // 给listView设置适配器
-                menuAdapter = new UnitMenuAdapter(mActivity, listTime, listUserName, listTypeId,pager);
+                menuAdapter = new UnitMenuAdapter(mActivity,listuserName,recordMap ,listTime, userNameMap, listTypeId,pager);
                 lvStudy.setAdapter(menuAdapter);
             }else{
                 menuAdapter.notifyDataSetChanged();

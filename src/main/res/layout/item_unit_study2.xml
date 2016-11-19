@@ -11,5 +11,5 @@
         android:paddingBottom="10dp"
         android:paddingLeft="15dp"
         android:paddingTop="10dp"
-        android:text="2016.10.12" />
+        android:text="" />
 </LinearLayout>

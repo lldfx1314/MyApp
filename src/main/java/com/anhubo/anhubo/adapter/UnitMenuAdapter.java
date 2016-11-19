@@ -1,5 +1,6 @@
 package com.anhubo.anhubo.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,10 +8,12 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
+import com.anhubo.anhubo.bean.StudyBean;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -19,28 +22,34 @@ import java.util.Map;
 public class UnitMenuAdapter extends BaseAdapter {
 
     private Context mContext;
+    private HashMap<String, ArrayList<StudyBean.Data.Records.Record_list>> recordMap;
     private ArrayList<String> listTime;
-    private ArrayList<String> listUserName;
+    private HashMap<String, String> userNameMap;
+    private ArrayList<String> listuserName;
     private ArrayList<String> listTypeId;
     private int pager;
     ViewHolder hold;
     ViewHolder2 hold2;
     private Map<String, String> map;
     private String string;
-
     final int TYPE_1 = 0;
     final int TYPE_2 = 1;
+    private ArrayList<String> listUserName1;
+    private UnitMenuAdapter listtime;
 
-    public UnitMenuAdapter(Context context, ArrayList<String> listTime, ArrayList<String> listUserName, ArrayList<String> listTypeId, int pager) {
+    public UnitMenuAdapter(Context context, ArrayList<String> listuserName, HashMap<String, ArrayList<StudyBean.Data.Records.Record_list>> recordMap, ArrayList<String> listTime, HashMap<String, String> userNameMap, ArrayList<String> listTypeId, int pager) {
         this.mContext = context;
+        this.recordMap = recordMap;
         this.listTime = listTime;
-        this.listUserName = listUserName;
+        this.userNameMap = userNameMap;
+        this.listuserName = listuserName;
         this.listTypeId = listTypeId;
         this.pager = pager;
 
-
+        setMap(listTypeId);
 
     }
+
 
     private void setMap(ArrayList<String> listTypeId) {
         // 定义一个map集合，用来存放学习、检查或者演练
@@ -52,11 +61,11 @@ public class UnitMenuAdapter extends BaseAdapter {
 
             if (string != null) {
                 if (string.equals(1 + "")) {
-                    map.put(1+"", "学习");
+                    map.put(1 + "", "学习");
                 } else if (string.equals(2 + "")) {
-                    map.put(2+"", "设备检查");
+                    map.put(2 + "", "设备检查");
                 } else if (string.equals(3 + "")) {
-                    map.put(3+"", "演练");
+                    map.put(3 + "", "演练");
                 }
             }
         }
@@ -65,14 +74,25 @@ public class UnitMenuAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        setMap(listTypeId);
-        int p = position % 20;
+        listUserName1 = new ArrayList<>();
+
+        int p = position % 21;
 
         if (p == 0) {
 
             return TYPE_2;
         } else {
-
+            for (Map.Entry<String, ArrayList<StudyBean.Data.Records.Record_list>> entry : recordMap.entrySet()) {
+                ArrayList<StudyBean.Data.Records.Record_list> value = entry.getValue();
+                for (int i = 0; i < value.size(); i++) {
+                    StudyBean.Data.Records.Record_list recordList = value.get(i);
+                    String userName = recordList.user_name;
+                    listUserName1.add(userName);
+                    if (listUserName1.size() % 20 == 0) {
+                        return TYPE_2;
+                    }
+                }
+            }
             return TYPE_1;
         }
 
@@ -87,12 +107,12 @@ public class UnitMenuAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return listUserName == null ? 0 : listUserName.size();
+        return listuserName == null ? 0 : listuserName.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return listUserName.get(position);
+        return listuserName.get(position);
     }
 
     @Override
@@ -102,6 +122,7 @@ public class UnitMenuAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         int type = getItemViewType(position);
         if (convertView == null) {
 
@@ -132,29 +153,24 @@ public class UnitMenuAdapter extends BaseAdapter {
 
         //设置资源
         switch (type) {
+
             case TYPE_1:
 
                 String s = "";
                 for (int j = 0; j < listTypeId.size(); j++) {
-                    String str = listTypeId.get(j);
+                    String str = listTypeId.get(position);
                     s = map.get(str);
                 }
-                hold.tvStudy.setText(listUserName.get(position) + "完成了一次" + s);
+                hold.tvStudy.setText(listuserName.get(position) + "完成了一次" + s);
                 break;
             case TYPE_2:
-
-                for (int i = 0; i < listTime.size(); i++) {
-                    if (i <= pager) {
-
-
-                        hold2.tvTimeRecord.setText(listTime.get(i));
-                        break;
-                    }
-                }
+                // 取时间记录
+                hold2.tvTimeRecord.setText(userNameMap.get(listuserName.get(position)));
                 break;
             default:
                 break;
         }
+
 
         return convertView;
 
