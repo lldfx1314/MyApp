@@ -5,8 +5,8 @@ package com.anhubo.anhubo.protocol;
  * Created by Administrator on 2016/9/22.
  */
 public interface Urls {
-    //String UrlBase = "http://115.28.56.139/api/";
-    String UrlBase = "http://anhubo.com/api/";
+    String UrlBase = "http://115.28.56.139/api/";
+    //String UrlBase = "http://anhubo.com/api/";
     /**新增界面的接口*/
     String Url_Add = UrlBase+"Device/add_device_info";
 
@@ -111,4 +111,6 @@ public interface Urls {
     String Url_FindFeed = "http://anhubo.com/s/html/feedBackSchedule.html";
     /**发现，公告*/
     String Url_FindNotice = "http://115.28.56.139//s/html/afficheList.html";
+    /**定位*/
+    String Location =  UrlBase +"Building/get_addrest";
 }

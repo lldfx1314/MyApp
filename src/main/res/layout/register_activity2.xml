@@ -23,11 +23,12 @@
         android:id="@+id/et_reg2_building"
         style="@style/reg_login_edit_style"
         android:background="@drawable/edit_text"
-        android:enabled="false"
+        android:enabled="true"
+        android:focusable="false"
         android:gravity="center"
-        android:textColor="@color/text_gray"
         android:text="腾讯众创空间"
         />
+
     <!--楼层-->
     <EditText
         android:id="@+id/et_reg2_floorName"
@@ -52,9 +53,9 @@
         style="@style/reg_login_edit_style"
         android:layout_marginTop="15dp"
         android:background="@drawable/edit_text"
-        android:enabled="false"
+        android:enabled="true"
+        android:focusable="false"
         android:hint="安互保"
-        android:inputType="phone"
         />
     <!--完成-->
     <Button

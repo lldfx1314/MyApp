@@ -280,6 +280,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             //System.out.println("=======微信注册=======");
             getUId_weixin();
         }
+        /*Intent intent = new Intent(RegisterActivity.this, RegisterActivity2.class);
+        startActivity(intent);*/
     }
     /**
      * 网络请求
@@ -294,7 +296,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         params.put("password", pwd);
         params.put("users_qrcode", inviteCode);
 
-        params.put("third_type", 2 + "");//第三方类型
+        params.put("third_type", 2 + "");//第三方类型，2代表微信
         params.put("pic_url", imageUrl);// 头像
         params.put("unique_id", unionid);// 微信uid
         params.put("third_name", weixinName);// 微信昵称

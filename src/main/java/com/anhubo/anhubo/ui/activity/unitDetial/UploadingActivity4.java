@@ -78,11 +78,8 @@ public class UploadingActivity4 extends BaseActivity {
     private Dialog dialog;
     private Button btnTakephoto;
     private Button btnPhoto;
-    private String imgName;
     private PopBirthHelper popBirthHelper;
     private PopDateHelper popDateHelper;
-    private File filePhoto01;
-    private File filePhoto02;
     private String newTime;
     private String timeLong;
 
@@ -324,7 +321,6 @@ public class UploadingActivity4 extends BaseActivity {
         File file = new File("/sdcard/photo_anhubo/");
         file.mkdirs();
         String filename = file.getPath() + name;
-        filePhoto01 = new File(filename);
         try {
             fout = new FileOutputStream(filename);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fout);

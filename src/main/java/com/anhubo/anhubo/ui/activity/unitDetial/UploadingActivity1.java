@@ -67,11 +67,7 @@ public class UploadingActivity1 extends BaseActivity {
     private Button btnTakephoto;
     private Button btnPhoto;
     private Dialog dialog;
-    private String imgName;
 
-    private String selectedImagePath;
-    private File filePhoto02;
-    private File filePhoto01;
 
     @Override
     protected int getContentViewId() {
@@ -86,8 +82,7 @@ public class UploadingActivity1 extends BaseActivity {
 
     @Override
     protected void onLoadDatas() {
-        /*String s = null;
-        System.out.println(s.equals("any string"));*/
+
     }
 
 

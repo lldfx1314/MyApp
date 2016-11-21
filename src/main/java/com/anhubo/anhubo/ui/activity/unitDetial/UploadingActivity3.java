@@ -66,9 +66,7 @@ public class UploadingActivity3 extends BaseActivity {
     private Dialog dialog;
     private Button btnTakephoto;
     private Button btnPhoto;
-    private String imgName;
-    private File filePhoto02;
-    private File filePhoto01;
+
     @Override
     protected int getContentViewId() {
         return R.layout.activity_uploading3;

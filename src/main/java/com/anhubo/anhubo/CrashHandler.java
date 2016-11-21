@@ -110,15 +110,15 @@ public class CrashHandler implements UncaughtExceptionHandler {
         new Thread() {
             @Override
             public void run() {
-                Looper.prepare();/*
+                Looper.prepare();
                 Toast toast = Toast.makeText(mContext, "程序出错，即将退出:\r\n" + msg,
                         Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();*/
-                new AlertDialog(mContext).builder()
+                toast.show();
+                /*new AlertDialog(mContext).builder()
                         .setTitle("提示")
                         .setMsg("网络有问题，请检查")
-                        .setCancelable(false).show();
+                        .setCancelable(false).show();*/
 
                 Looper.loop();
             }

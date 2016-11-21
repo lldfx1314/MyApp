@@ -46,6 +46,8 @@
             <EditText
                 android:id="@+id/et_add_build"
                 style="@style/editTextStyle"
+                android:enabled="true"
+                android:focusable="false"
                 android:textColor="@color/text_gray"
                 />
         </LinearLayout>
@@ -67,6 +69,8 @@
             <EditText
                 android:id="@+id/et_add_unit"
                 style="@style/editTextStyle"
+                android:enabled="true"
+                android:focusable="false"
                 android:textColor="@color/text_gray"/>
         </LinearLayout>
 

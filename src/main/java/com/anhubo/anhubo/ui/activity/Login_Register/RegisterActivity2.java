@@ -11,6 +11,8 @@ import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.Register_Com_Bean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.HomeActivity;
+import com.anhubo.anhubo.ui.activity.unitDetial.BuildingActivity;
+import com.anhubo.anhubo.ui.activity.unitDetial.BusinessActivity;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
@@ -28,6 +30,8 @@ import okhttp3.Call;
  * Created by Administrator on 2016/9/27.
  */
 public class RegisterActivity2 extends BaseActivity {
+    private static final int REQUESTCODE1 = 1;
+    private static final int REQUESTCODE2 = 2;
     @InjectView(R.id.et_reg2_building)
     EditText etReg2JianZhu;
     @InjectView(R.id.et_reg2_floorName)
@@ -35,7 +39,7 @@ public class RegisterActivity2 extends BaseActivity {
     @InjectView(R.id.et_reg2_area)
     EditText etReg2QuYu;
     @InjectView(R.id.et_reg2_business)// 单位名称
-    EditText etReg2DanWei;
+            EditText etReg2DanWei;
     @InjectView(R.id.btn_register2)
     Button btnRegister2;
     private String floorName;
@@ -64,11 +68,37 @@ public class RegisterActivity2 extends BaseActivity {
 
     }
 
+
     @Override
     protected void onLoadDatas() {
 
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data != null) {
+            switch (requestCode) {
+                case REQUESTCODE1:
+                    if (resultCode == 1) {
+                        String stringExtra = data.getStringExtra(Keys.STR);
+                        if (!TextUtils.isEmpty(stringExtra)) {
+                            etReg2JianZhu.setText(stringExtra);
+                        }
+                    }
+                    break;
+                case REQUESTCODE2:
+                    if (resultCode == 2) {
+                        String stringExtra = data.getStringExtra(Keys.STR);
+                        if (!TextUtils.isEmpty(stringExtra)) {
+                            etReg2DanWei.setText(stringExtra);
+                        }
+                    }
+                    break;
+            }
+        }
+    }
 
     @OnClick({R.id.et_reg2_building, R.id.et_reg2_business, R.id.btn_register2})
     public void onClick(View view) {
@@ -76,11 +106,13 @@ public class RegisterActivity2 extends BaseActivity {
         switch (view.getId()) {
             case R.id.et_reg2_building://建筑
                 // 建筑的点击事件，地图poi
-
+                Intent intent = new Intent(mActivity, BuildingActivity.class);
+                startActivityForResult(intent, REQUESTCODE1);
                 break;
             case R.id.et_reg2_business://单位名称
                 // 单位的点击事件，地图poi
-
+                Intent intent2 = new Intent(mActivity, BusinessActivity.class);
+                startActivityForResult(intent2, REQUESTCODE2);
                 break;
             case R.id.btn_register2://完成的点击事件
                 /*if (TextUtils.isEmpty(floorName)) {
@@ -99,7 +131,10 @@ public class RegisterActivity2 extends BaseActivity {
                 break;
         }
     }
-    /**注册完成的点击事件*/
+
+    /**
+     * 注册完成的点击事件
+     */
     private void registerComPlete() {
         String url = Urls.Url_RegCom;
         HashMap<String, String> params = new HashMap<>();
@@ -114,6 +149,7 @@ public class RegisterActivity2 extends BaseActivity {
                 .build()//
                 .execute(new MyStringCallback());
     }
+
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
@@ -124,7 +160,7 @@ public class RegisterActivity2 extends BaseActivity {
         @Override
         public void onResponse(String response) {
             Register_Com_Bean bean = new Gson().fromJson(response, Register_Com_Bean.class);
-            if(bean!=null){
+            if (bean != null) {
                 // 拿到数据，开始存储数据，并跳转到主界面
                 code = bean.code;
                 msg = bean.msg;
@@ -135,14 +171,14 @@ public class RegisterActivity2 extends BaseActivity {
                 businessName = data.business_name;
                 businessId = data.business_id;
                 // 定义方法把数据存在本地，最好把方法写在工具类里面，便于复用
-                SpUtils.putParam(mActivity,Keys.UID,newUid);
-                SpUtils.putParam(mActivity,Keys.BUSINESSID,businessId);
-                SpUtils.putParam(mActivity,Keys.BULIDINGID,buildingId);
-                SpUtils.putParam(mActivity,Keys.BUILDINGNAME,buildingName);
-                SpUtils.putParam(mActivity,Keys.BUSINESSNAME,businessName);
+                SpUtils.putParam(mActivity, Keys.UID, newUid);
+                SpUtils.putParam(mActivity, Keys.BUSINESSID, businessId);
+                SpUtils.putParam(mActivity, Keys.BULIDINGID, buildingId);
+                SpUtils.putParam(mActivity, Keys.BUILDINGNAME, buildingName);
+                SpUtils.putParam(mActivity, Keys.BUSINESSNAME, businessName);
                 //跳转到主页面
                 enterHome();
-            }else {
+            } else {
                 System.out.println("RegisterActivity2界面+++===没拿到bean对象");
             }
         }

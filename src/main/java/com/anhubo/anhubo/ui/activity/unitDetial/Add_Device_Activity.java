@@ -106,6 +106,8 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
 
 
         // 设置点击事件
+        device_Build.setOnClickListener(this);
+        device_Unit.setOnClickListener(this);
         device_Name.setOnClickListener(this);
         complete.setOnClickListener(this);
         takePhoto.setOnClickListener(this);
@@ -188,6 +190,12 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.et_add_build://所属建筑
+                startActivity(new Intent(mActivity,BuildingActivity.class));
+                break;
+            case R.id.et_add_unit://所属单位
+                startActivity(new Intent(mActivity,BusinessActivity.class));
+                break;
             case R.id.et_add_type://设备名称的点击事件
                 startActivityForResult(new Intent(Add_Device_Activity.this, DeviceName_Activity.class), REQUEST_CODE);
                 break;
