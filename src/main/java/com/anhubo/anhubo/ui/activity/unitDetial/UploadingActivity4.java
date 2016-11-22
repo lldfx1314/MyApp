@@ -165,14 +165,14 @@ public class UploadingActivity4 extends BaseActivity {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("亲，请选择开始日期")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
             return;
         }
         if (TextUtils.isEmpty(timeLong)) {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("亲，请选择租房时长")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
             return;
         }
 
@@ -180,7 +180,7 @@ public class UploadingActivity4 extends BaseActivity {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("亲，请拍取租房合同照片")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
             return;
         }
 
@@ -210,7 +210,7 @@ public class UploadingActivity4 extends BaseActivity {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
 
             System.out.println("UploadingActivity4+++===界面失败" + e.getMessage());
         }

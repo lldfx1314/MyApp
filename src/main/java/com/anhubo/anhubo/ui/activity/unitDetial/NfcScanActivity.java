@@ -249,12 +249,12 @@ public class NfcScanActivity extends BaseActivity {
                     new AlertDialog(mActivity).builder()
                             .setTitle("提示")
                             .setMsg("演练结束")
-                            .setCancelable(false).show();
+                            .setCancelable(true).show();
                 } else {
                     new AlertDialog(mActivity).builder()
                             .setTitle("提示")
                             .setMsg("您已到达" + lastNumber + "层")
-                            .setCancelable(false).show();
+                            .setCancelable(true).show();
                 }
 
                 /***********演练**************************/
@@ -304,7 +304,7 @@ public class NfcScanActivity extends BaseActivity {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
             System.out.println("NfcScanActivity+++===没拿到数据" + e.getMessage());
         }
 
@@ -470,7 +470,6 @@ public class NfcScanActivity extends BaseActivity {
                 if (!TextUtils.isEmpty(time)) {
                     startTime = time;
                     // 拿到年龄,上传到网络
-                    //uploadAge(time);
                 } else {
                     ToastUtils.showToast(mActivity, "您所选日期大于当前时间");
                 }
@@ -525,7 +524,7 @@ public class NfcScanActivity extends BaseActivity {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
 
             System.out.println("NfcScanActivity+++===没拿到数据" + e.getMessage());
         }
@@ -651,7 +650,7 @@ public class NfcScanActivity extends BaseActivity {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("您的手机不支持NFC")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
             return;
         } else {
             if ((!nfcAdapter.isEnabled())) {
@@ -727,8 +726,6 @@ public class NfcScanActivity extends BaseActivity {
 
     }
 
-
-
     /**
      * 拿到记录解析并显示
      */
@@ -752,7 +749,7 @@ public class NfcScanActivity extends BaseActivity {
         new AlertDialog(mActivity).builder()
                 .setTitle("提示")
                 .setMsg("前往系统设置的应用列表里打开安互保的NFC权限？")
-                .setCancelable(false)
+                .setCancelable(true)
                 .setPositiveButton("确认", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -775,8 +772,5 @@ public class NfcScanActivity extends BaseActivity {
             public void onClick(View v) {
             }
         }).show();
-
-
     }
-
 }

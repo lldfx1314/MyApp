@@ -133,14 +133,14 @@ public class UploadingActivity2 extends BaseActivity {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("亲，必须拍取法人身份证正面照片")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
             return;
         }
         if (file2 == null) {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("亲，必须拍取法人身份证背面照片")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
             return;
         }
         progressBar.setVisibility(View.VISIBLE);
@@ -358,7 +358,7 @@ public class UploadingActivity2 extends BaseActivity {
         FileOutputStream fos = null;
         try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新内容写入会被覆盖
             fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);// 把图片写入指定文件夹中
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);// 把图片写入指定文件夹中
 
         } catch (Exception e) {
             e.printStackTrace();

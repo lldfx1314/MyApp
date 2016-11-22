@@ -277,29 +277,53 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
 
 
         if (TextUtils.isEmpty(build)) {
-            ToastUtils.showToast(mActivity, "建筑物不能为空");
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("请选择建筑")
+                    .setCancelable(true).show();
+            //ToastUtils.showToast(mActivity, "请选择建筑");
             return;
         }
         if (TextUtils.isEmpty(unit)) {
-            ToastUtils.showToast(mActivity, "单位不能为空");
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("请选择单位")
+                    .setCancelable(true).show();
+            //ToastUtils.showToast(mActivity, "请选择单位");
             return;
         }
         if (TextUtils.isEmpty(area)) {
-            ToastUtils.showToast(mActivity, "区域不能为空");
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("区域不能为空")
+                    .setCancelable(true).show();
+            //ToastUtils.showToast(mActivity, "区域不能为空");
             return;
         }
         if (TextUtils.isEmpty(devicePlace)) {
-            ToastUtils.showToast(mActivity, "设备位置不能为空");
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("设备位置不能为空")
+                    .setCancelable(true).show();
+            //ToastUtils.showToast(mActivity, "设备位置不能为空");
             return;
         }
         if (TextUtils.isEmpty(deviceName)) {
-            ToastUtils.showToast(mActivity, "设备名称不能为空");
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("亲，请拍取设备照片")
+                    .setCancelable(true).show();
+            //ToastUtils.showToast(mActivity, "设备名称不能为空");
             return;
         }
 
 
         if (newFile == null) {
-            ToastUtils.showToast(mActivity, "请拍照");
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("亲，请拍取设备照片")
+                    .setCancelable(true).show();
+            //ToastUtils.showToast(mActivity, "请拍取设备照片");
             return;
         } else {
             progressBar.setVisibility(View.VISIBLE);
@@ -310,8 +334,8 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
             params.put("building_name", build);// 所属建筑
             params.put("business_name", unit);//所属单位
             params.put("area_name", area);//所属区域
-            params.put("type", devicePlace);// 设备位置
-            params.put("name", deviceName);// 设备名称
+            params.put("name", devicePlace);// 设备位置
+            params.put("type", deviceName);// 设备名称
             OkHttpUtils.post()//
                     .addFile("file", "file01.png", newFile)//
                     .url(url)//

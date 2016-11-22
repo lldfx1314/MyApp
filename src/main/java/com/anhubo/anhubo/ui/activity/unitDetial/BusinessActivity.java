@@ -305,7 +305,7 @@ public class BusinessActivity extends AppCompatActivity {
             new AlertDialog(BusinessActivity.this).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
             System.out.println("定位+" + e.getMessage());
         }
 
@@ -418,8 +418,6 @@ public class BusinessActivity extends AppCompatActivity {
      * @param str 设置顶部状态栏显示文字
      */
     protected final void setTopBarDesc(String str) {
-        //TextView text = (TextView) findViewById(R.id.tvAddress);
-
         tvToptitle.setTextColor(getResources().getColor(R.color.backgroud_white));
         tvToptitle.setText(str);
 

@@ -35,6 +35,7 @@ import com.anhubo.anhubo.utils.ImageTools;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.ShowBottonDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -44,6 +45,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -79,9 +81,6 @@ public class EngineerActivity extends BaseActivity {
     private Button btnTakephoto;
     private Button btnPhoto;
     private boolean isClick = false;//判断是正面还是反面
-    private boolean isClick1 = false;// 判断是拍照还是相册
-    private File filePhoto02;
-    private File filePhoto01;
     private ListView listView;
     private ArrayList<String> list;
     private PopupWindow popupWindow;
@@ -132,17 +131,26 @@ public class EngineerActivity extends BaseActivity {
             case R.id.tv_submit_engineer:
                 // 姓名
                 if (TextUtils.isEmpty(engineerName)) {
-                    ToastUtils.showToast(mActivity, "请输入姓名");
+                    new AlertDialog(mActivity).builder()
+                            .setTitle("提示")
+                            .setMsg("请输入您的姓名")
+                            .setCancelable(true).show();
                     return;
                 }
                 // 评级
                 if (TextUtils.isEmpty(str)) {
-                    ToastUtils.showToast(mActivity, "请选择证书等级");
+                    new AlertDialog(mActivity).builder()
+                            .setTitle("提示")
+                            .setMsg("请选择证书等级")
+                            .setCancelable(true).show();
                     return;
                 }
                 // 证书编号
                 if (TextUtils.isEmpty(engineerPhone)) {
-                    ToastUtils.showToast(mActivity, "请输入证件遍号");
+                    new AlertDialog(mActivity).builder()
+                            .setTitle("提示")
+                            .setMsg("请输入证件遍号")
+                            .setCancelable(true).show();
                     return;
                 }
                 /**提交证书编号*/
@@ -211,8 +219,8 @@ public class EngineerActivity extends BaseActivity {
             }
         });
     }
-    File file1 = null;
-    File file2 = null;
+    private File file1 = null;
+    private File file2 = null;
     /**
      * 提交证书编号
      */
@@ -220,17 +228,21 @@ public class EngineerActivity extends BaseActivity {
         // 获取
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
 
-
-
-        if (file1 == null || !file1.exists()) {
-            ToastUtils.showLongToast(mActivity, "请先拍照或者获取图库图片");
+        if (file1 == null) {
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("亲，请拍取消防工程师正面照片")
+                    .setCancelable(true).show();
             return;
         }
-        if (file2 == null || !file2.exists()) {
-            ToastUtils.showLongToast(mActivity, "请先拍照或者获取图库图片");
+        if (file2 == null) {
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("亲，请拍取消防工程师背面照片")
+                    .setCancelable(true).show();
             return;
         }
-
+        progressBar.setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         params.put("re_num", engineerPhone);
@@ -252,7 +264,10 @@ public class EngineerActivity extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            ToastUtils.showToast(mActivity, "网络有问题，请检查");
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("网络有问题，请检查")
+                    .setCancelable(true).show();
 
             System.out.println("IdCardActivity+++===界面失败" + e.getMessage());
         }
@@ -262,6 +277,7 @@ public class EngineerActivity extends BaseActivity {
             //System.out.println(response);
             EngineerBean bean = new Gson().fromJson(response, EngineerBean.class);
             if (bean != null) {
+                progressBar.setVisibility(View.GONE);
                 int code = bean.code;
                 final String msg = bean.msg;
                 if (code != 0) {
@@ -329,7 +345,6 @@ public class EngineerActivity extends BaseActivity {
         c.moveToFirst();
         int columnIndex = c.getColumnIndex(filePathColumns[0]);
         String imagePath = c.getString(columnIndex);
-        filePhoto02 = new File(imagePath);
         Bitmap photo = BitmapFactory.decodeFile(imagePath);
         try {
 
@@ -338,16 +353,17 @@ public class EngineerActivity extends BaseActivity {
             savePicture(imgName, photo);*/
 
             if (photo != null) {
-                //为防止原始图片过大导致内存溢出，这里先缩小原图显示，然后释放原始Bitmap占用的内存
-                Bitmap bitmap = ImageTools.zoomBitmap(photo, photo.getWidth() / 5, photo.getHeight() / 5);
+                // 把本文件压缩后缓存到本地文件里面
+                savePicture(photo,"photo02");
+                File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
                 if (isClick) {
                     //显示图片1
-                    ivEngineer1.setImageBitmap(bitmap);
+                    ivEngineer1.setImageBitmap(photo);
                     // 给图片一赋值
                     file1 = filePhoto02;
                 } else {
                     //显示图片2
-                    ivEngineer2.setImageBitmap(bitmap);
+                    ivEngineer2.setImageBitmap(photo);
 //                    给图片二赋值
                     file2 = filePhoto02;
                 }
@@ -381,10 +397,9 @@ public class EngineerActivity extends BaseActivity {
         File file = new File("/sdcard/photo_anhubo/");
         file.mkdirs();
         String filename = file.getPath() + name;
-        filePhoto01 = new File(filename);//图片的文件
         try {
             fout = new FileOutputStream(filename);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fout);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fout);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -395,6 +410,9 @@ public class EngineerActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }
+        // 把本文件压缩后缓存到本地文件里面
+        savePicture(bitmap,"photo01");
+        File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
         if (isClick) {
             //显示图片一
             ivEngineer1.setImageBitmap(bitmap);
@@ -407,7 +425,30 @@ public class EngineerActivity extends BaseActivity {
             file2 = filePhoto01;
         }
     }
+    /**
+     * 保存图片到本应用下
+     **/
+    private void savePicture(Bitmap bitmap,String fileName) {
 
+        FileOutputStream fos = null;
+        try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新写入内容会被覆盖
+            //fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
+            OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() +"/"+fileName);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);// 把图片写入指定文件夹中
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != fos) {
+                    fos.close();
+                    fos = null;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
     /**
      * 弹出对话框
      */

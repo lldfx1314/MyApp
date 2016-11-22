@@ -283,13 +283,13 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                     new AlertDialog(mActivity).builder()
                             .setTitle("提示")
                             .setMsg("演练结束")
-                            .setCancelable(false).show();
+                            .setCancelable(true).show();
                 } else {
                     //Toast.makeText(mActivity, "您已到达" + lastNumber + "层", Toast.LENGTH_LONG).show();
                     new AlertDialog(mActivity).builder()
                             .setTitle("提示")
                             .setMsg("您已到达" + lastNumber + "层")
-                            .setCancelable(false).show();
+                            .setCancelable(true).show();
                 }
                 /***********演练**************************/
             } else {
@@ -323,7 +323,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
             System.out.println("QrScanActivity+++===没拿到数据" + e.getMessage());
         }
 
@@ -549,7 +549,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         new AlertDialog(mActivity).builder()
                 .setTitle("提示")
                 .setMsg("前往系统设置的应用列表里打开安互保的相机权限？")
-                .setCancelable(false)
+                .setCancelable(true)
                 .setPositiveButton("确认", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -676,7 +676,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
 
             System.out.println("QrScanActivity+++完成===没拿到数据" + e.getMessage());
         }

@@ -115,7 +115,7 @@ public class MyFragment extends BaseFragment {
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("哈哈哈"+response);
+            System.out.println("哈哈哈"+response);
             bean = new Gson().fromJson(response, MyFragmentBean.class);
             if (bean != null) {
                 age = bean.data.age;
@@ -141,6 +141,9 @@ public class MyFragment extends BaseFragment {
     private void setData() {
         boolean booleanParam = PersonMsgActivity.isSetHeadIcon;
         String weixin_img = SpUtils.getStringParam(mActivity, Keys.WEIXINIMG);
+        // 微信登陆后保存的信息
+
+
         // 头像
         if (!TextUtils.isEmpty(img)) {
             // 用户自己设置过头像，就显示自己的头像
@@ -282,7 +285,7 @@ public class MyFragment extends BaseFragment {
      * 登出方法
      */
     private void logOut() {
-        // 保存参数
+        // 清楚消息
         SpUtils.putParam(mActivity, Keys.UID, null);
         SpUtils.putParam(mActivity, Keys.BUSINESSID, null);
         SpUtils.putParam(mActivity, Keys.BULIDINGID, null);
@@ -295,7 +298,7 @@ public class MyFragment extends BaseFragment {
         SpUtils.putParam(mActivity, Keys.SCREENNAME, null);// 清除微信昵称
 
 
-        //跳转到主页面
+        //跳转到登录页面
         startActivity(new Intent(mActivity, Login_Message.class));
         getActivity().finish();
     }

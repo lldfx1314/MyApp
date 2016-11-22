@@ -20,6 +20,7 @@ public class MyApp extends Application {
     private static Context context;
     private static Handler handler;
     private static RequestQueue requestQueue;	// NoHttp的请求列表
+    /**微信appKey*/
     {
         PlatformConfig.setWeixin("wx368b75520f5563b1", "ebf8da8d9862308a026173fa8cf4313a");
     }

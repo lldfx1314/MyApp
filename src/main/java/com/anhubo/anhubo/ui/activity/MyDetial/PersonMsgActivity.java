@@ -56,6 +56,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -112,9 +113,6 @@ public class PersonMsgActivity extends BaseActivity {
     private Dialog dialog;
     private Button btnTakephoto;
     private Button btnPhoto;
-    private boolean isClick = false;
-    private File filePhoto01;
-    private File filePhoto02;
     private boolean isShow;
     private String age;
     private String sex;
@@ -223,12 +221,10 @@ public class PersonMsgActivity extends BaseActivity {
                 break;
             case R.id.btn_popDialog_takephoto:
                 // 拍照
-                isClick = true;
                 takePhoto();
                 break;
             case R.id.btn_popDialog_photo:
                 // 相册
-                isClick = false;
                 getPhoto();
                 break;
         }
@@ -748,29 +744,20 @@ public class PersonMsgActivity extends BaseActivity {
     /**
      * 拿到拍到的照片去上传
      */
+    private File newFile = null;
     private void upLoading() {
-
 
         // 获取
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
-        File file = null;
-        if (isClick) {
-            file = filePhoto01;//相机照片
-        } else {
-            file = filePhoto02;//相册照片
-        }
-        if (file == null || !file.exists()) {
-            ToastUtils.showLongToast(mActivity, "请先拍照或者获取图库图片");
+        if (newFile == null) {
             return;
         }
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
-
-
         String url = Urls.Url_UpLoadingHeaderIcon;
 
         OkHttpUtils.post()//
-                .addFile("file", "file01.png", file)//
+                .addFile("file", "file01.png", newFile)//
                 .url(url)//
                 .params(params)//
                 .build()//
@@ -824,7 +811,6 @@ public class PersonMsgActivity extends BaseActivity {
         c.moveToFirst();
         int columnIndex = c.getColumnIndex(filePathColumns[0]);
         String imagePath = c.getString(columnIndex);
-        filePhoto02 = new File(imagePath);
         Bitmap photo = BitmapFactory.decodeFile(imagePath);
         try {
 
@@ -834,11 +820,13 @@ public class PersonMsgActivity extends BaseActivity {
 
 
             if (photo != null) {
-                //为防止原始图片过大导致内存溢出，这里先缩小原图显示，然后释放原始Bitmap占用的内存
-                Bitmap bitmap = ImageTools.zoomBitmap(photo, photo.getWidth() / 5, photo.getHeight() / 5);
 
                 //显示图片
-                ivHeaderIcon.setImageBitmap(bitmap);
+                ivHeaderIcon.setImageBitmap(photo);
+                // 把本文件压缩后缓存到本地文件里面
+                savePicture(photo,"photo02");
+                File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
+                newFile = filePhoto02;
                 return true;
             }
 
@@ -869,10 +857,9 @@ public class PersonMsgActivity extends BaseActivity {
         File file = new File("/sdcard/photo_anhubo/");
         file.mkdirs();
         String filename = file.getPath() + name;
-        filePhoto01 = new File(filename);//图片的文件
         try {
             fout = new FileOutputStream(filename);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fout);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fout);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -887,9 +874,38 @@ public class PersonMsgActivity extends BaseActivity {
         if (bitmap != null) {
             //显示图片
             ivHeaderIcon.setImageBitmap(bitmap);
+            // 把本文件压缩后缓存到本地文件里面
+            savePicture(bitmap,"photo01");
+            File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
+            newFile = filePhoto01;
             return true;
         }
         return false;
+    }
+
+    /**
+     * 保存图片到本应用下
+     **/
+    private void savePicture(Bitmap bitmap,String fileName) {
+
+        FileOutputStream fos = null;
+        try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新写入内容会被覆盖
+            //fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
+            OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() +"/"+fileName);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);// 把图片写入指定文件夹中
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != fos) {
+                    fos.close();
+                    fos = null;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**

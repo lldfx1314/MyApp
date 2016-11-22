@@ -121,7 +121,7 @@ public class UploadingActivity3 extends BaseActivity {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("亲，请拍取消防审批同意开业通知照片")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
             return;
         }
         progressBar.setVisibility(View.VISIBLE);
@@ -148,7 +148,7 @@ public class UploadingActivity3 extends BaseActivity {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
 
             System.out.println("UploadingActivity3+++===界面失败"+e.getMessage());
         }

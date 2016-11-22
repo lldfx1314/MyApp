@@ -48,7 +48,7 @@
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_iv"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/anhuboicon" />
+                    android:src="@drawable/newicon" />
 
 
                 <ImageView

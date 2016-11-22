@@ -301,13 +301,13 @@ public class BuildingActivity extends AppCompatActivity {
             new AlertDialog(BuildingActivity.this).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
             System.out.println("定位+" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
-            System.out.println("地图建筑界面+++===" + response);
+            //System.out.println("地图建筑界面+++===" + response);
             LocationBean bean = new Gson().fromJson(response, LocationBean.class);
             if (bean != null) {
                 progressBar.setVisibility(View.GONE);

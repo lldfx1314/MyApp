@@ -122,7 +122,7 @@ public class UploadingActivity1 extends BaseActivity {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("亲，请拍取营业执照照片")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
             return;
         }
 
@@ -152,7 +152,7 @@ public class UploadingActivity1 extends BaseActivity {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
 
         }
 
@@ -329,8 +329,6 @@ public class UploadingActivity1 extends BaseActivity {
         // 设置监听
         btnTakephoto.setOnClickListener(this);
         btnPhoto.setOnClickListener(this);
-
-
     }
 
 }

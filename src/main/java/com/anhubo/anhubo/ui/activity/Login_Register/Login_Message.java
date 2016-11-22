@@ -257,6 +257,7 @@ public class Login_Message extends BaseActivity {
                     SpUtils.putParam(mActivity, Keys.BULIDINGID, buildingId);
                     SpUtils.putParam(mActivity, Keys.BUILDINGNAME, buildingName);
                     SpUtils.putParam(mActivity, Keys.BUSINESSNAME, businessName);
+
                     //跳转到主页面
                     enterHome();
                 } else if (exict == 0) {
@@ -268,6 +269,7 @@ public class Login_Message extends BaseActivity {
                     intent.putExtra(Keys.WEIXINFORZHUCE,"weixinforzhuce");
                     intent.putExtra(Keys.UNIONID,unionid);
                     intent.putExtra(Keys.PROFILE_IMAGE_URL,profile_image_url);
+                    System.out.println("hduiewhfi7777777777+++===="+profile_image_url);
                     intent.putExtra(Keys.SCREEN_NAME,screen_name);
                     startActivity(intent);
                 }

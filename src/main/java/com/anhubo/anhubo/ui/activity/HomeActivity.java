@@ -1,5 +1,6 @@
 package com.anhubo.anhubo.ui.activity;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
@@ -13,6 +14,7 @@ import com.anhubo.anhubo.ui.impl.BuildFragment;
 import com.anhubo.anhubo.ui.impl.FindFragment;
 import com.anhubo.anhubo.ui.impl.MyFragment;
 import com.anhubo.anhubo.ui.impl.UnitFragment;
+import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.NoScrollViewPager;
@@ -52,6 +54,8 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     protected void initEvents() {
+        Intent intent = getIntent();
+
 
         // 初始化集合
         list = new ArrayList();

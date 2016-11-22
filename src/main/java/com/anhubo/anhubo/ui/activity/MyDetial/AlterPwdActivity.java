@@ -14,6 +14,7 @@ import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
+import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -79,32 +80,56 @@ public class AlterPwdActivity extends BaseActivity {
                 if (!TextUtils.isEmpty(oldPwd)) {
                     boolean isoldPwd = Utils.isRightPwd(oldPwd);
                     if (!isoldPwd) {
-                        ToastUtils.showToast(mActivity, "原密码输入不合法");
+                        new AlertDialog(mActivity).builder()
+                                .setTitle("提示")
+                                .setMsg("原密码输入不合法")
+                                .setCancelable(true).show();
+                        //ToastUtils.showToast(mActivity, "原密码输入不合法");
                         return;
                     }
                 } else {
-                    ToastUtils.showToast(mActivity, "请输入原密码");
+                    new AlertDialog(mActivity).builder()
+                            .setTitle("提示")
+                            .setMsg("请输入原密码")
+                            .setCancelable(true).show();
+                    //ToastUtils.showToast(mActivity, "请输入原密码");
                     return;
                 }
 
                 if (!TextUtils.isEmpty(newPwd1)) {
                     boolean isnewPwd1 = Utils.isRightPwd(newPwd1);
                     if (!isnewPwd1) {
-                        ToastUtils.showToast(mActivity, "请输入8-16位数字和字母的组合");
+                        new AlertDialog(mActivity).builder()
+                                .setTitle("提示")
+                                .setMsg("请输入8-16位数字和字母的组合")
+                                .setCancelable(true).show();
+                        //ToastUtils.showToast(mActivity, "请输入8-16位数字和字母的组合");
                         return;
                     }
                 } else {
-                    ToastUtils.showToast(mActivity, "请输入新密码");
+                    new AlertDialog(mActivity).builder()
+                            .setTitle("提示")
+                            .setMsg("请输入新密码")
+                            .setCancelable(true).show();
+                    //ToastUtils.showToast(mActivity, "请输入新密码");
                     return;
                 }
 
                 if (!TextUtils.isEmpty(newPwd2)) {
                     if (!TextUtils.equals(newPwd1, newPwd2)) {
-                        ToastUtils.showToast(mActivity, "两次输入不一致");
+                        new AlertDialog(mActivity).builder()
+                                .setTitle("提示")
+                                .setMsg("两次输入不一致")
+                                .setCancelable(true).show();
+                        //ToastUtils.showToast(mActivity, "两次输入不一致");
                         return;
                     }
                 } else {
-                    ToastUtils.showToast(mActivity, "请再次输入新密码");
+                    new AlertDialog(mActivity).builder()
+                            .setTitle("提示")
+                            .setMsg("请再次输入新密码")
+                            .setCancelable(true).show();
+                    //ToastUtils.showToast(mActivity, "请再次输入新密码");
                     return;
                 }
                 /**走网络，修改密码*/
@@ -118,6 +143,7 @@ public class AlterPwdActivity extends BaseActivity {
     /**走网络，修改密码*/
     private void alterPwd(String oldPwd, String newPwd2) {
         // 走网络，提交性别
+        progressBar.setVisibility(View.VISIBLE);
         String url = Urls.Url_My_AlterPwd;
         HashMap<String, String> params = new HashMap<>();
         params.put("uid", uid);
@@ -143,6 +169,7 @@ public class AlterPwdActivity extends BaseActivity {
             //System.out.println(response);
             MyAlterPwdBean bean = new Gson().fromJson(response, MyAlterPwdBean.class);
             if(bean!=null){
+                progressBar.setVisibility(View.GONE);
                 int code = bean.code;
                 String msg = bean.msg;
                 if(code != 0){
