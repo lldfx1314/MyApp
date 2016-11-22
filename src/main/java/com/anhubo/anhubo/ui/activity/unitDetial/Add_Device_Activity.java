@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
@@ -44,6 +45,8 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
 
     private static final int CAMERA = 1;
     private static final int REQUEST_CODE = 2;
+    private static final int REQUESTCODE1 = 3;
+    private static final int REQUESTCODE2 = 4;
     private Button complete;
     private LinearLayout takePhoto;
     private EditText device_Name;
@@ -57,13 +60,12 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     private String unit;
     private String area;
     private String devicePlace;
-    private File filePhoto;
     private String cardnumber;
     private String uid;
     private String deviceId;
     private String buildingname;
     private String businessname;
-    private File file1 = null;
+    private File newFile;
 
     @Override
     protected void initConfig() {
@@ -142,6 +144,22 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
                         showPhoto01(intent);
                     }
                     break;
+                case REQUESTCODE1:
+                    if (resultCode == 1) {
+                        String stringExtra = intent.getStringExtra(Keys.STR);
+                        if (!TextUtils.isEmpty(stringExtra)) {
+                            device_Build.setText(stringExtra);
+                        }
+                    }
+                    break;
+                case REQUESTCODE2:
+                    if (resultCode == 2) {
+                        String stringExtra = intent.getStringExtra(Keys.STR);
+                        if (!TextUtils.isEmpty(stringExtra)) {
+                            device_Unit.setText(stringExtra);
+                        }
+                    }
+                    break;
                 default:
                     break;
             }
@@ -167,10 +185,10 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         File file = new File("/sdcard/photo_anhubo/");
         file.mkdirs();
         String filename = file.getPath() + name;
-        filePhoto = new File(filename);//图片的文件对象
+        //filePhoto = new File(filename);//图片的文件对象
         try {
             fout = new FileOutputStream(filename);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fout);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fout);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -183,7 +201,36 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         }
         //显示图片
         iv.setImageBitmap(bitmap);
-        file1 = filePhoto;
+        //file1 = filePhoto;
+        // 把本文件压缩后缓存到本地文件里面
+        savePicture(bitmap, "photo01");
+        File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
+        newFile = filePhoto01;
+    }
+
+    /**
+     * 保存图片到本应用下
+     **/
+    private void savePicture(Bitmap bitmap, String fileName) {
+
+        FileOutputStream fos = null;
+        try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新写入内容会被覆盖
+            //fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
+            OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() + "/" + fileName);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);// 把图片写入指定文件夹中
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != fos) {
+                    fos.close();
+                    fos = null;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
@@ -191,10 +238,14 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.et_add_build://所属建筑
-                startActivity(new Intent(mActivity,BuildingActivity.class));
+                // 建筑的点击事件，地图poi
+                Intent intent = new Intent(mActivity, BuildingActivity.class);
+                startActivityForResult(intent, REQUESTCODE1);
                 break;
             case R.id.et_add_unit://所属单位
-                startActivity(new Intent(mActivity,BusinessActivity.class));
+                // 单位的点击事件，地图poi
+                Intent intent2 = new Intent(mActivity, BusinessActivity.class);
+                startActivityForResult(intent2, REQUESTCODE2);
                 break;
             case R.id.et_add_type://设备名称的点击事件
                 startActivityForResult(new Intent(Add_Device_Activity.this, DeviceName_Activity.class), REQUEST_CODE);
@@ -247,7 +298,7 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         }
 
 
-        if (file1 == null) {
+        if (newFile == null) {
             ToastUtils.showToast(mActivity, "请拍照");
             return;
         } else {
@@ -262,7 +313,7 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
             params.put("type", devicePlace);// 设备位置
             params.put("name", deviceName);// 设备名称
             OkHttpUtils.post()//
-                    .addFile("file", "file01.png", file1)//
+                    .addFile("file", "file01.png", newFile)//
                     .url(url)//
                     .params(params)//
                     .build()//

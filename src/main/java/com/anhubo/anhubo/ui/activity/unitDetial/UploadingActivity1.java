@@ -153,7 +153,6 @@ public class UploadingActivity1 extends BaseActivity {
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(false).show();
-            //ToastUtils.showToast(mActivity, "网络有问题，请检查");
 
         }
 

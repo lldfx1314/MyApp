@@ -24,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.EngineerAdapter;
@@ -37,8 +36,6 @@ import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.ShowBottonDialog;
-import com.anhubo.anhubo.view.ShowDialogEngineer;
-import com.anhubo.anhubo.view.ShowDialogTop;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;

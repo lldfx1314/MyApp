@@ -84,6 +84,7 @@ public class UnitMenuActivity extends BaseActivity {
     @Override
     protected void onLoadDatas() {
         /**获取网络数据*/
+        progressBar.setVisibility(View.VISIBLE);
         getData();
     }
 
@@ -92,7 +93,7 @@ public class UnitMenuActivity extends BaseActivity {
      * 获取网络数据
      */
     private void getData() {
-        progressBar.setVisibility(View.VISIBLE);
+
         String url = Urls.Url_studyRecord;
         HashMap<String, String> params = new HashMap<>();
         params.put("business_id", businessId);
@@ -116,6 +117,7 @@ public class UnitMenuActivity extends BaseActivity {
             if(pager<=page){
                 // 加载更多业务
                 isLoadMore = true;
+
                 getData();
             }else{
                 // 恢复Listview的加载更多状态

@@ -1,6 +1,7 @@
 package com.anhubo.anhubo.view;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -55,6 +56,7 @@ public class StateLayout extends FrameLayout {
 	/**
 	 * 把xml中的View填充成Java对象的View
 	 */
+	@SuppressLint("MissingSuperCall")
 	@Override
 	protected void onFinishInflate() {
 		loadingView = findViewById(R.id.loadingView);

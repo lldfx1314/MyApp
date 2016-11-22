@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/bg_upload">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_upload">
 
     <include android:id="@+id/top_title"
         layout="@layout/layout_top_bar"></include>
@@ -48,6 +47,7 @@
                 style="@style/editTextStyle"
                 android:enabled="true"
                 android:focusable="false"
+                android:drawableRight="@drawable/arrow_right"
                 android:textColor="@color/text_gray"
                 />
         </LinearLayout>
@@ -71,6 +71,7 @@
                 style="@style/editTextStyle"
                 android:enabled="true"
                 android:focusable="false"
+                android:drawableRight="@drawable/arrow_right"
                 android:textColor="@color/text_gray"/>
         </LinearLayout>
 
@@ -111,7 +112,7 @@
             <EditText
                 android:id="@+id/et_add_name"
                 style="@style/editTextStyle"
-                android:hint="命名设备位置"
+                android:hint="设备所在位置"
                 />
         </LinearLayout>
 

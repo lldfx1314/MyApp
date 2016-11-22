@@ -3,6 +3,7 @@ package com.anhubo.anhubo.ui.activity.unitDetial;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -36,6 +37,7 @@ import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +71,7 @@ public class BusinessActivity extends AppCompatActivity {
     private UiSettings settings;
     //声明mListener对象，定位监听器
     private LocationSource.OnLocationChangedListener mListener = null;
+    private ArrayList<String> listBuilding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,12 +115,49 @@ public class BusinessActivity extends AppCompatActivity {
     }
 
     private void initEvents() {
+        listBuilding =  new ArrayList<String>();
         // 设置地图的图标
         setIcon();
 
         // 开始定位
         getlocationData();
+        //添加建筑
+        addBuilding();
 
+    }
+
+    private void addBuilding() {
+        tvTopBarRight.setVisibility(View.VISIBLE);
+        tvTopBarRight.setText("添加");
+        tvTopBarRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog();
+            }
+        });
+    }
+
+    private void dialog() {
+        final AlertDialog alertDialog = new AlertDialog(BusinessActivity.this);
+        alertDialog
+                .builder()
+                .setTitle("提示")
+                .setEditHint("请输入您所在的单位")
+                .setCancelable(false)
+                .setPositiveButton("确认", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String string = alertDialog.et_msg.getText().toString().trim();
+                        if (!TextUtils.isEmpty(string)) {
+                            // 返回增加界面
+                            returnAddActivity(string);
+                        }
+                    }
+                }).setNegativeButton("取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        }).show();
     }
 
     /**
@@ -133,7 +173,7 @@ public class BusinessActivity extends AppCompatActivity {
             // 是否显示定位按钮
             settings.setMyLocationButtonEnabled(true);
             //添加指南针
-            settings.setCompassEnabled(true);
+            //settings.setCompassEnabled(true);
 
             //aMap.getCameraPosition(); 方法可以获取地图的旋转角度
 
@@ -172,6 +212,7 @@ public class BusinessActivity extends AppCompatActivity {
         // 注意设置合适的定位时间的间隔（最小间隔支持为2000ms），并且在合适时间调用stopLocation()方法来取消定位请求
         // 在定位结束后，在合适的生命周期调用onDestroy()方法
         // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
+        // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
         //启动定位
         mlocationClient.startLocation();
 
@@ -209,6 +250,7 @@ public class BusinessActivity extends AppCompatActivity {
                         isFirstLoc = false;
                     }
                     // 拿到经纬度请求网络
+                    progressBar.setVisibility(View.VISIBLE);
                     getData();
 
 
@@ -243,7 +285,7 @@ public class BusinessActivity extends AppCompatActivity {
      */
     private void getData() {
         String location = String.valueOf(latitude) + "," + String.valueOf(longitude);
-        progressBar.setVisibility(View.VISIBLE);
+
         String url = Urls.Location;
         Map<String, String> params = new HashMap<>();
         params.put("location", location);
@@ -308,16 +350,21 @@ public class BusinessActivity extends AppCompatActivity {
     private void processData(LocationBean bean) {
         int code = bean.code;
         String msg = bean.msg;
+        page = bean.data.page;
         List<String> business = bean.data.business;
-        if (!business.isEmpty()) {
 
-            if (!isLoadMore) {
-                // 给listView设置适配器
-                adapter = new Business_Location_Adapter(this, business);
-                lvBusiness.setAdapter(adapter);
-            } else {
-                adapter.notifyDataSetChanged();
+        if (!business.isEmpty()) {
+            for (int i = 0; i < business.size(); i++) {
+                String s = business.get(i);
+                listBuilding.add(s);
             }
+        }
+        if (!isLoadMore) {
+            // 给listView设置适配器
+            adapter = new Business_Location_Adapter(this, listBuilding);
+            lvBusiness.setAdapter(adapter);
+        } else {
+            adapter.notifyDataSetChanged();
         }
     }
 

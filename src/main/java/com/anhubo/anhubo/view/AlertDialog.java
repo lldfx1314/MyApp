@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,8 +30,10 @@ public class AlertDialog {
 	private Display display;
 	private boolean showTitle = false;
 	private boolean showMsg = false;
+	private boolean showEdit = false;
 	private boolean showPosBtn = false;
 	private boolean showNegBtn = false;
+	public EditText et_msg;
 
 	public AlertDialog(Context context) {
 		this.context = context;
@@ -50,6 +53,8 @@ public class AlertDialog {
 		txt_title.setVisibility(View.GONE);
 		txt_msg = (TextView) view.findViewById(R.id.txt_msg);
 		txt_msg.setVisibility(View.GONE);
+		et_msg = (EditText) view.findViewById(R.id.et_msg);
+		et_msg.setVisibility(View.GONE);
 		btn_neg = (Button) view.findViewById(R.id.btn_neg);
 		btn_neg.setVisibility(View.GONE);
 		btn_pos = (Button) view.findViewById(R.id.btn_pos);
@@ -84,6 +89,16 @@ public class AlertDialog {
 			txt_msg.setText("内容");
 		} else {
 			txt_msg.setText(msg);
+		}
+		return this;
+	}
+
+	public AlertDialog setEditHint(String msg) {
+		showEdit = true;
+		if ("".equals(msg)) {
+			et_msg.setText("");
+		} else {
+			et_msg.setHint(msg);
 		}
 		return this;
 	}
@@ -141,6 +156,10 @@ public class AlertDialog {
 
 		if (showMsg) {
 			txt_msg.setVisibility(View.VISIBLE);
+		}
+
+		if(showEdit){
+			et_msg.setVisibility(View.VISIBLE);
 		}
 
 		if (!showPosBtn && !showNegBtn) {

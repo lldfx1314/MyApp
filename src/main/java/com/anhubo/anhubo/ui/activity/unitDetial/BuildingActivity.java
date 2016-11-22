@@ -1,8 +1,11 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -35,6 +38,7 @@ import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +48,7 @@ import okhttp3.Call;
 /**
  * Created by LUOLI on 2016/11/21.
  */
-public class BuildingActivity extends AppCompatActivity{
+public class BuildingActivity extends AppCompatActivity {
 
     MapView mMapView = null;
     private RefreshListview lvBuilding;
@@ -61,12 +65,13 @@ public class BuildingActivity extends AppCompatActivity{
     private double longitude;
     private int pager = 0;
     private int page;
-    private boolean isLoadMore= false;
+    private boolean isLoadMore = false;
     private Business_Location_Adapter adapter;
     private AMap aMap;
     private UiSettings settings;
     //声明mListener对象，定位监听器
     private LocationSource.OnLocationChangedListener mListener = null;
+    private ArrayList<String> listBuilding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,30 +106,72 @@ public class BuildingActivity extends AppCompatActivity{
             }
         });
     }
+
     private void returnAddActivity(String str) {
         Intent intent = new Intent();
         intent.putExtra(Keys.STR, str);
         setResult(1, intent);
         finish();
     }
+
     private void initEvents() {
+        listBuilding = new ArrayList<String>();
         // 设置地图的图标
         setIcon();
         // 开始定位
         getlocationData();
+        //添加建筑
+        addBuilding();
     }
-    /**设置地图的图标*/
+
+    private void addBuilding() {
+        tvTopBarRight.setVisibility(View.VISIBLE);
+        tvTopBarRight.setText("添加");
+        tvTopBarRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog();
+            }
+        });
+    }
+
+    private void dialog() {
+        final AlertDialog alertDialog = new AlertDialog(BuildingActivity.this);
+        alertDialog
+                .builder()
+                .setTitle("提示")
+                .setEditHint("请输入您所在的建筑")
+                .setCancelable(false)
+                .setPositiveButton("确认", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String string = alertDialog.et_msg.getText().toString().trim();
+                        if (!TextUtils.isEmpty(string)) {
+                            // 返回增加界面
+                            returnAddActivity(string);
+                        }
+                    }
+                }).setNegativeButton("取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        }).show();
+    }
+
+    /**
+     * 设置地图的图标
+     */
     private void setIcon() {
         if (aMap == null) {
 
-            aMap =  mMapView.getMap();
+            aMap = mMapView.getMap();
             aMap.setLocationSource(mLocationLiSource);//设置了定位的监听,这里要实现LocationSource接口
             //UiSettings 主要是对地图上的控件的管理，比如指南针、logo位置（不能隐藏）.....
             settings = aMap.getUiSettings();
             // 是否显示定位按钮
             settings.setMyLocationButtonEnabled(true);
             //添加指南针
-            settings.setCompassEnabled(true);
+            //settings.setCompassEnabled(true);
 
             //aMap.getCameraPosition(); 方法可以获取地图的旋转角度
 
@@ -146,7 +193,9 @@ public class BuildingActivity extends AppCompatActivity{
     //声明mLocationOption对象
     public AMapLocationClientOption mLocationOption = null;
 
-    /** 开始定位，获取经纬度 */
+    /**
+     * 开始定位，获取经纬度
+     */
     private void getlocationData() {
 
         mlocationClient = new AMapLocationClient(this);
@@ -199,6 +248,7 @@ public class BuildingActivity extends AppCompatActivity{
                         isFirstLoc = false;
                     }
                     // 拿到经纬度请求网络
+                    progressBar.setVisibility(View.VISIBLE);
                     getData();
 
 
@@ -212,7 +262,9 @@ public class BuildingActivity extends AppCompatActivity{
         }
 
     };
-    /**定位的监听*/
+    /**
+     * 定位的监听
+     */
     public LocationSource mLocationLiSource = new LocationSource() {
 
         @Override
@@ -227,12 +279,12 @@ public class BuildingActivity extends AppCompatActivity{
     };
 
     private void getData() {
-        String location = String.valueOf(latitude) +","+ String.valueOf(longitude);
-        progressBar.setVisibility(View.VISIBLE);
+        String location = String.valueOf(latitude) + "," + String.valueOf(longitude);
+
         String url = Urls.Location;
         Map<String, String> params = new HashMap<>();
         params.put("location", location);
-        params.put("page", pager+"");
+        params.put("page", pager + "");
         pager++;
         OkHttpUtils.post()//
                 .url(url)//
@@ -240,8 +292,6 @@ public class BuildingActivity extends AppCompatActivity{
                 .build()//
                 .execute(new MyStringCallback());
     }
-
-
 
 
     class MyStringCallback extends StringCallback {
@@ -252,20 +302,20 @@ public class BuildingActivity extends AppCompatActivity{
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(false).show();
-            System.out.println("定位+"+e.getMessage());
+            System.out.println("定位+" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("地图建筑界面+++==="+response);
+            System.out.println("地图建筑界面+++===" + response);
             LocationBean bean = new Gson().fromJson(response, LocationBean.class);
-            if(bean != null){
+            if (bean != null) {
                 progressBar.setVisibility(View.GONE);
                 processData(bean);
                 isLoadMore = false;
                 // 恢复加载更多状态
                 lvBuilding.loadMoreFinished();
-            }else{
+            } else {
                 isLoadMore = false;
                 // 恢复加载更多状态
                 lvBuilding.loadMoreFinished();
@@ -276,16 +326,20 @@ public class BuildingActivity extends AppCompatActivity{
     private void processData(LocationBean bean) {
         int code = bean.code;
         String msg = bean.msg;
+        page = bean.data.page;
         List<String> building = bean.data.building;
-        if(!building.isEmpty()){
-
-            if(!isLoadMore){
-                // 给listView设置适配器
-                adapter = new Business_Location_Adapter(this,building);
-                lvBuilding.setAdapter(adapter);
-            }else{
-                adapter.notifyDataSetChanged();
+        if (!building.isEmpty()) {
+            for (int i = 0; i < building.size(); i++) {
+                String s = building.get(i);
+                listBuilding.add(s);
             }
+        }
+        if (!isLoadMore) {
+            // 给listView设置适配器
+            adapter = new Business_Location_Adapter(this, listBuilding);
+            lvBuilding.setAdapter(adapter);
+        } else {
+            adapter.notifyDataSetChanged();
         }
     }
 
@@ -296,17 +350,20 @@ public class BuildingActivity extends AppCompatActivity{
 
 
             // 判断是否有更多数据，moreurl是否为空
-            if(pager<=page){
+            if (pager <= page) {
+                System.out.println("pager+++==="+pager);
+                System.out.println("page+++==="+page);
                 // 加载更多业务
                 isLoadMore = true;
                 getData();
-            }else{
+            } else {
                 // 恢复Listview的加载更多状态
                 lvBuilding.loadMoreFinished();
-                ToastUtils.showToast(BuildingActivity.this,"没有更多数据了");
+                ToastUtils.showToast(BuildingActivity.this, "没有更多数据了");
             }
         }
     }
+
     /**
      * 设置标题栏
      */
@@ -350,7 +407,6 @@ public class BuildingActivity extends AppCompatActivity{
         llTop = (LinearLayout) findViewById(R.id.ll_Top); // 顶部标题栏
 
     }
-
 
 
     /**

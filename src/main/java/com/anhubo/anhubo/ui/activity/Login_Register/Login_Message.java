@@ -269,7 +269,6 @@ public class Login_Message extends BaseActivity {
                     intent.putExtra(Keys.UNIONID,unionid);
                     intent.putExtra(Keys.PROFILE_IMAGE_URL,profile_image_url);
                     intent.putExtra(Keys.SCREEN_NAME,screen_name);
-                    //System.out.println("22222222+unionid="+unionid+"222+profile_image_url+"+profile_image_url+"222screen_name+"+screen_name);
                     startActivity(intent);
                 }
 

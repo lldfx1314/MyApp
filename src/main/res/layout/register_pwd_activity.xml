@@ -70,6 +70,6 @@
         android:background="@drawable/btn_reg_login"
         android:text="下一步"
         android:textColor="@color/btn_blue"
-        android:textSize="20sp"/>
+        android:textSize="16sp"/>
 
 </LinearLayout>

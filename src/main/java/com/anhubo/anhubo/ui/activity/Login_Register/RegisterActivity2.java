@@ -34,12 +34,13 @@ public class RegisterActivity2 extends BaseActivity {
     private static final int REQUESTCODE2 = 2;
     @InjectView(R.id.et_reg2_building)
     EditText etReg2JianZhu;
+    @InjectView(R.id.et_reg2_business)// 单位名称
+    EditText etReg2DanWei;
     @InjectView(R.id.et_reg2_floorName)
     EditText etReg2floorName;
     @InjectView(R.id.et_reg2_area)
     EditText etReg2QuYu;
-    @InjectView(R.id.et_reg2_business)// 单位名称
-            EditText etReg2DanWei;
+
     @InjectView(R.id.btn_register2)
     Button btnRegister2;
     private String floorName;
@@ -51,6 +52,8 @@ public class RegisterActivity2 extends BaseActivity {
     private String buildingId;
     private String businessName;
     private String businessId;
+    private String buildName1;
+    private String businessName1;
 
     @Override
     protected void initConfig() {
@@ -115,18 +118,18 @@ public class RegisterActivity2 extends BaseActivity {
                 startActivityForResult(intent2, REQUESTCODE2);
                 break;
             case R.id.btn_register2://完成的点击事件
-                /*if (TextUtils.isEmpty(floorName)) {
+                if (TextUtils.isEmpty(buildName1)) {
                     ToastUtils.showToast(mActivity, "请选择建筑");
                     return;
-                }*/
+                }
                 if (TextUtils.isEmpty(floorName)) {
                     ToastUtils.showToast(mActivity, "请输入楼层");
                     return;
                 }
-                /*if (TextUtils.isEmpty(floorName)) {
+                if (TextUtils.isEmpty(businessName1)) {
                     ToastUtils.showToast(mActivity, "请选择单位");
                     return;
-                }*/
+                }
                 registerComPlete();
                 break;
         }
@@ -139,10 +142,10 @@ public class RegisterActivity2 extends BaseActivity {
         String url = Urls.Url_RegCom;
         HashMap<String, String> params = new HashMap<>();
         params.put("uid", uid);
-        params.put("building_name", "腾讯众创空间");//建筑物名称
+        params.put("building_name", buildName1);//建筑物名称
         params.put("floor_name", floorName);//楼层数
         params.put("area_name", areaName);//区域名称
-        params.put("business_name", "安互保"); //单位名称
+        params.put("business_name", businessName1); //单位名称
         OkHttpUtils.post()//
                 .url(url)//
                 .params(params)//
@@ -199,6 +202,12 @@ public class RegisterActivity2 extends BaseActivity {
     private void getInputData() {
         // 在这儿先获取到uid
         uid = getIntent().getStringExtra(Keys.UID);
+        // 获取建筑
+        buildName1 = etReg2JianZhu.getText().toString().trim();
+
+
+        // 获取单位
+        businessName1 = etReg2DanWei.getText().toString().trim();
         //获取输入的楼层
         floorName = etReg2floorName.getText().toString().trim();
         //第二次区域

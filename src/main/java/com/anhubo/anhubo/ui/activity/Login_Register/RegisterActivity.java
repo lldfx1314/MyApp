@@ -246,6 +246,10 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             ToastUtils.showToast(mActivity, "请输入手机号码");
             return;
         }
+        if (phoneNumber.length() != 11) {
+            ToastUtils.showToast(mActivity, "手机号码长度为11");
+            return;
+        }
         if (!Utils.judgePhoneNumber(phoneNumber)) {
             ToastUtils.showToast(mActivity, "请输入正确的手机号码");
             return;
@@ -320,11 +324,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             Register1_Bean register1Bean = new Gson().fromJson(response, Register1_Bean.class);
             if (register1Bean != null) {
                 String code = register1Bean.code;
-                //System.out.println(code);
                 String msg = register1Bean.msg;
-                //System.out.println(msg);
                 int uid = register1Bean.data.uid;
-                //System.out.println("uid+++===" + uid);
                 switch (code) {
                     case "0":// 注册成功
                         // 进入注册的第二个界面

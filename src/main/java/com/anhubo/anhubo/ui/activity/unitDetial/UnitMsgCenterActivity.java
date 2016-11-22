@@ -81,6 +81,7 @@ public class UnitMsgCenterActivity extends BaseActivity {
             // 判断是否有更多数据，moreurl是否为空
             if(pager<=page){
                 // 加载更多业务
+
                 isLoadMore = true;
                 getData();
             }else{
@@ -95,11 +96,12 @@ public class UnitMsgCenterActivity extends BaseActivity {
     @Override
     protected void onLoadDatas() {
         // 刚进来先获取网络数据
+        progressBar.setVisibility(View.VISIBLE);
         getData();
     }
 
     private void getData() {
-        progressBar.setVisibility(View.VISIBLE);
+
         String url = Urls.Url_UnitMsgCenter;
         HashMap<String, String> params = new HashMap<>();
         params.put("uid", uid);

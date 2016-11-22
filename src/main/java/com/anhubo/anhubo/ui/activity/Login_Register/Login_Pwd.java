@@ -110,6 +110,10 @@ public class Login_Pwd extends BaseActivity {
                     ToastUtils.showToast(mActivity, "请输入手机号码");
                     return;
                 }
+                if (phoneNumber.length() != 11) {
+                    ToastUtils.showToast(mActivity, "手机号码长度为11");
+                    return;
+                }
                 if (!Utils.judgePhoneNumber(phoneNumber)) {
                     ToastUtils.showToast(mActivity, "请输入正确的手机号码");
                     return;
