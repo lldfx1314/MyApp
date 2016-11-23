@@ -11,7 +11,9 @@ import com.anhubo.anhubo.R;
 
 
 import butterknife.InjectView;
-
+/**
+ * Created by LUOLI on 2016/10/28.
+ */
 public class RefreshListview extends ListView {
 
     @InjectView(R.id.tv_footer)

@@ -10,7 +10,9 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.anhubo.anhubo.R;
-
+/**
+ * Created by LUOLI on 2016/10/16.
+ */
 public class ShowCheckDeviceDialog {
 
     private Activity activity;

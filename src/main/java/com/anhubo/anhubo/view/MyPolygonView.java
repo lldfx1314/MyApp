@@ -13,11 +13,7 @@ import com.anhubo.anhubo.bean.MyPolygonBean;
 import com.anhubo.anhubo.utils.DisplayUtil;
 
 /**
- * =====作者=====
- * 罗礼
- * =====时间=====
- * 2016/10/13.
- *
+ * Created by LUOLI on 2016/10/13.
  * 多边形
  */
 public class MyPolygonView extends View {

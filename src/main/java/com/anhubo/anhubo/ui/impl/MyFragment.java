@@ -115,7 +115,7 @@ public class MyFragment extends BaseFragment {
 
         @Override
         public void onResponse(String response) {
-            System.out.println("哈哈哈"+response);
+            //System.out.println("哈哈哈"+response);
             bean = new Gson().fromJson(response, MyFragmentBean.class);
             if (bean != null) {
                 age = bean.data.age;

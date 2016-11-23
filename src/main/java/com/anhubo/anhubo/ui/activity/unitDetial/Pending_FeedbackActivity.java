@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -88,11 +89,9 @@ public class Pending_FeedbackActivity extends BaseActivity {
     private Dialog dialog;
     private Button btnTakephoto;
     private Button btnPhoto;
-    private File filePhoto01;
     private File file1;
     private File file2;
     private File file3;
-    private File filePhoto02;
     private String uid;
 
     @Override
@@ -271,7 +270,8 @@ public class Pending_FeedbackActivity extends BaseActivity {
         @Override
         public void onResponse(String response) {
             progressBar.setVisibility(View.GONE);
-            System.out.println("待反馈界面+++===" + response);
+
+            //System.out.println("待反馈界面Pending_FeedbackActivity+++===" + response);
             FeedBackBean bean = new Gson().fromJson(response, FeedBackBean.class);
             if (bean != null) {
                 int code = bean.code;
@@ -338,10 +338,10 @@ public class Pending_FeedbackActivity extends BaseActivity {
                             }
                         }
                     }
-                }else{
+                } else {
                     // 动态改变空间的高度
-                    tvIssuePhoto.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,0));
-                    llIssuePhoto.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,0));
+                    tvIssuePhoto.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 0));
+                    llIssuePhoto.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 0));
                 }
             }
         }
@@ -379,30 +379,25 @@ public class Pending_FeedbackActivity extends BaseActivity {
         c.moveToFirst();
         int columnIndex = c.getColumnIndex(filePathColumns[0]);
         String imagePath = c.getString(columnIndex);
-        filePhoto02 = new File(imagePath);
         Bitmap photo = BitmapFactory.decodeFile(imagePath);
         try {
-
-            /*imgName = createPhotoFileName();
-            //写一个方法将此文件保存到本应用下面啦
-            savePicture(imgName, photo);*/
-
+            // 把本文件压缩后缓存到本地文件里面
+            savePicture(photo,"photo02");
+            File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
 
             if (photo != null) {
-                //为防止原始图片过大导致内存溢出，这里先缩小原图显示，然后释放原始Bitmap占用的内存
-                Bitmap bitmap = ImageTools.zoomBitmap(photo, photo.getWidth() / 5, photo.getHeight() / 5);
                 if (TextUtils.equals(str_photo, 1 + "")) {
-                    ivPendPhoto1.setImageBitmap(bitmap);
+                    ivPendPhoto1.setImageBitmap(photo);
                     // 图片一
                     file1 = filePhoto02;
 
                 } else if (TextUtils.equals(str_photo, 2 + "")) {
-                    ivPendPhoto2.setImageBitmap(bitmap);
+                    ivPendPhoto2.setImageBitmap(photo);
                     //图片二
                     file2 = filePhoto02;
 
                 } else if (TextUtils.equals(str_photo, 3 + "")) {
-                    ivPendPhoto3.setImageBitmap(bitmap);
+                    ivPendPhoto3.setImageBitmap(photo);
 
                     // 图片三
                     file3 = filePhoto02;
@@ -439,10 +434,9 @@ public class Pending_FeedbackActivity extends BaseActivity {
         File file = new File("/sdcard/photo_anhubo/");
         file.mkdirs();
         String filename = file.getPath() + name;
-        filePhoto01 = new File(filename);//图片的文件
         try {
             fout = new FileOutputStream(filename);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fout);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fout);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -455,6 +449,9 @@ public class Pending_FeedbackActivity extends BaseActivity {
             }
         }
         if (bitmap != null) {
+            // 把本文件压缩后缓存到本地文件里面
+            savePicture(bitmap, "photo01");
+            File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
             //显示图片
             if (TextUtils.equals(str_photo, 1 + "")) {
                 ivPendPhoto1.setImageBitmap(bitmap);
@@ -478,6 +475,31 @@ public class Pending_FeedbackActivity extends BaseActivity {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 保存图片到本应用下
+     **/
+    private void savePicture(Bitmap bitmap, String fileName) {
+
+        FileOutputStream fos = null;
+        try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新写入内容会被覆盖
+            //fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
+            OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() + "/" + fileName);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);// 把图片写入指定文件夹中
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != fos) {
+                    fos.close();
+                    fos = null;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -548,7 +570,10 @@ public class Pending_FeedbackActivity extends BaseActivity {
                     }
                 });
     }
-    /**当用户按下返回键的时候退出此页面到二维码扫描界面回复扫码的功能*/
+
+    /**
+     * 当用户按下返回键的时候退出此页面到二维码扫描界面回复扫码的功能
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {

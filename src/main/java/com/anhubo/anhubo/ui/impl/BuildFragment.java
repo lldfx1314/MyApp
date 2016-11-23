@@ -17,6 +17,7 @@ import com.anhubo.anhubo.adapter.BuildAdapter;
 import com.anhubo.anhubo.base.BaseFragment;
 import com.anhubo.anhubo.bean.BuildScoreBean;
 import com.anhubo.anhubo.bean.BuildThreeBean;
+import com.anhubo.anhubo.bean.Build_Help_Plan_Bean;
 import com.anhubo.anhubo.bean.MyPolygonBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.buildDetial.Build_CltMsgActivity;
@@ -26,6 +27,7 @@ import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
+import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.MyPolygonView;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -33,6 +35,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.Call;
@@ -72,6 +75,7 @@ public class BuildFragment extends BaseFragment {
     private TextView tvBuildMiddleNum;
     private TextView tvBuildHeighNum;
     private TextView bottom;
+    private BuildAdapter adapter;
 
     @Override
     public void initTitleBar() {
@@ -79,8 +83,8 @@ public class BuildFragment extends BaseFragment {
         iv_basepager_left.setVisibility(View.GONE);
         //设置铅笔键显示
         ivTopBarleftBuildPen.setVisibility(View.VISIBLE);
-
-        tv_basepager_title.setText("建筑");
+        String buildingName = SpUtils.getStringParam(mActivity, Keys.BUILDINGNAME);
+        tv_basepager_title.setText(buildingName);
         // 设置title的背景颜色
         llTop.setBackgroundResource(R.color.unit_top);
 
@@ -100,12 +104,9 @@ public class BuildFragment extends BaseFragment {
         // 统计图下面的按钮tv_build_frag_02_msg
         tvBuildFragMsg = findView(R.id.tv_build_frag_02_msg);
         tvBuildFragTest = findView(R.id.tv_build_frag_02_test);
-        //
-
 
         // 多边形
         myPolygonView = findView(R.id.polygon_build);
-
 
         // 设置下划线 setUnderline里面的参数是可变参数
         Utils.setUnderline(tvBuildFragMsg, tvBuildFragTest);
@@ -133,11 +134,11 @@ public class BuildFragment extends BaseFragment {
         // 底色
         bottom = (TextView) view.findViewById(R.id.bottom);
 
-
         //ListView添加脚布局
-        lvBuild.addHeaderView(view);
-        BuildAdapter adapter = new BuildAdapter(this);
-        lvBuild.setAdapter(adapter);
+        lvBuild.addHeaderView(view, null, true);
+        // 去掉头布局的分割线
+        lvBuild.setHeaderDividersEnabled(false);
+
 
     }
 
@@ -152,11 +153,15 @@ public class BuildFragment extends BaseFragment {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
+            // 获取建筑安全指数
             getBuildData();
-            // 定义方法获取三色预警比例
+            // 获取三色预警比例
             getThreeWarning();
+            // 获取户主计划列表信息
+            getHelpPlan();
         }
     }
+
 
     /**
      * 设置监听
@@ -171,6 +176,51 @@ public class BuildFragment extends BaseFragment {
         tvBuildFragTest.setOnClickListener(this);
     }
 
+    /**
+     * ****************************************************
+     * 获取互助计划列表信息
+     */
+    private void getHelpPlan() {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("building_id", bulidingid);
+        String url = Urls.Url_Build_Help_Plan;
+
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback2());
+    }
+
+    /**
+     * 互助计划
+     */
+    class MyStringCallback2 extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+            System.out.println("BuildFragment互助计划+++===获取数据失败" + e.getMessage());
+
+        }
+
+        @Override
+        public void onResponse(String response) {
+            //System.out.println("BuildFragment互助计划+++===" + response);
+            Build_Help_Plan_Bean bean = new Gson().fromJson(response, Build_Help_Plan_Bean.class);
+            if (bean != null) {
+                int code = bean.code;
+                String msg = bean.msg;
+                Build_Help_Plan_Bean.Data data = bean.data;
+                List<Build_Help_Plan_Bean.Data.Plans> plans = data.plans;
+                if (code == 0 && !plans.isEmpty()) {
+                    adapter = new BuildAdapter(mActivity, plans);
+                } else {
+                    adapter = new BuildAdapter(mActivity);
+                }
+                lvBuild.setAdapter(adapter);
+            }
+
+        }
+    }
 
     /**
      * ****************************************************
@@ -195,7 +245,8 @@ public class BuildFragment extends BaseFragment {
     class MyStringCallback1 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            System.out.println("BuildFragment三色预警+++===获取数据失败");
+            System.out.println("BuildFragment三色预警+++===获取数据失败" + e.getMessage());
+
         }
 
         @Override
@@ -251,7 +302,11 @@ public class BuildFragment extends BaseFragment {
         @Override
         public void onError(Call call, Exception e) {
 
-            System.out.println("BuildFragment+++===界面没获取到数据");
+            System.out.println("BuildFragment+++建筑安全指数===获取到数据失败" + e.getMessage());
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("网络有问题，请检查")
+                    .setCancelable(true).show();
         }
 
         @Override
@@ -300,7 +355,7 @@ public class BuildFragment extends BaseFragment {
     public void processClick(View v) {
         switch (v.getId()) {
             case R.id.ivTopBarleft_build_pen:// 编辑
-                startActivity(new Intent(mActivity,  FeedbackActivity.class));
+                startActivity(new Intent(mActivity, FeedbackActivity.class));
                 break;
             case R.id.tv_build_frag_02_msg:// 完善基础信息
                 startActivity(new Intent(mActivity, Build_CltMsgActivity.class));

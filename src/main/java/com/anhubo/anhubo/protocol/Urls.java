@@ -77,6 +77,8 @@ public interface Urls {
     String Url_Build_score = UrlBase +"BuildingChart/details";
     /**建筑，三色预警*/
     String Url_Build_ThreeColour = UrlBase +"BuildingChart/Threec";
+    /**建筑,互助计划*/
+    String Url_Build_Help_Plan = UrlBase +"Plan/plan_list";
     /**我的，上传头像*/
     String Url_UpLoadingHeaderIcon = UrlBase +"Personal/save_pic";
     /**我的，获取用户信息*/
@@ -113,4 +115,5 @@ public interface Urls {
     String Url_FindNotice = "http://115.28.56.139//s/html/afficheList.html";
     /**定位*/
     String Location =  UrlBase +"Building/get_addrest";
+
 }

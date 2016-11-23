@@ -22,7 +22,8 @@ import com.anhubo.anhubo.utils.DisplayUtil;
 import java.util.ArrayList;
 
 /**
- * Created by wanghan on 16/1/19.
+ * Created by LUOLI on 2016/10/12.
+ * 弧形进度条
  */
 public class SesameCreditPanel extends View {
     /**

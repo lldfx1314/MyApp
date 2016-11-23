@@ -749,7 +749,7 @@ public class NfcScanActivity extends BaseActivity {
         new AlertDialog(mActivity).builder()
                 .setTitle("提示")
                 .setMsg("前往系统设置的应用列表里打开安互保的NFC权限？")
-                .setCancelable(true)
+                .setCancelable(false)
                 .setPositiveButton("确认", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

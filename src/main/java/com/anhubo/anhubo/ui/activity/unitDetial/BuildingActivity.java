@@ -116,6 +116,14 @@ public class BuildingActivity extends AppCompatActivity {
 
     private void initEvents() {
         listBuilding = new ArrayList<String>();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //在activity执行onResume时执行mMapView.onResume ()，实现地图生命周期管理
+        mMapView.onResume();
         // 设置地图的图标
         setIcon();
         // 开始定位
@@ -252,6 +260,8 @@ public class BuildingActivity extends AppCompatActivity {
                     getData();
 
 
+                }else if(amapLocation.getErrorCode() == 12){
+                    dialogLocation();
                 } else {
                     //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                     System.out.println(("AmapError,location Error, ErrCode:"
@@ -262,6 +272,40 @@ public class BuildingActivity extends AppCompatActivity {
         }
 
     };
+
+    /**
+     * Dialog对话框提示用户去设置界面打开权限
+     */
+    protected void dialogLocation() {
+
+        new AlertDialog(BuildingActivity.this).builder()
+                .setTitle("提示")
+                .setMsg("前往系统设置的应用列表里打开安互保的定位权限？")
+                .setCancelable(false)
+                .setPositiveButton("确认", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 打开系统设置界面
+                        Intent intent = new Intent();
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        if (Build.VERSION.SDK_INT >= 9) {
+                            intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                            intent.setData(Uri.fromParts("package", getPackageName(), null));
+                        } else if (Build.VERSION.SDK_INT <= 8) {
+                            intent.setAction(Intent.ACTION_VIEW);
+                            intent.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
+                            intent.putExtra("com.android.settings.ApplicationPkgName", getPackageName());
+                        }
+                        startActivity(intent);
+
+                    }
+                }).setNegativeButton("取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        }).show();
+    }
+
     /**
      * 定位的监听
      */
@@ -428,12 +472,7 @@ public class BuildingActivity extends AppCompatActivity {
         mMapView.onDestroy();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //在activity执行onResume时执行mMapView.onResume ()，实现地图生命周期管理
-        mMapView.onResume();
-    }
+
 
     @Override
     protected void onPause() {

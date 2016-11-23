@@ -1,6 +1,5 @@
 package com.anhubo.anhubo.ui.impl;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +26,7 @@ import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
+import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.MyPolygonView;
 import com.anhubo.anhubo.view.SesameCreditPanel;
 import com.google.gson.Gson;
@@ -74,16 +74,9 @@ public class UnitFragment extends BaseFragment {
     private int[] arrScores;
     private UnitBean.Data data;
     private SesameCreditPanel scp;
-    private Dialog dialog;
     private TextView tvNoPlan1;
     private TextView tvNoPlan2;
     private int code;
-    private String planName;
-    private String status;
-    private String planId;
-    private String maxEachMoney;
-    private String maxPlanEnsure;
-    private String planMoneyLast;
     private List<Unit_PlanBean.Data.Certs> certs;
 
 
@@ -94,8 +87,8 @@ public class UnitFragment extends BaseFragment {
         //设置菜单键和信息键显示
         ivTopBarleftUnitMenu.setVisibility(View.VISIBLE);
         ivTopBarRightUnitMsg.setVisibility(View.VISIBLE);
-
-        tv_basepager_title.setText("五彩太平洋");
+        String businessName = SpUtils.getStringParam(mActivity, Keys.BUSINESSNAME);
+        tv_basepager_title.setText(businessName);
         // 设置title的背景颜色
         llTop.setBackgroundResource(R.color.unit_top);
     }
@@ -246,6 +239,7 @@ public class UnitFragment extends BaseFragment {
             System.out.println("UnitFragment界面+++互保计划===没拿到数据" + e.getMessage());
             tvNoPlan1.setVisibility(View.VISIBLE);
             lvUnit.setDividerHeight(0);
+
         }
 
         @Override
@@ -262,6 +256,7 @@ public class UnitFragment extends BaseFragment {
             if (code == 0 &&certs!=null) {
                 if(certs.size() == 0){
                     tvNoPlan1.setVisibility(View.VISIBLE);
+
                     lvUnit.setDividerHeight(0);
                 }else{
                     tvNoPlan2.setVisibility(View.VISIBLE);
@@ -285,6 +280,10 @@ public class UnitFragment extends BaseFragment {
         @Override
         public void onError(Call call, Exception e) {
             System.out.println("UnitFragment界面+++分数、级别===没拿到数据" + e.getMessage());
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("网络有问题，请检查")
+                    .setCancelable(true).show();
         }
 
         @Override

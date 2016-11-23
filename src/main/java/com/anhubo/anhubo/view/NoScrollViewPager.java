@@ -4,7 +4,9 @@ import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-
+/**
+ * Created by LUOLI on 2016/09/20.
+ */
 public class NoScrollViewPager extends ViewPager {
 	/**
 	 * 在布局里面使用时调用

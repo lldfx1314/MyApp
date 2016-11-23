@@ -38,15 +38,12 @@ public class WelcomeActivity extends BaseActivity {
         businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
     }
 
-
-
     @Override
     protected void onLoadDatas() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if(!TextUtils.isEmpty(uid)) {
-                    //System.out.println("WelcomeActivity+++===uid_if+++==="+uid);
                     if(!TextUtils.isEmpty(bulidingid)||!TextUtils.isEmpty(businessid)) {
                         //跳转到主页面
                         enterHome();
@@ -56,7 +53,6 @@ public class WelcomeActivity extends BaseActivity {
                     }
 
                 }else{
-                    //System.out.println("WelcomeActivity+++===uid_else+++==="+uid);
                     // 无uid，跳到登录界面
                     enterLogin();
 
@@ -71,7 +67,6 @@ public class WelcomeActivity extends BaseActivity {
 
     private void enterRegister2() {
         Intent intent = new Intent(WelcomeActivity.this, RegisterActivity2.class);
-        //System.out.println("要传递的uid+++===+++" + uid);
         intent.putExtra(Keys.UID, uid);
         startActivity(intent);
     }

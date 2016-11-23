@@ -17,7 +17,9 @@ import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 
-
+/**
+ * Created by LUOLI on 2016/11/15.
+ */
 public class AlertDialog {
 	private Context context;
 	private Dialog dialog;

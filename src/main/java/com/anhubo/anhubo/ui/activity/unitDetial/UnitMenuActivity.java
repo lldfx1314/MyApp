@@ -140,7 +140,7 @@ public class UnitMenuActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-            System.out.println("执行记录++"+response);
+            //System.out.println("执行记录++"+response);
             StudyBean bean = new Gson().fromJson(response, StudyBean.class);
             if (bean != null) {
                 progressBar.setVisibility(View.GONE);

@@ -10,11 +10,11 @@ import android.widget.FrameLayout;
 import com.anhubo.anhubo.R;
 
 /**
+ * Created by LUOLI on 2016/11/02.
  * 状态布局，封装了4种状态：正在加载、加载失败、加载为空、正常界面
  * 使用{@link #newInstance(Context, Object)} 来创建StateLayout的实现
- * @author dzl
- *
  */
+
 public class StateLayout extends FrameLayout {
 
 	private View loadingView;

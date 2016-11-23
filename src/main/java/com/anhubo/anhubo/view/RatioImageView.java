@@ -2,15 +2,13 @@ package com.anhubo.anhubo.view;
 
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
 /**
+ * Created by LUOLI on 2016/11/18.
  * 会根据宽，等比例缩放高的ImageView
- * @author dzl
- *
  */
 public class RatioImageView extends ImageView {
 

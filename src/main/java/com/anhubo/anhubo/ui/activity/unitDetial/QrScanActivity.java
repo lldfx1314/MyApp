@@ -549,7 +549,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         new AlertDialog(mActivity).builder()
                 .setTitle("提示")
                 .setMsg("前往系统设置的应用列表里打开安互保的相机权限？")
-                .setCancelable(true)
+                .setCancelable(false)
                 .setPositiveButton("确认", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

@@ -41,6 +41,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
@@ -72,8 +73,6 @@ public class FeedbackActivity extends BaseActivity {
     private Dialog dialog;
     private Button btnTakephoto;
     private Button btnPhoto;
-    private File filePhoto01;
-    private File filePhoto02;
     private String str_photo;
     private boolean isClick;
     private String feedContent = "";
@@ -140,24 +139,24 @@ public class FeedbackActivity extends BaseActivity {
                 /**提交反馈*/
                 if (!TextUtils.isEmpty(deviceId)) {
                     // 有deviceId
-                    if (file1!=null&&file2!=null&&file3!=null) {
+                    if (file1 != null && file2 != null && file3 != null) {
                         submit3();
-                    }else if(file1!=null&&file2!=null){
+                    } else if (file1 != null && file2 != null) {
                         submit2();
-                    }else if(file1!=null){
+                    } else if (file1 != null) {
                         submit1();
-                    }else {
+                    } else {
                         submit();
                     }
                 } else {
                     // 无deviceId
-                    if (file1!=null&&file2!=null&&file3!=null) {
+                    if (file1 != null && file2 != null && file3 != null) {
                         submitnoId3();
-                    }else if(file1!=null&&file2!=null){
+                    } else if (file1 != null && file2 != null) {
                         submitnoId2();
-                    }else if(file1!=null){
+                    } else if (file1 != null) {
                         submitnoId1();
-                    }else {
+                    } else {
                         submitnoId();
                     }
                 }
@@ -176,6 +175,7 @@ public class FeedbackActivity extends BaseActivity {
         }
 
     }
+
     /**
      * 无deviceid提交反馈 无图片
      */
@@ -204,6 +204,7 @@ public class FeedbackActivity extends BaseActivity {
                 .build()//
                 .execute(new MyStringCallback1());
     }
+
     /**
      * 无deviceid提交反馈 1张图片
      */
@@ -226,6 +227,7 @@ public class FeedbackActivity extends BaseActivity {
                 .build()//
                 .execute(new MyStringCallback1());
     }
+
     /**
      * 无deviceid提交反馈 2张图片
      */
@@ -248,6 +250,7 @@ public class FeedbackActivity extends BaseActivity {
                 .build()//
                 .execute(new MyStringCallback1());
     }
+
     /**
      * 无deviceid提交反馈 3张图片
      */
@@ -300,14 +303,18 @@ public class FeedbackActivity extends BaseActivity {
             }
         }
     }
-    /**弹窗提示*/
-    private void dialog(){
+
+    /**
+     * 弹窗提示
+     */
+    private void dialog() {
         new AlertDialog(mActivity).builder()
                 .setTitle("提示")
                 .setMsg("请填写问题或者至少拍一张照片")
                 .setCancelable(false)
                 .show();
     }
+
     /**
      * 有deviceid提交反馈  无图片
      */
@@ -335,6 +342,7 @@ public class FeedbackActivity extends BaseActivity {
                 .build()//
                 .execute(new MyStringCallback());
     }
+
     /**
      * 有deviceid提交反馈 1张图片
      */
@@ -356,6 +364,7 @@ public class FeedbackActivity extends BaseActivity {
                 .build()//
                 .execute(new MyStringCallback());
     }
+
     /**
      * 有deviceid提交反馈 2张图片
      */
@@ -379,6 +388,7 @@ public class FeedbackActivity extends BaseActivity {
                 .build()//
                 .execute(new MyStringCallback());
     }
+
     /**
      * 有deviceid提交反馈  3张图片
      */
@@ -417,7 +427,7 @@ public class FeedbackActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("反馈界面+++===" + response);
+            //System.out.println("反馈界面FeedbackActivity+++===" + response);
             FeedBackBean bean = new Gson().fromJson(response, FeedBackBean.class);
             if (bean != null) {
                 progressBar.setVisibility(View.GONE);
@@ -458,30 +468,24 @@ public class FeedbackActivity extends BaseActivity {
         c.moveToFirst();
         int columnIndex = c.getColumnIndex(filePathColumns[0]);
         String imagePath = c.getString(columnIndex);
-        filePhoto02 = new File(imagePath);
         Bitmap photo = BitmapFactory.decodeFile(imagePath);
         try {
-
-            /*imgName = createPhotoFileName();
-            //写一个方法将此文件保存到本应用下面啦
-            savePicture(imgName, photo);*/
-
-
+            // 把本文件压缩后缓存到本地文件里面
+            savePicture(photo,"photo02");
+            File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
             if (photo != null) {
-                //为防止原始图片过大导致内存溢出，这里先缩小原图显示，然后释放原始Bitmap占用的内存
-                Bitmap bitmap = ImageTools.zoomBitmap(photo, photo.getWidth() / 5, photo.getHeight() / 5);
                 if (TextUtils.equals(str_photo, 1 + "")) {
-                    ivFeedback1.setImageBitmap(bitmap);
+                    ivFeedback1.setImageBitmap(photo);
                     // 图片一
                     file1 = filePhoto02;
 
                 } else if (TextUtils.equals(str_photo, 2 + "")) {
-                    ivFeedback2.setImageBitmap(bitmap);
+                    ivFeedback2.setImageBitmap(photo);
                     //图片二
                     file2 = filePhoto02;
 
                 } else if (TextUtils.equals(str_photo, 3 + "")) {
-                    ivFeedback3.setImageBitmap(bitmap);
+                    ivFeedback3.setImageBitmap(photo);
 
                     // 图片三
                     file3 = filePhoto02;
@@ -518,10 +522,9 @@ public class FeedbackActivity extends BaseActivity {
         File file = new File("/sdcard/photo_anhubo/");
         file.mkdirs();
         String filename = file.getPath() + name;
-        filePhoto01 = new File(filename);//图片的文件
         try {
             fout = new FileOutputStream(filename);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fout);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fout);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -533,6 +536,9 @@ public class FeedbackActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }
+        // 把本文件压缩后缓存到本地文件里面
+        savePicture(bitmap, "photo01");
+        File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
         if (bitmap != null) {
             //显示图片
             if (TextUtils.equals(str_photo, 1 + "")) {
@@ -558,6 +564,31 @@ public class FeedbackActivity extends BaseActivity {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 保存图片到本应用下
+     **/
+    private void savePicture(Bitmap bitmap, String fileName) {
+
+        FileOutputStream fos = null;
+        try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新写入内容会被覆盖
+            //fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
+            OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() + "/" + fileName);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);// 把图片写入指定文件夹中
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != fos) {
+                    fos.close();
+                    fos = null;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
