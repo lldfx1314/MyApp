@@ -21,8 +21,8 @@
 
         <ImageView
             android:id="@+id/iv_check_device"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
             android:layout_alignParentRight="true"
             android:background="@drawable/check_style" />
 

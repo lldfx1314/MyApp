@@ -106,6 +106,6 @@ public interface Keys {
     String DeviceId = "deviceId";
     /**待处理反馈isid*/
     String IsId = "isId";
-    /**返回键返回到二维码扫描*/
-    String QRchart = "QRchart";
+    /**测试*/
+    String TEST = "test";
 }

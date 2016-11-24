@@ -27,6 +27,7 @@ import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.CheckComplete_Bean;
 import com.anhubo.anhubo.bean.ScanBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.ui.activity.buildDetial.TestActivity;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.PopBirthHelper;
 import com.anhubo.anhubo.utils.SpUtils;
@@ -72,6 +73,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     private String ndIntent;
     private String checkIntent;
     private String exerciseIntent;
+    private String testIntent;
     private boolean isEnter = false;
     private String cardNumber;
     private String deviceId;
@@ -115,6 +117,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         ndIntent = getIntent().getStringExtra(Keys.NEWDEVICE);
         checkIntent = getIntent().getStringExtra(Keys.CHECK);
         exerciseIntent = getIntent().getStringExtra(Keys.EXERCISE);
+        testIntent = getIntent().getStringExtra(Keys.TEST);
         // 获取uid
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
         businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
@@ -165,6 +168,11 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
             proBar.setVisibility(View.GONE);
             rlQrNumber.setVisibility(View.GONE);
 
+        } else if(!TextUtils.isEmpty(testIntent)) {
+            setTopBarDesc("测试");
+            btnCompleteCheck.setText("完成测试");
+            proBar.setVisibility(View.GONE);
+            rlQrNumber.setVisibility(View.GONE);
         }
         tvTopBarRight.setOnClickListener(this);
         // 出厂时间的弹窗
@@ -264,18 +272,19 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         isEnter = false;
         if (!TextUtils.isEmpty(cardNumber)) {
             if (!TextUtils.isEmpty(ndIntent) && !isEnter) {
-
+                /***********新增**************************/
                 isEnter = true;
                 //新增
                 addNewDevice();
             } else if (!TextUtils.isEmpty(checkIntent) && !isEnter) {
-                // 检查
+                /***********检查**************************/
                 isEnter = true;
 
-                // 定义一个请求网络的方法
+                // 请求网络的方法
                 getData();
 
             } else if (!TextUtils.isEmpty(exerciseIntent) && !isEnter) {
+                /***********演练**************************/
                 // 演练,获取DeviceId的最后一位数进行跳转到演练界面
                 isEnter = true;
                 String lastNumber = cardNumber.substring(cardNumber.length() - 1, cardNumber.length());
@@ -291,11 +300,22 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                             .setMsg("您已到达" + lastNumber + "层")
                             .setCancelable(true).show();
                 }
-                /***********演练**************************/
-            } else {
+
+            } else if(!TextUtils.isEmpty(testIntent) && !isEnter){
+                isEnter = true;
+            /***********测试**************************/
+                // 测试的方法
+                enterTestActivity();
             }
 
         }
+    }
+
+    private void enterTestActivity() {
+        // 跳转到测试页面
+        Intent intent = new Intent(mActivity, TestActivity.class);
+        intent.putExtra(Keys.CARDNUMBER, cardNumber);
+        startActivity(intent);
     }
 
     /**
@@ -524,9 +544,8 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
      * 这是新增设备的方法
      */
     private void addNewDevice() {
-        // 拿到扫描到的eDeviceId走添加设备借接口
         // 跳转到新增页面
-        Intent intent = new Intent(QrScanActivity.this, Add_Device_Activity.class);
+        Intent intent = new Intent(mActivity, Add_Device_Activity.class);
         intent.putExtra(Keys.CARDNUMBER, cardNumber);
         startActivity(intent);
     }
@@ -729,8 +748,11 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
             Intent intentExercise = new Intent(mActivity, NfcScanActivity.class);
             intentExercise.putExtra(Keys.EXERCISE, "Exercise");
             startActivity(intentExercise);
-        } else {
-
+        } else if(!TextUtils.isEmpty(testIntent)){
+            // 测试
+            Intent intentExercise = new Intent(mActivity, NfcScanActivity.class);
+            intentExercise.putExtra(Keys.TEST, "test");
+            startActivity(intentExercise);
         }
 
 

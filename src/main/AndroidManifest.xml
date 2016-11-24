@@ -176,6 +176,8 @@
         <activity
             android:name=".ui.activity.buildDetial.Build_CltMsgActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.buildDetial.TestActivity"
+            android:screenOrientation="portrait" />
         <!--发现-->
         <activity android:name=".ui.activity.DiscoveryDetial.FeedActivity"
             android:screenOrientation="portrait" />

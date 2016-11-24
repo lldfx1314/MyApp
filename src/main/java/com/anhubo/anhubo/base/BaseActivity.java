@@ -162,10 +162,20 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      *
      */
     protected final void setTopBarDesc(String str) {
-            //TextView text = (TextView) findViewById(R.id.tvAddress);
 
             tvToptitle.setTextColor(getResources().getColor(R.color.backgroud_white));
             tvToptitle.setText(str);
+
+    }
+    /**
+     *
+     * @param str 设置顶部状态栏右侧显示文字
+     *
+     */
+    protected final void setTopBarRight(String str) {
+
+        tvTopBarRight.setTextColor(getResources().getColor(R.color.backgroud_white));
+        tvTopBarRight.setText(str);
 
     }
 

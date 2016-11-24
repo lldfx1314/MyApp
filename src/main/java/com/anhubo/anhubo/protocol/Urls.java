@@ -115,5 +115,8 @@ public interface Urls {
     String Url_FindNotice = "http://115.28.56.139//s/html/afficheList.html";
     /**定位*/
     String Location =  UrlBase +"Building/get_addrest";
-
+    /**获取测试项*/
+    String Url_Build_Test = UrlBase +"Device/require_list";
+    /**获取测试项详情*/
+    String Url_Build_TestDetial = UrlBase +"Device/require_desc_list";
 }

@@ -22,6 +22,7 @@ import com.anhubo.anhubo.bean.MyPolygonBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.buildDetial.Build_CltMsgActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.FeedbackActivity;
+import com.anhubo.anhubo.ui.activity.unitDetial.QrScanActivity;
 import com.anhubo.anhubo.utils.DisplayUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
@@ -137,7 +138,7 @@ public class BuildFragment extends BaseFragment {
         //ListView添加脚布局
         lvBuild.addHeaderView(view, null, true);
         // 去掉头布局的分割线
-        lvBuild.setHeaderDividersEnabled(false);
+        lvBuild.setHeaderDividersEnabled(true);
 
 
     }
@@ -237,6 +238,7 @@ public class BuildFragment extends BaseFragment {
                 .build()//
                 .execute(new MyStringCallback1());
     }
+
 
 
     /**
@@ -361,13 +363,16 @@ public class BuildFragment extends BaseFragment {
                 startActivity(new Intent(mActivity, Build_CltMsgActivity.class));
                 break;
             case R.id.tv_build_frag_02_test:// 测试
-                ToastUtils.showLongToast(mActivity, "测试");
+                //ToastUtils.showLongToast(mActivity, "测试");
+                Intent intent = new Intent(mActivity, QrScanActivity.class);
+                intent.putExtra(Keys.TEST, "test");
+                startActivity(intent);
                 break;
             case R.id.rl_build_01:
                 rlBuild01.setVisibility(View.GONE);
                 rlBuild02.setVisibility(View.VISIBLE);
                 tvBuildFragMsg.setVisibility(View.VISIBLE);
-                // tvBuildFragTest.setVisibility(View.VISIBLE);
+                tvBuildFragTest.setVisibility(View.VISIBLE);
                 break;
             case R.id.rl_build_02:
                 rlBuild01.setVisibility(View.VISIBLE);
