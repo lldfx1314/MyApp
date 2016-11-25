@@ -220,7 +220,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
         params.put("is_id", isId);
 
 
-        String url = Urls.Url_FeedBack;
+        String url = Urls.Url_PendFeedBack;
 
         OkHttpUtils.post()//
                 .addFile("file1", "file01.png", file1)//
@@ -228,7 +228,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
                 .url(url)//
                 .params(params)//
                 .build()//
-                .execute(new MyStringCallback());
+                .execute(new MyStringCallback1());
     }
 
     /**
@@ -242,7 +242,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
         params.put("is_id", isId);
 
 
-        String url = Urls.Url_FeedBack;
+        String url = Urls.Url_PendFeedBack;
 
         OkHttpUtils.post()//
                 .addFile("file1", "file01.png", file1)//
@@ -251,7 +251,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
                 .url(url)//
                 .params(params)//
                 .build()//
-                .execute(new MyStringCallback());
+                .execute(new MyStringCallback1());
     }
 
 
@@ -277,9 +277,12 @@ public class Pending_FeedbackActivity extends BaseActivity {
                 int code = bean.code;
                 String msg = bean.msg;
                 // 返回到上个页面
-                Intent intent = new Intent();
-                setResult(1, intent);
-                finish();
+                if(code == 0){
+                    Intent intent = new Intent();
+                    setResult(1, intent);
+                    finish();
+
+                }
             }
         }
     }
