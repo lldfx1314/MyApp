@@ -422,7 +422,7 @@ public class FeedbackActivity extends BaseActivity {
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(false).show();
-            System.out.println("FeedbackActivity界面+++===失败");
+            System.out.println("FeedbackActivity界面+++===失败" + e.getMessage());
         }
 
         @Override
@@ -470,22 +470,28 @@ public class FeedbackActivity extends BaseActivity {
         String imagePath = c.getString(columnIndex);
         Bitmap photo = BitmapFactory.decodeFile(imagePath);
         try {
-            // 把本文件压缩后缓存到本地文件里面
-            savePicture(photo,"photo02");
-            File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
             if (photo != null) {
                 if (TextUtils.equals(str_photo, 1 + "")) {
                     ivFeedback1.setImageBitmap(photo);
+                    // 把本文件压缩后缓存到本地文件里面
+                    savePicture(photo, "photo01");
+                    File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
                     // 图片一
                     file1 = filePhoto02;
 
                 } else if (TextUtils.equals(str_photo, 2 + "")) {
                     ivFeedback2.setImageBitmap(photo);
+                    // 把本文件压缩后缓存到本地文件里面
+                    savePicture(photo, "photo02");
+                    File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
                     //图片二
                     file2 = filePhoto02;
 
                 } else if (TextUtils.equals(str_photo, 3 + "")) {
                     ivFeedback3.setImageBitmap(photo);
+                    // 把本文件压缩后缓存到本地文件里面
+                    savePicture(photo, "photo03");
+                    File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo03");
 
                     // 图片三
                     file3 = filePhoto02;
@@ -536,27 +542,31 @@ public class FeedbackActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }
-        // 把本文件压缩后缓存到本地文件里面
-        savePicture(bitmap, "photo01");
-        File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
+
         if (bitmap != null) {
             //显示图片
             if (TextUtils.equals(str_photo, 1 + "")) {
                 ivFeedback1.setImageBitmap(bitmap);
-
+                // 把本文件压缩后缓存到本地文件里面
+                savePicture(bitmap, "photo01");
+                File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
                 // 图片一
                 file1 = filePhoto01;
 
 
             } else if (TextUtils.equals(str_photo, 2 + "")) {
                 ivFeedback2.setImageBitmap(bitmap);
-
+                // 把本文件压缩后缓存到本地文件里面
+                savePicture(bitmap, "photo02");
+                File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
                 // 图片二
                 file2 = filePhoto01;
 
             } else if (TextUtils.equals(str_photo, 3 + "")) {
                 ivFeedback3.setImageBitmap(bitmap);
-
+                // 把本文件压缩后缓存到本地文件里面
+                savePicture(bitmap, "photo03");
+                File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo03");
                 // 图片三
                 file3 = filePhoto01;
 
@@ -590,6 +600,31 @@ public class FeedbackActivity extends BaseActivity {
             }
         }
     }
+   /* private void savePicture(Bitmap bitmap, String fileName) {
+
+        FileOutputStream fos = null;
+        File file = new File("/sdcard/anhubo/");
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        String path = file.getPath() + fileName;
+        try {
+            fos = new FileOutputStream(path);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);// 把图片写入指定文件夹中
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != fos) {
+                    fos.close();
+                    fos = null;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }*/
 
     /**
      * 打开相册获取图片

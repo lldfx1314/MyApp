@@ -343,8 +343,6 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
                     .build()//
                     .execute(new MyStringCallback());
         }
-
-
     }
 
     class MyStringCallback extends StringCallback {
@@ -355,7 +353,7 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
         }
 
         @Override

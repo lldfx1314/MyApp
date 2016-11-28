@@ -249,14 +249,15 @@ public class UploadingActivity2 extends BaseActivity {
         Bitmap photo = ImageFactory.ratio(imagePath, 120f, 240f);
         try {
             if (photo != null) {
-                // 把本文件压缩后缓存到本地文件里面
-                savePicture(photo, "photo02");
-                File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
                 if (isClick) {
                     // 身份证正面
                     llCard01.setVisibility(View.GONE);
                     //显示图片
                     ivShowCardFront02.setImageBitmap(photo);
+                    // 把本文件压缩后缓存到本地文件里面
+                    savePicture(photo, "photo01");
+                    File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
+
 
                     file1 = filePhoto02;
 
@@ -265,6 +266,9 @@ public class UploadingActivity2 extends BaseActivity {
                     llCard02.setVisibility(View.GONE);
                     //显示图片
                     ivShowCardBehind02.setImageBitmap(photo);
+                    // 把本文件压缩后缓存到本地文件里面
+                    savePicture(photo, "photo02");
+                    File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
                     file2 = filePhoto02;
                 }
 
@@ -311,17 +315,19 @@ public class UploadingActivity2 extends BaseActivity {
                 e.printStackTrace();
             }
         }
-        savePicture(bitmap, "photo01");
-        File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
         if (isClick) {
             llCard01.setVisibility(View.GONE);
             //显示图片
             ivShowCardFront02.setImageBitmap(bitmap);
+            savePicture(bitmap, "photo01");
+            File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
             file1 = filePhoto01;
         } else {
             llCard02.setVisibility(View.GONE);
             //显示图片
             ivShowCardBehind02.setImageBitmap(bitmap);
+            savePicture(bitmap, "photo02");
+            File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
             file2 = filePhoto01;
         }
     }

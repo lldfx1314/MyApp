@@ -8,8 +8,11 @@ import android.webkit.WebViewClient;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
+import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
+
+import java.net.URL;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -44,7 +47,7 @@ public class FeedbackSuccessActivity extends BaseActivity {
     protected void initEvents() {
         super.initEvents();
         int userAddScore = FeedbackActivity.userAddScore;
-        String url = "http://anhubo.com/s/html/feedBackOK.html";
+        String url = Urls.Url_FeedBackSuccess;
         String newUrl = url+"?uid="+userAddScore+"&score="+userAddScore;
         WebSettings settings = wvFeedback.getSettings();
         settings.setJavaScriptEnabled(true);

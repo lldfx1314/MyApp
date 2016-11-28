@@ -280,24 +280,23 @@ public class IdCardActivity extends BaseActivity {
         Bitmap photo = BitmapFactory.decodeFile(imagePath);
         try {
 
-            /*imgName = createPhotoFileName();
-            //写一个方法将此文件保存到本应用下面啦
-            savePicture(imgName, photo);*/
-
             if (photo != null) {
-                // 把本文件压缩后缓存到本地文件里面
-                savePicture(photo,"photo02");
-                File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
                 if (isClick) {
                     //显示正面图片
                     ivCard1.setImageBitmap(photo);
 
+                    // 把本文件压缩后缓存到本地文件里面
+                    savePicture(photo,"photo01");
+                    File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
                     // 给正面图片赋值
                     file1 = filePhoto02;
                 } else {
                     //显示反面图片
                     ivCard2.setImageBitmap(photo);
                     // 给背面图片赋值
+                    // 把本文件压缩后缓存到本地文件里面
+                    savePicture(photo,"photo02");
+                    File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
                     file2 = filePhoto02;
                 }
 
@@ -344,18 +343,21 @@ public class IdCardActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }
-        // 把本文件压缩后缓存到本地文件里面
-        savePicture(bitmap,"photo01");
-        File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
         if (isClick) {
             //显示正面图片
             ivCard1.setImageBitmap(bitmap);
             // 给正面图片赋值
+            // 把本文件压缩后缓存到本地文件里面
+            savePicture(bitmap,"photo01");
+            File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
             file1 = filePhoto01;
         } else {
             //显示反面图片
             ivCard2.setImageBitmap(bitmap);
             // 给背面图片赋值
+            // 把本文件压缩后缓存到本地文件里面
+            savePicture(bitmap,"photo02");
+            File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
             file2 = filePhoto01;
         }
     }

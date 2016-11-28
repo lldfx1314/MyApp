@@ -145,12 +145,16 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     }
 
     @Override
+    protected void initTitleBar() {
+        super.initTitleBar();
+        // 设置标题栏提示内容
+        setTopBarDesc("检查");
+    }
+
+    @Override
     protected void initViews() {
         // 设置扫描二维码的代理
         mQRCodeView.setDelegate(this);
-
-        // 设置标题栏提示内容
-        setTopBarDesc("检查");
 
         // 设置完成检查按钮显示的文字
         if (!TextUtils.isEmpty(ndIntent)) {

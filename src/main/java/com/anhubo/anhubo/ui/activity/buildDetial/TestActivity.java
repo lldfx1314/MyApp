@@ -236,7 +236,7 @@ public class TestActivity extends BaseActivity {
         Map<String, String> params = new HashMap<>();
         params.put("device_id", cardnumber);
         String url = Urls.Url_Build_Test;
-        System.out.println("获取测试项运行了111222");
+        //System.out.println("获取测试项运行了111222");
         OkHttpUtils.post()//
                 .url(url)//
                 .params(params)//

@@ -384,24 +384,30 @@ public class Pending_FeedbackActivity extends BaseActivity {
         String imagePath = c.getString(columnIndex);
         Bitmap photo = BitmapFactory.decodeFile(imagePath);
         try {
-            // 把本文件压缩后缓存到本地文件里面
-            savePicture(photo,"photo02");
-            File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
+
 
             if (photo != null) {
                 if (TextUtils.equals(str_photo, 1 + "")) {
-                    ivPendPhoto1.setImageBitmap(photo);
+                    ivPendPhoto1.setImageBitmap(photo);// 把本文件压缩后缓存到本地文件里面
+                    savePicture(photo,"photo01");
+                    File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
+
                     // 图片一
                     file1 = filePhoto02;
 
                 } else if (TextUtils.equals(str_photo, 2 + "")) {
                     ivPendPhoto2.setImageBitmap(photo);
+                    // 把本文件压缩后缓存到本地文件里面
+                    savePicture(photo,"photo02");
+                    File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
                     //图片二
                     file2 = filePhoto02;
 
                 } else if (TextUtils.equals(str_photo, 3 + "")) {
                     ivPendPhoto3.setImageBitmap(photo);
-
+                    // 把本文件压缩后缓存到本地文件里面
+                    savePicture(photo,"photo03");
+                    File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo03");
                     // 图片三
                     file3 = filePhoto02;
 
@@ -452,25 +458,30 @@ public class Pending_FeedbackActivity extends BaseActivity {
             }
         }
         if (bitmap != null) {
-            // 把本文件压缩后缓存到本地文件里面
-            savePicture(bitmap, "photo01");
-            File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
+
             //显示图片
             if (TextUtils.equals(str_photo, 1 + "")) {
                 ivPendPhoto1.setImageBitmap(bitmap);
                 // 图片一
+                // 把本文件压缩后缓存到本地文件里面
+                savePicture(bitmap, "photo01");
+                File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
                 file1 = filePhoto01;
 
 
             } else if (TextUtils.equals(str_photo, 2 + "")) {
                 ivPendPhoto2.setImageBitmap(bitmap);
-
+                // 把本文件压缩后缓存到本地文件里面
+                savePicture(bitmap, "photo02");
+                File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
                 // 图片二
                 file2 = filePhoto01;
 
             } else if (TextUtils.equals(str_photo, 3 + "")) {
                 ivPendPhoto3.setImageBitmap(bitmap);
-
+                // 把本文件压缩后缓存到本地文件里面
+                savePicture(bitmap, "photo03");
+                File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo03");
                 // 图片三
                 file3 = filePhoto01;
 

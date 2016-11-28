@@ -11,6 +11,7 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Build;
 import android.os.Parcelable;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -556,8 +557,6 @@ public class NfcScanActivity extends BaseActivity {
                 pronfcBar.setProgress(deviceCheckedNum);
                 tvBignfcNumber.setText(deviceCheckedNum + "");
                 tvSmallnfcNumber.setText(devicesNum + "");
-            } else {
-                System.out.println("NfcScanActivity+++===没获取到bean对象");
             }
         }
     }
@@ -748,22 +747,14 @@ public class NfcScanActivity extends BaseActivity {
 
         new AlertDialog(mActivity).builder()
                 .setTitle("提示")
-                .setMsg("前往系统设置的应用列表里打开安互保的NFC权限？")
+                .setMsg("前往系统设置打开NFC权限？")
                 .setCancelable(false)
                 .setPositiveButton("确认", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // 打开系统设置界面
-                        Intent intent = new Intent();
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        if (Build.VERSION.SDK_INT >= 9) {
-                            intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
-                            intent.setData(Uri.fromParts("package", getPackageName(), null));
-                        } else if (Build.VERSION.SDK_INT <= 8) {
-                            intent.setAction(Intent.ACTION_VIEW);
-                            intent.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
-                            intent.putExtra("com.android.settings.ApplicationPkgName", getPackageName());
-                        }
+                        Intent intent =  new Intent(Settings.ACTION_NFC_SETTINGS);
+                        startActivity(intent);
                         startActivity(intent);
 
                     }

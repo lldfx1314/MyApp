@@ -5,8 +5,28 @@ package com.anhubo.anhubo.protocol;
  * Created by Administrator on 2016/9/22.
  */
 public interface Urls {
-    String UrlBase = "http://115.28.56.139/api/";
+    /**  接入H5********************************************************************************/
+    //String UrlBaseH5 = "http://anhubo.com/";
+    String UrlBaseH5 = "http://115.28.56.139/";
+    /**发现，反馈*/
+    String Url_FindFeed = UrlBaseH5+"s/html/feedBackSchedule.html";
+    /**发现，公告*/
+    String Url_FindNotice = UrlBaseH5+"/s/html/afficheList.html";
+    /**学习*/
+    String Url_UnitStudy = UrlBaseH5+"s/html/answerSheetAO.html";
+    /**邀请注册*/
+    String Url_MyInvare = UrlBaseH5+"s/html/inviteRegisterAO.html";
+    /**关于我们*/
+    String Url_MyAboutWe = UrlBaseH5+"s/html/AboutAnhubo.html";
+    /**安互保协议*/
+    String Url_Deal = UrlBaseH5+"s/html/registerTreaty.html";
+    /**反馈成功*/
+    String Url_FeedBackSuccess = UrlBaseH5+"s/html/feedBackOK.html";
+
+
+    /**  Android原生********************************************************************************/
     //String UrlBase = "http://anhubo.com/api/";
+    String UrlBase = "http://115.28.56.139/api/";
     /**新增界面的接口*/
     String Url_Add = UrlBase+"Device/add_device_info";
 
@@ -40,16 +60,10 @@ public interface Urls {
     String Url_PwdRegister = UrlBase + "User/registerSecond";
     /**密码登录*/
     String Url_LoginPwd = UrlBase + "User/mimaLogin";
-    /**安互保协议*/
-    String Url_Deal = "http://anhubo.com/s/html/registerTreaty.html";
+
     /**注册完成，信息填写完整*/
     String Url_RegCom = UrlBase +"User/businessRegister";
-    /**学习*/
-    String Url_UnitStudy = "http://anhubo.com/s/html/answerSheetAO.html";
-    /**邀请注册*/
-    String Url_MyInvare = "http://anhubo.com/s/html/inviteRegisterAO.html";
-    /**关于我们*/
-    String Url_MyAboutWe = "http://anhubo.com/s/html/AboutAnhubo.html";
+
     /**学习、检查记录*/
     String Url_studyRecord = UrlBase +"Record/get_re_list";
     String Url_Unit = UrlBase +"BusinessChart/index";
@@ -109,14 +123,12 @@ public interface Urls {
     String Url_Check_Pending_FeedBack = UrlBase +"Issue/issue_detail";
     /**待处理反馈界面提交*/
     String Url_PendFeedBack =  UrlBase +"Issue/deal_issue";
-    /**发现，反馈*/
-    String Url_FindFeed = "http://anhubo.com/s/html/feedBackSchedule.html";
-    /**发现，公告*/
-    String Url_FindNotice = "http://115.28.56.139//s/html/afficheList.html";
+
     /**定位*/
     String Location =  UrlBase +"Building/get_addrest";
     /**获取测试项*/
     String Url_Build_Test = UrlBase +"Device/require_list";
     /**获取测试项详情*/
     String Url_Build_TestDetial = UrlBase +"Device/require_desc_list";
+
 }

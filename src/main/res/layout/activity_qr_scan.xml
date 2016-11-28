@@ -47,7 +47,7 @@
 
         <ProgressBar
             android:id="@+id/proBar"
-            style="@android:style/Widget.ProgressBar.Horizontal"
+            style="@style/ProgressBar"
             android:layout_width="245dp"
             android:layout_height="5dp"
             android:layout_centerHorizontal="true"
@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:textColor="@color/blue"
+                android:textColor="#0078ff"
                 android:textSize="30sp"
                 />
             <ImageView

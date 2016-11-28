@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -34,7 +33,7 @@
             android:layout_height="5dp"
             android:layout_marginTop="30dp"
             android:layout_centerHorizontal="true"
-            style="@android:style/Widget.ProgressBar.Horizontal"
+            style="@style/ProgressBar"
             />
         <RelativeLayout
             android:id="@+id/rl_nfcnumber"
@@ -48,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:textColor="@color/blue"
+                android:textColor="#0078ff"
                 android:textSize="30sp"
                 />
             <ImageView
@@ -82,7 +81,7 @@
             android:layout_height="40dp"
             android:layout_marginTop="30dp"
             android:text="完成检查"
-            android:textColor="@color/blue"
+            android:textColor="#0078ff"
             android:textSize="15sp"
             android:background="@drawable/btn_nfc_shap"/>
 
