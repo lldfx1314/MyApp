@@ -19,7 +19,6 @@ public class TestAdapter extends BaseExpandableListAdapter {
     private Context mContext;
     private ArrayList<String> listFather;
     private ArrayList<ArrayList<String>> listChild;
-
     public TestAdapter(Context context, ArrayList<String> listRequireTag, ArrayList<ArrayList<String>> listChild) {
         this.mContext = context;
         this.listFather = listRequireTag;
@@ -41,7 +40,8 @@ public class TestAdapter extends BaseExpandableListAdapter {
     public int getChildrenCount(int groupPosition) {
         if (listChild.size() > 0) {
 
-            return listChild == null ? 0 : listChild.get(groupPosition).size();
+            //return listChild == null ? 0 : listChild.get(groupPosition).size();
+            return listChild == null ? 0 : listChild.size();
         } else {
             return 0;
         }

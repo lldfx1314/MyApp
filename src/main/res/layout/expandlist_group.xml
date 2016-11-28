@@ -5,18 +5,19 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/rl_group_name"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="#d1d1d1">
+        android:background="@color/bg_upload">
 
         <TextView
             android:id="@+id/tv_group_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_centerInParent="true"
+            android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true"
             android:text="检查"
-            android:textColor="#ffffff"
+            android:textColor="@color/black"
             android:textSize="14sp" />
 
     </RelativeLayout>

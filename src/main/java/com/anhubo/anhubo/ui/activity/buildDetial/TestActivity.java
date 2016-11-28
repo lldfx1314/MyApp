@@ -2,6 +2,7 @@ package com.anhubo.anhubo.ui.activity.buildDetial;
 
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -124,6 +125,18 @@ public class TestActivity extends BaseActivity {
      * 点击事件
      */
     private void setListener() {
+        elListview.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+
+            }
+        });
+        elListview.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                //getDetialData(groupPosition);
+            }
+        });
         /**组头的点击事件*/
         elListview.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             // 定义一个变量记录已经被点开的是哪一个组
@@ -131,27 +144,35 @@ public class TestActivity extends BaseActivity {
 
             @Override
             public boolean onGroupClick(final ExpandableListView parent, View v, final int groupPosition, long id) {
+                System.out.println(groupPosition);
+                getDetialData(groupPosition);
+                /*parent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        // 判断是否展开
+                        System.out.println("点击了OnItemClickListener");
+                        View view1 = view.findViewById(R.id.rl_group_name);
 
-
+                    }
+                });*/
                 v.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        boolean isOpen = false;
+                        System.out.println("点击了OnClickListener");
+
                         // 判断是否展开
-                        if (parent.isGroupExpanded(groupPosition)) {
-                            // 已经展开去关闭
-                            isOpen = false;
-                            parent.collapseGroup(groupPosition);
-                        } else {
-                            isOpen = true;
-                            // 已经关闭去 展开
-                            parent.expandGroup(groupPosition);
-                        }
+//                        if (parent.isGroupExpanded(groupPosition)) {
+//                            // 已经展开去关闭
+//                            parent.collapseGroup(groupPosition);
+//                        } else {
+//                            // 已经关闭去 展开
+//                            parent.expandGroup(groupPosition);
+//                        }
                         /**获取测试项详情*/
-                        if (isOpen) {
+                        /*if (isOpen) {
                             getDetialData(groupPosition);
 
-                        }
+                        }*/
                     }
                 });
 
@@ -163,28 +184,28 @@ public class TestActivity extends BaseActivity {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, final int childPosition, long id) {
                 final ImageView ivChild = (ImageView) v.findViewById(R.id.iv_child);
-                // 获取当前position对应位置的点击记录
-                Boolean isClick = map.get(childPosition);
-                if (!isClick) {
-                    // 表示这个问题存在
-                    ivChild.setImageResource(R.drawable.fuxuan_input01);
-                    // 存在问题就设置为1;
-                    isProblem = 1;
-                } else {
-                    // 这个问题不存在
-                    ivChild.setImageResource(R.drawable.fuxuan_input02);
-                    isProblem = 0;
-                }
 
-                // 将对应position位置改为对应的boolean值和值
-                map.put(childPosition, !isClick);
-                completeList.set(childPosition, isProblem);
-                /*v.setOnClickListener(new View.OnClickListener() {
+                parent.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        // 获取当前position对应位置的点击记录
+                        Boolean isClick = map.get(childPosition);
+                        if (!isClick) {
+                            // 表示这个问题存在
+                            ivChild.setImageResource(R.drawable.fuxuan_input01);
+                            // 存在问题就设置为1;
+                            isProblem = 1;
+                        } else {
+                            // 这个问题不存在
+                            ivChild.setImageResource(R.drawable.fuxuan_input02);
+                            isProblem = 0;
+                        }
 
+                        // 将对应position位置改为对应的boolean值和值
+                        map.put(childPosition, !isClick);
+                        completeList.set(childPosition, isProblem);
                     }
-                });*/
+                });
                 return false;
             }
         });
@@ -215,7 +236,7 @@ public class TestActivity extends BaseActivity {
         Map<String, String> params = new HashMap<>();
         params.put("device_id", cardnumber);
         String url = Urls.Url_Build_Test;
-
+        System.out.println("获取测试项运行了111222");
         OkHttpUtils.post()//
                 .url(url)//
                 .params(params)//
@@ -249,19 +270,21 @@ public class TestActivity extends BaseActivity {
                 String msg = bean.msg;
                 List<TestItemBean.Data.Require> requires = bean.data.require;
                 if (code == 0 && requires != null) {
-                    if (!requires.isEmpty()) {
+                    if (requires.size() > 0) {
                         for (int i = 0; i < requires.size(); i++) {
                             TestItemBean.Data.Require require = requires.get(i);
                             requireTag = require.require_tag;
+                            System.out.println(requireTag);
                             testId = require.test_id;
-                            hmTestId.put(m++, testId);
+
                             listRequireTag.add(requireTag);
+                            hmTestId.put(m++, testId);
                         }
                     }
+                    // 如果requireTag不为空，显示ExpandableListView
+                    adapter = new TestAdapter(mActivity, listRequireTag, listChild);
+                    elListview.setAdapter(adapter);
                 }
-                // 如果requireTag不为空，显示ExpandableListView
-                adapter = new TestAdapter(mActivity, listRequireTag, listChild);
-                elListview.setAdapter(adapter);
 
             }
         }
@@ -296,11 +319,11 @@ public class TestActivity extends BaseActivity {
 
                     for (int i = 0; i < split.length; i++) {
                         childitem.add(split[i]);
-                        System.out.println(split[i]);
                     }
                     listChild.add(childitem);
                     // 如果requireTag不为空，显示ExpandableListView
                     adapter = new TestAdapter(mActivity, listRequireTag, listChild);
+                    adapter.notifyDataSetChanged();
                     elListview.setAdapter(adapter);
                 }
             }
