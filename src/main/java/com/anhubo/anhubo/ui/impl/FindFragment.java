@@ -8,6 +8,9 @@ import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseFragment;
 import com.anhubo.anhubo.ui.activity.DiscoveryDetial.FeedActivity;
 import com.anhubo.anhubo.ui.activity.DiscoveryDetial.NoticeActivity;
+import com.anhubo.anhubo.ui.activity.buildDetial.TestActivity;
+import com.anhubo.anhubo.ui.activity.unitDetial.QrScanActivity;
+import com.anhubo.anhubo.utils.Keys;
 
 /**
  * Created by Administrator on 2016/10/8.
@@ -15,8 +18,9 @@ import com.anhubo.anhubo.ui.activity.DiscoveryDetial.NoticeActivity;
 public class FindFragment extends BaseFragment {
 
 
-    RelativeLayout rlNotice;
-    RelativeLayout rlFeedback;
+    private RelativeLayout rlNotice;
+    private RelativeLayout rlFeedback;
+    private RelativeLayout rlTest;
 
 
     @Override
@@ -36,6 +40,7 @@ public class FindFragment extends BaseFragment {
     public void initView() {
         rlNotice = findView(R.id.rl_notice);
         rlFeedback = findView(R.id.rl_feedback);
+        rlTest = findView(R.id.rl_test);
     }
 
     @Override
@@ -43,6 +48,7 @@ public class FindFragment extends BaseFragment {
         // 设置监听
         rlNotice.setOnClickListener(this);
         rlFeedback.setOnClickListener(this);
+        rlTest.setOnClickListener(this);
     }
 
     @Override
@@ -58,6 +64,11 @@ public class FindFragment extends BaseFragment {
                 break;
             case R.id.rl_feedback:
                 startActivity(new Intent(mActivity, FeedActivity.class));
+                break;
+            case R.id.rl_test:
+                Intent intent = new Intent(mActivity, QrScanActivity.class);
+                intent.putExtra(Keys.TEST, "test");
+                startActivity(intent);
                 break;
         }
     }

@@ -2,14 +2,12 @@ package com.anhubo.anhubo.ui.activity.buildDetial;
 
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.TestAdapter;
-import com.anhubo.anhubo.adapter.TestDetialBean;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.TestItemBean;
 import com.anhubo.anhubo.protocol.Urls;
@@ -45,11 +43,19 @@ public class TestActivity extends BaseActivity {
     private TestAdapter adapter;
     private HashMap<Integer, String> hmTestId;
     private int m = 0;
-    private ArrayList<Integer> completeList;
+
+
+    private HashMap<Integer,ArrayList<Integer>> hmItem;
+    private Map<Integer, Map<Integer, Boolean>> listMap = new HashMap<>();
     /*用来记录对应的position位是否被点击*/
     private Map<Integer, Boolean> map = new HashMap<>();
     /* 用来记录存在问题的选项，0表示没问题，1表示有问题*/
     private int isProblem = 0;
+    private String testDesc;
+    private HashMap<Integer, Integer> hm;
+    private ArrayList<Integer> completeList;
+    private int groupItem = 0;
+    private int childItem = 0;
 
     @Override
     protected void initConfig() {
@@ -76,22 +82,13 @@ public class TestActivity extends BaseActivity {
         hmTestId = new HashMap<>();
 
         listChild = new ArrayList<>();
-        // 获取测试项
-        getData();
         // 初始化completeList
         completeList = new ArrayList<>();
-        // 创建一个数组，五个数全是0
-        int[] arr = new int[]{0, 0, 0, 0, 0};
-        for (int i = 0; i < arr.length; i++) {
+        hmItem = new HashMap<>();
+        // 获取测试项
+        getData();
 
-            completeList.add(arr[i]);
-        }
-        // 为map集合设置默认的值，每个item默认没被点击过
-        map.put(0, false);
-        map.put(1, false);
-        map.put(2, false);
-        map.put(3, false);
-        map.put(4, false);
+
     }
 
 
@@ -99,8 +96,6 @@ public class TestActivity extends BaseActivity {
     protected void initEvents() {
         super.initEvents();
         tvTopBarRight.setOnClickListener(this);
-
-
     }
 
 
@@ -125,107 +120,62 @@ public class TestActivity extends BaseActivity {
      * 点击事件
      */
     private void setListener() {
-        elListview.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-            @Override
-            public void onGroupCollapse(int groupPosition) {
 
-            }
-        });
-        elListview.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                //getDetialData(groupPosition);
-            }
-        });
         /**组头的点击事件*/
-        elListview.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            // 定义一个变量记录已经被点开的是哪一个组
-            int selectposition = -1;
+
+        /*elListview.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
 
             @Override
             public boolean onGroupClick(final ExpandableListView parent, View v, final int groupPosition, long id) {
-                System.out.println(groupPosition);
-                getDetialData(groupPosition);
-                /*parent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        // 判断是否展开
-                        System.out.println("点击了OnItemClickListener");
-                        View view1 = view.findViewById(R.id.rl_group_name);
-
-                    }
-                });*/
-                v.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        System.out.println("点击了OnClickListener");
-
-                        // 判断是否展开
-//                        if (parent.isGroupExpanded(groupPosition)) {
-//                            // 已经展开去关闭
-//                            parent.collapseGroup(groupPosition);
-//                        } else {
-//                            // 已经关闭去 展开
-//                            parent.expandGroup(groupPosition);
-//                        }
-                        /**获取测试项详情*/
-                        /*if (isOpen) {
-                            getDetialData(groupPosition);
-
-                        }*/
-                    }
-                });
+                System.out.println("组头" + groupPosition);
 
                 return false;
             }
-        });
+        });*/
+
         /**孩子的点击事件*/
         elListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, final int childPosition, long id) {
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 final ImageView ivChild = (ImageView) v.findViewById(R.id.iv_child);
 
-                parent.setOnClickListener(new View.OnClickListener() {
+                System.out.println("点击了22222groupPosition+++==="+groupPosition);
+                System.out.println("点击了22222childPosition+++==="+childPosition);
+                groupItem = groupPosition;
+                childItem = childPosition;
+
+                // 获取当前position对应位置的点击记录
+                map = listMap.get(groupPosition);
+                final Boolean isClick = map.get(childPosition);
+//                if(groupItem == groupPosition && childItem == childPosition){
+                adapter.setOnChildClickListener(new TestAdapter.OnChildClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        // 获取当前position对应位置的点击记录
-                        Boolean isClick = map.get(childPosition);
+                    public void childClick() {
                         if (!isClick) {
                             // 表示这个问题存在
+                            //ivChild.setTag(groupPosition,childPosition);
                             ivChild.setImageResource(R.drawable.fuxuan_input01);
                             // 存在问题就设置为1;
                             isProblem = 1;
                         } else {
                             // 这个问题不存在
+                            //ivChild.setTag(groupPosition,childPosition);
                             ivChild.setImageResource(R.drawable.fuxuan_input02);
                             isProblem = 0;
                         }
-
-                        // 将对应position位置改为对应的boolean值和值
-                        map.put(childPosition, !isClick);
-                        completeList.set(childPosition, isProblem);
                     }
                 });
-                return false;
+
+//                }
+                // 将对应position位置改为对应的boolean值和值
+                map.put(childPosition, !isClick);
+                listMap.put(groupPosition,map);
+                //completeList.set(childPosition, isProblem);
+                //hmItem.put(groupPosition,completeList);
+                return true;
             }
         });
 
-    }
-
-    /**
-     * 获取测试项详情
-     */
-    private void getDetialData(int groupPosition) {
-        progressBar.setVisibility(View.VISIBLE);
-        String url = Urls.Url_Build_TestDetial;
-        Map<String, String> params = new HashMap<>();
-        params.put("device_id", cardnumber);
-        params.put("test_id", hmTestId.get(groupPosition));
-        OkHttpUtils.post()//
-                .url(url)//
-                .params(params)//
-                .build()//
-                .execute(new MyStringCallback1());
     }
 
     /**
@@ -234,9 +184,10 @@ public class TestActivity extends BaseActivity {
     private void getData() {
         progressBar.setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<>();
-        params.put("device_id", cardnumber);
+        if (!TextUtils.isEmpty(cardnumber)) {
+            params.put("device_id", cardnumber);
+        }
         String url = Urls.Url_Build_Test;
-        //System.out.println("获取测试项运行了111222");
         OkHttpUtils.post()//
                 .url(url)//
                 .params(params)//
@@ -262,73 +213,68 @@ public class TestActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-            System.out.println("获取测试项+++===" + response);
+            //System.out.println("获取测试项+++===" + response);
+            progressBar.setVisibility(View.GONE);
             TestItemBean bean = new Gson().fromJson(response, TestItemBean.class);
             if (bean != null) {
-                progressBar.setVisibility(View.GONE);
                 int code = bean.code;
                 String msg = bean.msg;
+                String deviceName = bean.data.device_name;
                 List<TestItemBean.Data.Require> requires = bean.data.require;
                 if (code == 0 && requires != null) {
                     if (requires.size() > 0) {
                         for (int i = 0; i < requires.size(); i++) {
                             TestItemBean.Data.Require require = requires.get(i);
                             requireTag = require.require_tag;
-                            System.out.println(requireTag);
-                            testId = require.test_id;
-
                             listRequireTag.add(requireTag);
-                            hmTestId.put(m++, testId);
+
+                            testDesc = require.require_desc;
+                            String[] split = testDesc.split("\\|");
+                            ArrayList<String> childitem = new ArrayList<String>();
+
+                            for (int m = 0; m < split.length; m++) {
+                                childitem.add(split[m]);
+                            }
+                            listChild.add(childitem);
+                        }
+                        // 创建一个hashmap，用于记录每组子item数量
+                        hm = new HashMap<>();
+                        //遍历listChild，listChild里面的元素是每组的元素的小集合
+                        for (int j = 0; j < listChild.size(); j++) {
+                            ArrayList<String> list = listChild.get(j);
+                            int size = list.size();
+                            // 记录每组子item数量
+                            hm.put(j,size);
+                            //System.out.println("添加+++==="+j+"+++"+"size+++=="+size);
+                            for (int m = 0; m < size; m++) {
+                                map.put(m, false);
+                            }
+                            listMap.put(j, map);
+                        }
+                        // 创建集合，保存每组被选中的状态
+                        for (int i = 0; i < hm.keySet().size(); i++) {
+
+
+                            // 得到每组子item的数
+                            Integer items = hm.get(i);
+                            System.out.println("items长度+++==="+items);
+
+                            // 创建对应的集合,集合长度为items里面的每个元素初始值都为0
+                            ArrayList<Integer> arrayList = new ArrayList<>();
+                            for (int m = 0; m < items; m++) {
+                                arrayList.add(m,0);
+                            }
+                            //System.out.println("arrayList长度+++==="+arrayList.size());
+                            //System.out.println("arrayList+++==="+arrayList.toString());
+                            // 把该集合添加进HashMap里面
+                            hmItem.put(i,arrayList);
                         }
                     }
                     // 如果requireTag不为空，显示ExpandableListView
                     adapter = new TestAdapter(mActivity, listRequireTag, listChild);
                     elListview.setAdapter(adapter);
                 }
-
             }
         }
     }
-
-    /**
-     * 测试项的详情
-     */
-    class MyStringCallback1 extends StringCallback {
-        @Override
-        public void onError(Call call, Exception e) {
-            System.out.println("TestActivity+++获取测试项详情===界面失败" + e.getMessage());
-
-            progressBar.setVisibility(View.GONE);
-            new AlertDialog(mActivity).builder()
-                    .setTitle("提示")
-                    .setMsg("网络有问题，请检查")
-                    .setCancelable(false).show();
-        }
-
-        @Override
-        public void onResponse(String response) {
-            System.out.println("测试详情+++===" + response);
-            TestDetialBean bean = new Gson().fromJson(response, TestDetialBean.class);
-            if (bean != null) {
-                progressBar.setVisibility(View.GONE);
-                int code = bean.code;
-                String requireDesc = bean.data.require_desc;
-                if (code == 0 && !TextUtils.isEmpty(requireDesc)) {
-                    String[] split = requireDesc.split("\\|");
-                    ArrayList<String> childitem = new ArrayList<String>();
-
-                    for (int i = 0; i < split.length; i++) {
-                        childitem.add(split[i]);
-                    }
-                    listChild.add(childitem);
-                    // 如果requireTag不为空，显示ExpandableListView
-                    adapter = new TestAdapter(mActivity, listRequireTag, listChild);
-                    adapter.notifyDataSetChanged();
-                    elListview.setAdapter(adapter);
-                }
-            }
-        }
-    }
-
-
 }

@@ -123,12 +123,9 @@ public interface Urls {
     String Url_Check_Pending_FeedBack = UrlBase +"Issue/issue_detail";
     /**待处理反馈界面提交*/
     String Url_PendFeedBack =  UrlBase +"Issue/deal_issue";
-
     /**定位*/
     String Location =  UrlBase +"Building/get_addrest";
     /**获取测试项*/
-    String Url_Build_Test = UrlBase +"Device/require_list";
-    /**获取测试项详情*/
-    String Url_Build_TestDetial = UrlBase +"Device/require_desc_list";
+    String Url_Build_Test = UrlBase +"Device/require_list_an";
 
 }

@@ -363,7 +363,6 @@ public class BuildFragment extends BaseFragment {
                 startActivity(new Intent(mActivity, Build_CltMsgActivity.class));
                 break;
             case R.id.tv_build_frag_02_test:// 测试
-                //ToastUtils.showLongToast(mActivity, "测试");
                 Intent intent = new Intent(mActivity, QrScanActivity.class);
                 intent.putExtra(Keys.TEST, "test");
                 startActivity(intent);

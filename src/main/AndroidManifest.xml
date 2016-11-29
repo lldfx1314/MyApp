@@ -9,14 +9,13 @@
     <uses-feature
         android:name="android.hardware.nfc"
         android:required="true" />
-    <!--添加拍照和读写卡的权限-->
+    <!--添加网络、拍照和读写卡的权限-->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!--二维码扫描权限-->
-    <!-- <uses-permission android:name="android.permission.CAMERA"/>-->
+
     <!--震动权限-->
     <uses-permission android:name="android.permission.VIBRATE" />
     <!--打开摄像头灯的权限-->
@@ -114,12 +113,13 @@
         <activity
             android:name=".ui.activity.Login_Register.Login_Message"
             android:screenOrientation="portrait"></activity>
-        <!--友盟-->
+        <!--友盟meta-data-->
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="561cae6ae0f55abd990035bf"></meta-data>
-        <!--高德-->
+        <!--高德服务-->
         <service android:name="com.amap.api.location.APSService"></service>
+        <!--高德meta-data-->
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="a302f9a3355d276c96844f55c2b6ffd5"/>
@@ -208,9 +208,10 @@
         <activity
             android:name=".ui.activity.MyDetial.EngineerActivity"
             android:screenOrientation="portrait" />
-        <!--高德地图-->
+        <!--高德地图建筑-->
         <activity android:name=".ui.activity.unitDetial.BuildingActivity"
             android:screenOrientation="portrait" />
+        <!--高德地图单位-->
         <activity android:name=".ui.activity.unitDetial.BusinessActivity"
             android:screenOrientation="portrait" />
 
@@ -221,9 +222,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-        <!-- alipay callback-->
-
 
         <!--欢迎界面-->
         <activity

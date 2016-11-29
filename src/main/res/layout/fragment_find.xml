@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
+            <!--公告-->
             <RelativeLayout
                 android:id="@+id/rl_notice"
                 android:layout_marginTop="8dp"
@@ -48,7 +48,7 @@
 
                 </LinearLayout>
             </RelativeLayout>
-
+            <!--反馈-->
             <RelativeLayout
                 android:id="@+id/rl_feedback"
                 android:layout_marginTop="8dp"
@@ -83,6 +83,45 @@
 
                 </LinearLayout>
             </RelativeLayout>
+
+            <!--测试-->
+            <RelativeLayout
+                android:id="@+id/rl_test"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.anhubo.anhubo.view.RatioImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/notice" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:background="@drawable/notice_icon" />
+
+                    <TextView
+                        android:id="@+id/tv_test"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        android:text="测试"
+                        android:textColor="@color/backgroud_white"/>
+
+                </LinearLayout>
+            </RelativeLayout>
+
+
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

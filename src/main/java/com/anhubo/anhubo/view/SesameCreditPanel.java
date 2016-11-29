@@ -145,7 +145,7 @@ public class SesameCreditPanel extends View {
             endPanel.setEndSweepValue(dataModel.getUserTotal());
 
             progressAnimator = ValueAnimator.ofObject(new creditEvaluator(), startPanel, endPanel);
-            progressAnimator.setDuration(5000);
+            progressAnimator.setDuration(2500);
             progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
@@ -155,17 +155,16 @@ public class SesameCreditPanel extends View {
 
                     //数字积分动态显示
                     sesameJiFen = String.valueOf(panel.getSesameSweepValue());
-                    //System.out.println("panel.getSesameSweepValue() = " + panel.getSesameSweepValue() + ", String.valueOf(panel.getSesameSweepValue()); = " + String.valueOf(panel.getSesameSweepValue()));
                     invalidateView();
                 }
             });
-
-            postDelayed(new Runnable() {
+            progressAnimator.start();
+            /*postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    progressAnimator.start();
+
                 }
-            }, 1000);
+            }, 1000);*/
         }
 
     }

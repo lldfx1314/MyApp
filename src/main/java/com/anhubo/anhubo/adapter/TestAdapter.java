@@ -19,6 +19,9 @@ public class TestAdapter extends BaseExpandableListAdapter {
     private Context mContext;
     private ArrayList<String> listFather;
     private ArrayList<ArrayList<String>> listChild;
+    private int groupItem = 0;
+    private int childItem = 0;
+
     public TestAdapter(Context context, ArrayList<String> listRequireTag, ArrayList<ArrayList<String>> listChild) {
         this.mContext = context;
         this.listFather = listRequireTag;
@@ -40,8 +43,7 @@ public class TestAdapter extends BaseExpandableListAdapter {
     public int getChildrenCount(int groupPosition) {
         if (listChild.size() > 0) {
 
-            //return listChild == null ? 0 : listChild.get(groupPosition).size();
-            return listChild == null ? 0 : listChild.size();
+            return listChild == null ? 0 : listChild.get(groupPosition).size();
         } else {
             return 0;
         }
@@ -128,15 +130,30 @@ public class TestAdapter extends BaseExpandableListAdapter {
         } else {
             holder = (ChildHolder) view.getTag();
         }
+        groupItem = groupPosition;
+        childItem = childPosition;
+        if (onChildClickListener != null) {
+            if (groupItem == groupPosition && childItem == childPosition) {
+
+                onChildClickListener.childClick();
+            }
+        }
+
 
         holder.tvChild.setText(listChild.get(groupPosition).get(childPosition));
-       /* if (isLastChild) {
-            holder.ivChild.setBackgroundResource(R.drawable.fuxuan_input01);
-        } else {
-            holder.ivChild.setBackgroundResource(R.drawable.fuxuan_input02);
-        }*/
+
         return view;
 
+    }
+
+    public void setOnChildClickListener(OnChildClickListener onChildClickListener) {
+        this.onChildClickListener = onChildClickListener;
+    }
+
+    public OnChildClickListener onChildClickListener;
+
+    public interface OnChildClickListener {
+        void childClick();
     }
 
     /**
