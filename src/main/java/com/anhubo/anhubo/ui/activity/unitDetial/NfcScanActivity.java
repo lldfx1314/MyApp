@@ -29,6 +29,7 @@ import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.CheckComplete_Bean;
 import com.anhubo.anhubo.bean.ScanBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.ui.activity.buildDetial.TestActivity;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.PopBirthHelper;
 import com.anhubo.anhubo.utils.SpUtils;
@@ -72,6 +73,7 @@ public class NfcScanActivity extends BaseActivity {
     private String ndIntent;// 新增设备
     private String checkIntent;// 检查设备
     private String exerciseIntent;// 演练
+    private String testIntent;// 演练
     private static String SCANINENT;// 定义一个字符串，用来执行具体那个的网络请求
     private String deviceId;// 网络获取到的deviceId
     private boolean isEnter = false;
@@ -104,6 +106,7 @@ public class NfcScanActivity extends BaseActivity {
     private View viewFeed;
     private View viewTime;
 
+
     @Override
     protected void initConfig() {
         super.initConfig();
@@ -112,6 +115,7 @@ public class NfcScanActivity extends BaseActivity {
         ndIntent = getIntent().getStringExtra(Keys.NEWDEVICE);
         checkIntent = getIntent().getStringExtra(Keys.CHECK);
         exerciseIntent = getIntent().getStringExtra(Keys.EXERCISE);
+        testIntent = getIntent().getStringExtra(Keys.TEST);
 
         // 获取uid
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
@@ -165,6 +169,11 @@ public class NfcScanActivity extends BaseActivity {
         } else if (!TextUtils.isEmpty(exerciseIntent)) {
             setTopBarDesc("演练");
             btnCompleteNfc.setText("完成演练");
+            pronfcBar.setVisibility(View.GONE);
+            rlNfcnumber.setVisibility(View.GONE);
+        }else if (!TextUtils.isEmpty(testIntent)) {
+            setTopBarDesc("测试");
+            btnCompleteNfc.setText("完成测试");
             pronfcBar.setVisibility(View.GONE);
             rlNfcnumber.setVisibility(View.GONE);
         }
@@ -230,19 +239,21 @@ public class NfcScanActivity extends BaseActivity {
         isEnter = false;
         if (!TextUtils.isEmpty(cardNumber)) {
             if (!TextUtils.isEmpty(ndIntent) && !isEnter) {
+                /***********新增**************************/
                 isEnter = true;
                 //新增
                 addNewDevice();
 
 
             } else if (!TextUtils.isEmpty(checkIntent) && !isEnter) {
-                // 检查
+                /***********检查**************************/
                 isEnter = true;
 
                 // 定义一个请求网络的方法
                 getData();
 
             } else if (!TextUtils.isEmpty(exerciseIntent) && !isEnter) {
+                /***********演练**************************/
                 // 演练,获取DeviceId的最后一位数进行跳转到演练界面
                 isEnter = true;
                 String lastNumber = cardNumber.substring(cardNumber.length() - 1, cardNumber.length());
@@ -258,12 +269,24 @@ public class NfcScanActivity extends BaseActivity {
                             .setCancelable(true).show();
                 }
 
-                /***********演练**************************/
-            } else {
-                //isEnter = false;
+
+            } else if(!TextUtils.isEmpty(testIntent) && !isEnter){
+                /***********测试**************************/
+                isEnter = true;
+                // 测试的方法
+                enterTestActivity();
             }
 
         }
+    }
+
+
+    /**进入测试页*/
+    private void enterTestActivity() {
+        // 跳转到测试页面
+        Intent intent = new Intent(mActivity, TestActivity.class);
+        intent.putExtra(Keys.CARDNUMBER, cardNumber);
+        startActivity(intent);
     }
 
     /**

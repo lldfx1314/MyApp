@@ -127,5 +127,6 @@ public interface Urls {
     String Location =  UrlBase +"Building/get_addrest";
     /**获取测试项*/
     String Url_Build_Test = UrlBase +"Device/require_list_an";
-
+    /**提交测试项*/
+    String Url_Test_Submit = UrlBase +"Device/sub_res";
 }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.anhubo.anhubo.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by LUOLI on 2016/11/24.
@@ -19,13 +20,17 @@ public class TestAdapter extends BaseExpandableListAdapter {
     private Context mContext;
     private ArrayList<String> listFather;
     private ArrayList<ArrayList<String>> listChild;
-    private int groupItem = 0;
-    private int childItem = 0;
+    private HashMap<Integer, ArrayList<Integer>> hm;
+
 
     public TestAdapter(Context context, ArrayList<String> listRequireTag, ArrayList<ArrayList<String>> listChild) {
         this.mContext = context;
         this.listFather = listRequireTag;
         this.listChild = listChild;
+    }
+    /**接收已经选择过的集合，用于当前item重新显示在屏幕的时候让其显示图标*/
+    public void setList(HashMap<Integer, ArrayList<Integer>> hmItem) {
+        hm = hmItem;
     }
 
     /**
@@ -115,45 +120,38 @@ public class TestAdapter extends BaseExpandableListAdapter {
 
     /**
      * 对一级标签下的二级标签进行设置
+     * ****************************这里是一个坑，千万别复用item************************
      */
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
         View view = convertView;
         ChildHolder holder = null;
-        if (view == null) {
+//        if (view == null) {
             holder = new ChildHolder();
             view = LayoutInflater.from(mContext).inflate(R.layout.expandlist_child, null);
             holder.tvChild = (TextView) view.findViewById(R.id.tv_child);
             holder.ivChild = (ImageView) view.findViewById(R.id.iv_child);
-            view.setTag(holder);
-        } else {
-            holder = (ChildHolder) view.getTag();
-        }
-        groupItem = groupPosition;
-        childItem = childPosition;
-        if (onChildClickListener != null) {
-            if (groupItem == groupPosition && childItem == childPosition) {
-
-                onChildClickListener.childClick();
+//            view.setTag(holder);
+//        } else {
+//            holder = (ChildHolder) view.getTag();
+//        }
+        //　遍历hm集合
+        if(hm!=null&&!hm.isEmpty()){
+            Integer integer = hm.get(groupPosition).get(childPosition);
+            switch (integer){
+                case 0:
+                    holder.ivChild.setImageResource(R.drawable.fuxuan_input02);
+                    break;
+                case 1:
+                    holder.ivChild.setImageResource(R.drawable.fuxuan_input01);
+                    break;
             }
         }
-
-
         holder.tvChild.setText(listChild.get(groupPosition).get(childPosition));
 
         return view;
 
-    }
-
-    public void setOnChildClickListener(OnChildClickListener onChildClickListener) {
-        this.onChildClickListener = onChildClickListener;
-    }
-
-    public OnChildClickListener onChildClickListener;
-
-    public interface OnChildClickListener {
-        void childClick();
     }
 
     /**

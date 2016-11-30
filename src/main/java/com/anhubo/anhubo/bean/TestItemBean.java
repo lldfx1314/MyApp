@@ -13,8 +13,9 @@ public class TestItemBean extends BaseEntity {
         public List<Require> require;
         public class Require implements Serializable  {
 
-            public String require_tag  ;
-            public String require_desc  ;
+            public String require_tag;
+            public String require_desc;
+            public String test_id;
 
         }
 

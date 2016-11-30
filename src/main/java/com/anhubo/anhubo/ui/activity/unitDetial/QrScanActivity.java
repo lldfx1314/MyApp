@@ -314,7 +314,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
 
         }
     }
-
+    /**进入测试页*/
     private void enterTestActivity() {
         // 跳转到测试页面
         Intent intent = new Intent(mActivity, TestActivity.class);
