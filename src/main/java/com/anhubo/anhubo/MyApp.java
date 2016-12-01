@@ -12,6 +12,8 @@ import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.util.concurrent.TimeUnit;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * Created by Administrator on 2016/9/18.
  */
@@ -34,6 +36,12 @@ public class MyApp extends Application {
         //CrashHandler crashHandler = CrashHandler.getInstance();
         // 注册crashHandler
         //crashHandler.init(getApplicationContext());
+
+        // 极光推送
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
+
+
 
         // 友盟
         UMShareAPI.get(this);

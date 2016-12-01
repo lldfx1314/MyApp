@@ -67,7 +67,8 @@ public class InvateActivity extends BaseActivity {
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
         url = Urls.Url_MyInvare;
         newUrl_invate = url + "?uid=" + uid;
-        url_weixin = "http://anhubo.com/s/html/InviteShare.html";
+
+        url_weixin = Urls.Url_MyInvare_WeiXin;
 
         WebSettings settings = wvInvate.getSettings();
         settings.setJavaScriptEnabled(true);

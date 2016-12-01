@@ -172,7 +172,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
             proBar.setVisibility(View.GONE);
             rlQrNumber.setVisibility(View.GONE);
 
-        } else if(!TextUtils.isEmpty(testIntent)) {
+        } else if (!TextUtils.isEmpty(testIntent)) {
             setTopBarDesc("测试");
             btnCompleteCheck.setText("完成测试");
             proBar.setVisibility(View.GONE);
@@ -305,16 +305,19 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                             .setCancelable(true).show();
                 }
 
-            } else if(!TextUtils.isEmpty(testIntent) && !isEnter){
+            } else if (!TextUtils.isEmpty(testIntent) && !isEnter) {
                 isEnter = true;
-            /***********测试**************************/
+                /***********测试**************************/
                 // 测试的方法
                 enterTestActivity();
             }
 
         }
     }
-    /**进入测试页*/
+
+    /**
+     * 进入测试页
+     */
     private void enterTestActivity() {
         // 跳转到测试页面
         Intent intent = new Intent(mActivity, TestActivity.class);
@@ -659,6 +662,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     private void checkComplete() {
 
         // 这里是完成的点击事件
+        progressBar.setVisibility(View.VISIBLE);
         String url = Urls.Url_Check_Complete;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("uid", uid); //这是uid,登录后改成真正的用户
@@ -676,6 +680,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
 
     private void checkComplete1() {
         // 这里是完成的点击事件
+        progressBar.setVisibility(View.VISIBLE);
         String url = Urls.Url_Check_Complete;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("uid", uid); //这是uid
@@ -706,9 +711,10 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
 
         @Override
         public void onResponse(String response) {
+            progressBar.setVisibility(View.GONE);
             CheckComplete_Bean bean = new Gson().fromJson(response, CheckComplete_Bean.class);
             if (bean != null) {
-                ToastUtils.showToast(mActivity, "检查完成");
+
                 // 完成后打开二维码扫描
                 mQRCodeView.startSpot();
                 dialog.dismiss();
@@ -725,8 +731,24 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                 proBar.setProgress(deviceCheckedNum);
                 tvBigQrNumber.setText(deviceCheckedNum + "");
                 tvSmallQrNumber.setText(devicesNum);
-            } else {
-                System.out.println("QrScanActivity+++完成===没获取到bean对象");
+                boolean isZero = false;
+                for (int i = 0; i < completeList.size(); i++) {
+                    Integer integer = completeList.get(i);
+                    if(integer == 1){
+                        isZero = true;
+                    }
+                }
+                if (isZero) {
+                    // 有问题，跳转到反馈界面
+                    Intent intent = new Intent(mActivity, FeedbackActivity.class);
+                    intent.putExtra(Keys.DeviceId, deviceId);
+                    startActivity(intent);
+                } else {
+                    // 无问题，提示检查完成
+                    ToastUtils.showToast(mActivity, "检查完成");
+
+                }
+
             }
         }
     }
@@ -752,7 +774,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
             Intent intentExercise = new Intent(mActivity, NfcScanActivity.class);
             intentExercise.putExtra(Keys.EXERCISE, "Exercise");
             startActivity(intentExercise);
-        } else if(!TextUtils.isEmpty(testIntent)){
+        } else if (!TextUtils.isEmpty(testIntent)) {
             // 测试
             Intent intentExercise = new Intent(mActivity, NfcScanActivity.class);
             intentExercise.putExtra(Keys.TEST, "test");

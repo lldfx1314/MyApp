@@ -33,6 +33,7 @@ import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.ShowBottonDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -150,16 +151,9 @@ public class Pending_FeedbackActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_complete_Deal:
-                if (file1 != null && file2 != null && file3 != null) {
-                    submit3();
-                } else if (file1 != null && file2 != null) {
-                    submit2();
-                } else if (file1 != null) {
-                    submit1();
-                } else {
-                    // 至少拍一张图片
-                    dialog();
-                }
+                // 提交
+                submit();
+
                 break;
             case R.id.btn_popDialog_takephoto:
                 // 拍照
@@ -180,75 +174,38 @@ public class Pending_FeedbackActivity extends BaseActivity {
     private void dialog() {
         new AlertDialog(mActivity).builder()
                 .setTitle("提示")
-                .setMsg("请至少拍一张照片")
+                .setMsg("请至少拍一张修复后的设备照片")
                 .setCancelable(false)
                 .show();
     }
 
-    /**
-     * 1张图片
-     */
-    private void submit1() {
-
-
-        progressBar.setVisibility(View.VISIBLE);
-        Map<String, String> params = new HashMap<>();
-
-        params.put("uid", uid);
-        params.put("is_id", isId);
-
-        String url = Urls.Url_PendFeedBack;
-
-
-        OkHttpUtils.post()//
-                .addFile("file1", "file01.png", file1)//
-                .url(url)//
-                .params(params)//
-                .build()//
-                .execute(new MyStringCallback1());
-    }
 
     /**
-     * 2张图片
+     * 提交
      */
-    private void submit2() {
-
-
+    private void submit() {
+        if (file1 == null && file2 == null && file3 == null) {
+            dialog();
+            return;
+        }
         progressBar.setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         params.put("is_id", isId);
 
-
         String url = Urls.Url_PendFeedBack;
 
-        OkHttpUtils.post()//
-                .addFile("file1", "file01.png", file1)//
-                .addFile("file2", "file02.png", file2)//
-                .url(url)//
-                .params(params)//
-                .build()//
-                .execute(new MyStringCallback1());
-    }
-
-    /**
-     * 3张图片
-     */
-    private void submit3() {
-
-        progressBar.setVisibility(View.VISIBLE);
-        Map<String, String> params = new HashMap<>();
-        params.put("uid", uid);
-        params.put("is_id", isId);
-
-
-        String url = Urls.Url_PendFeedBack;
-
-        OkHttpUtils.post()//
-                .addFile("file1", "file01.png", file1)//
-                .addFile("file2", "file02.png", file2)//
-                .addFile("file3", "file03.png", file3)//
-                .url(url)//
+        PostFormBuilder post = OkHttpUtils.post();
+        if (file1 != null) {
+            post.addFile("file1", "file01.png", file1);
+        }
+        if (file2 != null) {
+            post.addFile("file2", "file02.png", file2);
+        }
+        if (file3 != null) {
+            post.addFile("file3", "file03.png", file3);
+        }
+        post.url(url)//
                 .params(params)//
                 .build()//
                 .execute(new MyStringCallback1());
@@ -277,7 +234,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
                 int code = bean.code;
                 String msg = bean.msg;
                 // 返回到上个页面
-                if(code == 0){
+                if (code == 0) {
                     Intent intent = new Intent();
                     setResult(1, intent);
                     finish();
@@ -389,7 +346,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
             if (photo != null) {
                 if (TextUtils.equals(str_photo, 1 + "")) {
                     ivPendPhoto1.setImageBitmap(photo);// 把本文件压缩后缓存到本地文件里面
-                    savePicture(photo,"photo01");
+                    savePicture(photo, "photo01");
                     File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
 
                     // 图片一
@@ -398,7 +355,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
                 } else if (TextUtils.equals(str_photo, 2 + "")) {
                     ivPendPhoto2.setImageBitmap(photo);
                     // 把本文件压缩后缓存到本地文件里面
-                    savePicture(photo,"photo02");
+                    savePicture(photo, "photo02");
                     File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
                     //图片二
                     file2 = filePhoto02;
@@ -406,7 +363,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
                 } else if (TextUtils.equals(str_photo, 3 + "")) {
                     ivPendPhoto3.setImageBitmap(photo);
                     // 把本文件压缩后缓存到本地文件里面
-                    savePicture(photo,"photo03");
+                    savePicture(photo, "photo03");
                     File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo03");
                     // 图片三
                     file3 = filePhoto02;

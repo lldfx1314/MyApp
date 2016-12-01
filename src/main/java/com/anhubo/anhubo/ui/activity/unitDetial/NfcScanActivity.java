@@ -580,6 +580,25 @@ public class NfcScanActivity extends BaseActivity {
                 pronfcBar.setProgress(deviceCheckedNum);
                 tvBignfcNumber.setText(deviceCheckedNum + "");
                 tvSmallnfcNumber.setText(devicesNum + "");
+
+                boolean isZero = false;
+                for (int i = 0; i < completeList.size(); i++) {
+                    Integer integer = completeList.get(i);
+                    if(integer == 1){
+                        isZero = true;
+                    }
+                }
+                if (isZero) {
+                    // 有问题，跳转到反馈界面
+                    Intent intent = new Intent(mActivity, FeedbackActivity.class);
+                    intent.putExtra(Keys.DeviceId, deviceId);
+                    startActivity(intent);
+                } else {
+                    // 无问题，提示检查完成
+                    ToastUtils.showToast(mActivity, "检查完成");
+
+                }
+
             }
         }
     }

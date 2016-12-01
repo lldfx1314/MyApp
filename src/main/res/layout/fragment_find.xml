@@ -95,7 +95,7 @@
                 <com.anhubo.anhubo.view.RatioImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/notice" />
+                    android:src="@drawable/test" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -106,7 +106,7 @@
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:background="@drawable/notice_icon" />
+                        android:background="@drawable/test_icon" />
 
                     <TextView
                         android:id="@+id/tv_test"
@@ -119,7 +119,41 @@
 
                 </LinearLayout>
             </RelativeLayout>
+            <!--使用指导-->
+            <RelativeLayout
+                android:id="@+id/rl_useGuide"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
+                <com.anhubo.anhubo.view.RatioImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/useguide" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:background="@drawable/useguide_icon" />
+
+                    <TextView
+                        android:id="@+id/tv_useGuide"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        android:text="使用指导"
+                        android:textColor="@color/backgroud_white"/>
+
+                </LinearLayout>
+            </RelativeLayout>
 
 
         </LinearLayout>

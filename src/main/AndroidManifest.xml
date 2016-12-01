@@ -183,6 +183,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.DiscoveryDetial.NoticeActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.DiscoveryDetial.UseGuideActivity"
+            android:screenOrientation="portrait" />
         <!--我的界面-->
         <activity
             android:name=".ui.activity.MyDetial.InvateActivity"

@@ -16,12 +16,23 @@ public interface Urls {
     String Url_UnitStudy = UrlBaseH5+"s/html/answerSheetAO.html";
     /**邀请注册*/
     String Url_MyInvare = UrlBaseH5+"s/html/inviteRegisterAO.html";
+    /**邀请 微信*/
+    String Url_MyInvare_WeiXin = UrlBaseH5+"s/html/InviteShare.html";
     /**关于我们*/
     String Url_MyAboutWe = UrlBaseH5+"s/html/AboutAnhubo.html";
     /**安互保协议*/
     String Url_Deal = UrlBaseH5+"s/html/registerTreaty.html";
     /**反馈成功*/
     String Url_FeedBackSuccess = UrlBaseH5+"s/html/feedBackOK.html";
+    /**使用指导*/
+    String Url_UseGuide = UrlBaseH5+"s/html/userDirection/userList.html";
+
+
+
+
+
+
+
 
 
     /**  Android原生********************************************************************************/
@@ -129,4 +140,6 @@ public interface Urls {
     String Url_Build_Test = UrlBase +"Device/require_list_an";
     /**提交测试项*/
     String Url_Test_Submit = UrlBase +"Device/sub_res";
+
+
 }

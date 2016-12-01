@@ -35,6 +35,7 @@ import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.ShowBottonDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.builder.PostFormBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.File;
@@ -137,30 +138,7 @@ public class FeedbackActivity extends BaseActivity {
                 break;
             case R.id.tv_submit_feedback:// 提交按钮
                 /**提交反馈*/
-                if (!TextUtils.isEmpty(deviceId)) {
-                    // 有deviceId
-                    if (file1 != null && file2 != null && file3 != null) {
-                        submit3();
-                    } else if (file1 != null && file2 != null) {
-                        submit2();
-                    } else if (file1 != null) {
-                        submit1();
-                    } else {
-                        submit();
-                    }
-                } else {
-                    // 无deviceId
-                    if (file1 != null && file2 != null && file3 != null) {
-                        submitnoId3();
-                    } else if (file1 != null && file2 != null) {
-                        submitnoId2();
-                    } else if (file1 != null) {
-                        submitnoId1();
-                    } else {
-                        submitnoId();
-                    }
-                }
-
+                submit();
                 break;
             case R.id.btn_popDialog_takephoto:
                 // 拍照
@@ -176,133 +154,6 @@ public class FeedbackActivity extends BaseActivity {
 
     }
 
-    /**
-     * 无deviceid提交反馈 无图片
-     */
-    private void submitnoId() {
-
-        // 问题描述
-        if (TextUtils.isEmpty(feedContent)) {
-            // 弹窗提示问题和照片至少得有一个
-            dialog();
-            return;
-        }
-
-
-        progressBar.setVisibility(View.VISIBLE);
-        Map<String, String> params = new HashMap<>();
-
-        params.put("uid", uid);
-        params.put("issue_content", feedContent);
-
-        String url = Urls.Url_FeedBack;
-
-
-        OkHttpUtils.post()//
-                .url(url)//
-                .params(params)//
-                .build()//
-                .execute(new MyStringCallback1());
-    }
-
-    /**
-     * 无deviceid提交反馈 1张图片
-     */
-    private void submitnoId1() {
-
-
-        progressBar.setVisibility(View.VISIBLE);
-        Map<String, String> params = new HashMap<>();
-
-        params.put("uid", uid);
-        params.put("issue_content", feedContent);
-
-        String url = Urls.Url_FeedBack;
-
-
-        OkHttpUtils.post()//
-                .addFile("file1", "file01.png", file1)//
-                .url(url)//
-                .params(params)//
-                .build()//
-                .execute(new MyStringCallback1());
-    }
-
-    /**
-     * 无deviceid提交反馈 2张图片
-     */
-    private void submitnoId2() {
-
-        progressBar.setVisibility(View.VISIBLE);
-        Map<String, String> params = new HashMap<>();
-
-        params.put("uid", uid);
-        params.put("issue_content", feedContent);
-
-        String url = Urls.Url_FeedBack;
-
-
-        OkHttpUtils.post()//
-                .addFile("file1", "file01.png", file1)//
-                .addFile("file2", "file02.png", file2)//
-                .url(url)//
-                .params(params)//
-                .build()//
-                .execute(new MyStringCallback1());
-    }
-
-    /**
-     * 无deviceid提交反馈 3张图片
-     */
-    private void submitnoId3() {
-
-
-        progressBar.setVisibility(View.VISIBLE);
-        Map<String, String> params = new HashMap<>();
-
-        params.put("uid", uid);
-        params.put("issue_content", feedContent);
-
-        String url = Urls.Url_FeedBack;
-
-
-        OkHttpUtils.post()//
-                .addFile("file1", "file01.png", file1)//
-                .addFile("file2", "file02.png", file2)//
-                .addFile("file3", "file03.png", file3)//
-                .url(url)//
-                .params(params)//
-                .build()//
-                .execute(new MyStringCallback1());
-    }
-
-    class MyStringCallback1 extends StringCallback {
-
-        @Override
-        public void onError(Call call, Exception e) {
-            progressBar.setVisibility(View.GONE);
-            new AlertDialog(mActivity).builder()
-                    .setTitle("提示")
-                    .setMsg("网络有问题，请检查")
-                    .setCancelable(false).show();
-            System.out.println("FeedbackActivity界面+++===失败");
-        }
-
-        @Override
-        public void onResponse(String response) {
-            System.out.println("反馈界面+++===" + response);
-            FeedBackBean bean = new Gson().fromJson(response, FeedBackBean.class);
-            if (bean != null) {
-                progressBar.setVisibility(View.GONE);
-                int code = bean.code;
-                String msg = bean.msg;
-                userAddScore = bean.data.user_add_score;
-                // 打开反馈成功界面
-                Intent intent = new Intent(mActivity, FeedbackSuccessActivity.class);
-                startActivity(intent);
-            }
-        }
-    }
 
     /**
      * 弹窗提示
@@ -310,104 +161,42 @@ public class FeedbackActivity extends BaseActivity {
     private void dialog() {
         new AlertDialog(mActivity).builder()
                 .setTitle("提示")
-                .setMsg("请填写问题或者至少拍一张照片")
+                .setMsg("请填写问题描述")
                 .setCancelable(false)
                 .show();
     }
 
     /**
-     * 有deviceid提交反馈  无图片
+     * 有deviceid提交反馈  3张图片
      */
     private void submit() {
 
-
-        // 问题描述
         if (TextUtils.isEmpty(feedContent)) {
-            // 弹窗提示问题和照片至少得有一个
             dialog();
             return;
         }
-        progressBar.setVisibility(View.VISIBLE);
-        Map<String, String> params = new HashMap<>();
-        params.put("uid", uid);
-        params.put("issue_content", feedContent);
-        params.put("device_id", deviceId);
-
-
-        String url = Urls.Url_FeedBack;
-
-        OkHttpUtils.post()//
-                .url(url)//
-                .params(params)//
-                .build()//
-                .execute(new MyStringCallback());
-    }
-
-    /**
-     * 有deviceid提交反馈 1张图片
-     */
-    private void submit1() {
 
         progressBar.setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         params.put("issue_content", feedContent);
-        params.put("device_id", deviceId);
-
-
-        String url = Urls.Url_FeedBack;
-
-        OkHttpUtils.post()//
-                .addFile("file1", "file01.png", file1)//
-                .url(url)//
-                .params(params)//
-                .build()//
-                .execute(new MyStringCallback());
-    }
-
-    /**
-     * 有deviceid提交反馈 2张图片
-     */
-    private void submit2() {
-
-
-        progressBar.setVisibility(View.VISIBLE);
-        Map<String, String> params = new HashMap<>();
-        params.put("uid", uid);
-        params.put("issue_content", feedContent);
-        params.put("device_id", deviceId);
-
+        if (!TextUtils.isEmpty(deviceId)) {
+            params.put("device_id", deviceId);
+        }
 
         String url = Urls.Url_FeedBack;
 
-        OkHttpUtils.post()//
-                .addFile("file1", "file01.png", file1)//
-                .addFile("file2", "file02.png", file2)//
-                .url(url)//
-                .params(params)//
-                .build()//
-                .execute(new MyStringCallback());
-    }
-
-    /**
-     * 有deviceid提交反馈  3张图片
-     */
-    private void submit3() {
-
-        progressBar.setVisibility(View.VISIBLE);
-        Map<String, String> params = new HashMap<>();
-        params.put("uid", uid);
-        params.put("issue_content", feedContent);
-        params.put("device_id", deviceId);
-
-
-        String url = Urls.Url_FeedBack;
-
-        OkHttpUtils.post()//
-                .addFile("file1", "file01.png", file1)//
-                .addFile("file2", "file02.png", file2)//
-                .addFile("file3", "file03.png", file3)//
-                .url(url)//
+        PostFormBuilder post = OkHttpUtils.post();
+        if (file1 != null) {
+            post.addFile("file1", "file01.png", file1);
+        }
+        if (file2 != null) {
+            post.addFile("file2", "file02.png", file2);
+        }
+        if (file3 != null) {
+            post.addFile("file3", "file03.png", file3);
+        }
+        post.url(url)//
                 .params(params)//
                 .build()//
                 .execute(new MyStringCallback());
