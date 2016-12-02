@@ -12,7 +12,7 @@ android {
         versionName "1.0"
 
 
-        ndk {
+        /*ndk {
             //选择要添加的对应cpu类型的.so库。
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a'
             // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
@@ -22,7 +22,7 @@ android {
                 JPUSH_PKGNAME : applicationId,
                 JPUSH_APPKEY : "4c79125d89e7344f623afb9a", //JPush上注册的包名对应的appkey.
                 JPUSH_CHANNEL : "276b54ff537c5cc62ccd712c", //暂时填写默认值即可.
-        ]
+        ]*/
 
     }
     buildTypes {
@@ -65,5 +65,5 @@ dependencies {
     /**上面三个二维码的依赖*/
     /**圆形控件*/
     compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'cn.jiguang:jpush:2.2.0'
+    //compile 'cn.jiguang:jpush:2.2.0'
 }

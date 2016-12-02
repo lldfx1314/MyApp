@@ -37,9 +37,6 @@ public class MyApp extends Application {
         // 注册crashHandler
         //crashHandler.init(getApplicationContext());
 
-        // 极光推送
-        JPushInterface.setDebugMode(true);
-        JPushInterface.init(this);
 
 
 

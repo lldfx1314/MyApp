@@ -140,6 +140,8 @@ public interface Urls {
     String Url_Build_Test = UrlBase +"Device/require_list_an";
     /**提交测试项*/
     String Url_Test_Submit = UrlBase +"Device/sub_res";
-
-
+    /**邀请同事*/
+    String Url_Unit_InvateWorkMate = UrlBase +"Work/in_wo_mate";
+    /**上传Registration_Id*/
+    String Url_Registration_Id = UrlBase +"Device/add_token";
 }

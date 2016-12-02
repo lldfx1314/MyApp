@@ -110,7 +110,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     /**
      * 获取布局id
-     *
      * @return
      */
     protected abstract int getContentViewId();

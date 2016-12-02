@@ -1,6 +1,13 @@
 package com.anhubo.anhubo.ui.impl;
 
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -17,6 +24,7 @@ import com.anhubo.anhubo.bean.SesameModel;
 import com.anhubo.anhubo.bean.UnitBean;
 import com.anhubo.anhubo.bean.Unit_PlanBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.ui.activity.buildDetial.TestActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.MsgPerfectActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.QrScanActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.Unit2Study;
@@ -36,7 +44,9 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import cn.jpush.android.api.JPushInterface;
 import okhttp3.Call;
 
 /**
@@ -45,6 +55,7 @@ import okhttp3.Call;
 public class UnitFragment extends BaseFragment {
 
 
+    //private static final String REGISTRATION = "cn.jpush.android.intent.REGISTRATION";
     private ListView lvUnit;
     private RelativeLayout rlUnit01;
     private RelativeLayout rlUnit02;
@@ -78,6 +89,7 @@ public class UnitFragment extends BaseFragment {
     private TextView tvNoPlan2;
     private int code;
     private List<Unit_PlanBean.Data.Certs> certs;
+    private String uid;
 
 
     @Override
@@ -141,6 +153,10 @@ public class UnitFragment extends BaseFragment {
         lvUnit.addHeaderView(view,null,true);
         // 去掉头布局的分割线
         lvUnit.setHeaderDividersEnabled(false);
+
+        uid = SpUtils.getStringParam(mActivity, Keys.UID);
+
+
         //互保计划获取数据
         getPlanData();
 
@@ -208,13 +224,16 @@ public class UnitFragment extends BaseFragment {
 
     }
 
+
+
+
     /**
      * 互保计划获取数据
      */
     private void getPlanData() {
 
 
-        String uid = SpUtils.getStringParam(mActivity, Keys.UID);
+
         //　互保计划　请求网络
 
         String url = Urls.Url_Unit_Plan;
@@ -356,8 +375,8 @@ public class UnitFragment extends BaseFragment {
             case R.id.tv_unit_frag_02_msg: //信息完善
                 startActivity(new Intent(mActivity, MsgPerfectActivity.class));
                 break;
-            case R.id.tv_unit_frag_02_invite://邀请加入
-                ToastUtils.showLongToast(mActivity, "邀请加入");
+            case R.id.tv_unit_frag_02_invite://邀请同事
+                dialog();
                 break;
             case R.id.tv_unit_frag_02_add:  //新增设备
                 Intent intent = new Intent(mActivity, QrScanActivity.class);
@@ -381,7 +400,7 @@ public class UnitFragment extends BaseFragment {
                 rlUnit.setVisibility(View.GONE);
                 rlUnit02.setVisibility(View.VISIBLE);
                 tvUnitFragMsg.setVisibility(View.VISIBLE);
-                //tvUnitFragInvite.setVisibility(View.VISIBLE);
+                tvUnitFragInvite.setVisibility(View.VISIBLE);
                 tvUnitFragAdd.setVisibility(View.VISIBLE);
                 break;
             case R.id.rl_unit_02:
@@ -396,6 +415,64 @@ public class UnitFragment extends BaseFragment {
         }
 
     }
+    private void dialog() {
+        final AlertDialog alertDialog = new AlertDialog(mActivity);
+        alertDialog
+                .builder()
+                .setTitle("提示")
+                .setEditHint("请输入电话号码")
+                .setCancelable(false)
+                .setPositiveButton("确认", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String string = alertDialog.et_msg.getText().toString().trim();
+                        if (!TextUtils.isEmpty(string)) {
+                            boolean b = Utils.judgePhoneNumber(string);
+                            if(!b){
+                                ToastUtils.showToast(mActivity,"号码输入不正确，请重新输入");
+                                return;
+                            }else{
+                                // 拿着号码和uid请求网络
+                                invateWorkMate(string);
+                            }
+
+                        }
+                    }
+                }).setNegativeButton("取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        }).show();
+    }
+    /**邀请同事网络请求*/
+    private void invateWorkMate(String phone) {
+        String url = Urls.Url_Unit_InvateWorkMate;
+        Map<String, String> params = new HashMap<>();
+        params.put("uid", uid);
+        params.put("phone", phone);
+        params.put("version", "1.1.0");
+
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback2());
+    }
+
+    class MyStringCallback2 extends StringCallback{
+
+        @Override
+        public void onError(Call call, Exception e) {
+            System.out.println("UnitFragment界面+++邀请同事===没拿到数据" + e.getMessage());
+        }
+
+        @Override
+        public void onResponse(String response) {
+            System.out.println("邀请同事" + response);
+        }
+    }
+
+
 
 
 
