@@ -22,6 +22,7 @@ import com.anhubo.anhubo.bean.MyPolygonBean;
 import com.anhubo.anhubo.bean.SesameItemModel;
 import com.anhubo.anhubo.bean.SesameModel;
 import com.anhubo.anhubo.bean.UnitBean;
+import com.anhubo.anhubo.bean.Unit_Invate_WorkMateBean;
 import com.anhubo.anhubo.bean.Unit_PlanBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.buildDetial.TestActivity;
@@ -90,6 +91,7 @@ public class UnitFragment extends BaseFragment {
     private int code;
     private List<Unit_PlanBean.Data.Certs> certs;
     private String uid;
+    private String tableId;
 
 
     @Override
@@ -468,7 +470,18 @@ public class UnitFragment extends BaseFragment {
 
         @Override
         public void onResponse(String response) {
-            System.out.println("邀请同事" + response);
+            //System.out.println("邀请同事" + response);
+            Unit_Invate_WorkMateBean bean = new Gson().fromJson(response, Unit_Invate_WorkMateBean.class);
+            int code = bean.code;
+            String msg = bean.msg;
+            tableId = bean.data.table_id;
+            if(code == 0 && !TextUtils.isEmpty(tableId)){
+                // 邀请成功，等待服务器给被邀请同事发消息就行了
+
+            }else if(code == 1){
+                ToastUtils.showToast(mActivity,msg);
+            }
+
         }
     }
 

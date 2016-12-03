@@ -144,4 +144,6 @@ public interface Urls {
     String Url_Unit_InvateWorkMate = UrlBase +"Work/in_wo_mate";
     /**上传Registration_Id*/
     String Url_Registration_Id = UrlBase +"Device/add_token";
+    /**同事修改单位*/
+    String Url_Unit_AlterUnit =  UrlBase +"Work/save_bu_info";
 }
