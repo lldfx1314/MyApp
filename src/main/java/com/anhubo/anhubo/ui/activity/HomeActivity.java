@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -18,7 +17,6 @@ import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.Alter_MateUnitBean;
 import com.anhubo.anhubo.bean.ExtrasBean;
 import com.anhubo.anhubo.protocol.Urls;
-import com.anhubo.anhubo.ui.activity.buildDetial.TestActivity;
 import com.anhubo.anhubo.ui.impl.BuildFragment;
 import com.anhubo.anhubo.ui.impl.FindFragment;
 import com.anhubo.anhubo.ui.impl.MyFragment;
@@ -76,6 +74,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onResume() {
         isForeground = true;
+        JPushInterface.onResume(this);
         super.onResume();
     }
 
@@ -83,6 +82,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onPause() {
         isForeground = false;
+        JPushInterface.onPause(this);
         super.onPause();
     }
 
@@ -216,7 +216,12 @@ public class HomeActivity extends BaseActivity {
                 // 弹窗提示用户收到推送的消息
                 ExtrasBean bean = new Gson().fromJson(extras, ExtrasBean.class);
                 String tableId = bean.table_id;
-                dialog(messge, tableId);
+                if(tableId!=null){
+                    if (!TextUtils.isEmpty(messge)&&!TextUtils.isEmpty(tableId)) {
+                        dialog(messge, tableId);
+                    }
+                }
+
             }
         }
     }

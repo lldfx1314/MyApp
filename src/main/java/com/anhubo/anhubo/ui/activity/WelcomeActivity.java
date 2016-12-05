@@ -12,6 +12,8 @@ import com.anhubo.anhubo.ui.activity.Login_Register.RegisterActivity2;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * Created by Administrator on 2016/10/9.
  */
@@ -30,18 +32,31 @@ public class WelcomeActivity extends BaseActivity {
     protected void initViews() {
 
     }
+
+    @Override
+    protected void onResume() {
+        JPushInterface.onResume(this);
+        super.onResume();
+    }
+
+
+    @Override
+    protected void onPause() {
+        JPushInterface.onPause(this);
+        super.onPause();
+    }
     @Override
     protected void initEvents() {
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
         bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
         businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
-
     }
     @Override
     protected void onLoadDatas() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                //
                 if(!TextUtils.isEmpty(uid)) {
                     if(!TextUtils.isEmpty(bulidingid)||!TextUtils.isEmpty(businessid)) {
                         //跳转到主页面
@@ -71,7 +86,7 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void enterLogin() {
-        startActivity(new Intent(WelcomeActivity.this, Login_Message.class));
+        startActivity(new Intent(WelcomeActivity.this, GuideActivity.class));
         finish();
     }
 

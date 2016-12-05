@@ -258,6 +258,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--引导界面-->
+        <activity android:name=".ui.activity.GuideActivity"
+            android:screenOrientation="portrait" />
 
 
 

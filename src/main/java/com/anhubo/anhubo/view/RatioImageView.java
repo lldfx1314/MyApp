@@ -12,6 +12,9 @@ import android.widget.ImageView;
  */
 public class RatioImageView extends ImageView {
 
+	public RatioImageView(Context context) {
+		this(context,null);
+	}
 	public RatioImageView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}

@@ -139,14 +139,13 @@ public class UnitFragment extends BaseFragment {
         tvNoPlan1 = (TextView) view.findViewById(R.id.tv_no_plan1);
         tvNoPlan2 = (TextView) view.findViewById(R.id.tv_no_plan2);
         //先隐藏小圆点
-        dotStudy.setVisibility(View.GONE);
-        dotCheck.setVisibility(View.GONE);
-        dotDrill.setVisibility(View.GONE);
+//        dotStudy.setVisibility(View.GONE);
+//        dotCheck.setVisibility(View.GONE);
+//        dotDrill.setVisibility(View.GONE);
         // 添加头布局
         lvUnit.addHeaderView(view, null, true);
         // 去掉头布局的分割线
         lvUnit.setHeaderDividersEnabled(false);
-
 
     }
 
