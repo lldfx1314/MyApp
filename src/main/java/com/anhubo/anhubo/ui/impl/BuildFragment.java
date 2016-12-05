@@ -77,6 +77,7 @@ public class BuildFragment extends BaseFragment {
     private TextView tvBuildHeighNum;
     private TextView bottom;
     private BuildAdapter adapter;
+    private List<Build_Help_Plan_Bean.Data.Plans> plans;
 
     @Override
     public void initTitleBar() {
@@ -86,6 +87,7 @@ public class BuildFragment extends BaseFragment {
         ivTopBarleftBuildPen.setVisibility(View.VISIBLE);
         String buildingName = SpUtils.getStringParam(mActivity, Keys.BUILDINGNAME);
         tv_basepager_title.setText(buildingName);
+
         // 设置title的背景颜色
         llTop.setBackgroundResource(R.color.unit_top);
 
@@ -153,6 +155,12 @@ public class BuildFragment extends BaseFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
+            // 界面每次可见都设置一下建筑，邀请同事以后建筑可能会改变
+            String buildingName = SpUtils.getStringParam(mActivity, Keys.BUILDINGNAME);
+            if (tv_basepager_title != null) {
+                tv_basepager_title.setText(buildingName);
+            }
+
             bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
             // 获取建筑安全指数
             getBuildData();
@@ -182,6 +190,8 @@ public class BuildFragment extends BaseFragment {
      * 获取互助计划列表信息
      */
     private void getHelpPlan() {
+        plans = new ArrayList<>();
+
         HashMap<String, String> params = new HashMap<>();
         params.put("building_id", bulidingid);
         String url = Urls.Url_Build_Help_Plan;
@@ -200,7 +210,11 @@ public class BuildFragment extends BaseFragment {
         @Override
         public void onError(Call call, Exception e) {
             System.out.println("BuildFragment互助计划+++===获取数据失败" + e.getMessage());
-
+            // 获取数据失败后显示三色以及互助计划
+            if (plans != null) {
+                adapter = new BuildAdapter(mActivity, plans);
+            }
+            lvBuild.setAdapter(adapter);
         }
 
         @Override
@@ -211,7 +225,7 @@ public class BuildFragment extends BaseFragment {
                 int code = bean.code;
                 String msg = bean.msg;
                 Build_Help_Plan_Bean.Data data = bean.data;
-                List<Build_Help_Plan_Bean.Data.Plans> plans = data.plans;
+                plans = data.plans;
                 if (code == 0 && !plans.isEmpty()) {
                     adapter = new BuildAdapter(mActivity, plans);
                 } else {
@@ -238,7 +252,6 @@ public class BuildFragment extends BaseFragment {
                 .build()//
                 .execute(new MyStringCallback1());
     }
-
 
 
     /**
@@ -284,6 +297,10 @@ public class BuildFragment extends BaseFragment {
      * 获取建筑安全指数
      */
     private void getBuildData() {
+        // 创建一个集合，用于记录多边形的数据
+        list = new ArrayList<>();
+        // 创建一个数组,用于存储多边形的数据
+        arrScores = new int[6];
 
         Map<String, String> params = new HashMap<>();
         params.put("building_id", bulidingid);
@@ -305,6 +322,12 @@ public class BuildFragment extends BaseFragment {
         public void onError(Call call, Exception e) {
 
             System.out.println("BuildFragment+++建筑安全指数===获取到数据失败" + e.getMessage());
+
+            // 获取数据失败后显示多边形（主要显示各维度问题，分数默认显示0）
+            if (arrScores.length == 6 && myPolygonView != null) {
+                myPolygonView.setDataModel(getPolygonData());
+            }
+
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -313,25 +336,27 @@ public class BuildFragment extends BaseFragment {
 
         @Override
         public void onResponse(String response) {
-            //            System.out.println("BuildFragment建筑安全指数+++===" + response);
-            list = new ArrayList<>();// 创建一个数组
-            arrScores = new int[6];
+            //  System.out.println("BuildFragment建筑安全指数+++===" + response);
 
-            if (!TextUtils.isEmpty(response)) {
-                BuildScoreBean scoreBean = new Gson().fromJson(response, BuildScoreBean.class);
+            list.clear();
+            BuildScoreBean scoreBean = new Gson().fromJson(response, BuildScoreBean.class);
+            if (scoreBean != null) {
 
-                score1 = scoreBean.data.sub_score1;
-                score2 = scoreBean.data.sub_score2;
-                score3 = scoreBean.data.sub_score3;
-                score4 = scoreBean.data.sub_score4;
-                score5 = scoreBean.data.sub_score5;
-                score6 = scoreBean.data.sub_score6;
+
                 sumScore = scoreBean.data.sum_score;
                 datatime = scoreBean.data.datatime;
                 // 设置显示评估分数
                 tvBuildScore.setText(sumScore);
                 // 设置显示评估时间
                 tvBuildTime.setText("评估时间 " + datatime);
+
+                // 获取多边形数据
+                score1 = scoreBean.data.sub_score1;
+                score2 = scoreBean.data.sub_score2;
+                score3 = scoreBean.data.sub_score3;
+                score4 = scoreBean.data.sub_score4;
+                score5 = scoreBean.data.sub_score5;
+                score6 = scoreBean.data.sub_score6;
                 list.add(0, score4);
                 list.add(1, score5);
                 list.add(2, score6);

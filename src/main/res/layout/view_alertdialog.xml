@@ -29,7 +29,7 @@
             android:layout_marginTop="15dp"
             android:gravity="center"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
         <EditText
             android:id="@+id/et_msg"
             android:layout_width="match_parent"
@@ -37,13 +37,12 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="15dp"
-            android:paddingLeft="5dp"
+            android:paddingLeft="10dp"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
-            android:gravity="center"
             android:textColor="@color/black"
             android:textColorHighlight="@color/text_gray"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:background="@drawable/edit_alertdialog"/>
 
     </RelativeLayout>
@@ -68,7 +67,7 @@
             android:background="@drawable/alertdialog_left_selector"
             android:gravity="center"
             android:textColor="@color/actionsheet_blue"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <ImageView
             android:id="@+id/img_line"
@@ -84,7 +83,7 @@
             android:background="@drawable/alertdialog_right_selector"
             android:gravity="center"
             android:textColor="@color/actionsheet_blue"
-            android:textSize="16sp"/>
+            android:textSize="14sp"/>
     </LinearLayout>
 
 </LinearLayout>

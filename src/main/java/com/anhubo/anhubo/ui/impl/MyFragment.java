@@ -87,11 +87,25 @@ public class MyFragment extends BaseFragment {
         llSetting.setOnClickListener(this);
         tvLogOut.setOnClickListener(this);
     }
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        // 每次界面可见的时候请求网络获取数据
+        getDataInternet(isVisibleToUser);
+    }
+
+    private void getDataInternet(boolean isVisibleToUser) {
+        if(isVisibleToUser){
+            /**我的界面第一次请求网络*/
+            getData();
+        }
+    }
 
     @Override
     public void initData() {
-
-        /**我的界面第一次请求网络*/
+    }
+    /**我的界面第一次请求网络*/
+    private void getData() {
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
@@ -110,7 +124,7 @@ public class MyFragment extends BaseFragment {
 
             System.out.println("MyFragment+++===界面失败" + e.getMessage());
 
-            ToastUtils.showToast(mActivity, "网络有问题，请检查");
+            //ToastUtils.showToast(mActivity, "网络有问题，请检查");
         }
 
         @Override

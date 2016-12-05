@@ -92,7 +92,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="15dp"
             android:enabled="true"
-            android:text="邀请加入"
+            android:text="邀请同事"
 
             android:textColor="@color/tv_gray"
             android:textSize="16sp"

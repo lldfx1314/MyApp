@@ -1,13 +1,7 @@
 package com.anhubo.anhubo.ui.impl;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -25,7 +19,6 @@ import com.anhubo.anhubo.bean.UnitBean;
 import com.anhubo.anhubo.bean.Unit_Invate_WorkMateBean;
 import com.anhubo.anhubo.bean.Unit_PlanBean;
 import com.anhubo.anhubo.protocol.Urls;
-import com.anhubo.anhubo.ui.activity.buildDetial.TestActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.MsgPerfectActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.QrScanActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.Unit2Study;
@@ -47,16 +40,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.jpush.android.api.JPushInterface;
 import okhttp3.Call;
 
 /**
  * Created by Administrator on 2016/10/8.
  */
 public class UnitFragment extends BaseFragment {
-
-
-    //private static final String REGISTRATION = "cn.jpush.android.intent.REGISTRATION";
     private ListView lvUnit;
     private RelativeLayout rlUnit01;
     private RelativeLayout rlUnit02;
@@ -92,6 +81,7 @@ public class UnitFragment extends BaseFragment {
     private List<Unit_PlanBean.Data.Certs> certs;
     private String uid;
     private String tableId;
+    private UnitAdapter adapter;
 
 
     @Override
@@ -129,6 +119,7 @@ public class UnitFragment extends BaseFragment {
         sesameCreditPanelLL = findView(R.id.panel);
         // 多边形
         myPolygonView = findView(R.id.polygon);
+
         // 设置下划线 setUnderline里面的参数是可变参数
         Utils.setUnderline(tvUnitFrag, tvUnitFragMsg, tvUnitFragInvite, tvUnitFragAdd);
         // listView
@@ -152,15 +143,10 @@ public class UnitFragment extends BaseFragment {
         dotCheck.setVisibility(View.GONE);
         dotDrill.setVisibility(View.GONE);
         // 添加头布局
-        lvUnit.addHeaderView(view,null,true);
+        lvUnit.addHeaderView(view, null, true);
         // 去掉头布局的分割线
         lvUnit.setHeaderDividersEnabled(false);
 
-        uid = SpUtils.getStringParam(mActivity, Keys.UID);
-
-
-        //互保计划获取数据
-        getPlanData();
 
     }
 
@@ -198,27 +184,48 @@ public class UnitFragment extends BaseFragment {
 
     private void getDataInternet(boolean isVisibleToUser) {
         if (isVisibleToUser) {
-            //每次请求网络之前（控件是在网络获取成功后动态添加上去的）先把上次的控件对象移除，否则会重复
-            if (sesameCreditPanelLL != null) {
-                sesameCreditPanelLL.removeView(scp);
-            }
-
-            //只有当该Fragment被用户可见的时候,才加载网络数据
-            String businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
-            // 获取网络数据
-            String url = Urls.Url_Unit;
-            HashMap<String, String> params = new HashMap<>();
-            params.put("business_id", businessid);
-            OkHttpUtils.post()//
-                    .url(url)//
-                    .params(params)//
-                    .build()//
-                    .execute(new MyStringCallback());
-
             isLoading = true;
-        } else {
-            //否则不加载网络数据
+            // 界面每次可见都设置一下单位，邀请同事以后单位可能会改变
+            String businessName = SpUtils.getStringParam(mActivity, Keys.BUSINESSNAME);
+            if (tv_basepager_title != null) {
+
+                tv_basepager_title.setText(businessName);
+            }
+            // 获取圆弧数据
+            getData();
+            //互保计划获取数据
+            getPlanData();
+
+
         }
+    }
+
+    /**
+     * 获取圆弧数据
+     */
+    private void getData() {
+        //每次请求网络之前（控件是在网络获取成功后动态添加上去的）先把上次的控件对象移除，否则会重复
+        if (sesameCreditPanelLL != null) {
+            sesameCreditPanelLL.removeView(scp);
+        }
+
+        // 创建一个集合，用于记录多边形的数据
+        list = new ArrayList<>();
+        // 创建一个数组,用于存储多边形的数据
+        arrScores = new int[6];
+
+        /**只有当该Fragment被用户可见的时候,才加载网络数据*/
+        // 获取网络数据
+        String url = Urls.Url_Unit;
+        String businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
+        HashMap<String, String> params = new HashMap<>();
+        params.put("business_id", businessid);
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
+
     }
 
     @Override
@@ -227,15 +234,13 @@ public class UnitFragment extends BaseFragment {
     }
 
 
-
-
     /**
      * 互保计划获取数据
      */
     private void getPlanData() {
 
-
-
+        certs = new ArrayList<>();
+        uid = SpUtils.getStringParam(mActivity, Keys.UID);
         //　互保计划　请求网络
 
         String url = Urls.Url_Unit_Plan;
@@ -260,6 +265,8 @@ public class UnitFragment extends BaseFragment {
             System.out.println("UnitFragment界面+++互保计划===没拿到数据" + e.getMessage());
             tvNoPlan1.setVisibility(View.VISIBLE);
             lvUnit.setDividerHeight(0);
+            adapter = new UnitAdapter(mActivity, certs);
+            lvUnit.setAdapter(adapter);
 
         }
 
@@ -272,14 +279,14 @@ public class UnitFragment extends BaseFragment {
                 String msg = bean.msg;
                 certs = bean.data.certs;
             }
-            UnitAdapter adapter = new UnitAdapter(mActivity, certs);
             // 没有任何保障时显示提示信息，并且不显示ListView的分割线
-            if (code == 0 &&certs!=null) {
-                if(certs.size() == 0){
+            if (code == 0 && certs != null) {
+                adapter = new UnitAdapter(mActivity, certs);
+                if (certs.size() == 0) {
                     tvNoPlan1.setVisibility(View.VISIBLE);
 
                     lvUnit.setDividerHeight(0);
-                }else{
+                } else {
                     tvNoPlan2.setVisibility(View.VISIBLE);
                     tvNoPlan2.setText("动态保障凭证");
                 }
@@ -301,6 +308,10 @@ public class UnitFragment extends BaseFragment {
         @Override
         public void onError(Call call, Exception e) {
             System.out.println("UnitFragment界面+++分数、级别===没拿到数据" + e.getMessage());
+            // 获取数据时报后显示多边形（主要显示各维度问题，分数默认显示0）
+            if (arrScores.length == 6 && myPolygonView != null) {
+                myPolygonView.setDataModel(getPolygonData());
+            }
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -311,14 +322,12 @@ public class UnitFragment extends BaseFragment {
         public void onResponse(String response) {
             //System.out.println(response);
             UnitBean bean = new Gson().fromJson(response, UnitBean.class);
-            list = new ArrayList<>();
-            // 创建一个数组
-            arrScores = new int[6];
+
+
             list.clear();
             if (bean != null) {
-                // 表示获取到了真是的数据且不为空
+                // 表示获取到了真实的数据且不为空
                 isSucceed = true;
-
 
                 data = bean.data;
                 // 获取到数据
@@ -335,7 +344,7 @@ public class UnitFragment extends BaseFragment {
                     isLoading = false;
                 }
 
-
+                // 获取多边形数据
                 subScore1 = data.sub_score1;
                 subScore2 = data.sub_score2;
                 subScore3 = data.sub_score3;
@@ -355,8 +364,6 @@ public class UnitFragment extends BaseFragment {
                 if (arrScores.length == 6) {
                     myPolygonView.setDataModel(getPolygonData());
                 }
-            } else {
-                System.out.println("UnitFragment界面+++===没拿到bean对象");
             }
         }
     }
@@ -417,6 +424,7 @@ public class UnitFragment extends BaseFragment {
         }
 
     }
+
     private void dialog() {
         final AlertDialog alertDialog = new AlertDialog(mActivity);
         alertDialog
@@ -430,10 +438,10 @@ public class UnitFragment extends BaseFragment {
                         String string = alertDialog.et_msg.getText().toString().trim();
                         if (!TextUtils.isEmpty(string)) {
                             boolean b = Utils.judgePhoneNumber(string);
-                            if(!b){
-                                ToastUtils.showToast(mActivity,"号码输入不正确，请重新输入");
+                            if (!b) {
+                                ToastUtils.showToast(mActivity, "号码输入不正确，请重新输入");
                                 return;
-                            }else{
+                            } else {
                                 // 拿着号码和uid请求网络
                                 invateWorkMate(string);
                             }
@@ -446,7 +454,10 @@ public class UnitFragment extends BaseFragment {
             }
         }).show();
     }
-    /**邀请同事网络请求*/
+
+    /**
+     * 邀请同事网络请求
+     */
     private void invateWorkMate(String phone) {
         String url = Urls.Url_Unit_InvateWorkMate;
         Map<String, String> params = new HashMap<>();
@@ -461,7 +472,7 @@ public class UnitFragment extends BaseFragment {
                 .execute(new MyStringCallback2());
     }
 
-    class MyStringCallback2 extends StringCallback{
+    class MyStringCallback2 extends StringCallback {
 
         @Override
         public void onError(Call call, Exception e) {
@@ -475,18 +486,15 @@ public class UnitFragment extends BaseFragment {
             int code = bean.code;
             String msg = bean.msg;
             tableId = bean.data.table_id;
-            if(code == 0 && !TextUtils.isEmpty(tableId)){
+            if (code == 0 && !TextUtils.isEmpty(tableId)) {
                 // 邀请成功，等待服务器给被邀请同事发消息就行了
 
-            }else if(code == 1){
-                ToastUtils.showToast(mActivity,msg);
+            } else if (code == 1) {
+                ToastUtils.showToast(mActivity, msg);
             }
 
         }
     }
-
-
-
 
 
     /**
