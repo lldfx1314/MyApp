@@ -108,4 +108,8 @@ public interface Keys {
     String IsId = "isId";
     /**测试*/
     String TEST = "test";
+    /**引导页*/
+    String GUIDE_DONE = "guide_done";
+    /**保存版本号*/
+    java.lang.String VERSIONNAME = "versionName";
 }

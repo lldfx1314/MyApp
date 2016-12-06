@@ -132,6 +132,11 @@ public class HomeActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
     class onCheckedChangeListener implements RadioGroup.OnCheckedChangeListener {
 
         @Override
@@ -271,7 +276,7 @@ public class HomeActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-            System.out.println("同事修改单位+" + response);
+            //System.out.println("同事修改单位+" + response);
             Alter_MateUnitBean bean = new Gson().fromJson(response, Alter_MateUnitBean.class);
             if (bean != null) {
                 int code = bean.code;

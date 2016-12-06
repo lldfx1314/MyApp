@@ -107,6 +107,11 @@ public class UnitMenuActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
     class MyOnRefreshingListener implements RefreshListview.OnRefreshingListener {
 
         @Override

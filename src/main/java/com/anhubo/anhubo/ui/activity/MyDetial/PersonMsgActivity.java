@@ -76,6 +76,7 @@ import okhttp3.Call;
 public class PersonMsgActivity extends BaseActivity {
     private static final int PICTURE = 0;
     private static final int CAMERA = 1;
+    private static final int REQUESTCODE = 2;
     @InjectView(R.id.ll_psHeaderIcon)
     LinearLayout llPsHeaderIcon;
     @InjectView(R.id.ll_psUsername)
@@ -133,6 +134,7 @@ public class PersonMsgActivity extends BaseActivity {
     private String newAge;
     private String screenname;
     public static boolean isSetHeadIcon = false;// 记录自己是否设置过头像
+    private String buildingName;
 
     @Override
     protected void initConfig() {
@@ -145,6 +147,7 @@ public class PersonMsgActivity extends BaseActivity {
             img = bean.data.img;
             name = bean.data.name;
             businessName = bean.data.business_name;
+            buildingName = bean.data.building_name;
             phone = bean.data.phone;
             qqName = bean.data.qq_name;
             weiboName = bean.data.weibo_name;
@@ -212,6 +215,7 @@ public class PersonMsgActivity extends BaseActivity {
                 break;
             case R.id.ll_psUnit:
                 // 所属单位
+                alterUnit();
                 break;
             case R.id.ll_psWeChat:
                 //微信
@@ -338,7 +342,10 @@ public class PersonMsgActivity extends BaseActivity {
         }
     };
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
 
+    }
 
 
     class MyStringCallback5 extends StringCallback {
@@ -377,6 +384,15 @@ public class PersonMsgActivity extends BaseActivity {
         }
     }
 
+    /**
+     * ****************************************************************************
+     * 单位修改
+     */
+    private void alterUnit() {
+        Intent intent = new Intent(mActivity, AlterUnitActivity.class);
+        startActivityForResult(intent, REQUESTCODE);
+
+    }
 
     /**
      * ****************************************************************************
@@ -717,13 +733,28 @@ public class PersonMsgActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == Activity.RESULT_OK && null != data) {
+        if (null != data) {
             switch (requestCode) {
                 case CAMERA:
-                    isShow = showPhoto01(data);
+                    if (resultCode == Activity.RESULT_OK) {
+
+                        isShow = showPhoto01(data);
+                    }
                     break;
                 case PICTURE:
-                    isShow = showPhoto02(data);
+                    if (resultCode == Activity.RESULT_OK) {
+                        isShow = showPhoto02(data);
+                    }
+                    break;
+                case REQUESTCODE:
+                    if (resultCode == 1) {
+                        String stringExtra = data.getStringExtra(Keys.BUSINESSNAME);
+                        if (!TextUtils.isEmpty(stringExtra)) {
+                            tvMyUnit.setText(stringExtra);
+
+                        }
+                    }
+
                     break;
             }
         }
@@ -745,6 +776,7 @@ public class PersonMsgActivity extends BaseActivity {
      * 拿到拍到的照片去上传
      */
     private File newFile = null;
+
     private void upLoading() {
 
         // 获取
@@ -824,7 +856,7 @@ public class PersonMsgActivity extends BaseActivity {
                 //显示图片
                 ivHeaderIcon.setImageBitmap(photo);
                 // 把本文件压缩后缓存到本地文件里面
-                savePicture(photo,"photo02");
+                savePicture(photo, "photo02");
                 File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
                 newFile = filePhoto02;
                 return true;
@@ -875,7 +907,7 @@ public class PersonMsgActivity extends BaseActivity {
             //显示图片
             ivHeaderIcon.setImageBitmap(bitmap);
             // 把本文件压缩后缓存到本地文件里面
-            savePicture(bitmap,"photo01");
+            savePicture(bitmap, "photo01");
             File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
             newFile = filePhoto01;
             return true;
@@ -886,12 +918,12 @@ public class PersonMsgActivity extends BaseActivity {
     /**
      * 保存图片到本应用下
      **/
-    private void savePicture(Bitmap bitmap,String fileName) {
+    private void savePicture(Bitmap bitmap, String fileName) {
 
         FileOutputStream fos = null;
         try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新写入内容会被覆盖
             //fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
-            OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() +"/"+fileName);
+            OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() + "/" + fileName);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);// 把图片写入指定文件夹中
 
         } catch (Exception e) {

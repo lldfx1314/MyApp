@@ -20,6 +20,7 @@ import com.anhubo.anhubo.bean.BuildThreeBean;
 import com.anhubo.anhubo.bean.Build_Help_Plan_Bean;
 import com.anhubo.anhubo.bean.MyPolygonBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.ui.activity.MyDetial.AlterUnitActivity;
 import com.anhubo.anhubo.ui.activity.buildDetial.Build_CltMsgActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.FeedbackActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.QrScanActivity;
@@ -53,7 +54,6 @@ public class BuildFragment extends BaseFragment {
     private TextView tvBuildFragMsg;
     private TextView tvBuildFragTest;
     private MyPolygonView myPolygonView;
-    private String bulidingid;
     private TextView tvBuildScore;
     private TextView tvBuildTime;
     private TextView red;
@@ -156,18 +156,20 @@ public class BuildFragment extends BaseFragment {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             // 界面每次可见都设置一下建筑，邀请同事以后建筑可能会改变
+            String bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
             String buildingName = SpUtils.getStringParam(mActivity, Keys.BUILDINGNAME);
             if (tv_basepager_title != null) {
                 tv_basepager_title.setText(buildingName);
             }
 
-            bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
-            // 获取建筑安全指数
-            getBuildData();
-            // 获取三色预警比例
-            getThreeWarning();
-            // 获取户主计划列表信息
-            getHelpPlan();
+                // 获取建筑安全指数
+                getBuildData(bulidingid);
+                // 获取三色预警比例
+                getThreeWarning(bulidingid);
+                // 获取户主计划列表信息
+                getHelpPlan(bulidingid);
+
+
         }
     }
 
@@ -189,11 +191,14 @@ public class BuildFragment extends BaseFragment {
      * ****************************************************
      * 获取互助计划列表信息
      */
-    private void getHelpPlan() {
+    private void getHelpPlan(String bulidingid) {
         plans = new ArrayList<>();
 
         HashMap<String, String> params = new HashMap<>();
-        params.put("building_id", bulidingid);
+
+        if (!TextUtils.isEmpty(bulidingid)) {
+            params.put("building_id", bulidingid);
+        }
         String url = Urls.Url_Build_Help_Plan;
 
         OkHttpUtils.post()//
@@ -241,9 +246,12 @@ public class BuildFragment extends BaseFragment {
      * ****************************************************
      * 获取三色预警比例
      */
-    private void getThreeWarning() {
+    private void getThreeWarning(String bulidingid) {
         HashMap<String, String> params = new HashMap<>();
-        params.put("building_id", bulidingid);
+        if (!TextUtils.isEmpty(bulidingid)) {
+            params.put("building_id", bulidingid);
+        }
+
         String url = Urls.Url_Build_ThreeColour;
 
         OkHttpUtils.post()//
@@ -296,14 +304,16 @@ public class BuildFragment extends BaseFragment {
      * ****************************************************************
      * 获取建筑安全指数
      */
-    private void getBuildData() {
+    private void getBuildData(String bulidingid) {
         // 创建一个集合，用于记录多边形的数据
         list = new ArrayList<>();
         // 创建一个数组,用于存储多边形的数据
         arrScores = new int[6];
 
         Map<String, String> params = new HashMap<>();
-        params.put("building_id", bulidingid);
+        if (!TextUtils.isEmpty(bulidingid)) {
+            params.put("building_id", bulidingid);
+        }
 
         String url = Urls.Url_Build_score;
         OkHttpUtils.post()//

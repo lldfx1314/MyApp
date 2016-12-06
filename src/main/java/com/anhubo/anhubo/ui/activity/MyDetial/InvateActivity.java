@@ -92,6 +92,10 @@ public class InvateActivity extends BaseActivity {
 
     Handler handler = new Handler();
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
 
 
     class MyJavaScriptInterface {

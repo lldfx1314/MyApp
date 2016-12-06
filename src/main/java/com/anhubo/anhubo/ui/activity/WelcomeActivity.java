@@ -11,6 +11,7 @@ import com.anhubo.anhubo.ui.activity.Login_Register.Login_Message;
 import com.anhubo.anhubo.ui.activity.Login_Register.RegisterActivity2;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
+import com.anhubo.anhubo.utils.Utils;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -22,6 +23,8 @@ public class WelcomeActivity extends BaseActivity {
     private String uid;
     private String bulidingid;
     private String businessid;
+    private String oldversionName;
+    private String versionName;
 
     @Override
     protected int getContentViewId() {
@@ -45,38 +48,57 @@ public class WelcomeActivity extends BaseActivity {
         JPushInterface.onPause(this);
         super.onPause();
     }
+
     @Override
     protected void initEvents() {
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
         bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
         businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
+        //isGuide = SpUtils.getBooleanParam(mActivity, Keys.GUIDE_DONE, false);
+        oldversionName = SpUtils.getStringParam(mActivity, Keys.VERSIONNAME);
+        String[] split = Utils.getAppInfo(mActivity).split("#");
+        versionName = split[1];
     }
+
     @Override
     protected void onLoadDatas() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                //
-                if(!TextUtils.isEmpty(uid)) {
-                    if(!TextUtils.isEmpty(bulidingid)||!TextUtils.isEmpty(businessid)) {
-                        //跳转到主页面
-                        enterHome();
-                    }else{
-                        // 跳到注册第二个界面
-                        enterRegister2();
+                //System.out.println("versionName+222+"+versionName);
+                //System.out.println("oldversionName++"+oldversionName);
+                if (TextUtils.isEmpty(oldversionName)) {
+                    enterGuide();
+                } else if(!TextUtils.equals(versionName,oldversionName)){
+                    enterGuide();
+                }else {
+                    if (!TextUtils.isEmpty(uid)) {
+                        if (!TextUtils.isEmpty(bulidingid) || !TextUtils.isEmpty(businessid)) {
+                            //跳转到主页面
+                            enterHome();
+                        } else {
+                            // 跳到注册第二个界面
+                            enterRegister2();
+                        }
+
+                    } else {
+                        // 无uid，跳到登录界面
+                        enterLogin();
+
                     }
-
-                }else{
-                    // 无uid，跳到登录界面
-                    enterLogin();
-
                 }
+
 
             }
 
 
         }, 2000);
 
+    }
+
+    private void enterGuide() {
+        startActivity(new Intent(WelcomeActivity.this, GuideActivity.class));
+        finish();
     }
 
     private void enterRegister2() {
@@ -86,7 +108,7 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void enterLogin() {
-        startActivity(new Intent(WelcomeActivity.this, GuideActivity.class));
+        startActivity(new Intent(WelcomeActivity.this, Login_Message.class));
         finish();
     }
 
@@ -100,4 +122,8 @@ public class WelcomeActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
 }

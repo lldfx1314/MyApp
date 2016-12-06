@@ -73,4 +73,9 @@ public class NoticeActivity extends BaseActivity {
     public void onClick(View v) {
 
     }
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
 }

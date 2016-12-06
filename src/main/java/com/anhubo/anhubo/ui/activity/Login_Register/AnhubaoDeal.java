@@ -66,4 +66,8 @@ public class AnhubaoDeal extends BaseActivity {
     }
 
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
 }

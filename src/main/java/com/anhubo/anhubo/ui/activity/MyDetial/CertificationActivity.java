@@ -68,4 +68,8 @@ public class CertificationActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
 }

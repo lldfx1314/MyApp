@@ -45,6 +45,11 @@ public class Build_CltMsgActivity extends BaseActivity {
         //tvBuildMsg.setMovementMethod(LinkMovementMethod.getInstance());//设置可以点击超链接
     }
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
     class MyURLSpan extends URLSpan {
 
         public MyURLSpan(String url) {

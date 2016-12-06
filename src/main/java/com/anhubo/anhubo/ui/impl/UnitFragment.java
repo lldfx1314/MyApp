@@ -82,6 +82,7 @@ public class UnitFragment extends BaseFragment {
     private String uid;
     private String tableId;
     private UnitAdapter adapter;
+    private String versionName;
 
 
     @Override
@@ -458,11 +459,14 @@ public class UnitFragment extends BaseFragment {
      * 邀请同事网络请求
      */
     private void invateWorkMate(String phone) {
+        String[] split = Utils.getAppInfo(mActivity).split("#");
+        versionName = split[1];
+
         String url = Urls.Url_Unit_InvateWorkMate;
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         params.put("phone", phone);
-        params.put("version", "1.1.0");
+        params.put("version", versionName);
 
         OkHttpUtils.post()//
                 .url(url)//

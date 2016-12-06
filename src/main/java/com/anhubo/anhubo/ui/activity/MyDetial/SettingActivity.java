@@ -45,4 +45,9 @@ public class SettingActivity extends BaseActivity {
                 break;
         }
     }
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
 }

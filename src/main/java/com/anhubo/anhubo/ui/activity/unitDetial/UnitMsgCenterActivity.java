@@ -71,6 +71,11 @@ public class UnitMsgCenterActivity extends BaseActivity {
 
     private boolean isLoadMore;//记录是否加载更多
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
     class MyOnRefreshingListener implements RefreshListview.OnRefreshingListener {
 
 

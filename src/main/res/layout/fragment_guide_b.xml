@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/guide_bg">
+    <TextView
+        android:id="@+id/tv_anhubao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:textColor="#AA000000"
+        android:text="三色预警"/>
+    <TextView
+        android:id="@+id/tv_01"
+        android:layout_below="@+id/tv_anhubao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
+        android:text="安全自证义务，动态互保凭证"
+        android:textColor="#66000000"/>
+    <ImageView
+        android:layout_below="@+id/tv_01"
+        android:layout_width="250dp"
+        android:layout_height="260dp"
+        android:layout_marginTop="60dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/guide_02"/>
+
+</RelativeLayout>

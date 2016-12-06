@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
@@ -31,7 +32,7 @@ public abstract class BaseFragment extends Fragment  implements View.OnClickList
     protected ImageView ivTopBarleftBuildPen;
     protected ImageView ivTopBarRightUnitMsg;
     protected TextView tv_basepager_title;
-    protected LinearLayout llTop;
+    protected RelativeLayout llTop;
     protected FrameLayout fl_basepager_content;
     protected TextView tvTopBarRight;
 
@@ -70,7 +71,7 @@ public abstract class BaseFragment extends Fragment  implements View.OnClickList
         tvTopBarRight = (TextView) view.findViewById(R.id.tvTopBarRight);//右上角列表
         ivTopBarleftBuildPen = (ImageView) view.findViewById(R.id.ivTopBarleft_build_pen);//左上角铅笔按钮
         tv_basepager_title = (TextView) view.findViewById(R.id.tvAddress);//标题
-        llTop = (LinearLayout) view.findViewById(R.id.ll_Top); // 顶部标题栏
+        llTop = (RelativeLayout) view.findViewById(R.id.ll_Top); // 顶部标题栏
         fl_basepager_content = (FrameLayout) view.findViewById(R.id.fl_basepager_content);//正文提示
         // 设置监听事件
         iv_basepager_left.setOnClickListener(this);

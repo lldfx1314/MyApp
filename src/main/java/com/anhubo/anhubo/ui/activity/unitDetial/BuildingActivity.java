@@ -59,7 +59,7 @@ public class BuildingActivity extends AppCompatActivity {
     private TextView tvTopBarRight;
     private ImageView ivTopBarleftBuildPen;
     private TextView tvToptitle;
-    private LinearLayout llTop;
+    private RelativeLayout llTop;
     private AMapLocationClient mlocationClient;
     private double latitude;
     private double longitude;
@@ -178,6 +178,7 @@ public class BuildingActivity extends AppCompatActivity {
             settings = aMap.getUiSettings();
             // 是否显示定位按钮
             settings.setMyLocationButtonEnabled(true);
+
             //添加指南针
             //settings.setCompassEnabled(true);
 
@@ -448,7 +449,7 @@ public class BuildingActivity extends AppCompatActivity {
         tvTopBarRight = (TextView) findViewById(R.id.tvTopBarRight);//右上角列表
         ivTopBarleftBuildPen = (ImageView) findViewById(R.id.ivTopBarleft_build_pen);//左上角铅笔按钮
         tvToptitle = (TextView) findViewById(R.id.tvAddress);//标题
-        llTop = (LinearLayout) findViewById(R.id.ll_Top); // 顶部标题栏
+        llTop = (RelativeLayout) findViewById(R.id.ll_Top); // 顶部标题栏
 
     }
 

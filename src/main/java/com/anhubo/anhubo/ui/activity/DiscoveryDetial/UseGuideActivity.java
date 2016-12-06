@@ -82,4 +82,8 @@ public class UseGuideActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
 }

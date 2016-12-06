@@ -203,6 +203,11 @@ public class UploadingActivity4 extends BaseActivity {
 
     private Handler handler = new Handler();
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {

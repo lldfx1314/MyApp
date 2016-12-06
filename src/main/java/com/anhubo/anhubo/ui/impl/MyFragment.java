@@ -68,6 +68,7 @@ public class MyFragment extends BaseFragment {
 
     @Override
     public void initView() {
+        llTop.setVisibility(View.GONE);
         // 找控件
         image = findView(R.id.profile_image);
         tvMyName = findView(R.id.tv_my_name);
@@ -129,7 +130,7 @@ public class MyFragment extends BaseFragment {
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("哈哈哈"+response);
+            //System.out.println("MyFragment界面+++="+response);
             bean = new Gson().fromJson(response, MyFragmentBean.class);
             if (bean != null) {
                 age = bean.data.age;
@@ -137,6 +138,7 @@ public class MyFragment extends BaseFragment {
                 img = bean.data.img;
                 name = bean.data.name;
                 String businessName = bean.data.business_name;
+                String buildingName = bean.data.building_name;
                 String phone = bean.data.phone;
                 String qqName = bean.data.qq_name;
                 String weiboName = bean.data.weibo_name;

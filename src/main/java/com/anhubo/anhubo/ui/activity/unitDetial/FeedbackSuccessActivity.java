@@ -79,4 +79,8 @@ public class FeedbackSuccessActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
 }

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/ll_Top"
               android:fitsSystemWindows="true"
               android:clipToPadding="true"
               android:layout_width="match_parent"
-              android:layout_height="50dp"
+              android:layout_height="65dp"
               android:background="@color/bg_title"
               android:orientation="horizontal">
 
@@ -12,7 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:gravity="center"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
         <ImageButton
@@ -89,4 +89,4 @@
             />
 
     </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>

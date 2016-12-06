@@ -163,6 +163,11 @@ public class Login_Pwd extends BaseActivity {
 
     }
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {

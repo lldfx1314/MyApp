@@ -229,6 +229,11 @@ public class Login_Message extends BaseActivity {
         }
     };
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
     class MyStringCallback3 extends StringCallback {
         @Override
         public void onError(okhttp3.Call call, Exception e) {

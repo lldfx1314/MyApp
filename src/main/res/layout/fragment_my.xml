@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="180dp"
         android:background="@color/bg_title"
         android:orientation="vertical">
 
@@ -25,6 +25,7 @@
                 android:id="@+id/profile_image"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_marginTop="35dp"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/newicon"
                 app:civ_border_color="@color/blue"

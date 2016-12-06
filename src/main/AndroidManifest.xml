@@ -234,6 +234,8 @@
         <activity
             android:name=".ui.activity.MyDetial.EngineerActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.MyDetial.AlterUnitActivity"
+            android:screenOrientation="portrait" />
         <!--高德地图建筑-->
         <activity android:name=".ui.activity.unitDetial.BuildingActivity"
             android:screenOrientation="portrait" />

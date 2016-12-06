@@ -1,43 +1,38 @@
 package com.anhubo.anhubo.adapter;
 
-import android.support.v4.view.PagerAdapter;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
 
 /**
- * Created by LUOLI on 2016/12/5.
- * 引导页适配器
+ * Created by LUOLI on 2016/12/6.
  */
-public class GuidePagerAdapter extends PagerAdapter {
+public class GuidePagerAdapter  extends FragmentStatePagerAdapter {
+    ArrayList<Fragment> list;
 
-    private ArrayList<ImageView> images;
+    public GuidePagerAdapter(FragmentManager fm) {
+        super(fm);
+    }
 
-    public GuidePagerAdapter(ArrayList<ImageView> images) {
-        this.images = images;
+    public GuidePagerAdapter(FragmentManager fm,ArrayList<Fragment> list) {
+        super(fm);
+        this.list=list;
+    }
+
+
+    @Override
+    public Fragment getItem(int arg0) {
+        return list.get(arg0);
     }
 
     @Override
     public int getCount() {
-        return images == null ? 0 : images.size();
+        return list.size();
     }
-
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        ImageView imageView = images.get(position);
-        container.addView(imageView);
-        return imageView;
-    }
-
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((View) object);
-    }
-
-    @Override
-    public boolean isViewFromObject(View view, Object object) {
-        return view == object;
+    public int getItemPosition(Object object) {
+        return super.getItemPosition(object);
     }
 }

@@ -1,7 +1,9 @@
 package com.anhubo.anhubo.ui.activity;
 
+import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -10,8 +12,16 @@ import android.widget.RelativeLayout;
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.GuidePagerAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
+import com.anhubo.anhubo.ui.activity.Login_Register.Login_Message;
+import com.anhubo.anhubo.ui.activity.Login_Register.RegisterActivity2;
+import com.anhubo.anhubo.ui.fragment.GuideFragmentA;
+import com.anhubo.anhubo.ui.fragment.GuideFragmentB;
+import com.anhubo.anhubo.ui.fragment.GuideFragmentC;
 import com.anhubo.anhubo.utils.DisplayUtil;
-import com.anhubo.anhubo.view.RatioImageView;
+import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.SpUtils;
+import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -27,12 +37,18 @@ public class GuideActivity extends BaseActivity {
     ImageView btnGuideDone;
     @InjectView(R.id.rl_contain_dots)
     RelativeLayout rlContainDots;
+    @InjectView(R.id.ll_guide_point)
+    LinearLayout llGuidePoint;
+    @InjectView(R.id.iv_guide_point_red)
+    ImageView ivGuidePointRed;
 
-    private ArrayList<ImageView> images;
-    private ArrayList<LinearLayout> points;
     private GuidePagerAdapter guidePagerAdapter;
+    private ArrayList<Fragment> fragments;
+    private String uid;
+    private String bulidingid;
+    private String businessid;
+    private String versionName;
 
-    //private static int[] imgs = new int[]{R.drawable.bg_yindao_1, R.drawable.icon_yindao_2, R.drawable.bg_yindao_3};
 
     @Override
     protected int getContentViewId() {
@@ -40,90 +56,119 @@ public class GuideActivity extends BaseActivity {
     }
 
     @Override
+    protected void initTitleBar() {
+        super.initTitleBar();
+
+    }
+
+    @Override
     protected void initViews() {
-        points = new ArrayList<>();
+        //初始化界面，加载fragment
+        setData();
+    }
+
+    private void setData() {
+
+        fragments = new ArrayList<Fragment>();
+        GuideFragmentA fragment1 = new GuideFragmentA();
+        GuideFragmentB fragment2 = new GuideFragmentB();
+        GuideFragmentC fragment3 = new GuideFragmentC();
+        fragments.add(fragment1);
+        fragments.add(fragment2);
+        fragments.add(fragment3);
+        guidePagerAdapter = new GuidePagerAdapter(getSupportFragmentManager(), fragments);
+        vpSplash.setAdapter(guidePagerAdapter);
+        vpSplash.setCurrentItem(0);
+        //监听ViewPager的滑动事件
+        vpSplash.setOnPageChangeListener(onPageChangeListener);
 
     }
 
     @Override
     protected void onLoadDatas() {
-        images = new ArrayList<>();
 
-        guidePagerAdapter = new GuidePagerAdapter(images);
-        vpSplash.setAdapter(guidePagerAdapter);
-        //监听ViewPager的滑动事件
-        vpSplash.setOnPageChangeListener(onPageChangeListener);
         btnGuideDone.setOnClickListener(this);
+
     }
 
     @Override
     protected void initEvents() {
         super.initEvents();
-        for (int i = 0; i < imgs.length; i++) {
-            initGuideImage(i); //初始化引导图
+        uid = SpUtils.getStringParam(mActivity, Keys.UID);
+        bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
+        businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
+        String[] split = Utils.getAppInfo(mActivity).split("#");
+        versionName = split[1];
+
+
+        for (int i = 0; i < fragments.size(); i++) {
+            //initGuideImage(i); //初始化引导图
             initDots(i);//初始化静态点
         }
-        guidePagerAdapter.notifyDataSetChanged();
     }
 
     /**
      * 初始化底部小圆点
      */
     private void initDots(int i) {
+
         ImageView imageDot = new ImageView(this);
-        int dotsMargin = DisplayUtil.dp2px(mActivity,15);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(DisplayUtil.dp2px(mActivity,25), DisplayUtil.dp2px(mActivity,5));
+        imageDot.setBackgroundResource(R.drawable.dot_white_shape);
+        int dotsMargin = DisplayUtil.dp2px(mActivity, 10);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(dotsMargin,dotsMargin);
         imageDot.setLayoutParams(params);
         if (i != 0) {
             params.leftMargin = dotsMargin;
         }
-        ll_guide_points.addView(imageDot);
+        llGuidePoint.addView(imageDot);
     }
 
-    /**
-     * 初始化引导图
-     */
-    private void initGuideImage(int i) {
-        RatioImageView imageView = new RatioImageView(this);
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        imageView.setImageResource(imgs[i]);
-        images.add(imageView);
-    }
 
     @Override
     public void onClick(View v) {
+        //SpUtils.putParam(this, Keys.GUIDE_DONE, true);//保存是否完成引导页
+        SpUtils.putParam(mActivity, Keys.VERSIONNAME,versionName);
+        //System.out.println("versionName+111+"+versionName);
+        if(!TextUtils.isEmpty(uid)) {
+            if(!TextUtils.isEmpty(bulidingid)||!TextUtils.isEmpty(businessid)) {
+                //跳转到主页面
+                enterHome();
+            }else{
+                // 跳到注册第二个界面
+                enterRegister2();
+            }
 
+        }else{
+            // 无uid，跳到登录界面
+            enterLogin();
+
+        }
     }
+
     /**
      * ViewPager滑动的监听
      */
     private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            Log.d("onPageScrolled", "onPageScrolled() called with: " + "position = [" + position + "], positionOffset = [" + positionOffset + "], positionOffsetPixels = [" + positionOffsetPixels + "]");
-            int size = points.size();
-            for (int i = 0; i < size; i++) {
-                if (positionOffsetPixels != 0 && position == i) {
-                    points.get(position).setVisibility(View.INVISIBLE);
-                } else if (position == i) {
-                    points.get(position).setVisibility(View.VISIBLE);
-                }
-                if (position == i) {
-                    continue;
-                }
-                points.get(i).setVisibility(View.INVISIBLE);
-            }
+            //Log.d("onPageScrolled", "onPageScrolled() called with: " + "position = [" + position + "], positionOffset = [" + positionOffset + "], positionOffsetPixels = [" + positionOffsetPixels + "]");
+            // 红点滚动 红点移动的距离
+            int redMove = (int) ((position + positionOffset) * DisplayUtil.dp2px(mActivity,20));
+            // 获取控件的宽和高的属性
+            android.widget.RelativeLayout.LayoutParams params = (android.widget.RelativeLayout.LayoutParams) ivGuidePointRed
+                    .getLayoutParams();
+
+            params.leftMargin = redMove;// 把移动的距离设置为红点距离左边的距离
+            ivGuidePointRed.setLayoutParams(params);
         }
 
         @Override
         public void onPageSelected(int position) {
             //是否显示开始体验按钮
-            if (position == imgs.length - 1) {
+            if (position == fragments.size() - 1) {
                 btnGuideDone.setVisibility(View.VISIBLE);
-                rlContainDots.setVisibility(View.INVISIBLE);
             } else {
                 btnGuideDone.setVisibility(View.GONE);
-                rlContainDots.setVisibility(View.VISIBLE);
             }
         }
 
@@ -132,4 +177,24 @@ public class GuideActivity extends BaseActivity {
 
         }
     };
+    private void enterRegister2() {
+        Intent intent = new Intent(mActivity, RegisterActivity2.class);
+        intent.putExtra(Keys.UID, uid);
+        startActivity(intent);
+    }
+
+    private void enterLogin() {
+        startActivity(new Intent(mActivity, Login_Message.class));
+        finish();
+    }
+
+    private void enterHome() {
+        startActivity(new Intent(mActivity, HomeActivity.class));
+        finish();
+    }
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
 }

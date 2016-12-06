@@ -202,6 +202,11 @@ public class FeedbackActivity extends BaseActivity {
                 .execute(new MyStringCallback());
     }
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
     class MyStringCallback extends StringCallback {
 
         @Override

@@ -345,6 +345,11 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         }
     }
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {

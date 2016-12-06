@@ -34,6 +34,7 @@ import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.PopBirthHelper;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.ShowCheckDeviceDialog;
 import com.google.gson.Gson;
@@ -105,6 +106,7 @@ public class NfcScanActivity extends BaseActivity {
     private Map<Integer, Boolean> map = new HashMap<>();
     private View viewFeed;
     private View viewTime;
+    private String versionName;
 
 
     @Override
@@ -305,17 +307,24 @@ public class NfcScanActivity extends BaseActivity {
      * 这是检查的网络请求获取数据的方法，使用Post
      */
     private void getData() {
+        String[] split = Utils.getAppInfo(mActivity).split("#");
+        versionName = split[1];
         progressBar.setVisibility(View.VISIBLE);
         String url = Urls.Url_Check;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("device_id", cardNumber);
-        params.put("version", "1.1.0");
+        params.put("version", versionName);
         OkHttpUtils.post()//
                 .url(url)//
                 .params(params)//
                 .build()//
                 .execute(new MyStringCallback());
 
+
+    }
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
 
     }
 

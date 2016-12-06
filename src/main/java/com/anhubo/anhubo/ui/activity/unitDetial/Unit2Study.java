@@ -71,7 +71,10 @@ public class Unit2Study extends BaseActivity {
         wvStudy.loadUrl(newUrl);
     }
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
 
+    }
 
 
     class MyJavaScriptInterface {

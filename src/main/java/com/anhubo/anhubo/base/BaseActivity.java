@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Administrator on 2016/9/18.
  */
-public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
+public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener , View.OnSystemUiVisibilityChangeListener {
 
     protected Activity mActivity;
     protected static final String INTENT_FINISH = "intent_finish";
@@ -39,7 +39,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected ImageView ivTopBarleftUnitMenu;
     protected ImageView ivTopBarRightUnitMsg;
     protected ImageView ivTopBarleftBuildPen;
-    protected LinearLayout llTop;
+    protected RelativeLayout llTop;
     protected TextView tvToptitle;
     protected TextView tvTopBarRight;
     protected RelativeLayout progressBar;
@@ -48,6 +48,9 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+        requestWindowFeature(Window.FEATURE_ACTION_MODE_OVERLAY);
+        setStatusBarTransparent();
         super.onCreate(savedInstanceState);
 
         mActivity = this;
@@ -57,6 +60,26 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             setContentView(getContentViewId());
         }
     }
+
+    private void setStatusBarTransparent(){
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            //托盘重叠显示在Activity上
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    |View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            decorView.setSystemUiVisibility(uiOptions);
+            decorView.setOnSystemUiVisibilityChangeListener(this);
+            // 设置托盘透明
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+            //Log.d("CP_Common","VERSION.SDK_INT =" + VERSION.SDK_INT);
+        }else{
+            //Log.d("CP_Common", "SDK 小于19不设置状态栏透明效果");
+        }
+
+    }
+
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
@@ -132,7 +155,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         tvTopBarRight = (TextView) findViewById(R.id.tvTopBarRight);//右上角列表
         ivTopBarleftBuildPen = (ImageView) findViewById(R.id.ivTopBarleft_build_pen);//左上角铅笔按钮
         tvToptitle = (TextView) findViewById(R.id.tvAddress);//标题
-        llTop = (LinearLayout) findViewById(R.id.ll_Top); // 顶部标题栏
+        llTop = (RelativeLayout) findViewById(R.id.ll_Top); // 顶部标题栏
 
     }
     /**设置标题栏*/

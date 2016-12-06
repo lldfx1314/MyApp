@@ -105,7 +105,7 @@ public class MyReceiver extends BroadcastReceiver {
             int code = bean.code;
             String msg = bean.msg;
             if (code == 0) {
-                System.out.println("上传Registration_Id+++msg上传成功+++" + msg);
+                //System.out.println("上传Registration_Id+++msg上传成功+++" + msg);
             }
         }
     }

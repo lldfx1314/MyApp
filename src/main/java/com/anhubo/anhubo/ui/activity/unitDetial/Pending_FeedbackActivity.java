@@ -211,6 +211,11 @@ public class Pending_FeedbackActivity extends BaseActivity {
                 .execute(new MyStringCallback1());
     }
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
 
     class MyStringCallback1 extends StringCallback {
 

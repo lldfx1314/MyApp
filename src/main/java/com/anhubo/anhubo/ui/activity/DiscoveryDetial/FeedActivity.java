@@ -75,4 +75,8 @@ public class FeedActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
 }

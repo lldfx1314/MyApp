@@ -62,4 +62,8 @@ public class AboutWeActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
 }

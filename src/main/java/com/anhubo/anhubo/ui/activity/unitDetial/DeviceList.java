@@ -67,6 +67,12 @@ public class DeviceList extends BaseActivity {
                 .build()//
                 .execute(new MyStringCallback());
     }
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {

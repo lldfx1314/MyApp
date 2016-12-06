@@ -20,13 +20,15 @@ import java.util.regex.Pattern;
  * 这个类存放各个方法的类
  * Created by Administrator on 2016/9/28.
  */
-public class Utils{
+public class Utils {
 
     private static Dialog dialog;
     private static Button btnTakephoto;
     private static Button btnPhoto;
 
-    /**判断手机号码是否合法*/
+    /**
+     * 判断手机号码是否合法
+     */
     public static boolean judgePhoneNumber(String str) {
 //        String regular_phone_number = "^[1]([3][0-9]{1}|45|47|50|51|52|53|55|56|57|58|59|70|71|76|77|78|80|81|82|83|84|85|86|87|88|89)[0-9]{8}$";
         String regular_phone_number = "^1[34578]\\d{9}$";
@@ -36,7 +38,10 @@ public class Utils{
         Matcher m = p.matcher(str);
         return m.matches();
     }
-    /**验证密码是否正确*/
+
+    /**
+     * 验证密码是否正确
+     */
     public static final boolean isRightPwd(String pwd) {
         Pattern p = Pattern.compile("^(?![^a-zA-Z]+$)(?!\\D+$)[0-9a-zA-Z]{8,16}$");
         Matcher m = p.matcher(pwd);
@@ -44,16 +49,20 @@ public class Utils{
 
     }
 
-    /**身份证是否正确*/
+    /**
+     * 身份证是否正确
+     */
     public static final boolean isRightIdcard(String pwd) {
-        String regular_Idcard ="^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X)$";
-                Pattern p = Pattern.compile(regular_Idcard);
+        String regular_Idcard = "^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X)$";
+        Pattern p = Pattern.compile(regular_Idcard);
         Matcher m = p.matcher(pwd);
         return m.matches();
 
     }
 
-    /**更改获取验证码的TextView显示的内容*/
+    /**
+     * 更改获取验证码的TextView显示的内容
+     */
     public static void setSecurityTextView(final TextView textView) {
         CountDownTimer countDownTimer = new CountDownTimer(60 * 1000, 1000) {
             public void onTick(long millisUntilFinished) {
@@ -80,6 +89,23 @@ public class Utils{
             tv[i].getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
             tv[i].getPaint().setAntiAlias(true);//抗锯齿
         }
+    }
+
+
+    /**
+     * 获取版本信息
+     */
+    public static String getAppInfo(Context context) {
+        try {
+            String pkName = context.getPackageName();
+            String versionName = context.getPackageManager().getPackageInfo(
+                    pkName, 0).versionName;
+            int versionCode = context.getPackageManager()
+                    .getPackageInfo(pkName, 0).versionCode;
+            return pkName + "#" + versionName + "#" + versionCode;
+        } catch (Exception e) {
+        }
+        return null;
     }
 
     /** 把dp单位的值转换为px单位的值 */

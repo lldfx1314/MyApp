@@ -122,6 +122,11 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         tvDeal.setMovementMethod(LinkMovementMethod.getInstance());//设置可以点击超链接
     }
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
     class MyURLSpan extends URLSpan {
 
         public MyURLSpan(String url) {

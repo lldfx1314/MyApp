@@ -141,6 +141,11 @@ public class MsgPerfectActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
     /**
      * 员工数的网络强求
      */
