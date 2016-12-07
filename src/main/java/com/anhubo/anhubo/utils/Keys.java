@@ -152,4 +152,10 @@ public interface Keys {
      * 保存修改过的单位
      */
     String NEWBUSINESSNAME = "newBusinessName";
+    /**保存学习的时间*/
+    String STUDY_TIME = "study_time";
+    /**保存检查的时间*/
+    String CHECK_TIME = "check_time";
+    /**保存演练的时间*/
+    String DRILL_TIME = "drill_time";
 }

@@ -1,6 +1,8 @@
 package com.anhubo.anhubo.ui.impl;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -35,7 +37,10 @@ import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +51,9 @@ import okhttp3.Call;
  * Created by Administrator on 2016/10/8.
  */
 public class UnitFragment extends BaseFragment {
+    private static final int STUDY = 1;
+    private static final int CHECK = 2;
+    private static final int DRILL = 3;
     private ListView lvUnit;
     private RelativeLayout rlUnit01;
     private RelativeLayout rlUnit02;
@@ -83,6 +91,9 @@ public class UnitFragment extends BaseFragment {
     private String tableId;
     private UnitAdapter adapter;
     private String versionName;
+    private boolean isShowDot_study = false;
+    private boolean isShowDot_check = false;
+    private boolean isShowDot_drill = false;
 
 
     @Override
@@ -132,24 +143,20 @@ public class UnitFragment extends BaseFragment {
         btnStudy = (Button) view.findViewById(R.id.btn_study);
         btnCheck = (Button) view.findViewById(R.id.btn_check);
         btnDrill = (Button) view.findViewById(R.id.btn_drill);
-        // button的小圆点
+        // 红色的小圆点
         dotStudy = view.findViewById(R.id.dot_study);
         dotCheck = view.findViewById(R.id.dot_check);
         dotDrill = view.findViewById(R.id.dot_drill);
         // 提示没有任何保障计划
         tvNoPlan1 = (TextView) view.findViewById(R.id.tv_no_plan1);
         tvNoPlan2 = (TextView) view.findViewById(R.id.tv_no_plan2);
-        //先隐藏小圆点
-//        dotStudy.setVisibility(View.GONE);
-//        dotCheck.setVisibility(View.GONE);
-//        dotDrill.setVisibility(View.GONE);
+
         // 添加头布局
         lvUnit.addHeaderView(view, null, true);
         // 去掉头布局的分割线
         lvUnit.setHeaderDividersEnabled(false);
 
     }
-
 
     /**
      * 设置监听
@@ -170,9 +177,75 @@ public class UnitFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        //界面一加载设置小红点显示
+        setDotVisible();
+    }
+
+
+    /**
+     * 设置小圆点显示
+     */
+    private void setDotVisible() {
+        String newTime = getSystemTime();
+        String studyTime = SpUtils.getStringParam(mActivity, Keys.STUDY_TIME);
+        String checkTime = SpUtils.getStringParam(mActivity, Keys.CHECK_TIME);
+        String drillTime = SpUtils.getStringParam(mActivity, Keys.DRILL_TIME);
+        if (!TextUtils.isEmpty(newTime)) {
+            Date newDate = getDate(newTime);
+            // 学习
+            if (!TextUtils.isEmpty(studyTime)) {
+                Date studyDate = getDate(studyTime);
+                if (newDate != null && studyDate != null) {
+                    long time = (newDate.getTime() - studyDate.getTime()) / 1000 /*/ 60 / 60 / 24*/;
+                    if (time >= 10) {
+                        isShowDot_study = true;
+                    }
+                }
+            }else{
+                isShowDot_study = true;
+            }
+            // 检查
+            if (!TextUtils.isEmpty(checkTime)) {
+                Date checkDate = getDate(checkTime);
+                if (newDate != null && checkDate != null) {
+                    long time = (newDate.getTime() - checkDate.getTime()) / 1000 /*/ 60 / 60 / 24*/;
+                    if (time >= 10) {
+                        isShowDot_check = true;
+                    }
+                }
+            }else{
+                isShowDot_check = true;
+            }
+            // 演练
+            if (!TextUtils.isEmpty(drillTime)) {
+                Date drillDate = getDate(drillTime);
+                if (newDate != null && drillDate != null) {
+                    long time = (newDate.getTime() - drillDate.getTime()) / 1000 /*/ 60 / 60 / 24*/;
+                    if (time >= 10) {
+                        isShowDot_drill = true;
+                    }
+                }
+            }else{
+                isShowDot_drill = true;
+            }
+        }
+
+        if (isShowDot_study) {
+            dotStudy.setVisibility(View.VISIBLE);
+        }
+        if (isShowDot_check) {
+            dotCheck.setVisibility(View.VISIBLE);
+        }
+        if (isShowDot_drill) {
+            dotDrill.setVisibility(View.VISIBLE);
+        }
+    }
+
     private boolean isLoading = false;// 页面已经加载过
     private boolean isSucceed = false;// 记录数据是否获取成功
-
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -367,6 +440,72 @@ public class UnitFragment extends BaseFragment {
             }
         }
     }
+    /**接收消息让小圆点隐藏*/
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case STUDY:
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            dotStudy.setVisibility(View.GONE);
+                            String oldTime = getSystemTime();
+                            SpUtils.putParam(mActivity, Keys.STUDY_TIME, oldTime);
+                        }
+                    }, 300);
+
+                    break;
+                case CHECK:
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            dotCheck.setVisibility(View.GONE);
+                            String oldTime = getSystemTime();
+                            SpUtils.putParam(mActivity, Keys.CHECK_TIME, oldTime);
+                        }
+                    }, 300);
+                    break;
+                case DRILL:
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            dotDrill.setVisibility(View.GONE);
+                            String oldTime = getSystemTime();
+                            SpUtils.putParam(mActivity, Keys.DRILL_TIME, oldTime);
+                        }
+                    }, 300);
+                    break;
+            }
+        }
+    };
+
+    /**
+     * 获取系统当前时间
+     */
+    private String getSystemTime() {
+        Date date = new Date(System.currentTimeMillis());//获取当前时间
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日HH:mm:ss");
+        String str = formatter.format(date);
+        return str;
+    }
+
+    /**
+     * 获取Date格式的时间
+     */
+    private Date getDate(String time) {
+        //2,定义日期格式化对象
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日HH:mm:ss");
+        //3,将日期字符串转换成日期对象
+        Date date = null;
+        try {
+            date = sdf.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
 
 
     @Override
@@ -378,6 +517,7 @@ public class UnitFragment extends BaseFragment {
                 break;
 
             case R.id.ivTopBarRight_unit_msg://消息中心
+
                 startActivity(new Intent(mActivity, UnitMsgCenterActivity.class));
                 break;
 
@@ -393,14 +533,29 @@ public class UnitFragment extends BaseFragment {
                 startActivity(intent);
                 break;
             case R.id.btn_study:// 学习
+                /****************************************************/
+                isShowDot_study = false;
+                if (!isShowDot_study) {
+                    handler.sendEmptyMessage(STUDY);
+                }
                 startActivity(new Intent(mActivity, Unit2Study.class));
                 break;
             case R.id.btn_check://检查
+                /****************************************************/
+                isShowDot_check = false;
+                if (!isShowDot_check) {
+                    handler.sendEmptyMessage(CHECK);
+                }
                 Intent intentCheck = new Intent(mActivity, QrScanActivity.class);
                 intentCheck.putExtra(Keys.CHECK, "Check");
                 startActivity(intentCheck);
                 break;
             case R.id.btn_drill: // 演练
+                /****************************************************/
+                isShowDot_drill = false;
+                if (!isShowDot_drill) {
+                    handler.sendEmptyMessage(DRILL);
+                }
                 Intent intentExercise = new Intent(mActivity, QrScanActivity.class);
                 intentExercise.putExtra(Keys.EXERCISE, "Exercise");
                 startActivity(intentExercise);

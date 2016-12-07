@@ -19,8 +19,10 @@ public class StudyBean extends BaseEntity implements Serializable {
 
             public class Record_list implements Serializable {
 
-                public String user_name;
+                public String device_type_name;
                 public String type_id;
+                public String user_name;
+                public String study_score;
 
             }
 

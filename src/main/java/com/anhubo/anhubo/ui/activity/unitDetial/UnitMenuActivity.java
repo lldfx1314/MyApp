@@ -10,6 +10,7 @@ import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.RefreshListview;
 import com.google.gson.Gson;
@@ -45,6 +46,7 @@ public class UnitMenuActivity extends BaseActivity {
     private int page;
     private boolean isLoadMore = false;
     private UnitMenuAdapter menuAdapter;
+    private String versionName;
 
     @Override
     protected void initConfig() {
@@ -93,10 +95,13 @@ public class UnitMenuActivity extends BaseActivity {
      * 获取网络数据
      */
     private void getData() {
-
+        String[] split = Utils.getAppInfo(mActivity).split("#");
+        versionName = split[1];
         String url = Urls.Url_studyRecord;
         HashMap<String, String> params = new HashMap<>();
+        System.out.println("++++business_id+"+businessId+"++versionName+"+versionName+"++page"+pager);
         params.put("business_id", businessId);
+        params.put("version", versionName);
         params.put("page", pager + "");
         pager++;
         OkHttpUtils.post()//
@@ -190,6 +195,8 @@ public class UnitMenuActivity extends BaseActivity {
                     recordDetails = recordList.get(j);
                     String typeId = recordDetails.type_id;
                     String userName = recordDetails.user_name;
+                    String deviceTypeName = recordDetails.device_type_name;
+                    String studyScore = recordDetails.study_score;
                     listTypeId.add(typeId);
                     listuserName.add(userName);
                     userNameMap.put(userName,time);

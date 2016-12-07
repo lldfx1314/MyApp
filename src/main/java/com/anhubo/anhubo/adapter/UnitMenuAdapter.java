@@ -35,7 +35,6 @@ public class UnitMenuAdapter extends BaseAdapter {
     final int TYPE_1 = 0;
     final int TYPE_2 = 1;
     private ArrayList<String> listUserName1;
-    private UnitMenuAdapter listtime;
 
     public UnitMenuAdapter(Context context, ArrayList<String> listuserName, HashMap<String, ArrayList<StudyBean.Data.Records.Record_list>> recordMap, ArrayList<String> listTime, HashMap<String, String> userNameMap, ArrayList<String> listTypeId, int pager) {
         this.mContext = context;
@@ -165,7 +164,7 @@ public class UnitMenuAdapter extends BaseAdapter {
                 break;
             case TYPE_2:
                 // 取时间记录
-                hold2.tvTimeRecord.setText(userNameMap.get(listuserName.get(position)));
+                hold2.tvTimeRecord.setText(listTime.get(position));
                 break;
             default:
                 break;
