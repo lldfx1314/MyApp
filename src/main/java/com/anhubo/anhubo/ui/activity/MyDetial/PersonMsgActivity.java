@@ -601,6 +601,9 @@ public class PersonMsgActivity extends BaseActivity {
      * 给每个控件先设置初始内容
      */
     private void setInitialData() {
+        // 记录是否修改过单位，以便于从我的界面进来后决定是否修改单位显示内容，因为修改完返回到我的界面是不请求网络的，此时要是进入PersonMsgActivity界面，单位显示的必然是修改之前的单位
+        boolean isalterUnit = SpUtils.getBooleanParam(mActivity, Keys.ISALTERUNIT, false);
+        String newBusinessName = SpUtils.getStringParam(mActivity, Keys.NEWBUSINESSNAME);
         if (!TextUtils.isEmpty(img)) {
             isSetHeadIcon = true;
         }
@@ -616,9 +619,18 @@ public class PersonMsgActivity extends BaseActivity {
         if (!TextUtils.isEmpty(phone)) {
             tvMyPhone.setText(phone);
         }
-        if (!TextUtils.isEmpty(businessName)) {
-            tvMyUnit.setText(businessName);
+        if (!isalterUnit) {
+            // 没修改过，显示之前的单位
+            if (!TextUtils.isEmpty(businessName)) {
+                tvMyUnit.setText(businessName);
+            }
+        } else {
+            // 修改过，显示修改的单位
+            if (!TextUtils.isEmpty(newBusinessName)) {
+                tvMyUnit.setText(newBusinessName);
+            }
         }
+
         if (!TextUtils.isEmpty(weixinName)) {
             tvMyWechat.setText(weixinName);
         }
@@ -728,7 +740,6 @@ public class PersonMsgActivity extends BaseActivity {
         }
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -748,9 +759,11 @@ public class PersonMsgActivity extends BaseActivity {
                     break;
                 case REQUESTCODE:
                     if (resultCode == 1) {
-                        String stringExtra = data.getStringExtra(Keys.BUSINESSNAME);
-                        if (!TextUtils.isEmpty(stringExtra)) {
-                            tvMyUnit.setText(stringExtra);
+                        String newBusinessName = data.getStringExtra(Keys.BUSINESSNAME);
+                        if (!TextUtils.isEmpty(newBusinessName)) {
+                            SpUtils.putParam(mActivity, Keys.ISALTERUNIT, true);
+                            SpUtils.putParam(mActivity, Keys.NEWBUSINESSNAME, newBusinessName);
+                            tvMyUnit.setText(newBusinessName);
 
                         }
                     }

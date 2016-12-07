@@ -12,9 +12,8 @@ public interface Keys {
      */
     String CARDNUMBER = "cardnumber";
     /**
-     * 跳转到修改页面
+     * 登陆注册时携带手机号
      */
-    String DEVICEINFO = "deviceInfo";
     String PHONE = "phone";
     /**
      * 安互保协议
@@ -71,45 +70,86 @@ public interface Keys {
      * 扫描类型
      */
     String SCAN_TYPE = "scan_type";
-    /**已经能检查的设备数，用来做缓存*/
+    /**
+     * 已经能检查的设备数，用来做缓存
+     */
     String DEVICECHECKEDNUM = "DEVICECHECKEDNUM";
-    /**添加的设备总数，用来做缓存*/
+    /**
+     * 添加的设备总数，用来做缓存
+     */
     String DEVICESNUM = "DEVICESNUM";
 
-    /**头像保存成功，给上个页面传值*/
+    /**
+     * 头像保存成功，给上个页面传值
+     */
     String HEADERICON = "headericon";
-    /**我的界面传递图片给个人信息*/
+    /**
+     * 我的界面传递图片给个人信息
+     */
     String MYBEAN = "mybean";
-    /**给我的界面传递名字*/
+    /**
+     * 给我的界面传递名字
+     */
     String NEWNAME = "NEWNAME";
-    /**给我的界面传递性别*/
+    /**
+     * 给我的界面传递性别
+     */
     String NEWGENDER = "newGender";
-    /**给我的界面传递年龄*/
+    /**
+     * 给我的界面传递年龄
+     */
     String NEWAGE = "newage";
-    /**微信登录界面跳转到注册界面的三个信息*/
+    /**
+     * 微信登录界面跳转到注册界面的三个信息
+     */
     String UNIONID = "unionid";
     String PROFILE_IMAGE_URL = "profile_image_url";
     String SCREEN_NAME = "screen_name";
 
-    /**正常登录界面跳到注册界面*/
+    /**
+     * 正常登录界面跳到注册界面
+     */
     String LOGINFORZHUCE = "loginforzhuce";
-    /**微信登录界面跳到注册界面*/
+    /**
+     * 微信登录界面跳到注册界面
+     */
     String WEIXINFORZHUCE = "weixinforzhuce";
-    /**微信绑定后显示头像并传到我的界面*/
+    /**
+     * 微信绑定后显示头像并传到我的界面
+     */
     String HEADERICON_WEIXIN = "headericon_weixin";
 
-    /**微信的昵称*/
+    /**
+     * 微信的昵称
+     */
     String SCREENNAME = "screenName";
-    /**微信头像的url*/
+    /**
+     * 微信头像的url
+     */
     String WEIXINIMG = "weixinImg";
-    /**传递deviceId*/
+    /**
+     * 传递deviceId
+     */
     String DeviceId = "deviceId";
-    /**待处理反馈isid*/
+    /**
+     * 待处理反馈isid
+     */
     String IsId = "isId";
-    /**测试*/
+    /**
+     * 测试
+     */
     String TEST = "test";
-    /**引导页*/
-    String GUIDE_DONE = "guide_done";
-    /**保存版本号*/
+
+    /**
+     * 保存版本号
+     */
     java.lang.String VERSIONNAME = "versionName";
+    /**
+     * 保存是否修改过单位
+     */
+    String ISALTERUNIT = "isalterUnit";
+    /**
+     * 保存修改过的单位
+     */
+    String NEWBUSINESSNAME = "newBusinessName";
 }

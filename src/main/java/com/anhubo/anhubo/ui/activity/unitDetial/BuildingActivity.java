@@ -1,26 +1,19 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.view.OnApplyWindowInsetsListener;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.WindowInsetsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -55,7 +48,7 @@ import okhttp3.Call;
 /**
  * Created by LUOLI on 2016/11/21.
  */
-public class BuildingActivity extends AppCompatActivity {
+public class BuildingActivity extends AppCompatActivity implements View.OnSystemUiVisibilityChangeListener {
 
     MapView mMapView = null;
     private RefreshListview lvBuilding;
@@ -82,9 +75,13 @@ public class BuildingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /**设置浸入式状态栏*/
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+        requestWindowFeature(Window.FEATURE_ACTION_MODE_OVERLAY);
+        setStatusBarTransparent();
+
         super.onCreate(savedInstanceState);
-        setBar();
         setContentView(R.layout.activity_building);
         // 设置title上的返回键的点击事件
         initDefaultViews();
@@ -347,6 +344,11 @@ public class BuildingActivity extends AppCompatActivity {
                 .execute(new MyStringCallback());
     }
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
 
     class MyStringCallback extends StringCallback {
         @Override
@@ -497,35 +499,24 @@ public class BuildingActivity extends AppCompatActivity {
         //在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，实现地图生命周期管理
         mMapView.onSaveInstanceState(outState);
     }
-    private void setBar() {
-        Window window = getWindow();
+    /**设置浸入式状态栏*/
+    private void setStatusBarTransparent(){
 
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        boolean hideStatusBarBackground = false;
-        if (hideStatusBarBackground) {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                window.setStatusBarColor(Color.TRANSPARENT);
-            }
-            //隐藏状态栏的阴影window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        } else {
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            //托盘重叠显示在Activity上
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    |View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            decorView.setSystemUiVisibility(uiOptions);
+            decorView.setOnSystemUiVisibilityChangeListener(this);
+            // 设置托盘透明
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+            //Log.d("CP_Common","VERSION.SDK_INT =" + VERSION.SDK_INT);
+        }else{
+            //Log.d("CP_Common", "SDK 小于19不设置状态栏透明效果");
         }
 
-        ViewGroup mContentView = (ViewGroup) window.findViewById(Window.ID_ANDROID_CONTENT);
-        View mChildView = mContentView.getChildAt(0);
-        if (mChildView != null) {
-            ViewCompat.setOnApplyWindowInsetsListener(mChildView, new OnApplyWindowInsetsListener() {
-                @Override
-                public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
-                    return insets;
-                }
-            });
-            ViewCompat.setFitsSystemWindows(mChildView, false);
-            ViewCompat.requestApplyInsets(mChildView);
-
-        }
     }
 
 }

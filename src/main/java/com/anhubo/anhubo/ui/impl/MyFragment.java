@@ -313,6 +313,12 @@ public class MyFragment extends BaseFragment {
         SpUtils.putParam(mActivity, Keys.WEIXINIMG, null);// 清除微信头像
         SpUtils.putParam(mActivity, Keys.SCREENNAME, null);// 清除微信昵称
 
+        /**修改过单位*/
+        SpUtils.putParam(mActivity, Keys.ISALTERUNIT, false);
+        SpUtils.putParam(mActivity, Keys.NEWBUSINESSNAME, null);
+        /**保存版本号*/
+        SpUtils.putParam(mActivity, Keys.VERSIONNAME, null);
+
 
         //跳转到登录页面
         startActivity(new Intent(mActivity, Login_Message.class));

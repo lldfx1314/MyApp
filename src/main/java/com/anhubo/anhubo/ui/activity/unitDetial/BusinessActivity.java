@@ -56,7 +56,7 @@ import okhttp3.Call;
 /**
  * Created by LUOLI on 2016/11/21.
  */
-public class BusinessActivity extends AppCompatActivity {
+public class BusinessActivity extends AppCompatActivity implements View.OnSystemUiVisibilityChangeListener {
 
     MapView mMapView = null;
     private RefreshListview lvBusiness;
@@ -84,9 +84,13 @@ public class BusinessActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /**设置浸入式状态栏*/
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+        requestWindowFeature(Window.FEATURE_ACTION_MODE_OVERLAY);
+        setStatusBarTransparent();
         super.onCreate(savedInstanceState);
-        setBar();
+        //setBar();
         setContentView(R.layout.activity_business);
         // 设置title上的返回键的点击事件
         initDefaultViews();
@@ -126,10 +130,11 @@ public class BusinessActivity extends AppCompatActivity {
     }
 
     private void initEvents() {
-        listBuilding =  new ArrayList<String>();
+        listBuilding = new ArrayList<String>();
 
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -272,9 +277,9 @@ public class BusinessActivity extends AppCompatActivity {
                     getData();
 
 
-                }else if(amapLocation.getErrorCode() == 12){
+                } else if (amapLocation.getErrorCode() == 12) {
                     dialogLocation();
-                }  else {
+                } else {
                     //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                     System.out.println(("AmapError,location Error, ErrCode:"
                             + amapLocation.getErrorCode() + ", errInfo:"
@@ -283,6 +288,7 @@ public class BusinessActivity extends AppCompatActivity {
             }
         }
     };
+
     /**
      * Dialog对话框提示用户去设置界面打开权限
      */
@@ -315,6 +321,7 @@ public class BusinessActivity extends AppCompatActivity {
             }
         }).show();
     }
+
     /**
      * 定位的监听
      */
@@ -348,6 +355,11 @@ public class BusinessActivity extends AppCompatActivity {
                 .params(params)//
                 .build()//
                 .execute(new MyStringCallback());
+    }
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
     }
 
     class MyStringCallback extends StringCallback {
@@ -496,6 +508,32 @@ public class BusinessActivity extends AppCompatActivity {
         //在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，实现地图生命周期管理
         mMapView.onSaveInstanceState(outState);
     }
+
+    /**
+     * 设置浸入式状态栏
+     */
+    private void setStatusBarTransparent() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //托盘重叠显示在Activity上
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            decorView.setSystemUiVisibility(uiOptions);
+            decorView.setOnSystemUiVisibilityChangeListener(this);
+            // 设置托盘透明
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+            //Log.d("CP_Common","VERSION.SDK_INT =" + VERSION.SDK_INT);
+        } else {
+            //Log.d("CP_Common", "SDK 小于19不设置状态栏透明效果");
+        }
+
+    }
+
+    /**
+     * 设置浸入式状态栏
+     */
     private void setBar() {
         Window window = getWindow();
 
