@@ -60,7 +60,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             setContentView(getContentViewId());
         }
     }
-
+    /**设置浸入式状态栏*/
     private void setStatusBarTransparent(){
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
