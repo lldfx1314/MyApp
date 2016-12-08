@@ -148,4 +148,6 @@ public interface Urls {
     String Url_Unit_AlterUnit = UrlBase +"Work/save_bu_info";
     /**我的  修改单位*/
     String Url_AlterUnit = UrlBase +"Personal/change_business";
+    /** 删除设备*/
+    String Delete_Device = UrlBase +"Device/del_dev";
 }

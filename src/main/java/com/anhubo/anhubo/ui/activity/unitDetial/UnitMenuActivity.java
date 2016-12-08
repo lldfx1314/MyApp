@@ -95,11 +95,12 @@ public class UnitMenuActivity extends BaseActivity {
      * 获取网络数据
      */
     private void getData() {
+
         String[] split = Utils.getAppInfo(mActivity).split("#");
         versionName = split[1];
         String url = Urls.Url_studyRecord;
         HashMap<String, String> params = new HashMap<>();
-        System.out.println("++++business_id+"+businessId+"++versionName+"+versionName+"++page"+pager);
+        // System.out.println("++++business_id+"+businessId+"++versionName+"+versionName+"++page"+pager);
         params.put("business_id", businessId);
         params.put("version", versionName);
         params.put("page", pager + "");

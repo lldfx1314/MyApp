@@ -6,24 +6,40 @@
 
     <include android:id="@+id/top_title"
         layout="@layout/layout_top_bar"></include>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top_title">
+
 
     <TextView
         android:id="@+id/tv_device"
-        android:layout_below="@+id/top_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#F7F7F7"
-        android:paddingBottom="10dp"
+        android:layout_height="62dp"
+        android:gravity="center_vertical"
         android:paddingLeft="15dp"
-        android:paddingTop="10dp" />
-
-    <ListView
-        android:id="@+id/device_Listview"
+        android:background="#F7F7F7" />
+    <View
+        android:id="@+id/view"
         android:layout_below="@+id/tv_device"
         android:layout_width="match_parent"
+        android:background="#E3E3E3"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_height="1dp"/>
+
+    <ListView
+        android:id="@+id/listview_device"
+        android:layout_below="@+id/view"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:divider="#E3E3E3"
+        android:dividerHeight="1dp"
         android:paddingLeft="15dp"
-        android:background="@color/backgroud_white"/>
+        android:paddingRight="15dp"
+        android:background="#F7F7F7"/>
+    </RelativeLayout>
+
     <include layout="@layout/loading"/>
 
 </RelativeLayout>

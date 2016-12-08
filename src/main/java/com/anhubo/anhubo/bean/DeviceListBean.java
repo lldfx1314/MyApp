@@ -15,6 +15,7 @@ public class DeviceListBean extends BaseEntity {
 
             public String device_name;
             public String device_id;
+            public String judge;
         }
 
     }

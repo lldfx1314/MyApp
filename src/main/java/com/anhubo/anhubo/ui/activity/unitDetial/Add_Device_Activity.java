@@ -275,45 +275,18 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         // 点击完成的时候获取输入框内的内容，调用接口，使用post方法把数据添加到后台
         getInputData();
 
-
-        if (TextUtils.isEmpty(build)) {
-            new AlertDialog(mActivity).builder()
-                    .setTitle("提示")
-                    .setMsg("请选择建筑")
-                    .setCancelable(true).show();
-            //ToastUtils.showToast(mActivity, "请选择建筑");
-            return;
-        }
-        if (TextUtils.isEmpty(unit)) {
-            new AlertDialog(mActivity).builder()
-                    .setTitle("提示")
-                    .setMsg("请选择单位")
-                    .setCancelable(true).show();
-            //ToastUtils.showToast(mActivity, "请选择单位");
-            return;
-        }
-        if (TextUtils.isEmpty(area)) {
-            new AlertDialog(mActivity).builder()
-                    .setTitle("提示")
-                    .setMsg("区域不能为空")
-                    .setCancelable(true).show();
-            //ToastUtils.showToast(mActivity, "区域不能为空");
-            return;
-        }
         if (TextUtils.isEmpty(devicePlace)) {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("设备位置不能为空")
                     .setCancelable(true).show();
-            //ToastUtils.showToast(mActivity, "设备位置不能为空");
             return;
         }
         if (TextUtils.isEmpty(deviceName)) {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
-                    .setMsg("亲，请拍取设备照片")
+                    .setMsg("亲，请选择设备名称")
                     .setCancelable(true).show();
-            //ToastUtils.showToast(mActivity, "设备名称不能为空");
             return;
         }
 
@@ -323,26 +296,28 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
                     .setTitle("提示")
                     .setMsg("亲，请拍取设备照片")
                     .setCancelable(true).show();
-            //ToastUtils.showToast(mActivity, "请拍取设备照片");
             return;
-        } else {
-            progressBar.setVisibility(View.VISIBLE);
-            String url = Urls.Url_Add;
-            Map<String, String> params = new HashMap<>();
-            params.put("uid", uid);
-            params.put("qrcode", cardnumber);
-            params.put("building_name", build);// 所属建筑
-            params.put("business_name", unit);//所属单位
-            params.put("area_name", area);//所属区域
-            params.put("name", devicePlace);// 设备位置
-            params.put("type", deviceName);// 设备名称
-            OkHttpUtils.post()//
-                    .addFile("file", "file01.png", newFile)//
-                    .url(url)//
-                    .params(params)//
-                    .build()//
-                    .execute(new MyStringCallback());
         }
+
+        progressBar.setVisibility(View.VISIBLE);
+        String url = Urls.Url_Add;
+        Map<String, String> params = new HashMap<>();
+        params.put("uid", uid);
+        params.put("qrcode", cardnumber);
+        params.put("building_name", build);// 所属建筑
+        params.put("business_name", unit);//所属单位
+        if (!TextUtils.isEmpty(area)) {
+            params.put("area_name", area);//所属区域
+        }
+        params.put("name", devicePlace);// 设备位置
+        params.put("type", deviceName);// 设备名称
+        OkHttpUtils.post()//
+                .addFile("file", "file01.png", newFile)//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
+
     }
 
     @Override
