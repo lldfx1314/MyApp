@@ -1,45 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical" >
-    <!--<TextView
-        android:id="@+id/tv_timeRecord"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:text="" />-->
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    android:orientation="horizontal">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="75dp"
+        android:layout_marginLeft="31dp">
 
-    <LinearLayout
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2.3dp"
+            android:background="@color/blue" />
+
+        <View
+            android:layout_width="7dp"
+            android:layout_height="7dp"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/dot_blue_shape" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal" >
-        <RelativeLayout
-            android:layout_marginLeft="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <View
-                android:layout_width="2dp"
-                android:layout_marginLeft="1.5dp"
-                android:layout_height="match_parent"
-                android:background="@color/blue"/>
-            <View
-                android:layout_width="5dp"
-                android:layout_height="5dp"
-                android:layout_centerVertical="true"
-                android:background="@drawable/dot_blue_shape"/>
-        </RelativeLayout>
+        android:layout_height="75dp">
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="55dp"
+
+           android:gravity="center_vertical"
+           android:orientation="horizontal">
+           <TextView
+               android:id="@+id/tv_study"
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:layout_height="wrap_content"
+               android:padding="10dp"
+               android:text="学习记录"
+               android:textColor="#232323"
+               android:textSize="14sp" />
+
+           <ImageView
+               android:layout_width="14dp"
+               android:layout_height="14dp"
+               android:layout_marginRight="7dp"
+               android:background="@drawable/time_execute" />
+           <TextView
+
+               android:id="@+id/tv_deviceTime"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginRight="20dp"
+               android:textSize="14sp"
+               android:text="12:40"/>
+       </LinearLayout>
         <TextView
-            android:id="@+id/tv_study"
+            android:id="@+id/tv_deviceName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:text="学习记录"
-            android:textColor="#232323"
-            android:textSize="16sp" />
-    </LinearLayout>
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="13sp"
+            android:text="设备名称"/>
+
+    </RelativeLayout>
 
 </LinearLayout>

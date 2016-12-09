@@ -407,6 +407,19 @@ public class NfcScanActivity extends BaseActivity {
         View view = View.inflate(mActivity, R.layout.activity_check_device, null);
         //显示对话框
         ShowCheckDeviceDialog checkDeviceDialog = new ShowCheckDeviceDialog(mActivity, view);
+        checkDeviceDialog.setListenerDialog(new ShowCheckDeviceDialog.ClickListenerDialog() {
+
+            @Override
+            public void popup() {
+
+                // 每次弹出对话框把集合里的元素全部置为0，防止扫描其他设备受影响
+                for (int i = 0; i < completeList.size(); i++) {
+                    completeList.set(i,0);
+                }
+
+            }
+
+        });
         dialog = checkDeviceDialog.show();
         // 找控件
         ck_ListView = (ListView) view.findViewById(R.id.check_listView);
@@ -425,7 +438,7 @@ public class NfcScanActivity extends BaseActivity {
         tvIssueDes = (TextView) view.findViewById(R.id.tv_issue_des);
 
         // 获取适配器对象
-        adapter = new DeviceDetailsAdapter(this, require_list, isId, isContent);
+        adapter = new DeviceDetailsAdapter(this, require_list);
         // 处理出厂日期、待处理反馈
         checkFeedback.setOnClickListener((View.OnClickListener) mActivity);
 

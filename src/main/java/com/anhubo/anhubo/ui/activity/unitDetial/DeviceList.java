@@ -116,10 +116,13 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
                 if (devices != null && !devices.isEmpty()) {
                     for (int i = 0; i < devices.size(); i++) {
                         DeviceListBean.Data.Devices device = devices.get(i);
+
                         String deviceId = device.device_id;
                         deviceIds.add(deviceId);
+
                         String deviceName = device.device_name;
                         deviceNames.add(deviceName);
+
                         String judge = device.judge;
                         deviceJudges.add(judge);
                     }
@@ -129,13 +132,9 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
                     newDevices = deviceIds.size();
                     tvDevice.setText("拥有设备总数: " + newDevices);
                 }
-
                 if (deviceNames != null && deviceJudges != null) {
 
-                    // 创建一个设备列表的适配器
-                    //System.out.println("设备列表界面"+deviceIds);
-                    //System.out.println("设备列表界面"+deviceNames);
-                    adapter = new DeviceListAdapter(mActivity, deviceNames, deviceJudges, DeviceList.this);
+                    adapter = new DeviceListAdapter(mActivity, deviceIds,deviceNames, deviceJudges, DeviceList.this);
                     listview.setAdapter(adapter);
                 }
             }
@@ -157,7 +156,9 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
     @Override
     public void onBtnClick(View v) {
         // 弹窗提示用户删除设备
-        dialog((Integer) v.getTag());
+        mPosition = (int) v.getTag();
+
+        dialog(mPosition);
     }
 
     /**
@@ -187,8 +188,8 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
      * 删除设备
      */
     private void deleteDevice(int position) {
-        // 记录当前点击的条目索引，便于删除
-        mPosition = position;
+
+
         String url = Urls.Delete_Device;
         Map<String, String> params = new HashMap<>();
         params.put("device_id", deviceIds.get(position));
@@ -224,8 +225,9 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
                     tvDevice.setText("拥有设备总数: " + newDevices);
                     // 删除集合里面对应的数据
 
+                    deviceIds.remove(mPosition);
                     deviceNames.remove(mPosition);
-                    mPosition = mPosition-1;
+                    deviceJudges.remove(mPosition);
                     // 刷新适配器
                     adapter.notifyDataSetChanged();
                 }

@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:descendantFocusability="blocksDescendants"
+    android:paddingBottom="12dp"
+    android:paddingTop="12dp">
     <!-- 检查的条目布局 -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:paddingBottom="12dp"
-        android:paddingTop="12dp">
-
 
         <TextView
             android:id="@+id/tv_check_des"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="安装不牢固"
             android:textColor="#000000"
@@ -23,9 +22,10 @@
             android:id="@+id/iv_check_device"
             android:layout_width="14dp"
             android:layout_height="14dp"
+            android:clickable="true"
+            android:focusable="false"
             android:layout_alignParentRight="true"
-            android:background="@drawable/check_style" />
+            android:background="@drawable/fuxuan_input02" />
 
-    </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>

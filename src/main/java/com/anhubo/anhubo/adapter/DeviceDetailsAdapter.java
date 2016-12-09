@@ -18,10 +18,8 @@ public class DeviceDetailsAdapter extends BaseAdapter {
 
     public Context mContext;
     public List mList;
-    private String isId;
-    private String isContent;
 
-    public DeviceDetailsAdapter(Context context, List<String> list, String isId, String isContent) {
+    public DeviceDetailsAdapter(Context context, List<String> list) {
         this.mContext = context;
         this.mList = list;
 

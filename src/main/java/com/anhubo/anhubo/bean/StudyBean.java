@@ -23,7 +23,7 @@ public class StudyBean extends BaseEntity implements Serializable {
                 public String type_id;
                 public String user_name;
                 public String study_score;
-
+                public String time_ext;
             }
 
         }

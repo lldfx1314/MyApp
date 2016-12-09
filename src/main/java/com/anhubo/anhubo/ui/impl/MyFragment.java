@@ -318,6 +318,9 @@ public class MyFragment extends BaseFragment {
         SpUtils.putParam(mActivity, Keys.NEWBUSINESSNAME, null);
         /**保存版本号*/
         SpUtils.putParam(mActivity, Keys.VERSIONNAME, null);
+        /**学习和检查的小圆点*/
+        SpUtils.putParam(mActivity, Keys.STUDY_TIME, null);
+        SpUtils.putParam(mActivity, Keys.CHECK_TIME, null);
 
 
         //跳转到登录页面

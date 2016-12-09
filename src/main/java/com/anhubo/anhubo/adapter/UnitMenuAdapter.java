@@ -2,6 +2,7 @@ package com.anhubo.anhubo.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -24,9 +25,11 @@ public class UnitMenuAdapter extends BaseAdapter {
     private Context mContext;
     private HashMap<String, ArrayList<StudyBean.Data.Records.Record_list>> recordMap;
     private ArrayList<String> listTime;
-    private HashMap<String, String> userNameMap;
-    private ArrayList<String> listuserName;
     private ArrayList<String> listTypeId;
+    private ArrayList<String> listuserName;
+    private ArrayList<String> listDeviceTypeName;
+    private ArrayList<String> listStudyScore;
+    private ArrayList<String> listTimeExt;
     private int pager;
     ViewHolder hold;
     ViewHolder2 hold2;
@@ -34,16 +37,22 @@ public class UnitMenuAdapter extends BaseAdapter {
     private String string;
     final int TYPE_1 = 0;
     final int TYPE_2 = 1;
-    private ArrayList<String> listUserName1;
+    private int i = 0;
 
-    public UnitMenuAdapter(Context context, ArrayList<String> listuserName, HashMap<String, ArrayList<StudyBean.Data.Records.Record_list>> recordMap, ArrayList<String> listTime, HashMap<String, String> userNameMap, ArrayList<String> listTypeId, int pager) {
+    public UnitMenuAdapter(Context context, HashMap<String, ArrayList<StudyBean.Data.Records.Record_list>> recordMap,
+                           ArrayList<String> listTime, ArrayList<String> listTypeId, ArrayList<String> listuserName,
+                           ArrayList<String> listDeviceTypeName, ArrayList<String> listStudyScore, ArrayList<String> listTimeExt,
+                           int pager) {
         this.mContext = context;
         this.recordMap = recordMap;
         this.listTime = listTime;
-        this.userNameMap = userNameMap;
-        this.listuserName = listuserName;
         this.listTypeId = listTypeId;
+        this.listuserName = listuserName;
+        this.listDeviceTypeName = listDeviceTypeName;
+        this.listStudyScore = listStudyScore;
+        this.listTimeExt = listTimeExt;
         this.pager = pager;
+
 
         setMap(listTypeId);
 
@@ -73,28 +82,17 @@ public class UnitMenuAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        listUserName1 = new ArrayList<>();
 
-        int p = position % 21;
-
-        if (p == 0) {
-
-            return TYPE_2;
-        } else {
-            for (Map.Entry<String, ArrayList<StudyBean.Data.Records.Record_list>> entry : recordMap.entrySet()) {
-                ArrayList<StudyBean.Data.Records.Record_list> value = entry.getValue();
-                for (int i = 0; i < value.size(); i++) {
-                    StudyBean.Data.Records.Record_list recordList = value.get(i);
-                    String userName = recordList.user_name;
-                    listUserName1.add(userName);
-                    if (listUserName1.size() % 20 == 0) {
-                        return TYPE_2;
-                    }
-                }
+        //int p = position % 20;
+        for (int m = 0; m < listTypeId.size(); m++) {
+            String string = listTypeId.get(m);
+            if (TextUtils.equals(string, "#")) {
+                return TYPE_2;
+            } else {
+                return TYPE_1;
             }
-            return TYPE_1;
         }
-
+        return TYPE_2;
     }
 
     @Override
@@ -106,12 +104,12 @@ public class UnitMenuAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return listuserName == null ? 0 : listuserName.size();
+        return listTypeId == null ? 0 : listTypeId.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return listuserName.get(position);
+        return listTypeId.get(position);
     }
 
     @Override
@@ -158,13 +156,24 @@ public class UnitMenuAdapter extends BaseAdapter {
                 String s = "";
                 for (int j = 0; j < listTypeId.size(); j++) {
                     String str = listTypeId.get(position);
-                    s = map.get(str);
+                    if (!TextUtils.equals(str, "#")) {
+                        s = map.get(str);
+                    } else {
+
+                    }
                 }
-                hold.tvStudy.setText(listuserName.get(position) + "完成了一次" + s);
+
+                hold.tvStudy.setText(listuserName.get(position) + " 完成了一次" + s);
+                hold.tvdeviceTime.setText(listTimeExt.get(position));
+                if (TextUtils.equals(s, "学习")) {
+                    hold.tvdeviceName.setText("学习成绩:" + listStudyScore.get(position));
+                } else if (TextUtils.equals(s, "设备检查")) {
+                    hold.tvdeviceName.setText("设备名称:" + listDeviceTypeName.get(position));
+                }
                 break;
             case TYPE_2:
                 // 取时间记录
-                hold2.tvTimeRecord.setText(listTime.get(position));
+                hold2.tvTimeRecord.setText(listTime.get(i++));
                 break;
             default:
                 break;
@@ -179,9 +188,13 @@ public class UnitMenuAdapter extends BaseAdapter {
 
     class ViewHolder {
         TextView tvStudy;
+        TextView tvdeviceTime;
+        TextView tvdeviceName;
 
         public ViewHolder(View view) {
             tvStudy = (TextView) view.findViewById(R.id.tv_study);
+            tvdeviceTime = (TextView) view.findViewById(R.id.tv_deviceTime);
+            tvdeviceName = (TextView) view.findViewById(R.id.tv_deviceName);
         }
     }
 

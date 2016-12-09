@@ -167,7 +167,7 @@ public class FeedbackActivity extends BaseActivity {
     }
 
     /**
-     * 有deviceid提交反馈  3张图片
+     * 提交反馈
      */
     private void submit() {
 

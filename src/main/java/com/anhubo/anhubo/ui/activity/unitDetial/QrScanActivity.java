@@ -1,16 +1,15 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.app.Dialog;
-import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Vibrator;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -19,7 +18,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.DeviceDetailsAdapter;
@@ -34,7 +32,6 @@ import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
-import com.anhubo.anhubo.view.ShowBottonDialog;
 import com.anhubo.anhubo.view.ShowCheckDeviceDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -55,6 +52,8 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     private static final String TAG = QrScanActivity.class.getSimpleName();
     private static final int REQUESTSCAN = 1;
     private static final int REQUIRECODE = 2;
+    private static final int STOPSCAN = 3;
+    private static final int STARTSCAN = 4;
     @InjectView(R.id.zxingview)
     ZXingView mQRCodeView;
     @InjectView(R.id.proBar)
@@ -263,7 +262,6 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         Log.i(TAG, "result:" + cardNumber);
         // 调用震动的方法
         vibrate();
-        mQRCodeView.startSpot();
         // 拿到数据后做相应的操作
         processData(cardNumber);
 
@@ -427,6 +425,26 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         isContent = scanBean.data.is_content;
     }
 
+    /**
+     * 接受消息暂停和开始二维码扫描
+     */
+    private Handler handler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case STOPSCAN:
+                    mQRCodeView.stopSpot();
+                    break;
+
+                case STARTSCAN:
+                    mQRCodeView.startSpot();
+                    break;
+            }
+        }
+    };
+
     private void showCheckDeviceDialog() {
         // 创建一个对象
         View view = View.inflate(mActivity, R.layout.activity_check_device, null);
@@ -436,8 +454,14 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
 
             @Override
             public void popup() {
-                // 停止二维码扫描
-                mQRCodeView.stopSpot();
+                // 发送消息，停止二维码扫描
+                handler.sendEmptyMessage(STOPSCAN);
+
+                // 每次弹出对话框把集合里的元素全部置为0，防止扫描其他设备受影响
+                for (int i = 0; i < completeList.size(); i++) {
+                    completeList.set(i, 0);
+                }
+
             }
 
         });
@@ -449,7 +473,10 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
             @Override
             public void onCancel(DialogInterface dialog) {
                 // 打开二维码扫描
-                mQRCodeView.startSpot();
+                if (mQRCodeView != null) {
+                    handler.sendEmptyMessage(STARTSCAN);
+
+                }
             }
         });
         // 找控件
@@ -468,7 +495,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         // 问题描述
         tvIssueDes = (TextView) view.findViewById(R.id.tv_issue_des);
         // 获取适配器对象
-        adapter = new DeviceDetailsAdapter(this, require_list, isId, isContent);
+        adapter = new DeviceDetailsAdapter(this, require_list);
         // 处理出厂日期、待处理反馈
         checkFeedback.setOnClickListener((View.OnClickListener) mActivity);
         checkTime.setOnClickListener((View.OnClickListener) mActivity);
@@ -645,12 +672,8 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                 break;
             case R.id.check_complete:
                 // 检查完成的点击事件
-                if (!TextUtils.isEmpty(startTime)) {
-                    checkComplete();
+                checkComplete();
 
-                } else {
-                    checkComplete1();
-                }
                 break;
             case R.id.tv_check_time:
                 // 时间
@@ -678,7 +701,10 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         params.put("device_id", deviceId);
         params.put("device_result", completeList.toString());//选择后的集合
         params.put("business_id", businessid);//这是business_id,登录后改成真正的business_id
-        params.put("start_time", startTime);
+        if (!TextUtils.isEmpty(startTime)) {
+
+            params.put("start_time", startTime);
+        }
 
         OkHttpUtils.post()//
                 .url(url)//
@@ -687,23 +713,6 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                 .execute(new MyStringCallback1());
     }
 
-    private void checkComplete1() {
-        // 这里是完成的点击事件
-        progressBar.setVisibility(View.VISIBLE);
-        String url = Urls.Url_Check_Complete;
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("uid", uid); //这是uid
-        params.put("device_id", deviceId);
-
-        params.put("device_result", completeList.toString());//选择后的集合
-        params.put("business_id", businessid);//这是business_id,登录后改成真正的business_id
-
-        OkHttpUtils.post()//
-                .url(url)//
-                .params(params)//
-                .build()//
-                .execute(new MyStringCallback1());
-    }
 
     class MyStringCallback1 extends StringCallback {
         @Override
@@ -743,7 +752,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                 boolean isZero = false;
                 for (int i = 0; i < completeList.size(); i++) {
                     Integer integer = completeList.get(i);
-                    if(integer == 1){
+                    if (integer == 1) {
                         isZero = true;
                     }
                 }

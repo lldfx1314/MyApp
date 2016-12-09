@@ -18,13 +18,15 @@ import java.util.ArrayList;
  */
 public class DeviceListAdapter extends BaseAdapter implements View.OnClickListener {
     private Context mContext;
+    private ArrayList<String> deviceIds;
     private ArrayList<String> deviceNames;
     private ArrayList<String> deviceJudges;
     private InterClick mCallback;
     ViewHolder hold;
 
-    public DeviceListAdapter(Context context, ArrayList<String> deviceNames, ArrayList<String> deviceJudges,InterClick callback) {
+    public DeviceListAdapter(Context context, ArrayList<String> deviceIds,ArrayList<String> deviceNames, ArrayList<String> deviceJudges,InterClick callback) {
         this.mContext = context;
+        this.deviceIds = deviceIds;
         this.deviceNames = deviceNames;
         this.deviceJudges = deviceJudges;
         this.mCallback = callback;
@@ -32,12 +34,12 @@ public class DeviceListAdapter extends BaseAdapter implements View.OnClickListen
 
     @Override
     public int getCount() {
-        return deviceNames == null ? 0 : deviceNames.size();
+        return deviceIds == null ? 0 : deviceIds.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return deviceNames.get(position);
+        return deviceIds.get(position);
     }
 
     @Override

@@ -67,7 +67,7 @@ public class UnitFragment extends BaseFragment {
     private Button btnDrill;
     private View dotStudy;
     private View dotCheck;
-    private View dotDrill;
+    //private View dotDrill;
     private FrameLayout sesameCreditPanelLL;
     private MyPolygonView myPolygonView;
     private String datatime;
@@ -146,7 +146,7 @@ public class UnitFragment extends BaseFragment {
         // 红色的小圆点
         dotStudy = view.findViewById(R.id.dot_study);
         dotCheck = view.findViewById(R.id.dot_check);
-        dotDrill = view.findViewById(R.id.dot_drill);
+        //dotDrill = view.findViewById(R.id.dot_drill);
         // 提示没有任何保障计划
         tvNoPlan1 = (TextView) view.findViewById(R.id.tv_no_plan1);
         tvNoPlan2 = (TextView) view.findViewById(R.id.tv_no_plan2);
@@ -192,7 +192,7 @@ public class UnitFragment extends BaseFragment {
         String newTime = getSystemTime();
         String studyTime = SpUtils.getStringParam(mActivity, Keys.STUDY_TIME);
         String checkTime = SpUtils.getStringParam(mActivity, Keys.CHECK_TIME);
-        String drillTime = SpUtils.getStringParam(mActivity, Keys.DRILL_TIME);
+        //String drillTime = SpUtils.getStringParam(mActivity, Keys.DRILL_TIME);
         if (!TextUtils.isEmpty(newTime)) {
             Date newDate = getDate(newTime);
             // 学习
@@ -220,17 +220,17 @@ public class UnitFragment extends BaseFragment {
                 isShowDot_check = true;
             }
             // 演练
-            if (!TextUtils.isEmpty(drillTime)) {
-                Date drillDate = getDate(drillTime);
-                if (newDate != null && drillDate != null) {
-                    long time = (newDate.getTime() - drillDate.getTime()) / 1000 /*/ 60 / 60 / 24*/;
-                    if (time >= 10) {
-                        isShowDot_drill = true;
-                    }
-                }
-            }else{
-                isShowDot_drill = true;
-            }
+//            if (!TextUtils.isEmpty(drillTime)) {
+//                Date drillDate = getDate(drillTime);
+//                if (newDate != null && drillDate != null) {
+//                    long time = (newDate.getTime() - drillDate.getTime()) / 1000 /*/ 60 / 60 / 24*/;
+//                    if (time >= 10) {
+//                        isShowDot_drill = true;
+//                    }
+//                }
+//            }else{
+//                isShowDot_drill = true;
+//            }
         }
 
         if (isShowDot_study) {
@@ -239,9 +239,9 @@ public class UnitFragment extends BaseFragment {
         if (isShowDot_check) {
             dotCheck.setVisibility(View.VISIBLE);
         }
-        if (isShowDot_drill) {
-            dotDrill.setVisibility(View.VISIBLE);
-        }
+//        if (isShowDot_drill) {
+//            dotDrill.setVisibility(View.VISIBLE);
+//        }
     }
 
     private boolean isLoading = false;// 页面已经加载过
@@ -471,9 +471,9 @@ public class UnitFragment extends BaseFragment {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            dotDrill.setVisibility(View.GONE);
-                            String oldTime = getSystemTime();
-                            SpUtils.putParam(mActivity, Keys.DRILL_TIME, oldTime);
+//                            dotDrill.setVisibility(View.GONE);
+//                            String oldTime = getSystemTime();
+//                            SpUtils.putParam(mActivity, Keys.DRILL_TIME, oldTime);
                         }
                     }, 300);
                     break;
