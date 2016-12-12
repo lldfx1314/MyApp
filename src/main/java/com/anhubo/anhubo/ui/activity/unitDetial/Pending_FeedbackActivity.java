@@ -233,7 +233,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
         public void onResponse(String response) {
             progressBar.setVisibility(View.GONE);
 
-            //System.out.println("待反馈界面Pending_FeedbackActivity+++===" + response);
+            System.out.println("待反馈界面Pending_FeedbackActivity+++===" + response);
             FeedBackBean bean = new Gson().fromJson(response, FeedBackBean.class);
             if (bean != null) {
                 int code = bean.code;
@@ -550,14 +550,14 @@ public class Pending_FeedbackActivity extends BaseActivity {
     /**
      * 当用户按下返回键的时候退出此页面到二维码扫描界面回复扫码的功能
      */
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Intent intent = new Intent();
-            setResult(2, intent);
-            finish();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//            Intent intent = new Intent();
+//            setResult(2, intent);
+//            finish();
+//            return true;
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
 }

@@ -36,20 +36,11 @@ public class UnitMenuActivity extends BaseActivity {
     private int pager;
     private List<StudyBean.Data.Records> records;
     private StudyBean.Data.Records record;
-    private ArrayList<StudyBean.Data.Records.Record_list> recordList;
-    private HashMap<String, ArrayList<StudyBean.Data.Records.Record_list>> recordMap;
-    private ArrayList<String> listTime;
-    //private HashMap<String, String> userNameMap;
-    private ArrayList<String> listTypeId;
-    private ArrayList<String> listuserName;
-    private ArrayList<String> listDeviceTypeName;
-    private ArrayList<String> listStudyScore;
-    private ArrayList<String> listTimeExt;
-    private StudyBean.Data.Records.Record_list recordDetails;
     private int page;
     private boolean isLoadMore = false;
     private UnitMenuAdapter menuAdapter;
     private String versionName;
+    private ArrayList<Object> datas;
 
     @Override
     protected void initConfig() {
@@ -73,23 +64,7 @@ public class UnitMenuActivity extends BaseActivity {
     @Override
     protected void initEvents() {
         super.initEvents();
-
-
-        recordMap = new HashMap<>();
-
-        // 创建一个集合用来存放time
-        listTime = new ArrayList<>();
-
-        //userNameMap = new HashMap<>();
-
-        listuserName = new ArrayList<>();
-        // 创建一个集合用来存放typeId
-        listTypeId = new ArrayList<>();
-        listDeviceTypeName = new ArrayList<>();
-        listStudyScore = new ArrayList<>();
-        listTimeExt = new ArrayList<>();
-
-
+        datas = new ArrayList<>();
         // 监听listview的滑动监听
         lvStudy.setOnRefreshingListener(new MyOnRefreshingListener());
     }
@@ -105,7 +80,6 @@ public class UnitMenuActivity extends BaseActivity {
             if (pager <= page) {
                 // 加载更多业务
                 isLoadMore = true;
-
                 getData();
             } else {
                 // 恢复Listview的加载更多状态
@@ -123,7 +97,6 @@ public class UnitMenuActivity extends BaseActivity {
     @Override
     protected void onLoadDatas() {
         /**获取网络数据*/
-
         getData();
     }
 
@@ -138,7 +111,6 @@ public class UnitMenuActivity extends BaseActivity {
         progressBar.setVisibility(View.VISIBLE);
         String url = Urls.Url_studyRecord;
         HashMap<String, String> params = new HashMap<>();
-        // System.out.println("++++business_id+"+businessId+"++versionName+"+versionName+"++page"+pager);
         params.put("business_id", businessId);
         params.put("version", versionName);
         params.put("page", String.valueOf(pager++));
@@ -165,7 +137,7 @@ public class UnitMenuActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-            System.out.println("执行记录++" + response);
+            //System.out.println("执行记录++" + response);
 
             StudyBean bean = new Gson().fromJson(response, StudyBean.class);
             if (bean != null) {
@@ -194,56 +166,18 @@ public class UnitMenuActivity extends BaseActivity {
             // 拿到一条信息记录
             record = records.get(i);
             String time = record.time;
-            // 把每个记录的时间添加到map集合里面
-            //timeMap.put(i,time);
-            // 拿到详细记录的集合
-            recordList = (ArrayList<StudyBean.Data.Records.Record_list>) record.record_list;
-            // 把每个记录添加到map集合里面
-            recordMap.put(time, recordList);
-
+            datas.add(time);
+            datas.addAll(record.record_list);
         }
 
-        for (Map.Entry<String, ArrayList<StudyBean.Data.Records.Record_list>> entry : recordMap.entrySet()) {
-            String timeList = entry.getKey();
-            listTime.add(timeList);
-            recordList = entry.getValue();
-            //  遍历集合
-            for (int j = 0; j < recordList.size(); j++) {
-                // 获取到每条详细记录
-                recordDetails = recordList.get(j);
-                String typeId = recordDetails.type_id;
-                String userName = recordDetails.user_name;
-                String deviceTypeName = recordDetails.device_type_name;
-                String studyScore = recordDetails.study_score;
-                String timeExt = recordDetails.time_ext;
-
-                listTypeId.add(typeId);
-                listuserName.add(userName);
-                listDeviceTypeName.add(deviceTypeName);
-                listStudyScore.add(studyScore);
-                listTimeExt.add(timeExt);
-            }
-                /*listTypeId.add("#");
-                listuserName.add("#");
-                listDeviceTypeName.add("#");
-                listStudyScore.add("#");
-                listTimeExt.add("#");*/
-
-        }
-
-        System.out.println("集合+*********+" + listTypeId.toString());
-        System.out.println("集合+*********+" + listuserName.toString());
-        System.out.println("集合+*********+" + listDeviceTypeName.toString());
         if (!isLoadMore) {
             // 给listView设置适配器
-            menuAdapter = new UnitMenuAdapter(mActivity, recordMap, listTime,
-                    listTypeId, listuserName, listDeviceTypeName, listStudyScore, listTimeExt, pager);
+            menuAdapter = new UnitMenuAdapter(mActivity, datas);
             lvStudy.setAdapter(menuAdapter);
         } else {
             menuAdapter.notifyDataSetChanged();
         }
     }
-
 
     @Override
     public void onClick(View v) {

@@ -22,94 +22,43 @@ import java.util.Set;
  */
 public class UnitMenuAdapter extends BaseAdapter {
 
+    private final ArrayList<Object> datas;
     private Context mContext;
-    private HashMap<String, ArrayList<StudyBean.Data.Records.Record_list>> recordMap;
-    private ArrayList<String> listTime;
-    private ArrayList<String> listTypeId;
-    private ArrayList<String> listuserName;
-    private ArrayList<String> listDeviceTypeName;
-    private ArrayList<String> listStudyScore;
-    private ArrayList<String> listTimeExt;
-    private int pager;
     ViewHolder hold;
     ViewHolder2 hold2;
-    private Map<String, String> map;
-    private String string;
     final int TYPE_1 = 0;
     final int TYPE_2 = 1;
-    private int i = 0;
-
-    public UnitMenuAdapter(Context context, HashMap<String, ArrayList<StudyBean.Data.Records.Record_list>> recordMap,
-                           ArrayList<String> listTime, ArrayList<String> listTypeId, ArrayList<String> listuserName,
-                           ArrayList<String> listDeviceTypeName, ArrayList<String> listStudyScore, ArrayList<String> listTimeExt,
-                           int pager) {
-        this.mContext = context;
-        this.recordMap = recordMap;
-        this.listTime = listTime;
-        this.listTypeId = listTypeId;
-        this.listuserName = listuserName;
-        this.listDeviceTypeName = listDeviceTypeName;
-        this.listStudyScore = listStudyScore;
-        this.listTimeExt = listTimeExt;
-        this.pager = pager;
 
 
-        setMap(listTypeId);
-
+    public UnitMenuAdapter(Context mContext, ArrayList<Object> datas) {
+        this.mContext = mContext;
+        this.datas = datas;
     }
-
-
-    private void setMap(ArrayList<String> listTypeId) {
-        // 定义一个map集合，用来存放学习、检查或者演练
-        map = new HashMap<>();
-
-        //　遍历集合listTypeId
-        for (int i = 0; i < listTypeId.size(); i++) {
-            string = listTypeId.get(i);
-
-            if (string != null) {
-                if (string.equals(1 + "")) {
-                    map.put(1 + "", "学习");
-                } else if (string.equals(2 + "")) {
-                    map.put(2 + "", "设备检查");
-                } else if (string.equals(3 + "")) {
-                    map.put(3 + "", "演练");
-                }
-            }
-        }
-    }
-
 
     @Override
     public int getItemViewType(int position) {
-
-        //int p = position % 20;
-        for (int m = 0; m < listTypeId.size(); m++) {
-            String string = listTypeId.get(m);
-            if (TextUtils.equals(string, "#")) {
-                return TYPE_2;
-            } else {
-                return TYPE_1;
-            }
+        // 返回条目类型
+        if (datas.get(position) instanceof String) {
+            return TYPE_2;
+        } else {
+            return TYPE_1;
         }
-        return TYPE_2;
     }
 
     @Override
     public int getViewTypeCount() {
-
         return 2;
-
     }
 
     @Override
     public int getCount() {
-        return listTypeId == null ? 0 : listTypeId.size();
+        return datas == null ? 0 : datas.size();
     }
+
 
     @Override
     public Object getItem(int position) {
-        return listTypeId.get(position);
+        return datas.get(position);
     }
 
     @Override
@@ -119,11 +68,8 @@ public class UnitMenuAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         int type = getItemViewType(position);
         if (convertView == null) {
-
-
             switch (type) {
                 case TYPE_1:
                     convertView = View.inflate(mContext, R.layout.item_unit_study, null);
@@ -153,27 +99,26 @@ public class UnitMenuAdapter extends BaseAdapter {
 
             case TYPE_1:
 
-                String s = "";
-                for (int j = 0; j < listTypeId.size(); j++) {
-                    String str = listTypeId.get(position);
-                    if (!TextUtils.equals(str, "#")) {
-                        s = map.get(str);
+                StudyBean.Data.Records.Record_list record = (StudyBean.Data.Records.Record_list) datas.get(position);
+                String typeIDStr = getTypeIDStr(record.type_id);
+                hold.tvStudy.setText(record.user_name + " 完成了一次" + typeIDStr);
+                hold.tvdeviceTime.setText(record.time_ext);
+                if (TextUtils.equals(typeIDStr, "学习")) {
+                    hold.tvdeviceName.setText("学习成绩:" + record.study_score);
+                } else if (TextUtils.equals(typeIDStr, "设备检查")) {
+                    String deviceTypeName = record.device_type_name;
+                    if (TextUtils.equals("", deviceTypeName)) {
+                        hold.tvdeviceName.setText("设备名称:" + "设备已删除");
                     } else {
-
+                        hold.tvdeviceName.setText("设备名称:" + record.device_type_name);
                     }
                 }
 
-                hold.tvStudy.setText(listuserName.get(position) + " 完成了一次" + s);
-                hold.tvdeviceTime.setText(listTimeExt.get(position));
-                if (TextUtils.equals(s, "学习")) {
-                    hold.tvdeviceName.setText("学习成绩:" + listStudyScore.get(position));
-                } else if (TextUtils.equals(s, "设备检查")) {
-                    hold.tvdeviceName.setText("设备名称:" + listDeviceTypeName.get(position));
-                }
                 break;
             case TYPE_2:
                 // 取时间记录
-                hold2.tvTimeRecord.setText(listTime.get(i++));
+                String time = (String) datas.get(position);
+                hold2.tvTimeRecord.setText(time);
                 break;
             default:
                 break;
@@ -183,6 +128,17 @@ public class UnitMenuAdapter extends BaseAdapter {
         return convertView;
 
 
+    }
+
+    public String getTypeIDStr(String id) {
+        if (id.equals("1")) {
+            return "学习";
+        } else if (id.equals("2")) {
+            return "设备检查";
+        } else if (id.equals("3")) {
+            return "演练";
+        }
+        return "";
     }
 
 

@@ -78,7 +78,7 @@ public class RefreshListview extends ListView {
                 // 判断当前展示的最后一个条目是否是Adapter中的最后一条
                 if (getLastVisiblePosition() == getCount() - 1 && !isLoadMore) {
                     isLoadMore = true;
-                    System.out.println("显示的是最后一条，开始加载更多");
+                    //System.out.println("显示的是最后一条，开始加载更多");
                     footer.setPadding(0, 0, 0, 0);
 
                     // 让脚布局自动显示出来

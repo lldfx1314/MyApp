@@ -70,7 +70,5 @@ public class ShowCheckDeviceDialog {
     public interface ClickListenerDialog{
         // 显示
         void popup();
-
-
     }
 }

@@ -2,6 +2,7 @@ package com.anhubo.anhubo.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,6 +108,7 @@ public class AlertDialog {
 
 	public AlertDialog setCancelable(boolean cancel) {
 		dialog.setCancelable(cancel);
+
 		return this;
 	}
 
@@ -123,6 +125,7 @@ public class AlertDialog {
 			public void onClick(View v) {
 				listener.onClick(v);
 				dialog.dismiss();
+
 			}
 		});
 		return this;
@@ -172,6 +175,9 @@ public class AlertDialog {
 				@Override
 				public void onClick(View v) {
 					dialog.dismiss();
+					if(listenerDialog!=null){
+						listenerDialog.dismissDialog();
+					}
 				}
 			});
 		}
@@ -198,6 +204,20 @@ public class AlertDialog {
 	public void show() {
 		setLayout();
 		dialog.show();
+	}
+
+	public void setListenerDialog(ClickListenerDialog listenerDialog) {
+		this.listenerDialog = listenerDialog;
+	}
+
+	private ClickListenerDialog listenerDialog;
+
+
+
+
+	public interface ClickListenerDialog{
+		// 显示
+		void dismissDialog();
 	}
 
 }

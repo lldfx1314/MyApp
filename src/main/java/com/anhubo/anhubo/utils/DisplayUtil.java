@@ -2,9 +2,17 @@ package com.anhubo.anhubo.utils;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.StateListDrawable;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.TextView;
 
 import com.anhubo.anhubo.MyApp;
+
+import java.util.Random;
 
 /**
  * dp(dip): device independent pixels(设备独立像素). 不同设备有不同的显示效果,这个和设备硬件有关，一般我们为了支持WVGA、HVGA和QVGA 推荐使用这个，不依赖像素。
@@ -92,6 +100,68 @@ public class DisplayUtil {
     }
 
 
+    /** 创建一个随机颜色 */
+    public static int createRandomColor() {
+        Random random = new Random();
+        int red = 50 + random.nextInt(151);		// 50 ~ 200
+        int green = 50 + random.nextInt(151);	// 50 ~ 200
+        int blue = 50 + random.nextInt(151);	// 50 ~ 200
+        int color = Color.rgb(red, green, blue);
+        return color;
+    }
+
+    /**
+     * 创建一个带随机颜色图形的选择器的TextView
+     * @return
+     */
+    public static TextView createRandomColorShapeSelectorTextView() {
+        final TextView textView = new TextView(MyApp.getContext());
+        textView.setTextColor(Color.parseColor("#5e84ff"));
+        textView.setPadding(6, 6, 6, 6);
+        textView.setGravity(Gravity.CENTER);
+        //textView.setTextSize(DisplayUtil.sp2px(MyApp.getContext(),8));
+        textView.setBackgroundDrawable(createRandomColorShapeSelector());
+        textView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //ToastUtils.showToast(v.getContext(), (String) textView.getText());
+            }
+        });
+        return textView;
+    }
+
+    /**
+     * 创建一个带随机颜色图形的选择器的
+     * @return
+     */
+    public static Drawable createRandomColorShapeSelector() {
+        StateListDrawable stateListDrawable = new StateListDrawable();	// 创建一个选择器对象
+        // 创建一个按下状态和按下状态对应的图片
+//        int[] pressState = {android.R.attr.state_pressed, android.R.attr.state_enabled};
+//        Drawable pressDrawable = createRandomColorShape();
+
+        // 创建一个正常状态和正常状态对应的图片
+        int[] normalState = {};
+        Drawable normalDrawable = createRandomColorShape();
+
+//        stateListDrawable.addState(pressState, pressDrawable);	// 按下状态显示按下的Drawable
+        stateListDrawable.addState(normalState, normalDrawable);// 正常状态显示正常的Drawable
+        return stateListDrawable;
+    }
+
+    /**
+     * 创建一个带随机颜色的图形
+     * @return
+     */
+    public static Drawable createRandomColorShape() {
+        GradientDrawable gradientDrawable = new GradientDrawable();	// 创建一个图形Drawable
+        gradientDrawable.setShape(GradientDrawable.RECTANGLE);		// 设置图形为矩形
+        gradientDrawable.setCornerRadius(6);	// 设置矩形的圆角
+        gradientDrawable.setStroke(1,Color.parseColor("#5e84ff"));//设置边框颜色
+        gradientDrawable.setColor(Color.argb(100,230,230,230));	// 设置矩形的颜色
+        return gradientDrawable;
+    }
 
 
 

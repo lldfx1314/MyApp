@@ -8,30 +8,32 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.FeedBackBean;
+import com.anhubo.anhubo.bean.ScanBean;
 import com.anhubo.anhubo.protocol.Urls;
-import com.anhubo.anhubo.utils.ImageTools;
+import com.anhubo.anhubo.utils.DisplayUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
+import com.anhubo.anhubo.view.FlowLayout;
 import com.anhubo.anhubo.view.ShowBottonDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -43,11 +45,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import okhttp3.Call;
@@ -69,7 +75,9 @@ public class FeedbackActivity extends BaseActivity {
     @InjectView(R.id.tv_submit_feedback)
     TextView tvSubmitFeedback;
     @InjectView(R.id.rl_feedback)
-    RelativeLayout rlFeedback;
+    RelativeLayout svFeedback;
+    @InjectView(R.id.rl_feedback_tag)
+    RelativeLayout rlFeedbackTag;
     private InputMethodManager imm;
     private Dialog dialog;
     private Button btnTakephoto;
@@ -83,11 +91,16 @@ public class FeedbackActivity extends BaseActivity {
     private File file3;
     private String uid;
     public static int userAddScore;
+    private ArrayList<String> listResult;
+    private FlowLayout flowLayout;
 
     @Override
     protected void initConfig() {
         super.initConfig();
         deviceId = getIntent().getStringExtra(Keys.DeviceId);
+        listResult = (ArrayList<String>) getIntent().getSerializableExtra(Keys.REQUIRE_LIST);
+
+
     }
 
     @Override
@@ -98,6 +111,23 @@ public class FeedbackActivity extends BaseActivity {
     @Override
     protected void initViews() {
         setTopBarDesc("反馈");
+    }
+
+    @Override
+    protected void initEvents() {
+        super.initEvents();
+        ScrollView scrollView = new ScrollView(mActivity);
+        flowLayout = new FlowLayout(mActivity);
+        flowLayout.setPadding(6, 6, 6, 6);
+        scrollView.addView(flowLayout);
+        rlFeedbackTag.addView(scrollView);
+        if(listResult!=null){
+            for (String string : listResult) {
+                TextView textView = DisplayUtil.createRandomColorShapeSelectorTextView();
+                textView.setText(string);
+                flowLayout.addView(textView);
+            }
+        }
     }
 
     @Override
@@ -394,31 +424,7 @@ public class FeedbackActivity extends BaseActivity {
             }
         }
     }
-   /* private void savePicture(Bitmap bitmap, String fileName) {
 
-        FileOutputStream fos = null;
-        File file = new File("/sdcard/anhubo/");
-        if (!file.exists()) {
-            file.mkdir();
-        }
-        String path = file.getPath() + fileName;
-        try {
-            fos = new FileOutputStream(path);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);// 把图片写入指定文件夹中
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (null != fos) {
-                    fos.close();
-                    fos = null;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
 
     /**
      * 打开相册获取图片

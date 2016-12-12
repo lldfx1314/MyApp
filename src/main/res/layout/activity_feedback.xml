@@ -11,6 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:background="@color/bg_upload">
@@ -113,6 +115,15 @@
                 android:background="@drawable/card" />
 
         </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_feedback_tag"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </RelativeLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

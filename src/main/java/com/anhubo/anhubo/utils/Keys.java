@@ -158,4 +158,6 @@ public interface Keys {
     String CHECK_TIME = "check_time";
     /**保存演练的时间*/
     String DRILL_TIME = "drill_time";
+    /**反馈标签传递内容*/
+    String REQUIRE_LIST = "require_list";
 }

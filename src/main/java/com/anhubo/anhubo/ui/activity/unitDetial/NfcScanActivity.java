@@ -259,7 +259,7 @@ public class NfcScanActivity extends BaseActivity {
                 // 演练,获取DeviceId的最后一位数进行跳转到演练界面
                 isEnter = true;
                 String lastNumber = cardNumber.substring(cardNumber.length() - 1, cardNumber.length());
-                if (Integer.parseInt(lastNumber) == 1) {
+                if (Integer.parseInt(lastNumber) <= 1) {
                     new AlertDialog(mActivity).builder()
                             .setTitle("提示")
                             .setMsg("演练结束")
