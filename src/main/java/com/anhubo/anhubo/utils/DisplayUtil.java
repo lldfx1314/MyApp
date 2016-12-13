@@ -111,16 +111,17 @@ public class DisplayUtil {
     }
 
     /**
-     * 创建一个带随机颜色图形的选择器的TextView
+     * 创建一个TextView
      * @return
      */
-    public static TextView createRandomColorShapeSelectorTextView() {
-        final TextView textView = new TextView(MyApp.getContext());
+    public static TextView createTextView(Context context) {
+        final TextView textView = new TextView(context);
         textView.setTextColor(Color.parseColor("#5e84ff"));
+        textView.setTextSize(12);
         textView.setPadding(6, 6, 6, 6);
         textView.setGravity(Gravity.CENTER);
-        //textView.setTextSize(DisplayUtil.sp2px(MyApp.getContext(),8));
-        textView.setBackgroundDrawable(createRandomColorShapeSelector());
+
+        textView.setBackgroundDrawable(createDrawableShape());
         textView.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -132,18 +133,18 @@ public class DisplayUtil {
     }
 
     /**
-     * 创建一个带随机颜色图形的选择器的
+     * 创建一个自定义背景的Drawable
      * @return
      */
-    public static Drawable createRandomColorShapeSelector() {
+    public static Drawable createDrawableShape() {
         StateListDrawable stateListDrawable = new StateListDrawable();	// 创建一个选择器对象
         // 创建一个按下状态和按下状态对应的图片
 //        int[] pressState = {android.R.attr.state_pressed, android.R.attr.state_enabled};
-//        Drawable pressDrawable = createRandomColorShape();
+//        Drawable pressDrawable = createShape();
 
         // 创建一个正常状态和正常状态对应的图片
         int[] normalState = {};
-        Drawable normalDrawable = createRandomColorShape();
+        Drawable normalDrawable = createShape();
 
 //        stateListDrawable.addState(pressState, pressDrawable);	// 按下状态显示按下的Drawable
         stateListDrawable.addState(normalState, normalDrawable);// 正常状态显示正常的Drawable
@@ -151,18 +152,15 @@ public class DisplayUtil {
     }
 
     /**
-     * 创建一个带随机颜色的图形
+     * 创建一个的图形
      * @return
      */
-    public static Drawable createRandomColorShape() {
-        GradientDrawable gradientDrawable = new GradientDrawable();	// 创建一个图形Drawable
-        gradientDrawable.setShape(GradientDrawable.RECTANGLE);		// 设置图形为矩形
+    public static Drawable createShape() {
+        GradientDrawable gradientDrawable = new GradientDrawable();	 // 创建一个图形Drawable
+        gradientDrawable.setShape(GradientDrawable.RECTANGLE);		 // 设置图形为矩形
         gradientDrawable.setCornerRadius(6);	// 设置矩形的圆角
-        gradientDrawable.setStroke(1,Color.parseColor("#5e84ff"));//设置边框颜色
-        gradientDrawable.setColor(Color.argb(100,230,230,230));	// 设置矩形的颜色
+        gradientDrawable.setStroke(dp2px(MyApp.getContext(),1),Color.parseColor("#5e84ff"));  //设置边框颜色
+        gradientDrawable.setColor(Color.argb(100,230,230,230));	    // 设置矩形的颜色
         return gradientDrawable;
     }
-
-
-
 }

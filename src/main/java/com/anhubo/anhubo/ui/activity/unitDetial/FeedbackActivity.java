@@ -121,9 +121,9 @@ public class FeedbackActivity extends BaseActivity {
         flowLayout.setPadding(6, 6, 6, 6);
         scrollView.addView(flowLayout);
         rlFeedbackTag.addView(scrollView);
-        if(listResult!=null){
+        if (listResult != null) {
             for (String string : listResult) {
-                TextView textView = DisplayUtil.createRandomColorShapeSelectorTextView();
+                TextView textView = DisplayUtil.createTextView(mActivity);
                 textView.setText(string);
                 flowLayout.addView(textView);
             }
@@ -192,7 +192,7 @@ public class FeedbackActivity extends BaseActivity {
         new AlertDialog(mActivity).builder()
                 .setTitle("提示")
                 .setMsg("请填写问题描述")
-                .setCancelable(false)
+                .setCancelable(true)
                 .show();
     }
 
@@ -207,14 +207,13 @@ public class FeedbackActivity extends BaseActivity {
         }
 
         progressBar.setVisibility(View.VISIBLE);
+        String url = Urls.Url_FeedBack;
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         params.put("issue_content", feedContent);
         if (!TextUtils.isEmpty(deviceId)) {
             params.put("device_id", deviceId);
         }
-
-        String url = Urls.Url_FeedBack;
 
         PostFormBuilder post = OkHttpUtils.post();
         if (file1 != null) {
@@ -245,7 +244,7 @@ public class FeedbackActivity extends BaseActivity {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
             System.out.println("FeedbackActivity界面+++===失败" + e.getMessage());
         }
 

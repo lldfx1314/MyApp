@@ -301,10 +301,7 @@ public class UnitFragment extends BaseFragment {
 
     }
 
-    @Override
-    public void initData() {
 
-    }
 
 
     /**
@@ -665,7 +662,10 @@ public class UnitFragment extends BaseFragment {
         myPolygonBean.setArea(arrScores);
         return myPolygonBean;
     }
+    @Override
+    public void initData() {
 
+    }
     /**
      * 获取圆形统计图的数据
      */

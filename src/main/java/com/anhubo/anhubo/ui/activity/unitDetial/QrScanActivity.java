@@ -782,7 +782,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                             listResult.add(s);
                         }
                     }
-                    intent.putExtra(Keys.REQUIRE_LIST, (Serializable) listResult);
+                    intent.putExtra(Keys.REQUIRE_LIST,listResult);
                     startActivity(intent);
                 } else {
                     // 无问题，提示检查完成

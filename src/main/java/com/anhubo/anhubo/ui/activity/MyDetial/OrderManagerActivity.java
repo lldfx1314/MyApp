@@ -1,4 +1,4 @@
-package com.anhubo.anhubo.ui.activity.DiscoveryDetial;
+package com.anhubo.anhubo.ui.activity.MyDetial;
 
 import android.view.View;
 import android.webkit.WebSettings;
@@ -8,47 +8,50 @@ import android.webkit.WebViewClient;
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 
 import butterknife.InjectView;
 
 /**
- * Created by LUOLI on 2016/12/1.
+ * Created by LUOLI on 2016/12/13.
  */
-public class UseGuideActivity extends BaseActivity {
-
-    @InjectView(R.id.wv_useGuide)
-    WebView wvUseGuide;
-    private String urlUseGuide;
+public class OrderManagerActivity extends BaseActivity {
+    @InjectView(R.id.wv_order)
+    WebView wvOrder;
+    private String uid;
+    private String url;
+    private String newUrl;
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_use_guide;
+        return R.layout.activity_ordermanager;
     }
 
     @Override
     protected void initViews() {
-        // 设置状态栏显示的提示内容
-        setTopBarDesc("使用指导");
+// 设置状态栏显示的提示内容
+        setTopBarDesc("订单管理");
         progressBar.setVisibility(View.VISIBLE);
         iv_basepager_left.setOnClickListener(this);
     }
 
-
     @Override
-    protected void initEvents() {
-        super.initEvents();
-        urlUseGuide = Urls.Url_UseGuide;
-
-        WebSettings settings = wvUseGuide.getSettings();
+    protected void onLoadDatas() {
+        uid = SpUtils.getStringParam(mActivity, Keys.UID);
+        url = Urls.Url_MyOrderManager;
+        newUrl = url + "?uid=" + uid;
+        //System.out.println("哈哈+"+uid);
+        //System.out.println("哈哈+"+newUrl);
+        WebSettings settings = wvOrder.getSettings();
         settings.setJavaScriptEnabled(true);
 
-        wvUseGuide.setWebViewClient(new WebViewClient() {
+        wvOrder.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) { //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
                 view.loadUrl(url);
                 return true;
             }
-
             @Override
             public void onPageFinished(WebView view, String url) {
                 // 当页面加载完成后调用,在此隐藏进度条
@@ -57,16 +60,16 @@ public class UseGuideActivity extends BaseActivity {
             }
 
         });
-        wvUseGuide.loadUrl(urlUseGuide);
+        wvOrder.loadUrl(newUrl);
     }
 
     @Override
     public void onBackPressed() {
-        if (wvUseGuide.canGoBack()){
-            if(wvUseGuide.getUrl().equals(urlUseGuide)){
+        if (wvOrder.canGoBack()){
+            if(wvOrder.getUrl().equals(newUrl)){
                 super.onBackPressed();
             }else{
-                wvUseGuide.goBack();
+                wvOrder.goBack();
             }
         }else{
             super.onBackPressed();
@@ -74,25 +77,21 @@ public class UseGuideActivity extends BaseActivity {
 
     }
 
-    @Override
-    protected void onLoadDatas() {
-
-    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.ivTopBarLeft:
-                if (wvUseGuide.canGoBack()){
-                    if(wvUseGuide.getUrl().equals(urlUseGuide)){
+                if (wvOrder.canGoBack()){
+                    if(wvOrder.getUrl().equals(newUrl)){
                         super.onBackPressed();
                     }else{
-                        wvUseGuide.goBack();
+                        wvOrder.goBack();
                     }
                 }else{
                     finish();
                 }
-                break;
+            break;
         }
     }
 
@@ -100,4 +99,5 @@ public class UseGuideActivity extends BaseActivity {
     public void onSystemUiVisibilityChange(int visibility) {
 
     }
+
 }

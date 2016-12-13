@@ -13,9 +13,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
+import com.anhubo.anhubo.bean.AddDevice_CheckName_Bean;
 import com.anhubo.anhubo.bean.Add_Device_Bean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
@@ -66,6 +68,7 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     private String buildingname;
     private String businessname;
     private File newFile;
+    private TextView tvAddDevice;
 
     @Override
     protected void initConfig() {
@@ -82,9 +85,18 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         return R.layout.activity_add_device;
     }
 
+    @Override
+    protected void initTitleBar() {
+        super.initTitleBar();
+        // 设置显示内容
+        setTopBarDesc("新增设备");
+    }
 
     @Override
     protected void initViews() {
+        // 提示设备是否绑定的控件
+        tvAddDevice = (TextView) findViewById(R.id.tv_add_device);
+
         // 所属建筑
         device_Build = (EditText) findViewById(R.id.et_add_build);
         // 单位
@@ -113,15 +125,62 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         device_Name.setOnClickListener(this);
         complete.setOnClickListener(this);
         takePhoto.setOnClickListener(this);
+    }
 
-        // 设置显示内容
-        setTopBarDesc("新增设备");
+    @Override
+    protected void initEvents() {
+        super.initEvents();
+        //　查询该设备号是否已经添加到设备里里面
+        getData_Device();
+        //tvAddDevice
+    }
+
+    /**
+     * 查询该设备号是否已经添加到设备里里面
+     */
+    private void getData_Device() {
+        String url = Urls.Url_Add_Check;
+        Map<String, String> params = new HashMap<>();
+        params.put("device_id", cardnumber);
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback1());
+    }
+
+    class MyStringCallback1 extends StringCallback {
+
+        @Override
+        public void onError(Call call, Exception e) {
+            System.out.println("Add_Device_Activity+++===界面失败" + e.getMessage());
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("网络有问题，请检查")
+                    .setCancelable(true).show();
+        }
+
+        @Override
+        public void onResponse(String response) {
+            //System.out.println("Add_Device_Activity界面+++" + response);
+            AddDevice_CheckName_Bean bean = new Gson().fromJson(response, AddDevice_CheckName_Bean.class);
+            if (bean != null) {
+                int code = bean.code;
+                String typeName = bean.data.device_dev_type_name;
+                if (code == 0) {
+                    if (!TextUtils.isEmpty(typeName)) {
+                        tvAddDevice.setText("您扫描的二维码绑定的设备是:"+"\n"+typeName);
+
+                    }else {
+                        tvAddDevice.setText("您扫描的二维码尚未添加到设备库");
+                    }
+                }
+            }
+        }
     }
 
     @Override
     protected void onLoadDatas() {
-
-
     }
 
     /**

@@ -13,6 +13,7 @@ import com.anhubo.anhubo.bean.MyFragmentBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.Login_Register.Login_Message;
 import com.anhubo.anhubo.ui.activity.MyDetial.InvateActivity;
+import com.anhubo.anhubo.ui.activity.MyDetial.OrderManagerActivity;
 import com.anhubo.anhubo.ui.activity.MyDetial.PersonMsgActivity;
 import com.anhubo.anhubo.ui.activity.MyDetial.SettingActivity;
 import com.anhubo.anhubo.utils.Keys;
@@ -38,6 +39,7 @@ public class MyFragment extends BaseFragment {
     private static final int REQUESTCODE = 0;
     private LinearLayout llMyDetial;
     private LinearLayout llInvate;
+    private LinearLayout llOrderManager;
     private LinearLayout llSetting;
     private TextView tvLogOut;
     private CircleImageView image;
@@ -76,6 +78,7 @@ public class MyFragment extends BaseFragment {
         tvMyAge = findView(R.id.tv_my_age);
         llMyDetial = findView(R.id.ll_My_Detial);
         llInvate = findView(R.id.ll_invate);
+        llOrderManager = findView(R.id.ll_orderManager);
         llSetting = findView(R.id.ll_setting);
         tvLogOut = findView(R.id.tv_logOut);
     }
@@ -85,6 +88,7 @@ public class MyFragment extends BaseFragment {
         // 设置监听
         llMyDetial.setOnClickListener(this);
         llInvate.setOnClickListener(this);
+        llOrderManager.setOnClickListener(this);
         llSetting.setOnClickListener(this);
         tvLogOut.setOnClickListener(this);
     }
@@ -183,6 +187,10 @@ public class MyFragment extends BaseFragment {
             case R.id.ll_invate:
                 // 邀请
                 enterInvate();
+                break;
+            case R.id.ll_orderManager:
+                // 订单管理
+                enterOrder();
                 break;
             case R.id.ll_setting:
                 //设置
@@ -288,7 +296,13 @@ public class MyFragment extends BaseFragment {
     private void enterSetting() {
         startActivity(new Intent(mActivity, SettingActivity.class));
     }
-
+    /**
+     * 进入订单管理界面
+     */
+    private void enterOrder() {
+        Intent intent = new Intent(mActivity, OrderManagerActivity.class);
+        startActivity(intent);
+    }
     /**
      * 进入邀请界面
      */

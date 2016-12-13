@@ -58,6 +58,7 @@ public class InvateActivity extends BaseActivity {
         // 设置状态栏显示的提示内容
         setTopBarDesc("邀请");
         progressBar.setVisibility(View.VISIBLE);
+
     }
 
     @Override

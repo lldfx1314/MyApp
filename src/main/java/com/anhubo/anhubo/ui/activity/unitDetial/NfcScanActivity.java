@@ -41,6 +41,7 @@ import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -107,7 +108,7 @@ public class NfcScanActivity extends BaseActivity {
     private View viewFeed;
     private View viewTime;
     private String versionName;
-
+    private ArrayList<String> listResult;
 
     @Override
     protected void initConfig() {
@@ -173,7 +174,7 @@ public class NfcScanActivity extends BaseActivity {
             btnCompleteNfc.setText("完成演练");
             pronfcBar.setVisibility(View.GONE);
             rlNfcnumber.setVisibility(View.GONE);
-        }else if (!TextUtils.isEmpty(testIntent)) {
+        } else if (!TextUtils.isEmpty(testIntent)) {
             setTopBarDesc("测试");
             btnCompleteNfc.setText("完成测试");
             pronfcBar.setVisibility(View.GONE);
@@ -187,6 +188,8 @@ public class NfcScanActivity extends BaseActivity {
     @Override
     protected void initEvents() {
         super.initEvents();
+        listResult = new ArrayList<String>();
+
         // 获取是否保存过进度，如果保存了就显示进度
         String deviceCheckedNum = SpUtils.getStringParam(mActivity, Keys.DEVICECHECKEDNUM);
         String devicesNum = SpUtils.getStringParam(mActivity, Keys.DEVICESNUM);
@@ -272,7 +275,7 @@ public class NfcScanActivity extends BaseActivity {
                 }
 
 
-            } else if(!TextUtils.isEmpty(testIntent) && !isEnter){
+            } else if (!TextUtils.isEmpty(testIntent) && !isEnter) {
                 /***********测试**************************/
                 isEnter = true;
                 // 测试的方法
@@ -283,7 +286,9 @@ public class NfcScanActivity extends BaseActivity {
     }
 
 
-    /**进入测试页*/
+    /**
+     * 进入测试页
+     */
     private void enterTestActivity() {
         // 跳转到测试页面
         Intent intent = new Intent(mActivity, TestActivity.class);
@@ -329,7 +334,9 @@ public class NfcScanActivity extends BaseActivity {
     }
 
 
-    /**检查的网络请求获取数据的方法*/
+    /**
+     * 检查的网络请求获取数据的方法
+     */
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
@@ -414,7 +421,11 @@ public class NfcScanActivity extends BaseActivity {
 
                 // 每次弹出对话框把集合里的元素全部置为0，防止扫描其他设备受影响
                 for (int i = 0; i < completeList.size(); i++) {
-                    completeList.set(i,0);
+                    completeList.set(i, 0);
+                }
+                // 每次弹出对话框把listResult集合里的元素全部清空
+                if (listResult != null) {
+                    listResult.clear();
                 }
 
             }
@@ -525,6 +536,7 @@ public class NfcScanActivity extends BaseActivity {
 
         });
     }
+
     /**
      * 检查完成的点击事件，请求网络
      */
@@ -537,7 +549,9 @@ public class NfcScanActivity extends BaseActivity {
         params.put("device_id", deviceId);
         params.put("device_result", completeList.toString());//选择后的集合
         params.put("business_id", businessid);//这是business_id,登录后改成真正的business_id
-        params.put("start_time", startTime);
+        if (!TextUtils.isEmpty(startTime)) {
+            params.put("start_time", startTime);
+        }
 
         OkHttpUtils.post()//
                 .url(url)//
@@ -546,21 +560,6 @@ public class NfcScanActivity extends BaseActivity {
                 .execute(new MyStringCallback1());
     }
 
-    private void checkComplete1() {
-        // 这里是完成的点击事件
-        String url = Urls.Url_Check_Complete;
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("uid", uid); //这是uid,登录后改成真正的用户
-        params.put("device_id", deviceId);
-        params.put("device_result", completeList.toString());//选择后的集合
-        params.put("business_id", businessid);//这是business_id,登录后改成真正的business_id
-
-        OkHttpUtils.post()//
-                .url(url)//
-                .params(params)//
-                .build()//
-                .execute(new MyStringCallback1());
-    }
 
     class MyStringCallback1 extends StringCallback {
         @Override
@@ -606,7 +605,7 @@ public class NfcScanActivity extends BaseActivity {
                 boolean isZero = false;
                 for (int i = 0; i < completeList.size(); i++) {
                     Integer integer = completeList.get(i);
-                    if(integer == 1){
+                    if (integer == 1) {
                         isZero = true;
                     }
                 }
@@ -614,6 +613,15 @@ public class NfcScanActivity extends BaseActivity {
                     // 有问题，跳转到反馈界面
                     Intent intent = new Intent(mActivity, FeedbackActivity.class);
                     intent.putExtra(Keys.DeviceId, deviceId);
+                    /******************把问题传递过去********************/
+                    for (int i = 0; i < completeList.size(); i++) {
+                        Integer integer = completeList.get(i);
+                        if (integer == 1) {
+                            String s = require_list.get(i);
+                            listResult.add(s);
+                        }
+                    }
+                    intent.putExtra(Keys.REQUIRE_LIST, listResult);
                     startActivity(intent);
                 } else {
                     // 无问题，提示检查完成
@@ -624,6 +632,7 @@ public class NfcScanActivity extends BaseActivity {
             }
         }
     }
+
     /**
      * 点击事件的处理
      */
@@ -645,12 +654,8 @@ public class NfcScanActivity extends BaseActivity {
                 break;
             case R.id.check_complete:
                 // 检查完成的点击事件
-                if (!TextUtils.isEmpty(startTime)) {
-                    checkComplete();
+                checkComplete();
 
-                } else {
-                    checkComplete1();
-                }
                 break;
             case R.id.tv_check_time:
                 // 时间
@@ -817,7 +822,7 @@ public class NfcScanActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         // 打开系统设置界面
-                        Intent intent =  new Intent(Settings.ACTION_NFC_SETTINGS);
+                        Intent intent = new Intent(Settings.ACTION_NFC_SETTINGS);
                         startActivity(intent);
                         startActivity(intent);
 

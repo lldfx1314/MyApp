@@ -26,7 +26,8 @@ public interface Urls {
     String Url_FeedBackSuccess = UrlBaseH5+"s/html/feedBackOK.html";
     /**使用指导*/
     String Url_UseGuide = UrlBaseH5+"s/html/userDirection/userList.html";
-
+    /**我的 订单管理*/
+    String Url_MyOrderManager = UrlBaseH5+"s/html/orderFormList.html";
 
 
 
@@ -38,9 +39,10 @@ public interface Urls {
     /**  Android原生********************************************************************************/
     //String UrlBase = "http://anhubo.com/api/";
     String UrlBase = "http://115.28.56.139/api/";
-    /**新增界面的接口*/
+    /**新增界面*/
     String Url_Add = UrlBase+"Device/add_device_info";
-
+    /**新增设备，检查设备是否已经添加*/
+    String Url_Add_Check = UrlBase +"Device/dev_check_name";
     /**
      * 扫描界面的接口
      */
@@ -150,4 +152,6 @@ public interface Urls {
     String Url_AlterUnit = UrlBase +"Personal/change_business";
     /** 删除设备*/
     String Delete_Device = UrlBase +"Device/del_dev";
+
+
 }

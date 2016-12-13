@@ -214,6 +214,9 @@
             android:name=".ui.activity.MyDetial.InvateActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.activity.MyDetial.OrderManagerActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.activity.MyDetial.SettingActivity"
             android:screenOrientation="portrait" />
         <activity

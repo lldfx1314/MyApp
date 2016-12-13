@@ -12,7 +12,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -22,10 +21,9 @@ import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
-import com.anhubo.anhubo.bean.FeedBackBean;
+import com.anhubo.anhubo.bean.Peeding_FeedBackBean;
 import com.anhubo.anhubo.bean.Pending_FeedbackBean;
 import com.anhubo.anhubo.protocol.Urls;
-import com.anhubo.anhubo.utils.ImageTools;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
@@ -119,7 +117,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
         progressBar.setVisibility(View.VISIBLE);
         String url = Urls.Url_Check_Pending_FeedBack;
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("is_id", isId); //这是uid,登录后改成真正的用户
+        params.put("is_id", isId);
 
         OkHttpUtils.post()//
                 .url(url)//
@@ -234,7 +232,8 @@ public class Pending_FeedbackActivity extends BaseActivity {
             progressBar.setVisibility(View.GONE);
 
             System.out.println("待反馈界面Pending_FeedbackActivity+++===" + response);
-            FeedBackBean bean = new Gson().fromJson(response, FeedBackBean.class);
+
+            Peeding_FeedBackBean bean = new Gson().fromJson(response, Peeding_FeedBackBean.class);
             if (bean != null) {
                 int code = bean.code;
                 String msg = bean.msg;
@@ -547,17 +546,4 @@ public class Pending_FeedbackActivity extends BaseActivity {
                 });
     }
 
-    /**
-     * 当用户按下返回键的时候退出此页面到二维码扫描界面回复扫码的功能
-     */
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            Intent intent = new Intent();
-//            setResult(2, intent);
-//            finish();
-//            return true;
-//        }
-//        return super.onKeyDown(keyCode, event);
-//    }
 }
