@@ -7,8 +7,10 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -214,6 +216,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
 
     }
 
+    private Handler handler = new Handler();
 
     class MyStringCallback1 extends StringCallback {
 
@@ -231,7 +234,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
         public void onResponse(String response) {
             progressBar.setVisibility(View.GONE);
 
-            System.out.println("待反馈界面Pending_FeedbackActivity+++===" + response);
+            //System.out.println("待反馈界面Pending_FeedbackActivity+++===" + response);
 
             Peeding_FeedBackBean bean = new Gson().fromJson(response, Peeding_FeedBackBean.class);
             if (bean != null) {
@@ -239,15 +242,31 @@ public class Pending_FeedbackActivity extends BaseActivity {
                 String msg = bean.msg;
                 // 返回到上个页面
                 if (code == 0) {
-                    Intent intent = new Intent();
-                    setResult(1, intent);
-                    finish();
+
+                    new AlertDialog(mActivity).builder()
+                            .setTitle("提示")
+                            .setMsg("反馈已处理完成")
+                            .setCancelable(false)
+                            .setPositiveButton("确认", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    handler.postDelayed(new MyRunnable(),500);
+                                }
+                            }).show();
+
 
                 }
             }
         }
     }
+    /**执行推出界面操作*/
+    class MyRunnable implements Runnable {
 
+        @Override
+        public void run() {
+            finish();
+        }
+    }
 
     class MyStringCallback extends StringCallback {
         @Override
@@ -281,24 +300,24 @@ public class Pending_FeedbackActivity extends BaseActivity {
 
                     if (size == 1) {
                         for (int i = 0; i < isPic.size(); i++) {
-                            setHeaderIcon(ivIssue1, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
+                            setHeaderIcon(ivIssue1, isPic.get(i));
                         }
                     } else if (size == 2) {
                         for (int i = 0; i < isPic.size(); i++) {
                             if (i == 0) {
-                                setHeaderIcon(ivIssue1, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
+                                setHeaderIcon(ivIssue1, isPic.get(i));
                             } else if (i == 1) {
-                                setHeaderIcon(ivIssue2, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
+                                setHeaderIcon(ivIssue2, isPic.get(i));
                             }
                         }
                     } else if (size == 3) {
                         for (int i = 0; i < isPic.size(); i++) {
                             if (i == 0) {
-                                setHeaderIcon(ivIssue1, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
+                                setHeaderIcon(ivIssue1, isPic.get(i));
                             } else if (i == 1) {
-                                setHeaderIcon(ivIssue2, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
+                                setHeaderIcon(ivIssue2, isPic.get(i));
                             } else if (i == 2) {
-                                setHeaderIcon(ivIssue3, isPic.get(i).replace("anhubo.com", "115.28.56.139"));
+                                setHeaderIcon(ivIssue3, isPic.get(i));
                             }
                         }
                     }

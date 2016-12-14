@@ -68,7 +68,7 @@ public class HomeActivity extends BaseActivity {
         // 极光推送
         JPushInterface.setDebugMode(true);    // 设置开启日志,发布时请关闭日志
         JPushInterface.init(this);            // 初始化 JPush
-        registerMessageReceiver();
+        registerMessageReceiver();             // 注册广播
     }
 
     @Override
@@ -104,7 +104,7 @@ public class HomeActivity extends BaseActivity {
         rgHomeBottom.check(R.id.rb_bottom_unit);//参数是默认的ID
         viewpager.setOffscreenPageLimit(0);
         // 监听viewpager的滑动
-        viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        /*viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -119,7 +119,7 @@ public class HomeActivity extends BaseActivity {
             public void onPageScrollStateChanged(int state) {
 
             }
-        });
+        });*/
     }
 
     @Override

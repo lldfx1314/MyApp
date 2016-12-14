@@ -51,8 +51,7 @@ import okhttp3.Call;
 
 public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate {
     private static final String TAG = QrScanActivity.class.getSimpleName();
-    private static final int REQUIRECODE = 1;
-    private static final int STARTSCAN = 2;
+    private static final int STARTSCAN = 1;
     @InjectView(R.id.zxingview)
     ZXingView mQRCodeView;
     @InjectView(R.id.proBar)
@@ -210,25 +209,6 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     protected void onLoadDatas() {
 
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (intent != null) {
-
-            switch (requestCode) {
-
-                case REQUIRECODE:
-                    // 待反馈界面
-                    if (checkFeedback != null && resultCode == 1) {
-
-                        checkFeedback.setVisibility(View.GONE);
-                    }
-                    break;
-            }
-        }
-    }
-
 
     @Override
     protected void onStart() {
@@ -565,8 +545,10 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         popBirthHelper.setOnClickOkListener(new PopBirthHelper.OnClickOkListener() {
             @Override
             public void onClickOk(String time) {
-
+                /*dialog.dismiss();
+                mQRCodeView.startSpot();*/
                 if (!TextUtils.isEmpty(time)) {
+
                     startTime = time;
                 } else {
                     ToastUtils.showToast(mActivity, "您所选日期大于当前时间");
@@ -691,7 +673,6 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                 break;
             case R.id.tv_check_time:
                 // 时间
-                dialog.dismiss();
                 popBirthHelper.show(checkTime);
                 break;
             case R.id.rl_check_feedback:
@@ -699,7 +680,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                 dialog.dismiss();
                 Intent intent1 = new Intent(mActivity, Pending_FeedbackActivity.class);
                 intent1.putExtra(Keys.IsId, isId);
-                startActivityForResult(intent1, REQUIRECODE);
+                startActivity(intent1);
                 break;
         }
     }

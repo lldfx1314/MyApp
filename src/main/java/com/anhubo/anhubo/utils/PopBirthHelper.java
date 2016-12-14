@@ -188,7 +188,7 @@ public class PopBirthHelper {
     }
 
     public interface OnClickOkListener {
-        public void onClickOk(String birthday);
+        void onClickOk(String birthday);
     }
 
 }
