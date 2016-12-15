@@ -1,8 +1,5 @@
 package com.anhubo.anhubo.ui.activity.buildDetial;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
@@ -18,7 +15,6 @@ import com.anhubo.anhubo.bean.TestSubmitBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
-import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -29,7 +25,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import butterknife.InjectView;
 import okhttp3.Call;
@@ -113,7 +108,6 @@ public class TestActivity extends BaseActivity {
             case R.id.tvTopBarRight:
                 //　走提交的接口
                 submit();
-
                 break;
             case R.id.rl_all_test:
                 // 当点击全部按钮的时候让其他全部都呈现未选中状态
@@ -151,7 +145,6 @@ public class TestActivity extends BaseActivity {
             String string = key + ":" + list.toString();
             requireIds.add(string);
         }
-        //System.out.println("**********++=="+requireIds.toString());
 
         progressBar.setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<>();
@@ -171,6 +164,7 @@ public class TestActivity extends BaseActivity {
 
 
     }
+
     private Handler handler = new Handler();
 
     @Override
@@ -194,9 +188,9 @@ public class TestActivity extends BaseActivity {
             //System.out.println(response);
             progressBar.setVisibility(View.GONE);
             TestSubmitBean bean = new Gson().fromJson(response, TestSubmitBean.class);
-            if(bean != null){
+            if (bean != null) {
                 int code = bean.code;
-                if(code == 0){
+                if (code == 0) {
                     new AlertDialog(mActivity).builder()
                             .setTitle("提示")
                             .setMsg("提交成功")
@@ -209,7 +203,7 @@ public class TestActivity extends BaseActivity {
                                         public void run() {
                                             finish();
                                         }
-                                    },300);
+                                    }, 300);
 
                                 }
                             }).setCancelable(false).show();
@@ -218,6 +212,7 @@ public class TestActivity extends BaseActivity {
             }
         }
     }
+
     /**
      * 点击事件
      */

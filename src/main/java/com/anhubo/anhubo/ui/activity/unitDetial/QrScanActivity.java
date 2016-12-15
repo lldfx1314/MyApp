@@ -110,6 +110,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     private String versionName;
     private ScanBean scanBean;
     private ArrayList<String> listResult;
+    private boolean isZero;
 
     @Override
     protected void initConfig() {
@@ -123,20 +124,6 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
         businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
 
-        // 初始化completeList
-        completeList = new ArrayList<>();
-        // 创建一个数组，五个数全是0
-        int[] arr = new int[]{0, 0, 0, 0, 0};
-        for (int i = 0; i < arr.length; i++) {
-
-            completeList.add(arr[i]);
-        }
-        // 为map集合设置默认的值，每个item默认没被点击过
-        map.put(0, false);
-        map.put(1, false);
-        map.put(2, false);
-        map.put(3, false);
-        map.put(4, false);
     }
 
 
@@ -429,10 +416,24 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
 
             @Override
             public void popup() {
-                // 每次弹出对话框把集合里的元素全部置为0，防止扫描其他设备受影响
-                for (int i = 0; i < completeList.size(); i++) {
-                    completeList.set(i, 0);
+                // 初始化completeList
+                completeList = new ArrayList<>();
+                // 创建一个数组，五个数全是0
+                int[] arr = new int[]{0, 0, 0, 0, 0};
+                for (int i = 0; i < arr.length; i++) {
+                    completeList.add(arr[i]);
                 }
+                // 为map集合设置默认的值，每个item默认没被点击过
+                map.put(0, false);
+                map.put(1, false);
+                map.put(2, false);
+                map.put(3, false);
+                map.put(4, false);
+
+                // 每次弹出对话框把集合里的元素全部置为0，防止扫描其他设备受影响
+//                for (int i = 0; i < completeList.size(); i++) {
+//                    completeList.set(i, 0);
+//                }
                 // 每次弹出对话框把listResult集合里的元素全部清空
                 if (listResult != null) {
                     listResult.clear();
@@ -744,7 +745,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                 proBar.setProgress(deviceCheckedNum);
                 tvBigQrNumber.setText(deviceCheckedNum + "");
                 tvSmallQrNumber.setText(devicesNum);
-                boolean isZero = false;
+                isZero = false;
                 for (int i = 0; i < completeList.size(); i++) {
                     Integer integer = completeList.get(i);
                     if (integer == 1) {

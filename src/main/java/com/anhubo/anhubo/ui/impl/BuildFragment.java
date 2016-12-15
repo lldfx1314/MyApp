@@ -137,7 +137,7 @@ public class BuildFragment extends BaseFragment {
         // 底色
         bottom = (TextView) view.findViewById(R.id.bottom);
 
-        //ListView添加脚布局
+        //ListView添加头布局
         lvBuild.addHeaderView(view, null, true);
         // 去掉头布局的分割线
         lvBuild.setHeaderDividersEnabled(true);

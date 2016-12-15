@@ -2,14 +2,11 @@ package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.app.Dialog;
 import android.app.PendingIntent;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
-import android.os.Build;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -21,7 +18,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.DeviceDetailsAdapter;
@@ -41,7 +37,6 @@ import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -124,20 +119,7 @@ public class NfcScanActivity extends BaseActivity {
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
         businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
 
-        // 初始化completeList
-        completeList = new ArrayList<>();
-        // 创建一个数组，五个数全是0
-        int[] arr = new int[]{0, 0, 0, 0, 0};
-        for (int i = 0; i < arr.length; i++) {
 
-            completeList.add(arr[i]);
-        }
-        // 为map集合设置默认的值，每个item默认没被点击过
-        map.put(0, false);
-        map.put(1, false);
-        map.put(2, false);
-        map.put(3, false);
-        map.put(4, false);
     }
 
     /**
@@ -419,10 +401,21 @@ public class NfcScanActivity extends BaseActivity {
             @Override
             public void popup() {
 
-                // 每次弹出对话框把集合里的元素全部置为0，防止扫描其他设备受影响
-                for (int i = 0; i < completeList.size(); i++) {
-                    completeList.set(i, 0);
+                // 初始化completeList
+                completeList = new ArrayList<>();
+                // 创建一个数组，五个数全是0
+                int[] arr = new int[]{0, 0, 0, 0, 0};
+                for (int i = 0; i < arr.length; i++) {
+
+                    completeList.add(arr[i]);
                 }
+                // 为map集合设置默认的值，每个item默认没被点击过
+                map.put(0, false);
+                map.put(1, false);
+                map.put(2, false);
+                map.put(3, false);
+                map.put(4, false);
+
                 // 每次弹出对话框把listResult集合里的元素全部清空
                 if (listResult != null) {
                     listResult.clear();
@@ -578,7 +571,6 @@ public class NfcScanActivity extends BaseActivity {
         public void onResponse(String response) {
             CheckComplete_Bean bean = new Gson().fromJson(response, CheckComplete_Bean.class);
             if (bean != null) {
-                ToastUtils.showToast(mActivity, "检查完成");
                 dialog.dismiss();
                 // 获取到数据
                 deviceCheckedNum = bean.data.device_checked_num;
@@ -714,7 +706,6 @@ public class NfcScanActivity extends BaseActivity {
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
-            //ToastUtils.showToast(mActivity, "您的手机不支持NFC");
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("您的手机不支持NFC")
@@ -780,7 +771,7 @@ public class NfcScanActivity extends BaseActivity {
         for (int i = 0; i < messages.length; i++) {
             //获取每条信息记录的长度
             int length = messages[i].getRecords().length;
-            //System.out.println("拿到的信息记录是===" + length + "条");//这里用公交卡获取到的长度为1，说明每条信息里面只有一条记录
+            //System.out.println("拿到的信息记录是===" + length + "条");
             //ToastUtils.showToast(getApplicationContext(), "信息 的长度"+length);
             // 拿到每条信息里面的记录
             NdefRecord[] records = messages[i].getRecords();
@@ -791,7 +782,6 @@ public class NfcScanActivity extends BaseActivity {
                 }
             }
         }
-
     }
 
     /**
@@ -800,8 +790,9 @@ public class NfcScanActivity extends BaseActivity {
     private void parseRTDUriRecord(NdefRecord record) {
         if (record != null) {
             String card = new String(record.getPayload());
-            //System.out.println("切割之前的号======" + cardNumber);
+            /*******************************/
             cardNumber = card.replace(card.substring(0, 7), "anhubo");
+
             // 拿到数据后做相应的操作
             if (!TextUtils.isEmpty(cardNumber)) {
                 processData(cardNumber);

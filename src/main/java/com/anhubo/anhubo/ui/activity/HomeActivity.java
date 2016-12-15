@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -44,6 +43,8 @@ import okhttp3.Call;
 
 public class HomeActivity extends BaseActivity {
 
+    private static final int DOWN_ERROR = 1;
+    private static final int UPDATA_CLIENT = 2;
     @InjectView(R.id.viewpager)
     NoScrollViewPager viewpager;
 
@@ -52,6 +53,8 @@ public class HomeActivity extends BaseActivity {
     private ArrayList<Fragment> list;
     private long exitTime = 0;
     public static boolean isForeground = false;
+    private String versionName;
+    private String url;
 
     @Override
     protected void initConfig() {
@@ -103,24 +106,10 @@ public class HomeActivity extends BaseActivity {
         //默认选中首页
         rgHomeBottom.check(R.id.rb_bottom_unit);//参数是默认的ID
         viewpager.setOffscreenPageLimit(0);
-        // 监听viewpager的滑动
-        /*viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });*/
     }
+
+
 
     @Override
     protected void onLoadDatas() {
@@ -221,8 +210,8 @@ public class HomeActivity extends BaseActivity {
                 // 弹窗提示用户收到推送的消息
                 ExtrasBean bean = new Gson().fromJson(extras, ExtrasBean.class);
                 String tableId = bean.table_id;
-                if(tableId!=null){
-                    if (!TextUtils.isEmpty(messge)&&!TextUtils.isEmpty(tableId)) {
+                if (tableId != null) {
+                    if (!TextUtils.isEmpty(messge) && !TextUtils.isEmpty(tableId)) {
                         dialog(messge, tableId);
                     }
                 }

@@ -16,8 +16,7 @@
             android:layout_width="220dp"
             android:layout_height="250dp"
             android:layout_centerInParent="true"
-            android:layout_marginTop="10dp"
-            android:paddingBottom="8dp">
+            android:paddingBottom="15dp">
 
             <RelativeLayout
                 android:layout_width="220dp"
@@ -59,7 +58,7 @@
             android:id="@+id/rl_unit_02"
             android:layout_width="350dp"
             android:layout_height="230dp"
-            android:layout_alignParentTop="true"
+            android:paddingBottom="20dp"
             android:layout_centerHorizontal="true"
             android:visibility="gone">
 
@@ -82,7 +81,7 @@
             android:text="信息完善"
             android:textColor="@color/tv_gray"
             android:textSize="16sp"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tv_unit_frag_02_invite"

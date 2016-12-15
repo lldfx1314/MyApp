@@ -152,6 +152,6 @@ public interface Urls {
     String Url_AlterUnit = UrlBase +"Personal/change_business";
     /** 删除设备*/
     String Delete_Device = UrlBase +"Device/del_dev";
-
-
+    /**检查更新*/
+    String Url_Check_Update = UrlBase +"Index/version_change";
 }

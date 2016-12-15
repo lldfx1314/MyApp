@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.bean.Build_Help_Plan_Bean;
-import com.anhubo.anhubo.ui.impl.BuildFragment;
 import com.anhubo.anhubo.utils.DisplayUtil;
 
 import java.util.List;

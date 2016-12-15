@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="85dp"
+        android:layout_height="105dp"
         android:background="#fdfdfe"
         android:orientation="vertical"
         android:paddingLeft="20dp"
@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_mass_name"
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/black"
-                android:textSize="10sp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <TextView
@@ -38,15 +38,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
+            android:layout_marginTop="5dp"
             android:textColor="@color/black"
-            android:textSize="10sp" />
+            android:textSize="12sp" />
         <TextView
             android:id="@+id/tv_plan_range"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
+            android:layout_marginTop="5dp"
             android:textColor="#77000000"
-            android:textSize="10sp" />
+            android:textSize="12sp" />
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -76,14 +78,14 @@
                         android:id="@+id/tv_proBar_plan_join"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="10sp"
+                        android:textSize="12sp"
                         android:textColor="#3b69ff"
                         android:text="400"/>
                     <TextView
                         android:id="@+id/tv_proBar_plan_persion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="10sp"
+                        android:textSize="12sp"
                         android:textColor="#77000000"
                         android:text="/1000"/>
                 </LinearLayout>
@@ -97,7 +99,7 @@
                 android:visibility="gone"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="8dp"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:textColor="#77000000"
                 android:text="已加入1000人"/>
         </RelativeLayout>

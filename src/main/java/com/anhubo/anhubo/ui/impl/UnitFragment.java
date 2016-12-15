@@ -12,8 +12,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
+import com.anhubo.anhubo.adapter.BuildAdapter;
 import com.anhubo.anhubo.adapter.UnitAdapter;
 import com.anhubo.anhubo.base.BaseFragment;
+import com.anhubo.anhubo.bean.Build_Help_Plan_Bean;
+import com.anhubo.anhubo.bean.Check_UpDateBean;
 import com.anhubo.anhubo.bean.MyPolygonBean;
 import com.anhubo.anhubo.bean.SesameItemModel;
 import com.anhubo.anhubo.bean.SesameModel;
@@ -95,6 +98,8 @@ public class UnitFragment extends BaseFragment {
     private boolean isShowDot_check = false;
     private boolean isShowDot_drill = false;
 
+    private List<Build_Help_Plan_Bean.Data.Plans> plans;
+    private BuildAdapter adapter1;
 
     @Override
     public void initTitleBar() {
@@ -260,6 +265,7 @@ public class UnitFragment extends BaseFragment {
             isLoading = true;
             // 界面每次可见都设置一下单位，邀请同事以后单位可能会改变
             String businessName = SpUtils.getStringParam(mActivity, Keys.BUSINESSNAME);
+            String bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
             if (tv_basepager_title != null) {
 
                 tv_basepager_title.setText(businessName);
@@ -267,41 +273,67 @@ public class UnitFragment extends BaseFragment {
             // 获取圆弧数据
             getData();
             //互保计划获取数据
-            getPlanData();
+            //getPlanData();
 
-
+            // 获取户主计划列表信息
+            getHelpPlan(bulidingid);
         }
     }
 
     /**
-     * 获取圆弧数据
+     * ****************************************************
+     * 获取互助计划列表信息
      */
-    private void getData() {
-        //每次请求网络之前（控件是在网络获取成功后动态添加上去的）先把上次的控件对象移除，否则会重复
-        if (sesameCreditPanelLL != null) {
-            sesameCreditPanelLL.removeView(scp);
-        }
+    private void getHelpPlan(String bulidingid) {
+        plans = new ArrayList<>();
 
-        // 创建一个集合，用于记录多边形的数据
-        list = new ArrayList<>();
-        // 创建一个数组,用于存储多边形的数据
-        arrScores = new int[6];
-
-        /**只有当该Fragment被用户可见的时候,才加载网络数据*/
-        // 获取网络数据
-        String url = Urls.Url_Unit;
-        String businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
         HashMap<String, String> params = new HashMap<>();
-        params.put("business_id", businessid);
+
+        if (!TextUtils.isEmpty(bulidingid)) {
+            params.put("building_id", bulidingid);
+        }
+        String url = Urls.Url_Build_Help_Plan;
+
         OkHttpUtils.post()//
                 .url(url)//
                 .params(params)//
                 .build()//
-                .execute(new MyStringCallback());
-
+                .execute(new MyStringCallback3());
     }
 
+    /**
+     * 互助计划
+     */
+    class MyStringCallback3 extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+            System.out.println("BuildFragment互助计划+++===获取数据失败" + e.getMessage());
+            // 获取数据失败后显示三色以及互助计划
+            if (plans != null) {
+                adapter1 = new BuildAdapter(mActivity, plans);
+            }
+            lvUnit.setAdapter(adapter1);
+        }
 
+        @Override
+        public void onResponse(String response) {
+            //System.out.println("BuildFragment互助计划+++===" + response);
+            Build_Help_Plan_Bean bean = new Gson().fromJson(response, Build_Help_Plan_Bean.class);
+            if (bean != null) {
+                int code = bean.code;
+                String msg = bean.msg;
+                Build_Help_Plan_Bean.Data data = bean.data;
+                plans = data.plans;
+                if (code == 0 && !plans.isEmpty()) {
+                    adapter1 = new BuildAdapter(mActivity, plans);
+                } else {
+                    adapter1 = new BuildAdapter(mActivity);
+                }
+                lvUnit.setAdapter(adapter1);
+            }
+
+        }
+    }
 
 
     /**
@@ -370,7 +402,33 @@ public class UnitFragment extends BaseFragment {
         }
     }
 
+    /**
+     * 获取圆弧数据
+     */
+    private void getData() {
+        //每次请求网络之前（控件是在网络获取成功后动态添加上去的）先把上次的控件对象移除，否则会重复
+        if (sesameCreditPanelLL != null) {
+            sesameCreditPanelLL.removeView(scp);
+        }
 
+        // 创建一个集合，用于记录多边形的数据
+        list = new ArrayList<>();
+        // 创建一个数组,用于存储多边形的数据
+        arrScores = new int[6];
+
+        /**只有当该Fragment被用户可见的时候,才加载网络数据*/
+        // 获取网络数据
+        String url = Urls.Url_Unit;
+        String businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
+        HashMap<String, String> params = new HashMap<>();
+        params.put("business_id", businessid);
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback());
+
+    }
     /**
      * 分数、级别的网络请求
      */
@@ -665,7 +723,10 @@ public class UnitFragment extends BaseFragment {
     @Override
     public void initData() {
 
+
     }
+
+
     /**
      * 获取圆形统计图的数据
      */

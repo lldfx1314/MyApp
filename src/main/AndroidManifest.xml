@@ -98,6 +98,7 @@
         <!--Nfc扫描界面-->
         <activity
             android:name=".ui.activity.unitDetial.NfcScanActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.nfca.action.NDEF_DISCOVERED" />
