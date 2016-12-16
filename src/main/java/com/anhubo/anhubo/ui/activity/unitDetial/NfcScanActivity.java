@@ -171,16 +171,50 @@ public class NfcScanActivity extends BaseActivity {
     protected void initEvents() {
         super.initEvents();
         listResult = new ArrayList<String>();
+        getNum();
+    }
+    /**获取进度条的信息*/
+    private void getNum() {
+        String url = Urls.Url_Get_Num;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("uid", uid); //这是uid,登录后改成真正的用户
+        params.put("business_id", businessid);//这是business_id,登录后改成真正的business_id
 
-        // 获取是否保存过进度，如果保存了就显示进度
-        String deviceCheckedNum = SpUtils.getStringParam(mActivity, Keys.DEVICECHECKEDNUM);
-        String devicesNum = SpUtils.getStringParam(mActivity, Keys.DEVICESNUM);
-        if (!TextUtils.isEmpty(deviceCheckedNum) && !TextUtils.isEmpty(deviceCheckedNum)) {
-            //设置进度条的初始化
-            pronfcBar.setMax(Integer.parseInt(devicesNum));
-            pronfcBar.setProgress(Integer.parseInt(deviceCheckedNum));
-            tvBignfcNumber.setText(deviceCheckedNum + "");
-            tvSmallnfcNumber.setText(devicesNum + "");
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback2());
+    }
+
+
+    class MyStringCallback2 extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("网络有问题，请检查")
+                    .setCancelable(true).show();
+
+            System.out.println("QrScanActivity+++获取进度条信息===没拿到数据" + e.getMessage());
+        }
+
+        @Override
+        public void onResponse(String response) {
+            System.out.println("获取进度条信息+"+response);
+            progressBar.setVisibility(View.GONE);
+            CheckComplete_Bean bean = new Gson().fromJson(response, CheckComplete_Bean.class);
+            if (bean != null) {
+
+                // 获取到数据
+                deviceCheckedNum = bean.data.device_checked_num;
+                devicesNum = bean.data.devices_num;
+
+                //动态的设置进度条
+                setProgressBar();
+
+            }
         }
     }
 
@@ -575,24 +609,9 @@ public class NfcScanActivity extends BaseActivity {
                 // 获取到数据
                 deviceCheckedNum = bean.data.device_checked_num;
                 devicesNum = bean.data.devices_num;
-                // 把这俩数据保存起来
-                SpUtils.putParam(mActivity, Keys.DEVICECHECKEDNUM, deviceCheckedNum + "");
-                SpUtils.putParam(mActivity, Keys.DEVICESNUM, devicesNum);
-
-
-                // 获取到数据
-                deviceCheckedNum = bean.data.device_checked_num;
-                devicesNum = bean.data.devices_num;
-                // 把这俩数据保存起来
-                SpUtils.putParam(mActivity, Keys.DEVICECHECKEDNUM, deviceCheckedNum + "");
-                SpUtils.putParam(mActivity, Keys.DEVICESNUM, devicesNum);
-
 
                 //动态的设置进度条
-                pronfcBar.setMax(Integer.parseInt(devicesNum));
-                pronfcBar.setProgress(deviceCheckedNum);
-                tvBignfcNumber.setText(deviceCheckedNum + "");
-                tvSmallnfcNumber.setText(devicesNum + "");
+                setProgressBar();
 
                 boolean isZero = false;
                 for (int i = 0; i < completeList.size(); i++) {
@@ -623,6 +642,13 @@ public class NfcScanActivity extends BaseActivity {
 
             }
         }
+    }
+    /**动态的设置进度条*/
+    private void setProgressBar() {
+        pronfcBar.setMax(Integer.parseInt(devicesNum));
+        pronfcBar.setProgress(deviceCheckedNum);
+        tvBignfcNumber.setText(deviceCheckedNum + "");
+        tvSmallnfcNumber.setText(devicesNum + "");
     }
 
     /**

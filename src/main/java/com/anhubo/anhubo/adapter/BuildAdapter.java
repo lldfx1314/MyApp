@@ -72,13 +72,21 @@ public class BuildAdapter extends BaseAdapter {
         String planRange = plan.plan_range;
         String planName = plan.plan_name;
         //设置数据
+        if(planName.length()>=8){
+            planName = planName.substring(0, 8);
+        }
         holder.tvPlanName.setText(planName);
+        if(massName.length()>=12){
+            massName = massName.substring(0, 12);
+        }
+
         holder.tvMassName.setText("By "+massName);
         holder.tvPlanEnsure.setText("参与会员单位最高获得"+planEnsure+"保障");
         holder.tvPlanRange.setText("保障范围: "+planRange);
         // 根据参与人数与计划人数相比判断显示进度条还是已完成计划人数
         if(Integer.parseInt(planJoin)<Integer.parseInt(planPerson)){
             // 显示进度条
+            holder.tvPlanPerson.setVisibility(View.GONE);
             holder.rlProBar.setVisibility(View.VISIBLE);
             holder.proBarPlan.setMax(Integer.parseInt(planPerson));
             holder.proBarPlan.setProgress(Integer.parseInt(planJoin));
@@ -87,8 +95,9 @@ public class BuildAdapter extends BaseAdapter {
 
         }else{
             // 隐藏进度条，显示已完成的计划人数
+            holder.rlProBar.setVisibility(View.GONE);
             holder.tvPlanPerson.setVisibility(View.VISIBLE);
-            String string = "已加入"+planPerson+"人";
+            String string = "已加入"+planJoin+"人";
             setCharacterSize(string);
             holder.tvPlanPerson.setText(ss);
         }

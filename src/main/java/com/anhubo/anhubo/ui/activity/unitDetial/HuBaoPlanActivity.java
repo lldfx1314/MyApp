@@ -1,5 +1,6 @@
-package com.anhubo.anhubo.ui.activity.MyDetial;
+package com.anhubo.anhubo.ui.activity.unitDetial;
 
+import android.content.Intent;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -9,42 +10,42 @@ import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
-import com.anhubo.anhubo.utils.SpUtils;
 
 import butterknife.InjectView;
 
 /**
- * Created by LUOLI on 2016/12/13.
+ * Created by LUOLI on 2016/12/16.
  */
-public class OrderManagerActivity extends BaseActivity {
-    @InjectView(R.id.wv_order)
-    WebView wvOrder;
-    private String uid;
-    private String url;
+public class HuBaoPlanActivity extends BaseActivity {
+    @InjectView(R.id.wv_hubaoplan)
+    WebView wvHubaoplan;
     private String newUrl;
+    private String url;
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_ordermanager;
+        return R.layout.activity_hubaoplan;
     }
 
     @Override
     protected void initViews() {
         // 设置状态栏显示的提示内容
-        setTopBarDesc("订单管理");
+        setTopBarDesc("计划详情");
         progressBar.setVisibility(View.VISIBLE);
         iv_basepager_left.setOnClickListener(this);
     }
 
     @Override
     protected void onLoadDatas() {
-        uid = SpUtils.getStringParam(mActivity, Keys.UID);
-        url = Urls.Url_MyOrderManager;
-        newUrl = url + "?uid=" + uid;
-        WebSettings settings = wvOrder.getSettings();
+        Intent intent = getIntent();
+        String planId = intent.getStringExtra(Keys.PLANID);
+        String massId = intent.getStringExtra(Keys.MASSID);
+        url = Urls.Url_HuBaoPlan;
+        newUrl = url + "?mass_id=" + massId+"&plan_id="+planId;
+        WebSettings settings = wvHubaoplan.getSettings();
         settings.setJavaScriptEnabled(true);
 
-        wvOrder.setWebViewClient(new WebViewClient() {
+        wvHubaoplan.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) { //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
                 progressBar.setVisibility(View.VISIBLE);
                 view.loadUrl(url);
@@ -58,16 +59,16 @@ public class OrderManagerActivity extends BaseActivity {
             }
 
         });
-        wvOrder.loadUrl(newUrl);
+        wvHubaoplan.loadUrl(newUrl);
     }
 
     @Override
     public void onBackPressed() {
-        if (wvOrder.canGoBack()){
-            if(wvOrder.getUrl().equals(newUrl)){
+        if (wvHubaoplan.canGoBack()){
+            if(wvHubaoplan.getUrl().equals(newUrl)){
                 super.onBackPressed();
             }else{
-                wvOrder.goBack();
+                wvHubaoplan.goBack();
             }
         }else{
             super.onBackPressed();
@@ -80,16 +81,16 @@ public class OrderManagerActivity extends BaseActivity {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.ivTopBarLeft:
-                if (wvOrder.canGoBack()){
-                    if(wvOrder.getUrl().equals(newUrl)){
+                if (wvHubaoplan.canGoBack()){
+                    if(wvHubaoplan.getUrl().equals(newUrl)){
                         super.onBackPressed();
                     }else{
-                        wvOrder.goBack();
+                        wvHubaoplan.goBack();
                     }
                 }else{
                     finish();
                 }
-            break;
+                break;
         }
     }
 
@@ -97,5 +98,4 @@ public class OrderManagerActivity extends BaseActivity {
     public void onSystemUiVisibilityChange(int visibility) {
 
     }
-
 }

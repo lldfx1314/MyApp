@@ -134,7 +134,6 @@ public class IdCardActivity extends BaseActivity {
                             .setTitle("提示")
                             .setMsg("请输入身份证号码")
                             .setCancelable(true).show();
-                    //ToastUtils.showToast(mActivity, "请输入身份证号码");
                     return;
                 }
 
@@ -177,11 +176,11 @@ public class IdCardActivity extends BaseActivity {
             return;
         }
         progressBar.setVisibility(View.VISIBLE);
+        String url = Urls.Url_IdCard;
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         params.put("card_num", idcardPhone);
         params.put("true_name", name);
-        String url = Urls.Url_IdCard;
 
         OkHttpUtils.post()//
                 .addFile("file1", "file01.png", file1)//
@@ -202,6 +201,7 @@ public class IdCardActivity extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
+            progressBar.setVisibility(View.GONE);
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")

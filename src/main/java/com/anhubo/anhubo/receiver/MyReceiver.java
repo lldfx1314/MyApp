@@ -43,13 +43,12 @@ public class MyReceiver extends BroadcastReceiver {
         //System.out.println( "[MyReceiver] onReceive - " + intent.getAction() + ", extras: " + printBundle(bundle));
         if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
             String registration_id = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
-            //System.out.println("registration_id********" + registration_id);
-
+            System.out.println("registration_id********" + registration_id);
             // 把这个registration_id上传到服务器
             String uid = SpUtils.getStringParam(mContent, Keys.UID);
             String url = Urls.Url_Registration_Id;
             HashMap<String, String> params = new HashMap<>();
-
+/*device_token*/
             params.put("uid", uid);
 
             params.put("registration_id", registration_id);

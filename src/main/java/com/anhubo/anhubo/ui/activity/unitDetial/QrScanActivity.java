@@ -176,20 +176,59 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     protected void initEvents() {
         super.initEvents();
         listResult = new ArrayList<String>();
+        // 获取进度条的信息
+        getNum();
+    }
+    /**获取进度条的信息*/
+    private void getNum() {
+        String url = Urls.Url_Get_Num;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("uid", uid); //这是uid,登录后改成真正的用户
+        params.put("business_id", businessid);//这是business_id,登录后改成真正的business_id
+
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback2());
+    }
 
 
-        // 获取是否保存过进度，如果保存了就显示进度
-        String deviceCheckedNum = SpUtils.getStringParam(mActivity, Keys.DEVICECHECKEDNUM);
-        String devicesNum = SpUtils.getStringParam(mActivity, Keys.DEVICESNUM);
-        if (!TextUtils.isEmpty(deviceCheckedNum) && !TextUtils.isEmpty(deviceCheckedNum)) {
-            //设置进度条的初始化
-            proBar.setMax(Integer.parseInt(devicesNum));
-            proBar.setProgress(Integer.parseInt(deviceCheckedNum));
-            tvBigQrNumber.setText(deviceCheckedNum + "");
-            tvSmallQrNumber.setText(devicesNum);
+    class MyStringCallback2 extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("网络有问题，请检查")
+                    .setCancelable(true).show();
+
+            System.out.println("QrScanActivity+++获取进度条信息===没拿到数据" + e.getMessage());
         }
 
+        @Override
+        public void onResponse(String response) {
+            System.out.println("获取进度条信息+"+response);
+            progressBar.setVisibility(View.GONE);
+            CheckComplete_Bean bean = new Gson().fromJson(response, CheckComplete_Bean.class);
+            if (bean != null) {
 
+                // 获取到数据
+                deviceCheckedNum = bean.data.device_checked_num;
+                devicesNum = bean.data.devices_num;
+
+                //动态的设置进度条
+                setProgressBar();
+
+            }
+        }
+    }
+    /**动态的设置进度条*/
+    private void setProgressBar() {
+        proBar.setMax(Integer.parseInt(devicesNum));
+        proBar.setProgress(deviceCheckedNum);
+        tvBigQrNumber.setText(deviceCheckedNum + "");
+        tvSmallQrNumber.setText(devicesNum);
     }
 
     @Override
@@ -735,16 +774,10 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                 // 获取到数据
                 deviceCheckedNum = bean.data.device_checked_num;
                 devicesNum = bean.data.devices_num;
-                // 把这俩数据保存起来
-                SpUtils.putParam(mActivity, Keys.DEVICECHECKEDNUM, deviceCheckedNum + "");
-                SpUtils.putParam(mActivity, Keys.DEVICESNUM, devicesNum);
 
 
                 //动态的设置进度条
-                proBar.setMax(Integer.parseInt(devicesNum));
-                proBar.setProgress(deviceCheckedNum);
-                tvBigQrNumber.setText(deviceCheckedNum + "");
-                tvSmallQrNumber.setText(devicesNum);
+                setProgressBar();
                 isZero = false;
                 for (int i = 0; i < completeList.size(); i++) {
                     Integer integer = completeList.get(i);

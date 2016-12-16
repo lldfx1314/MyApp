@@ -33,6 +33,7 @@
         <RadioButton
             android:id="@+id/rb_bottom_build"
             style="@style/bottom_style"
+            android:visibility="gone"
             android:drawableTop="@drawable/bottom_build_selector"
             android:text="建筑"/>
         <RadioButton

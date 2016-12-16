@@ -48,6 +48,8 @@ public class WelcomeActivity extends BaseActivity {
 
     private static final int DOWN_ERROR = 1;
     private static final int UPDATA_CLIENT = 2;
+    private static final int NET_ERROR = 3;
+    private static final int ENTER_MAIN = 4;
     private String uid;
     private String bulidingid;
     private String businessid;
@@ -65,19 +67,6 @@ public class WelcomeActivity extends BaseActivity {
     @Override
     protected void initViews() {
 
-    }
-
-    @Override
-    protected void onResume() {
-        JPushInterface.onResume(this);
-        super.onResume();
-    }
-
-
-    @Override
-    protected void onPause() {
-        JPushInterface.onPause(this);
-        super.onPause();
     }
 
     @Override
@@ -119,13 +108,16 @@ public class WelcomeActivity extends BaseActivity {
     /**
      * 检查更新
      */
+    private Message msg = Message.obtain();
     class MyStringCallback extends StringCallback {
 
         @Override
         public void onError(Call call, Exception e) {
             System.out.println("UnitFragment界面+++版本升级===没拿到数据" + e.getMessage());
             // 网络出故障，直接进后面界面
-            enterMain();
+            msg.what = NET_ERROR;
+            handler.sendMessage(msg);
+
         }
 
         @Override
@@ -136,19 +128,19 @@ public class WelcomeActivity extends BaseActivity {
                 int code = bean.code;
                 String newVersion = bean.data.new_version;
                 String type = bean.data.type;
-//                url = bean.data.url;
-                url = "http://softfile.3g.qq.com:8080/msoft/179/24659/43549/qq_hd_mini_1.4.apk";
+                url = bean.data.url;
+//              url = "http://softfile.3g.qq.com:8080/msoft/179/24659/43549/qq_hd_mini_1.4.apk";
                 if (code == 0) {
                     if (!TextUtils.isEmpty(newVersion)) {
                         // 有更新，根据type判断是必须更新还是非必须更新
                         if (TextUtils.equals(type, 0 + "")) {
                             // 强制更新
-                            Message msg1 = new Message();
-                            msg1.what = UPDATA_CLIENT;
-                            handler.sendMessage(msg1);
+                            msg.what = UPDATA_CLIENT;
+                            handler.sendMessage(msg);
                         }
                     } else {
-                        enterMain();
+                        msg.what = ENTER_MAIN;
+                        handler.sendMessage(msg);
                     }
                 }
             }
@@ -165,11 +157,19 @@ public class WelcomeActivity extends BaseActivity {
                 case UPDATA_CLIENT:
                     //对话框通知用户升级程序
                     dialog();
-
                     break;
                 case DOWN_ERROR:
                     //下载apk失败
                     ToastUtils.showToast(mActivity, "下载新版本失败");
+                    enterMain();
+                    break;
+                case NET_ERROR:
+                    //下载apk失败
+                    ToastUtils.showToast(mActivity, "网络有问题，请检查");
+                    enterMain();
+                    break;
+                case ENTER_MAIN:
+                    //下载apk失败
                     enterMain();
                     break;
             }
@@ -189,7 +189,7 @@ public class WelcomeActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         // 弹出进度条的对话框，进行一步下载
-                        System.out.println("正在下载。。。");
+//                        System.out.println("正在下载。。。");
                         downLoadApk();
                     }
                 }).show();
@@ -205,7 +205,6 @@ public class WelcomeActivity extends BaseActivity {
         pd = new ProgressDialog(this);
         pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         pd.setCancelable(false);
-        pd.setProgress(0);
         pd.setMessage("正在下载更新");
         pd.show();
         new Thread() {
@@ -213,16 +212,15 @@ public class WelcomeActivity extends BaseActivity {
             public void run() {
                 try {
                     File file = getFileFromServer(url, pd);
-                    //File file = downloadFile(url, pd);
-                    sleep(3000);
                     installApk(file);
                     pd.dismiss(); //结束掉进度条对话框
                 } catch (Exception e) {
-                    Message msg = new Message();
-                    msg.what = DOWN_ERROR;
-                    handler.sendMessage(msg);
+                    Message msg1 = Message.obtain();
+                    msg1.what = DOWN_ERROR;
+                    handler.sendMessage(msg1);
                     pd.dismiss(); //结束掉进度条对话框
                     e.printStackTrace();
+                    System.out.println("下载失败"+e.getMessage());
                 }
             }
         }.start();
@@ -238,41 +236,6 @@ public class WelcomeActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    public File downloadFile(String url, final ProgressDialog pd) {
-        final File[] newFile = {null};
-        OkHttpUtils//
-                .get()//
-                .url(url)//
-                .build()//
-                .execute(new FileCallBack(Environment.getExternalStorageDirectory().getAbsolutePath(), "gson-2.2.1.jar"){
-
-                    @Override
-                    public void onBefore(Request request) {
-                        super.onBefore(request);
-                    }
-
-                    @Override
-                    public void inProgress(float progress, long total) {
-                        pd.setProgress((int) (100 * progress));
-                        System.out.println((int) (100 * progress));
-                        System.out.println("总大小"+(int) total);
-                        pd.setMax((int) total);
-                    }
-
-                    @Override
-                    public void onError(Call call, Exception e) {
-                        //Log.e(TAG, "onError :" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onResponse(File file) {
-                        //Log.e(TAG, "onResponse :" + file.getAbsolutePath());
-                        newFile[0] = file;
-                    }
-                });
-        return newFile[0];
-    }
-
     public File getFileFromServer(String path, ProgressDialog pd) {
         //如果相等的话表示当前的sdcard挂载在手机上并且是可用的
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -280,15 +243,17 @@ public class WelcomeActivity extends BaseActivity {
             try {
                 URL url = new URL(path);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.connect();
                 conn.setConnectTimeout(10*1000);
-                conn.setRequestMethod("GET");
-                int code = conn.getResponseCode();
+                conn .setRequestProperty("Accept-Encoding", "identity");
+                conn.connect();
+                int contentLength = conn.getContentLength();
+//                conn.setRequestMethod("GET");
+//                conn.setRequestMethod("POST");
                 //获取到文件的大小
 
-//                System.out.println("总大小+++" + conn.getContentLength());
+                //System.out.println("总大小+++" + contentLength);
 
-                pd.setMax(conn.getContentLength()/ 1024/1024);
+                pd.setMax(contentLength/ 1024/1024);
                 InputStream is = conn.getInputStream();
                 file = new File(Environment.getExternalStorageDirectory(), "/anhubao.apk");
                 //如果目标文件已经存在，则删除。产生覆盖旧文件的效果
@@ -305,7 +270,7 @@ public class WelcomeActivity extends BaseActivity {
                     total += len;
                     //获取当前下载量
                     pd.setProgress(total/ 1024/1024);
-//                    System.out.println("进度+++" + total / 1024/1024);
+                    //System.out.println("进度+++" + total / 1024/1024);
                 }
                 fos.close();
                 bis.close();
@@ -320,7 +285,7 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void enterMain() {
-        new Handler().postDelayed(new Runnable() {
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (TextUtils.isEmpty(oldversionName)) {

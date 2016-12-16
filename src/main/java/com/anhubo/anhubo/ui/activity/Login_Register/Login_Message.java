@@ -350,6 +350,8 @@ public class Login_Message extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
+
+//            System.out.println("Login_Message++"+response);
             Login_Bean bean = new Gson().fromJson(response, Login_Bean.class);
             if (bean != null) {
                 // 获取到数据

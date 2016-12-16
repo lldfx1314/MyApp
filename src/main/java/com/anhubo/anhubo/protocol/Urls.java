@@ -6,8 +6,8 @@ package com.anhubo.anhubo.protocol;
  */
 public interface Urls {
     /**  接入H5********************************************************************************/
-    //String UrlBaseH5 = "http://anhubo.com/";
-    String UrlBaseH5 = "http://115.28.56.139/";
+    String UrlBaseH5 = "http://anhubo.com/";
+    //String UrlBaseH5 = "http://115.28.56.139/";
     /**发现，反馈*/
     String Url_FindFeed = UrlBaseH5+"s/html/feedBackSchedule.html";
     /**发现，公告*/
@@ -28,7 +28,8 @@ public interface Urls {
     String Url_UseGuide = UrlBaseH5+"s/html/userDirection/userList.html";
     /**我的 订单管理*/
     String Url_MyOrderManager = UrlBaseH5+"s/html/orderFormList.html";
-
+    /**互保计划*/
+    String Url_HuBaoPlan= UrlBaseH5+"anhubo_s/anhubo_concur/html/concurProgram.html";
 
 
 
@@ -37,8 +38,8 @@ public interface Urls {
 
 
     /**  Android原生********************************************************************************/
-    //String UrlBase = "http://anhubo.com/api/";
-    String UrlBase = "http://115.28.56.139/api/";
+    String UrlBase = "http://anhubo.com/api/";
+    //String UrlBase = "http://115.28.56.139/api/";
     /**新增界面*/
     String Url_Add = UrlBase+"Device/add_device_info";
     /**新增设备，检查设备是否已经添加*/
@@ -55,6 +56,9 @@ public interface Urls {
      * 完成设备检查
      */
     String Url_Check_Complete = UrlBase + "Device/check_device_re";
+    /**获取进度条信息*/
+    String Url_Get_Num= UrlBase + "Device/get_num";
+
     /**
      * 获取验证的token
      */
@@ -154,4 +158,6 @@ public interface Urls {
     String Delete_Device = UrlBase +"Device/del_dev";
     /**检查更新*/
     String Url_Check_Update = UrlBase +"Index/version_change";
+
+
 }

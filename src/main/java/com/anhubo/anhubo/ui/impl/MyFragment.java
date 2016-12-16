@@ -270,7 +270,7 @@ public class MyFragment extends BaseFragment {
                     @Override
                     public void onError(Call call, Exception e) {
 
-                        System.out.println("MyFragment获取头像+++===" + e.getMessage());
+                        System.out.println("MyFragment设置头像头像+++===" + e.getMessage());
                     }
 
                     @Override

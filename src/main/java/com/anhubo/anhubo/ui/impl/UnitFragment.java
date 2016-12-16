@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -24,6 +25,7 @@ import com.anhubo.anhubo.bean.UnitBean;
 import com.anhubo.anhubo.bean.Unit_Invate_WorkMateBean;
 import com.anhubo.anhubo.bean.Unit_PlanBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.ui.activity.unitDetial.HuBaoPlanActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.MsgPerfectActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.QrScanActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.Unit2Study;
@@ -250,7 +252,6 @@ public class UnitFragment extends BaseFragment {
     }
 
     private boolean isLoading = false;// 页面已经加载过
-    private boolean isSucceed = false;// 记录数据是否获取成功
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -317,7 +318,7 @@ public class UnitFragment extends BaseFragment {
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("BuildFragment互助计划+++===" + response);
+//            System.out.println("BuildFragment互助计划+++===" + response);
             Build_Help_Plan_Bean bean = new Gson().fromJson(response, Build_Help_Plan_Bean.class);
             if (bean != null) {
                 int code = bean.code;
@@ -342,7 +343,7 @@ public class UnitFragment extends BaseFragment {
     private void getPlanData() {
 
         certs = new ArrayList<>();
-        uid = SpUtils.getStringParam(mActivity, Keys.UID);
+
         //　互保计划　请求网络
 
         String url = Urls.Url_Unit_Plan;
@@ -454,9 +455,6 @@ public class UnitFragment extends BaseFragment {
 
             list.clear();
             if (bean != null) {
-                // 表示获取到了真实的数据且不为空
-                isSucceed = true;
-
                 data = bean.data;
                 // 获取到数据
                 datatime = data.datatime;
@@ -565,6 +563,7 @@ public class UnitFragment extends BaseFragment {
 
     @Override
     public void processClick(View v) {
+        uid = SpUtils.getStringParam(mActivity, Keys.UID);
         switch (v.getId()) {
 
             case R.id.ivTopBarleft_unit_menu:// 执行记录
@@ -669,6 +668,7 @@ public class UnitFragment extends BaseFragment {
      * 邀请同事网络请求
      */
     private void invateWorkMate(String phone) {
+
         String[] split = Utils.getAppInfo(mActivity).split("#");
         versionName = split[1];
 
@@ -720,9 +720,23 @@ public class UnitFragment extends BaseFragment {
         myPolygonBean.setArea(arrScores);
         return myPolygonBean;
     }
+
+
     @Override
     public void initData() {
-
+        lvUnit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Build_Help_Plan_Bean.Data.Plans plan = plans.get(position-1);
+                String planId = plan.plan_id;
+                String massId = plan.mass_id;
+                Intent intent = new Intent();
+                intent.setClass(mActivity,HuBaoPlanActivity.class);
+                intent.putExtra(Keys.PLANID, planId);
+                intent.putExtra(Keys.MASSID, massId);
+                startActivity(intent);
+            }
+        });
 
     }
 

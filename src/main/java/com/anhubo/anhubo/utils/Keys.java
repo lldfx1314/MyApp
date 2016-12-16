@@ -160,4 +160,8 @@ public interface Keys {
     String DRILL_TIME = "drill_time";
     /**反馈标签传递内容*/
     String REQUIRE_LIST = "require_list";
+    /**互保计划  planId*/
+    String PLANID = "planId";
+    /**互保计划  massId*/
+    String MASSID = "massId";
 }

@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.anhubo.anhubo.R;
 
 import butterknife.ButterKnife;
+import cn.jpush.android.api.JPushInterface;
 
 /**
  * Created by Administrator on 2016/9/18.
@@ -103,7 +104,18 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     }
 
+    @Override
+    protected void onResume() {
+        JPushInterface.onResume(this);
+        super.onResume();
+    }
 
+
+    @Override
+    protected void onPause() {
+        JPushInterface.onPause(this);
+        super.onPause();
+    }
 
 
     /**
