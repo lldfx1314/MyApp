@@ -54,7 +54,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_LOGS" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!--<uses-permission android:name="android.permission.CALL_PHONE" />-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -138,16 +138,7 @@
         <activity
             android:name=".ui.activity.Login_Register.Login_Message"
             android:screenOrientation="portrait"></activity>
-        <!--友盟meta-data-->
-        <meta-data
-            android:name="UMENG_APPKEY" android:value="561cae6ae0f55abd990035bf"></meta-data>
 
-        <!--高德服务-->
-        <service android:name="com.amap.api.location.APSService"></service>
-        <!--高德meta-data-->
-        <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="a302f9a3355d276c96844f55c2b6ffd5"/>
         <!--单位界面-->
         <activity
             android:name=".ui.activity.unitDetial.Add_Device_Activity"
@@ -335,11 +326,21 @@
                 <category android:name="${applicationId}"/>
             </intent-filter>
         </receiver>
-
-        <!-- Required . Enable it you can get statistics data with channel -->
+        <!--极光-->
         <meta-data android:name="JPUSH_CHANNEL" android:value="developer-default"/>
         <meta-data android:name="JPUSH_APPKEY" android:value="4c79125d89e7344f623afb9a"/>
-        <!--**************************极光*****************************-->
+
+        <!--友盟-->
+        <!--友盟561cae6ae0f55abd990035bf-->
+        <meta-data android:name="UMENG_APPKEY" android:value="5819590dcae7e74aff00035c"></meta-data>
+        <meta-data android:value="ying_yong_bao" android:name="UMENG_CHANNEL"/>
+        <!--高德服务-->
+        <service android:name="com.amap.api.location.APSService"></service>
+        <!--高德meta-data-->
+        <meta-data android:name="com.amap.api.v2.apikey" android:value="a302f9a3355d276c96844f55c2b6ffd5"/>
+
+
+
 
 
     </application>

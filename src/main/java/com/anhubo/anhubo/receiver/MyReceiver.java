@@ -13,6 +13,7 @@ import com.anhubo.anhubo.ui.activity.HomeActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.UnitMsgCenterActivity;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
+import com.anhubo.anhubo.utils.Utils;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -39,18 +40,20 @@ public class MyReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         mContent = context;
+        String deviceId = Utils.getDeviceId(mContent);
         Bundle bundle = intent.getExtras();
         //System.out.println( "[MyReceiver] onReceive - " + intent.getAction() + ", extras: " + printBundle(bundle));
         if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
             String registration_id = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
-            System.out.println("registration_id********" + registration_id);
+//            System.out.println("registration_id********++" + registration_id);
+//            System.out.println("deviceId********++" + deviceId);
             // 把这个registration_id上传到服务器
             String uid = SpUtils.getStringParam(mContent, Keys.UID);
             String url = Urls.Url_Registration_Id;
             HashMap<String, String> params = new HashMap<>();
-/*device_token*/
+            /**/
             params.put("uid", uid);
-
+            params.put("device_token", deviceId);
             params.put("registration_id", registration_id);
 
             OkHttpUtils.post()//

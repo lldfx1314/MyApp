@@ -25,6 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
 import cn.jpush.android.api.JPushInterface;
@@ -107,6 +108,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onResume() {
         JPushInterface.onResume(this);
+        // 友盟
+        MobclickAgent.onResume(this);
         super.onResume();
     }
 
@@ -114,6 +117,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onPause() {
         JPushInterface.onPause(this);
+        MobclickAgent.onPause(this);
         super.onPause();
     }
 

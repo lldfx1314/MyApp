@@ -4,15 +4,12 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
-import com.yolanda.nohttp.NoHttp;
-import com.yolanda.nohttp.rest.RequestQueue;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.util.concurrent.TimeUnit;
-
-import cn.jpush.android.api.JPushInterface;
 
 /**
  * Created by Administrator on 2016/9/18.
@@ -21,7 +18,6 @@ public class MyApp extends Application {
     public static MyApp mInstance;
     private static Context context;
     private static Handler handler;
-    private static RequestQueue requestQueue;	// NoHttp的请求列表
     /**微信appKey*/
     {
         PlatformConfig.setWeixin("wx368b75520f5563b1", "ebf8da8d9862308a026173fa8cf4313a");
@@ -38,18 +34,17 @@ public class MyApp extends Application {
         //crashHandler.init(getApplicationContext());
 
         // 极光推送
-//        JPushInterface.setDebugMode(true); 	// 设置开启日志,发布时请关闭日志
 //        JPushInterface.init(this);     		// 初始化 JPush
-
 
         // 友盟
         UMShareAPI.get(this);
 
+//        禁止默认的页面统计方式，这样将不会再自动统计Activity
+//        MobclickAgent.openActivityDurationTrack(false);
+
         mInstance=MyApp.this;
         context = this;
         handler = new Handler();
-        NoHttp.initialize(this);	// 初始化NoHttp
-        requestQueue = NoHttp.newRequestQueue();	// 创建一个请求队列
         // OkHttp
         OkHttpUtils.getInstance().debug("OkHttpUtils").setConnectTimeout(20000, TimeUnit.MILLISECONDS);
         //使用https，但是默认信任全部证书
@@ -73,9 +68,5 @@ public class MyApp extends Application {
         return handler;
     }
 
-    /** 获取NoHttp的请求列表 */
-    public static RequestQueue getRequestQueue() {
-        return requestQueue;
-    }
-    
+
 }

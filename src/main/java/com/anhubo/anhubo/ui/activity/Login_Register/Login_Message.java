@@ -57,6 +57,7 @@ public class Login_Message extends BaseActivity {
     private String screen_name;
     private String newUnionid;
     private String unionid;
+    private UMShareAPI mShareAPI;
 
 
     @Override
@@ -138,37 +139,55 @@ public class Login_Message extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.ib_weichat://跳到微信界面
-                UMShareAPI mShareAPI = UMShareAPI.get(Login_Message.this);
+                mShareAPI = UMShareAPI.get(Login_Message.this);
                 mShareAPI.doOauthVerify(Login_Message.this, SHARE_MEDIA.WEIXIN, umAuthListener);//授权
-                mShareAPI.getPlatformInfo(mActivity, SHARE_MEDIA.WEIXIN, umAuthListener1);//获取用户信息
+
                 break;
         }
 
     }
 
-    private UMAuthListener umAuthListener1 = new UMAuthListener() {
+    /**微信授权*/
+    private UMAuthListener umAuthListener = new UMAuthListener() {
+        @Override
+        public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+            //ToastUtils.showToast(mActivity, "授权成功");
+            mShareAPI.getPlatformInfo(mActivity, SHARE_MEDIA.WEIXIN, umGetUserInfoListener);//获取用户信息
+
+        }
+
+
+        @Override
+        public void onError(SHARE_MEDIA platform, int action, Throwable t) {
+            ToastUtils.showToast(mActivity, "登录失败");
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform, int action) {
+            ToastUtils.showToast(mActivity, "取消登录");
+        }
+    };
+    /**
+     * 获取微信详细信息
+     */
+    private UMAuthListener umGetUserInfoListener = new UMAuthListener() {
         @Override
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-            if (map != null) {
-                //转换为set
+            // 从map结合里面获取unionid
+            unionid = map.get("unionid");
 
-                Set<String> keySet = map.keySet();
+            /**微信授权后走的微信登录接口*/
+            String url = Urls.Url_LoginWEIXIN;
+            // 封装请求参数
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("reg_mode", 2 + "");// 2代表微信
+            params.put("unique_id", unionid);
 
-                //遍历循环，得到里面的key值----用户名，头像....
-
-                for (String string : keySet) {
-                    //打印下
-                    //System.out.println("==========11111111111=="+string);
-                    // 打印完获取到的信息在下面
-                   /* unionid profile_image_url country screen_name access_token city gender province
-                    language expires_in refresh_token openid*/
-                    //我需要的 uid unionid 头像 profile_image_url   姓名  screen_name
-                }
-                newUnionid = map.get("unionid");
-                profile_image_url = map.get("profile_image_url");
-                screen_name = map.get("screen_name");
-
-            }
+            OkHttpUtils.post()//
+                    .url(url)//
+                    .params(params)//
+                    .build()//
+                    .execute(new MyStringCallback3());
         }
 
         @Override
@@ -182,58 +201,9 @@ public class Login_Message extends BaseActivity {
         }
     };
 
-    private UMAuthListener umAuthListener = new UMAuthListener() {
-        @Override
-        public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-            //ToastUtils.showToast(mActivity, "授权成功");
-
-            //转换为set
-
-            Set<String> keySet = data.keySet();
-
-            //遍历循环，得到里面的key值----用户名，头像....
-
-            for (String string : keySet) {
-                //打印下
-                //System.out.println("==========11111111111==========string111111111"+string);
-                /*unionid scope  expires_in access_token openid  refresh_token*/
-            }
-
-            //得到key值得话，可以直接的到value
-
-            unionid = data.get("unionid");
-
-            /**微信授权后走的微信登录接口*/
-            String url = Urls.Url_LoginWEIXIN;
-            // 封装请求参数
-            HashMap<String, String> params = new HashMap<String, String>();
-            params.put("reg_mode", 2 + "");
-            params.put("unique_id", unionid);
-
-            OkHttpUtils.post()//
-                    .url(url)//
-                    .params(params)//
-                    .build()//
-                    .execute(new MyStringCallback3());
-        }
 
 
-        @Override
-        public void onError(SHARE_MEDIA platform, int action, Throwable t) {
-            ToastUtils.showToast(mActivity, "授权失败");
-        }
-
-        @Override
-        public void onCancel(SHARE_MEDIA platform, int action) {
-            ToastUtils.showToast(mActivity, "授权取消");
-        }
-    };
-
-    @Override
-    public void onSystemUiVisibilityChange(int visibility) {
-
-    }
-
+    /**微信登录*/
     class MyStringCallback3 extends StringCallback {
         @Override
         public void onError(okhttp3.Call call, Exception e) {
@@ -274,7 +244,6 @@ public class Login_Message extends BaseActivity {
                     intent.putExtra(Keys.WEIXINFORZHUCE,"weixinforzhuce");
                     intent.putExtra(Keys.UNIONID,unionid);
                     intent.putExtra(Keys.PROFILE_IMAGE_URL,profile_image_url);
-                    System.out.println("hduiewhfi7777777777+++===="+profile_image_url);
                     intent.putExtra(Keys.SCREEN_NAME,screen_name);
                     startActivity(intent);
                 }
@@ -556,5 +525,10 @@ public class Login_Message extends BaseActivity {
         phoneNumber = etLoginMsgphoneNumber.getText().toString().trim();
         //验证码
         securityCode = etLoginMsgSecurity.getText().toString().trim();
+    }
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
     }
 }

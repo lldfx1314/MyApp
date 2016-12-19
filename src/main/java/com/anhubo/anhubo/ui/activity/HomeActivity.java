@@ -43,8 +43,6 @@ import okhttp3.Call;
 
 public class HomeActivity extends BaseActivity {
 
-    private static final int DOWN_ERROR = 1;
-    private static final int UPDATA_CLIENT = 2;
     @InjectView(R.id.viewpager)
     NoScrollViewPager viewpager;
 
@@ -53,8 +51,6 @@ public class HomeActivity extends BaseActivity {
     private ArrayList<Fragment> list;
     private long exitTime = 0;
     public static boolean isForeground = false;
-    private String versionName;
-    private String url;
 
     @Override
     protected void initConfig() {

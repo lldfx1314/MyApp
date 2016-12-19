@@ -54,6 +54,7 @@ public class FeedbackSuccessActivity extends BaseActivity {
         wvFeedback.setWebViewClient(new WebViewClient() {
             //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                progressBar.setVisibility(View.VISIBLE);
                 view.loadUrl(url);
                 return true;
             }

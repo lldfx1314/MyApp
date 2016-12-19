@@ -309,7 +309,7 @@ public class UploadingActivity2 extends BaseActivity {
         //filePhoto01 = new File(filename);//图片的文件
         try {
             fout = new FileOutputStream(filename);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fout);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fout);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -345,7 +345,7 @@ public class UploadingActivity2 extends BaseActivity {
         try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新写入内容会被覆盖
             //fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
             OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() + "/" + fileName);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);// 把图片写入指定文件夹中
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);// 把图片写入指定文件夹中
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -361,29 +361,6 @@ public class UploadingActivity2 extends BaseActivity {
         }
     }
 
-    /**
-     * 保存图片到本应用下
-     **/
-    private void savePicture(String fileName, Bitmap bitmap) {
-
-        FileOutputStream fos = null;
-        try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新内容写入会被覆盖
-            fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);// 把图片写入指定文件夹中
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (null != fos) {
-                    fos.close();
-                    fos = null;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     /**
      * 创建图片不同的文件名

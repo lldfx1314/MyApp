@@ -132,9 +132,8 @@ public class PersonMsgActivity extends BaseActivity {
     private PopGenderHelper popGenderHelper;
     private String newGender;
     private String newAge;
-    private String screenname;
-    public static boolean isSetHeadIcon = false;// 记录自己是否设置过头像
     private String buildingName;
+    private UMShareAPI mShareAPI;
 
     @Override
     protected void initConfig() {
@@ -153,8 +152,6 @@ public class PersonMsgActivity extends BaseActivity {
             weiboName = bean.data.weibo_name;
             weixinName = bean.data.weixin_name;
         }
-        // 进来页面后取出微信昵称
-        screenname = SpUtils.getStringParam(mActivity, Keys.SCREENNAME, null);
 
 
     }
@@ -167,9 +164,7 @@ public class PersonMsgActivity extends BaseActivity {
     @Override
     protected void initViews() {
         setTopBarDesc("个人信息");
-        if (!TextUtils.isEmpty(screenname)) {
-            tvMyWechat.setText(screenname);
-        }
+
     }
 
 
@@ -177,63 +172,6 @@ public class PersonMsgActivity extends BaseActivity {
     protected void onLoadDatas() {
 
     }
-
-    @OnClick({R.id.ll_psHeaderIcon, R.id.ll_psUsername, R.id.et_my_username, R.id.ll_psAge, R.id.ll_psGender, R.id.ll_psPhone, R.id.ll_pspwd, R.id.ll_psCertification, R.id.ll_psUnit, R.id.ll_psWeChat})
-    public void onClick(View view) {
-        // 获取uid
-        uid = SpUtils.getStringParam(mActivity, Keys.UID);
-        //System.out.println("111uid是+++===" + uid);
-        switch (view.getId()) {
-            case R.id.ll_psHeaderIcon:
-                /**弹出拍照对话框*/
-                showDialog();
-                break;
-            case R.id.ll_psUsername:
-                /**修改用户名*/
-                alterName();
-                break;
-            case R.id.et_my_username:
-                break;
-            case R.id.ll_psAge:
-                /**年龄弹窗*/
-                popBirthHelper.show(llPsAge);
-                break;
-            case R.id.ll_psGender:
-                /**性别弹窗*/
-                popGenderHelper.show(llPsGender);
-                break;
-            case R.id.ll_psPhone:
-                //手机号码
-                break;
-            case R.id.ll_pspwd:
-                // 密码修改
-                alterPwd();
-                break;
-            case R.id.ll_psCertification:
-                // 实名认证
-                certification();
-                break;
-            case R.id.ll_psUnit:
-                // 所属单位
-                alterUnit();
-                break;
-            case R.id.ll_psWeChat:
-                //微信
-                UMShareAPI mShareAPI = UMShareAPI.get(mActivity);
-                //mShareAPI.doOauthVerify(mActivity, SHARE_MEDIA.WEIXIN, umAuthListener);//授权
-                mShareAPI.getPlatformInfo(mActivity, SHARE_MEDIA.WEIXIN, umAuthListener1);//获取用户信息
-                break;
-            case R.id.btn_popDialog_takephoto:
-                // 拍照
-                takePhoto();
-                break;
-            case R.id.btn_popDialog_photo:
-                // 相册
-                getPhoto();
-                break;
-        }
-    }
-
 
     @Override
     protected void initEvents() {
@@ -282,13 +220,97 @@ public class PersonMsgActivity extends BaseActivity {
         alterGender();
     }
 
+    @OnClick({R.id.ll_psHeaderIcon, R.id.ll_psUsername, R.id.et_my_username, R.id.ll_psAge, R.id.ll_psGender, R.id.ll_psPhone, R.id.ll_pspwd, R.id.ll_psCertification, R.id.ll_psUnit, R.id.ll_psWeChat})
+    public void onClick(View view) {
+        // 获取uid
+        uid = SpUtils.getStringParam(mActivity, Keys.UID);
+        //System.out.println("111uid是+++===" + uid);
+        switch (view.getId()) {
+            case R.id.ll_psHeaderIcon:
+                /**弹出拍照对话框*/
+                showDialog();
+                break;
+            case R.id.ll_psUsername:
+                /**修改用户名*/
+                alterName();
+                break;
+            case R.id.et_my_username:
+                break;
+            case R.id.ll_psAge:
+                /**年龄弹窗*/
+                popBirthHelper.show(llPsAge);
+                break;
+            case R.id.ll_psGender:
+                /**性别弹窗*/
+                popGenderHelper.show(llPsGender);
+                break;
+            case R.id.ll_psPhone:
+                //手机号码
+                break;
+            case R.id.ll_pspwd:
+                // 密码修改
+                alterPwd();
+                break;
+            case R.id.ll_psCertification:
+                // 实名认证
+                certification();
+                break;
+            case R.id.ll_psUnit:
+                // 所属单位
+                alterUnit();
+                break;
+            case R.id.ll_psWeChat:
+                //微信
+                mShareAPI = UMShareAPI.get(mActivity);
+                boolean authorize = mShareAPI.isAuthorize(mActivity, SHARE_MEDIA.WEIXIN);
+//                if (!authorize) {
+                    mShareAPI.doOauthVerify(mActivity, SHARE_MEDIA.WEIXIN, umAuthListener);//授权
+//                }else{
+////                    ToastUtils.showToast(mActivity,"别点了，已经授权了");
+//                }
+
+                break;
+            case R.id.btn_popDialog_takephoto:
+                // 拍照
+                takePhoto();
+                break;
+            case R.id.btn_popDialog_photo:
+                // 相册
+                getPhoto();
+                break;
+        }
+    }
+
+
+    /**
+     * 微信授权
+     */
+
+    private UMAuthListener umAuthListener = new UMAuthListener() {
+        @Override
+        public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+            // 授权成功
+            mShareAPI.getPlatformInfo(mActivity, SHARE_MEDIA.WEIXIN, umGetUserInfoListener);//获取用户信息
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+            ToastUtils.showToast(mActivity, "绑定失败");
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media, int i) {
+            ToastUtils.showToast(mActivity, "取消绑定");
+        }
+    };
+
     private String unionid;
     private String profileImageUrl;
     private String screenName;
     /**
-     * 微信绑定
+     * 获取微信详细信息
      */
-    private UMAuthListener umAuthListener1 = new UMAuthListener() {
+    private UMAuthListener umGetUserInfoListener = new UMAuthListener() {
         @Override
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
             if (map != null) {
@@ -312,13 +334,13 @@ public class PersonMsgActivity extends BaseActivity {
 
             }
 
-            /**微信授权后走的微信登录接口*/
+            /**获取微信信息后走绑定接口*/
             String url = Urls.Url_BindWEIXIN;
             // 封装请求参数
             HashMap<String, String> params = new HashMap<String, String>();
 
             params.put("uid", uid);
-            params.put("third_type", 2 + "");
+            params.put("third_type", 2 + "");// 2代表微信
             params.put("unique_name", screenName);
             params.put("unique_id", unionid);
             params.put("pic_url", profileImageUrl);
@@ -333,20 +355,14 @@ public class PersonMsgActivity extends BaseActivity {
 
         @Override
         public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-            ToastUtils.showToast(mActivity, "授权失败");
+
         }
 
         @Override
         public void onCancel(SHARE_MEDIA share_media, int i) {
-            ToastUtils.showToast(mActivity, "授权取消");
+
         }
     };
-
-    @Override
-    public void onSystemUiVisibilityChange(int visibility) {
-
-    }
-
 
     class MyStringCallback5 extends StringCallback {
         @Override
@@ -358,30 +374,31 @@ public class PersonMsgActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-//            System.out.println("绑定微信"+response);
+//            System.out.println("PersonMsgActivity界面+绑定微信+"+response);
             PersonMsgBindBean bean = new Gson().fromJson(response, PersonMsgBindBean.class);
             if (bean != null) {
                 int code = bean.code;
                 if (code == 0) {
-                    if (!isSetHeadIcon) {
+                    if (TextUtils.isEmpty(img)) {
                         // 代表用户没设置过自己的头像，因此显示自己的微信头像
                         setHeaderIcon(profileImageUrl);
-
 
                         // 设置完后通知我的界面也改变显示内容
                         Intent intent = new Intent();
                         intent.putExtra(Keys.HEADERICON_WEIXIN, profileImageUrl);
                         setResult(5, intent);
                     }
+                    // 显示微信名
                     tvMyWechat.setText(screenName);
-                    // 把微信名也要记录下来，下次进来的时候显示
-                    SpUtils.putParam(mActivity, Keys.SCREENNAME, screenName);
-
-
                 }
 
             }
         }
+    }
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
     }
 
     /**
@@ -604,9 +621,7 @@ public class PersonMsgActivity extends BaseActivity {
         // 记录是否修改过单位，以便于从我的界面进来后决定是否修改单位显示内容，因为修改完返回到我的界面是不请求网络的，此时要是进入PersonMsgActivity界面，单位显示的必然是修改之前的单位
         boolean isalterUnit = SpUtils.getBooleanParam(mActivity, Keys.ISALTERUNIT, false);
         String newBusinessName = SpUtils.getStringParam(mActivity, Keys.NEWBUSINESSNAME);
-        if (!TextUtils.isEmpty(img)) {
-            isSetHeadIcon = true;
-        }
+
         if (!TextUtils.isEmpty(name)) {
             etMyUsername.setText(name);
         }
@@ -655,10 +670,13 @@ public class PersonMsgActivity extends BaseActivity {
      */
     private void alterName() {
         // 先弹出键盘,让焦点在输入框上
-        etMyUsername.requestFocus();// 获取焦点
+
+        etMyUsername.requestFocus(); // 获取焦点
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
+//        imm.showSoftInput(llPsUsername, InputMethodManager.SHOW_FORCED);
         if (imm.isActive()) {
+            System.out.println("点击了");
             // 获取焦点,先设置光标遇到最后，然后监听输入框的动态变化
             etMyUsername.setSelection(etMyUsername.length());
             listenetMyUsername();
@@ -689,7 +707,7 @@ public class PersonMsgActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {
                 newName = s.toString();
                 //延迟2s，如果不再输入字符，则执行该线程的run方法，取消输入框的焦点
-                handler.postDelayed(delayRun, 2000);
+                handler.postDelayed(delayRun, 1000);
             }
         });
     }
@@ -772,8 +790,6 @@ public class PersonMsgActivity extends BaseActivity {
             }
         }
         if (isShow) {
-            // 记录头像已经设置过
-            isSetHeadIcon = true;
 
             // 说明图片已经显示，上传头像到网络
             upLoading();
@@ -832,8 +848,6 @@ public class PersonMsgActivity extends BaseActivity {
                 if (code != 0) {
                     ToastUtils.showToast(mActivity, msg);
                 } else {
-                    // code = 0，保存成功
-
                     ToastUtils.showToast(mActivity, "保存成功");
                     Intent intent = new Intent();
                     intent.putExtra(Keys.HEADERICON, img1);
@@ -937,7 +951,7 @@ public class PersonMsgActivity extends BaseActivity {
         try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新写入内容会被覆盖
             //fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
             OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() + "/" + fileName);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);// 把图片写入指定文件夹中
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);// 把图片写入指定文件夹中
 
         } catch (Exception e) {
             e.printStackTrace();

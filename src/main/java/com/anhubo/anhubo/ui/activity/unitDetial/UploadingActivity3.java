@@ -265,7 +265,7 @@ public class UploadingActivity3 extends BaseActivity {
         String filename = file.getPath() + name;
         try {
             fout = new FileOutputStream(filename);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fout);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fout);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -294,7 +294,7 @@ public class UploadingActivity3 extends BaseActivity {
         try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新写入内容会被覆盖
             //fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
             OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() +"/"+fileName);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);// 把图片写入指定文件夹中
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);// 把图片写入指定文件夹中
 
         } catch (Exception e) {
             e.printStackTrace();

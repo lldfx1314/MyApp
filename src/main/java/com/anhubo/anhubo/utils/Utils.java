@@ -5,7 +5,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.CountDownTimer;
+import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,6 +17,15 @@ import android.widget.TextView;
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.view.ShowBottonDialog;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,9 +35,6 @@ import java.util.regex.Pattern;
  */
 public class Utils {
 
-    private static Dialog dialog;
-    private static Button btnTakephoto;
-    private static Button btnPhoto;
 
     /**
      * 判断手机号码是否合法
@@ -108,11 +118,52 @@ public class Utils {
         return null;
     }
 
-    /** 把dp单位的值转换为px单位的值 */
-   /* public static int dp2px(int dp) {
-        // 获取手机的屏幕密度，不同手机的屏幕密度可能不一样
-        float density = getResources().getDisplayMetrics().density;
-        return (int) (dp * density + 0.5);	// 加0.5是为了把结果四舍五入
-    }*/
+    public static String getDeviceId(Context context) {
+        String deviceId = "";
 
+        if (deviceId == null || "".equals(deviceId)) {
+            try {
+                deviceId = getLocalMac(context).replace(":", "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (deviceId == null || "".equals(deviceId)) {
+            try {
+                deviceId = getAndroidId(context);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (deviceId == null || "".equals(deviceId)) {
+
+            if (deviceId == null || "".equals(deviceId)) {
+                UUID uuid = UUID.randomUUID();
+                deviceId = uuid.toString().replace("-", "");
+            }
+        }
+        return deviceId;
+    }
+    // IMEI码
+    private static String getIMIEStatus(Context context) {
+        TelephonyManager tm = (TelephonyManager) context
+                .getSystemService(Context.TELEPHONY_SERVICE);
+        String deviceId = tm.getDeviceId();
+        return deviceId;
+    }
+
+    // Mac地址
+    private static String getLocalMac(Context context) {
+        WifiManager wifi = (WifiManager) context
+                .getSystemService(Context.WIFI_SERVICE);
+        WifiInfo info = wifi.getConnectionInfo();
+        return info.getMacAddress();
+    }
+
+    // Android Id
+    private static String getAndroidId(Context context) {
+        String androidId = Settings.Secure.getString(
+                context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        return androidId;
+    }
 }
