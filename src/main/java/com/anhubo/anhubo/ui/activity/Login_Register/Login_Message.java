@@ -55,7 +55,6 @@ public class Login_Message extends BaseActivity {
     private ImageButton ibWeichat;
     private String profile_image_url;
     private String screen_name;
-    private String newUnionid;
     private String unionid;
     private UMShareAPI mShareAPI;
 
@@ -175,6 +174,8 @@ public class Login_Message extends BaseActivity {
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
             // 从map结合里面获取unionid
             unionid = map.get("unionid");
+            profile_image_url = map.get("profile_image_url");
+            screen_name = map.get("screen_name");
 
             /**微信授权后走的微信登录接口*/
             String url = Urls.Url_LoginWEIXIN;

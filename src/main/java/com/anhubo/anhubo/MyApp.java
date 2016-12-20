@@ -33,9 +33,6 @@ public class MyApp extends Application {
         // 注册crashHandler
         //crashHandler.init(getApplicationContext());
 
-        // 极光推送
-//        JPushInterface.init(this);     		// 初始化 JPush
-
         // 友盟
         UMShareAPI.get(this);
 
@@ -46,7 +43,7 @@ public class MyApp extends Application {
         context = this;
         handler = new Handler();
         // OkHttp
-        OkHttpUtils.getInstance().debug("OkHttpUtils").setConnectTimeout(20000, TimeUnit.MILLISECONDS);
+        OkHttpUtils.getInstance().debug("OkHttpUtils").setConnectTimeout(60000, TimeUnit.MILLISECONDS);
         //使用https，但是默认信任全部证书
         OkHttpUtils.getInstance().setCertificates();
     }

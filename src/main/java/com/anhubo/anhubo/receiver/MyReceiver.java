@@ -45,7 +45,7 @@ public class MyReceiver extends BroadcastReceiver {
         //System.out.println( "[MyReceiver] onReceive - " + intent.getAction() + ", extras: " + printBundle(bundle));
         if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
             String registration_id = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
-//            System.out.println("registration_id********++" + registration_id);
+            System.out.println("registration_id********++" + registration_id);
 //            System.out.println("deviceId********++" + deviceId);
             // 把这个registration_id上传到服务器
             String uid = SpUtils.getStringParam(mContent, Keys.UID);
@@ -114,7 +114,7 @@ public class MyReceiver extends BroadcastReceiver {
 
     // 发消息给HomeActivity
     private void processCustomMessage(Context context, Bundle bundle) {
-        if (HomeActivity.isForeground) {
+        if (HomeActivity.isForeground) {// 判断程序是否处于前台
             String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
             String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
             Intent msgIntent = new Intent(HomeActivity.MESSAGE_RECEIVED_ACTION);

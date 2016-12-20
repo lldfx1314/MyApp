@@ -673,10 +673,8 @@ public class PersonMsgActivity extends BaseActivity {
 
         etMyUsername.requestFocus(); // 获取焦点
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
-//        imm.showSoftInput(llPsUsername, InputMethodManager.SHOW_FORCED);
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
         if (imm.isActive()) {
-            System.out.println("点击了");
             // 获取焦点,先设置光标遇到最后，然后监听输入框的动态变化
             etMyUsername.setSelection(etMyUsername.length());
             listenetMyUsername();

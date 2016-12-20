@@ -53,7 +53,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private String pwd;
     private String inviteCode;
     private Button btnRegphoneNumber;
-    private int uid = 0;
     private boolean pwdIsVisible = false;//记录密码是否显示
     private Button btnRegPwdIsVisible;
     private TextView tvDeal;
@@ -285,13 +284,14 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             // 再次请求网络，获取uid
             //System.out.println("=======正常注册=======");
             getUId();
-        }else if(!TextUtils.isEmpty(weixinforzhuce)){
+        } else if (!TextUtils.isEmpty(weixinforzhuce)) {
             //System.out.println("=======微信注册=======");
             getUId_weixin();
         }
         /*Intent intent = new Intent(RegisterActivity.this, RegisterActivity2.class);
         startActivity(intent);*/
     }
+
     /**
      * 网络请求
      * 微信注册的网络请求
@@ -301,9 +301,14 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         // 封装请求参数
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("telphone", phoneNumber);
+
         params.put("verify_code", securityCode);
+
         params.put("password", pwd);
-        params.put("users_qrcode", inviteCode);
+
+        if (!TextUtils.isEmpty(inviteCode)) {
+            params.put("users_qrcode", inviteCode);
+        }
 
         params.put("third_type", 2 + "");//第三方类型，2代表微信
         params.put("pic_url", imageUrl);// 头像
@@ -317,7 +322,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 .execute(new MyStringCallback3());
     }
 
-    class MyStringCallback3 extends StringCallback{
+    class MyStringCallback3 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
             System.out.println("RegisterActivity+++===微信没拿到数据" + e.getMessage());
@@ -363,7 +368,10 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         params.put("telphone", phoneNumber);
         params.put("verify_code", securityCode);
         params.put("password", pwd);
-        params.put("users_qrcode", inviteCode);
+        if (!TextUtils.isEmpty(inviteCode)) {
+
+            params.put("users_qrcode", inviteCode);
+        }
 
         OkHttpUtils.post()//
                 .url(url)//

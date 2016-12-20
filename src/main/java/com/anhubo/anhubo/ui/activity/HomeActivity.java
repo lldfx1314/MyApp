@@ -20,6 +20,7 @@ import com.anhubo.anhubo.ui.impl.BuildFragment;
 import com.anhubo.anhubo.ui.impl.FindFragment;
 import com.anhubo.anhubo.ui.impl.MyFragment;
 import com.anhubo.anhubo.ui.impl.UnitFragment;
+import com.anhubo.anhubo.utils.JPushManager;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
@@ -64,10 +65,9 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
-//        // 极光推送
-        JPushInterface.setDebugMode(true);    // 设置开启日志,发布时请关闭日志
-        JPushInterface.init(this);            // 初始化 JPush
-        registerMessageReceiver();             // 注册广播
+        // 极光推送
+        JPushManager.newInstence(mActivity).initJPush();
+        registerMessageReceiver();     // 注册广播  用来处理接收到消息后弹出对话框提示用户
     }
 
     @Override
@@ -180,7 +180,7 @@ public class HomeActivity extends BaseActivity {
 
 
     private MessageReceiver mMessageReceiver;
-    public static final String MESSAGE_RECEIVED_ACTION = "com.anhubo.anhubo.MESSAGE_RECEIVED_ACTION";
+    public static final String MESSAGE_RECEIVED_ACTION = "MESSAGE_RECEIVED_ACTION";
     public static final String KEY_TITLE = "title";
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_EXTRAS = "extras";
@@ -248,6 +248,9 @@ public class HomeActivity extends BaseActivity {
                 .execute(new MyStringCallback());
     }
 
+    /**
+     * 同事修改单位
+     */
     class MyStringCallback extends StringCallback {
 
         @Override

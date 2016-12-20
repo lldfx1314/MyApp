@@ -75,8 +75,6 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     private boolean isEnter = false;
     private String cardNumber;
     private String deviceId;
-    /*用来记录是否获取到信息的变量*/
-    private boolean isGetCkeckInfo = false;
     private int deviceCheckedNum;
     private String devicesNum;
     private boolean isPermission;
@@ -208,7 +206,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
 
         @Override
         public void onResponse(String response) {
-            System.out.println("获取进度条信息+"+response);
+            //System.out.println("获取进度条信息+"+response);
             progressBar.setVisibility(View.GONE);
             CheckComplete_Bean bean = new Gson().fromJson(response, CheckComplete_Bean.class);
             if (bean != null) {
