@@ -92,13 +92,15 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:paddingTop="10dp">
-
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:background="@drawable/invate" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/invate"
-            android:drawablePadding="15dp"
+            android:layout_marginLeft="15dp"
             android:text="邀请注册"
             android:gravity="center_vertical"
             android:textColor="@color/black"
@@ -128,13 +130,15 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:paddingTop="10dp">
-
+        <ImageView
+            android:layout_width="14dp"
+            android:layout_height="16dp"
+            android:background="@drawable/order_manager" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/order_manager"
-            android:drawablePadding="15dp"
+            android:layout_marginLeft="15dp"
             android:text="订单管理"
             android:gravity="center_vertical"
             android:textColor="@color/black"
@@ -164,13 +168,15 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:paddingTop="10dp">
-
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:background="@drawable/setting" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/setting"
-            android:drawablePadding="15dp"
+            android:layout_marginLeft="15dp"
             android:text="设置"
             android:gravity="center_vertical"
             android:textColor="@color/black"

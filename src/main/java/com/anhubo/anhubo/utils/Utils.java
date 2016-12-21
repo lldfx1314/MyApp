@@ -12,6 +12,7 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
@@ -166,4 +167,13 @@ public class Utils {
                 context.getContentResolver(), Settings.Secure.ANDROID_ID);
         return androidId;
     }
+
+    /**把光标移动到指定输入框*/
+    public static void setEditTextSelection(EditText et) {
+        // 把焦点移动到验证码的输入框
+        et.requestFocus();
+        // 设置光标
+        et.setSelection(0);
+    }
+
 }

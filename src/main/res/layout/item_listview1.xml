@@ -18,7 +18,7 @@
             android:paddingLeft="10dp"
             android:text="单位常用设备"
             android:textColor="#232323"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 
 </LinearLayout>

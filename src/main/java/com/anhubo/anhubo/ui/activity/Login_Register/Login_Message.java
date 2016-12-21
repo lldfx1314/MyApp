@@ -62,8 +62,7 @@ public class Login_Message extends BaseActivity {
     @Override
     protected void initConfig() {
         super.initConfig();
-        // 第一次请求获取验证的token
-        getToken();
+
     }
 
 
@@ -121,8 +120,10 @@ public class Login_Message extends BaseActivity {
                 etLoginMsgphoneNumber.setText("");
                 break;
             case R.id.tv_loginMsg_security:// 获取验证码
+
                 // 定义一个方法获取验证码
                 getSecurityCode();
+
                 break;
             case R.id.btn_loginMsg:        // 登录
                 // 调用接口登录的方法
@@ -145,6 +146,7 @@ public class Login_Message extends BaseActivity {
         }
 
     }
+
 
     /**微信授权*/
     private UMAuthListener umAuthListener = new UMAuthListener() {
@@ -428,17 +430,51 @@ public class Login_Message extends BaseActivity {
      * 获取验证码
      */
     private void getSecuritys() {
-        /*// 第一次请求获取验证的token
-        getToken();*/
-        // 第二次请求获取验证码
-        if (token != null) {
-            // 第一次请求获取验证的token不为为空，则第二次请求获取验证码
-            getSecurity();
+        // 把光标移动到验证码输入框
+        Utils.setEditTextSelection(etLoginMsgSecurity);
+        // 第一次请求获取验证的token
+        getToken();
 
-        } else {
-            // 为空，则弹吐司提示用户
-            ToastUtils.showToast(mActivity, "网络有误，请稍后再点");
+    }
 
+    /**
+     * 第一次请求获取验证的token
+     */
+    private void getToken() {
+
+        String url = Urls.Url_Token;
+        OkHttpUtils.post()//
+                .url(url)//
+                .build()//
+                .execute(new MyStringCallback());
+
+
+    }
+
+    class MyStringCallback extends StringCallback {
+
+        @Override
+        public void onError(okhttp3.Call call, Exception e) {
+            System.out.println("Login_Message+++token===没拿到数据" + e.getMessage());
+        }
+
+        @Override
+        public void onResponse(String response) {
+            Security_Token_Bean bean = new Gson().fromJson(response, Security_Token_Bean.class);
+            if (bean != null) {
+                // 拿到checkCompleteBean，获取token
+                token = bean.data.token;
+                // 第二次请求获取验证码
+                if (token != null) {
+                    // 第一次请求获取验证的token不为为空，则第二次请求获取验证码
+                    getSecurity();
+
+                } else {
+                    // 为空，则弹吐司提示用户
+                    ToastUtils.showToast(mActivity, "网络有误，请稍后再点");
+
+                }
+            }
         }
     }
 
@@ -480,43 +516,7 @@ public class Login_Message extends BaseActivity {
     }
 
 
-    /**
-     * 第一次请求获取验证的token
-     */
-    private void getToken() {
 
-        String url = Urls.Url_Token;
-        OkHttpUtils.post()//
-                .url(url)//
-                .build()//
-                .execute(new MyStringCallback());
-
-
-    }
-
-    class MyStringCallback extends StringCallback {
-       /* @Override
-        public void onError(Call call, Exception e) {
-
-        }*/
-
-        @Override
-        public void onError(okhttp3.Call call, Exception e) {
-            System.out.println("Login_Message+++token===没拿到数据" + e.getMessage());
-        }
-
-        @Override
-        public void onResponse(String response) {
-            Security_Token_Bean bean = new Gson().fromJson(response, Security_Token_Bean.class);
-            if (bean != null) {
-                // 拿到checkCompleteBean，获取token
-                token = bean.data.token;
-            } else {
-                System.out.println("Login_Message+++===没拿到bean对象");
-
-            }
-        }
-    }
 
     /**
      * 获取输入的内容

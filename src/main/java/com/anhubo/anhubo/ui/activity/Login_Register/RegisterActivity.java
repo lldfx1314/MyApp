@@ -67,8 +67,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     @Override
     protected void initConfig() {
         super.initConfig();
-        // 第一次请求获取验证的token
-        getToken();
 
         loginforzhuce = getIntent().getStringExtra(Keys.LOGINFORZHUCE);
         weixinforzhuce = getIntent().getStringExtra(Keys.WEIXINFORZHUCE);
@@ -198,6 +196,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             case R.id.tv_reg_security: // 获取验证码
                 // 定义一个方法获取验证码
                 getSecurityCode();
+
                 break;
             case R.id.btn_reg_phoneNumber: // 号码的小圆叉
                 etRegphoneNumber.setText("");
@@ -229,7 +228,9 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         pwdIsVisible = !pwdIsVisible;
     }
 
-    /*获取输入的内容*/
+    /**
+     * 获取输入的内容
+     */
     private void getInputData() {
         //手机号
         phoneNumber = etRegphoneNumber.getText().toString().trim();
@@ -322,6 +323,9 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 .execute(new MyStringCallback3());
     }
 
+    /**
+     * 微信注册的网络请求
+     */
     class MyStringCallback3 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
@@ -464,17 +468,51 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
      * 获取验证码
      */
     private void getSecuritys() {
-        /*// 第一次请求获取验证的token
-        getToken();*/
-        // 第二次请求获取验证码
-        if (token != null) {
-            // 第一次请求获取验证的token不为为空，则第二次请求获取验证码
-            getSecurity();
+        // 把光标移动到验证码输入框
+        Utils.setEditTextSelection(etRegSecurity);
+        // 第一次请求获取验证的token
+        getToken();
 
-        } else {
-            // 为空，则弹吐司提示用户
-            ToastUtils.showToast(mActivity, "网络有误，请稍后再点");
+    }
 
+    /**
+     * 第一次请求获取验证的token
+     */
+    private void getToken() {
+
+        String url = Urls.Url_Token;
+        OkHttpUtils.post()//
+                .url(url)//
+                .build()//
+                .execute(new MyStringCallback1());
+    }
+
+    class MyStringCallback1 extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+            System.out.println("UnitMenuActivity+++token===没拿到数据" + e.getMessage());
+        }
+
+        @Override
+        public void onResponse(String response) {
+            Security_Token_Bean bean = new Gson().fromJson(response, Security_Token_Bean.class);
+            if (bean != null) {
+                // 拿到checkCompleteBean，获取token
+                token = bean.data.token;
+                // 第二次请求获取验证码
+                if (token != null) {
+                    // 第一次请求获取验证的token不为为空，则第二次请求获取验证码
+                    getSecurity();
+
+                } else {
+                    // 为空，则弹吐司提示用户
+                    ToastUtils.showToast(mActivity, "网络有误，请稍后再点");
+
+                }
+            } else {
+                System.out.println("Login_Message+++===没拿到bean对象");
+
+            }
         }
     }
 
@@ -508,38 +546,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         public void onResponse(String response) {
             Security_Bean bean = new Gson().fromJson(response, Security_Bean.class);
 
-        }
-    }
-
-
-    /**
-     * 第一次请求获取验证的token
-     */
-    private void getToken() {
-
-        String url = Urls.Url_Token;
-        OkHttpUtils.post()//
-                .url(url)//
-                .build()//
-                .execute(new MyStringCallback1());
-    }
-
-    class MyStringCallback1 extends StringCallback {
-        @Override
-        public void onError(Call call, Exception e) {
-            System.out.println("UnitMenuActivity+++token===没拿到数据" + e.getMessage());
-        }
-
-        @Override
-        public void onResponse(String response) {
-            Security_Token_Bean bean = new Gson().fromJson(response, Security_Token_Bean.class);
-            if (bean != null) {
-                // 拿到checkCompleteBean，获取token
-                token = bean.data.token;
-            } else {
-                System.out.println("Login_Message+++===没拿到bean对象");
-
-            }
         }
     }
 

@@ -325,7 +325,7 @@ public class UnitFragment extends BaseFragment {
                 String msg = bean.msg;
                 Build_Help_Plan_Bean.Data data = bean.data;
                 plans = data.plans;
-                if (code == 0 && !plans.isEmpty()) {
+                if (code == 0 && plans!=null&&plans.size()>0) {
                     adapter1 = new BuildAdapter(mActivity, plans);
                 } else {
                     adapter1 = new BuildAdapter(mActivity);

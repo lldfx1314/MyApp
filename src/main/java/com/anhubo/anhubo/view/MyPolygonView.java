@@ -54,7 +54,7 @@ public class MyPolygonView extends View {
     //文字颜色
     private int textColor = Color.parseColor("#D6D6D8");
     //区域颜色
-    private int areaColor = Color.parseColor("#885B73C3");
+    private int areaColor = Color.parseColor("#DD5B73C3");
     private MyPolygonBean polygonBean;
 
 

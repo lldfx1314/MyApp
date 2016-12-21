@@ -9,6 +9,8 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.anhubo.anhubo.R;
+import com.anhubo.anhubo.utils.DisplayUtil;
+
 /**
  * Created by LUOLI on 2016/10/13.
  */
@@ -34,7 +36,7 @@ public class ShowDialogTop {
 		wl.y = -activity.getWindowManager().getDefaultDisplay().getHeight();
 		// 以下这两句是为了保证按钮可以水平满屏
 		wl.width = LayoutParams.MATCH_PARENT;
-		wl.height = LayoutParams.MATCH_PARENT;
+		wl.height = LayoutParams.WRAP_CONTENT;
 
 		// 设置显示位置
 		dialog.onWindowAttributesChanged(wl);
