@@ -7,7 +7,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 import com.anhubo.anhubo.R;
@@ -19,27 +18,22 @@ import com.anhubo.anhubo.ui.activity.Login_Register.RegisterActivity2;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
-import com.anhubo.anhubo.utils.UpdateManger;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.FileCallBack;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.jpush.android.api.JPushInterface;
 import okhttp3.Call;
-import okhttp3.Request;
 
 /**
  * Created by Administrator on 2016/10/9.
@@ -50,14 +44,13 @@ public class WelcomeActivity extends BaseActivity {
     private static final int UPDATA_CLIENT = 2;
     private static final int NET_ERROR = 3;
     private static final int ENTER_MAIN = 4;
+    private static final int SELECT_UPDATA_CLIENT = 5;
     private String uid;
     private String bulidingid;
     private String businessid;
     private String oldversionName;
     private String versionName;
     private String url;
-    private boolean isCheck = false;
-    private UpdateManger mUpdateManger;
 
     @Override
     protected int getContentViewId() {
@@ -78,14 +71,19 @@ public class WelcomeActivity extends BaseActivity {
         String[] split = Utils.getAppInfo(mActivity).split("#");
         versionName = split[1];
 
-        // 检查是否有版本升级
-        checkUpdate();
-//        mUpdateManger = new UpdateManger(mActivity);
-//        mUpdateManger.checkUpdateInfo();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // 检查是否有版本升级
+                checkUpdate();
+            }
+        }, 2000);
+
     }
 
     @Override
     protected void onLoadDatas() {
+
     }
 
     /**
@@ -109,6 +107,7 @@ public class WelcomeActivity extends BaseActivity {
      * 检查更新
      */
     private Message msg = Message.obtain();
+
     class MyStringCallback extends StringCallback {
 
         @Override
@@ -129,13 +128,20 @@ public class WelcomeActivity extends BaseActivity {
                 String newVersion = bean.data.new_version;
                 String type = bean.data.type;
                 url = bean.data.url;
-//              url = "http://softfile.3g.qq.com:8080/msoft/179/24659/43549/qq_hd_mini_1.4.apk";
                 if (code == 0) {
                     if (!TextUtils.isEmpty(newVersion)) {
                         // 有更新，根据type判断是必须更新还是非必须更新
                         if (TextUtils.equals(type, 0 + "")) {
-                            // 强制更新
+                            // 0,强制更新
                             msg.what = UPDATA_CLIENT;
+                            handler.sendMessage(msg);
+                        } else if (TextUtils.equals(type, 1 + "")) {
+                            // 1,选择更新
+                            msg.what = SELECT_UPDATA_CLIENT;
+                            handler.sendMessage(msg);
+                        } else {
+                            // 2,什么都不管
+                            msg.what = ENTER_MAIN;
                             handler.sendMessage(msg);
                         }
                     } else {
@@ -144,8 +150,6 @@ public class WelcomeActivity extends BaseActivity {
                     }
                 }
             }
-
-
         }
     }
 
@@ -155,8 +159,16 @@ public class WelcomeActivity extends BaseActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case UPDATA_CLIENT:
-                    //对话框通知用户升级程序
-                    dialog();
+                    //对话框通知用户升级程序  强制
+                    dialog_force();
+                    break;
+                case SELECT_UPDATA_CLIENT:
+                    //对话框通知用户升级程序  选择
+                    dialog_select();
+                    break;
+                case ENTER_MAIN:
+                    // 不更新，进入主界面
+                    enterMain();
                     break;
                 case DOWN_ERROR:
                     //下载apk失败
@@ -168,18 +180,14 @@ public class WelcomeActivity extends BaseActivity {
                     ToastUtils.showToast(mActivity, "网络有问题，请检查");
                     enterMain();
                     break;
-                case ENTER_MAIN:
-                    //下载apk失败
-                    enterMain();
-                    break;
             }
         }
     };
 
     /**
-     * Dialog对话框提示用户更新
+     * Dialog对话框提示用户更新 强制
      */
-    protected void dialog() {
+    protected void dialog_force() {
 
         new AlertDialog(mActivity).builder()
                 .setTitle("提示")
@@ -188,11 +196,37 @@ public class WelcomeActivity extends BaseActivity {
                 .setPositiveButton("确认", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // 弹出进度条的对话框，进行一步下载
-//                        System.out.println("正在下载。。。");
                         downLoadApk();
+                        enterMain();
                     }
                 }).show();
+
+
+    }
+
+    /**
+     * Dialog对话框提示用户更新 选择
+     */
+    protected void dialog_select() {
+
+        new AlertDialog(mActivity).builder()
+                .setTitle("提示")
+                .setMsg("发现需要升级的版本,现在去更新!")
+                .setCancelable(false)
+                .setPositiveButton("确认", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        downLoadApk();
+                        enterMain();
+                    }
+                })
+                .setNegativeButton("取消", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                })
+                .show();
 
 
     }
@@ -201,26 +235,22 @@ public class WelcomeActivity extends BaseActivity {
      * 从服务器中下载APK
      */
     protected void downLoadApk() {
-        final ProgressDialog pd;    //进度条对话框
-        pd = new ProgressDialog(this);
-        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        pd.setCancelable(false);
-        pd.setMessage("正在下载更新");
-        pd.show();
         new Thread() {
             @Override
             public void run() {
                 try {
-                    File file = getFileFromServer(url, pd);
-                    installApk(file);
-                    pd.dismiss(); //结束掉进度条对话框
+                    File file = getFileFromServer(url, null);
+                    if (file != null) {
+                        installApk(file);
+                    } else {
+                        ToastUtils.showToast(mActivity, "下载失败");
+                    }
                 } catch (Exception e) {
                     Message msg1 = Message.obtain();
                     msg1.what = DOWN_ERROR;
                     handler.sendMessage(msg1);
-                    pd.dismiss(); //结束掉进度条对话框
                     e.printStackTrace();
-                    System.out.println("下载失败"+e.getMessage());
+                    System.out.println("下载失败" + e.getMessage());
                 }
             }
         }.start();
@@ -243,17 +273,9 @@ public class WelcomeActivity extends BaseActivity {
             try {
                 URL url = new URL(path);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setConnectTimeout(10*1000);
-                conn .setRequestProperty("Accept-Encoding", "identity");
+                conn.setConnectTimeout(10 * 1000);
+                conn.setRequestProperty("Accept-Encoding", "identity");
                 conn.connect();
-                int contentLength = conn.getContentLength();
-//                conn.setRequestMethod("GET");
-//                conn.setRequestMethod("POST");
-                //获取到文件的大小
-
-                //System.out.println("总大小+++" + contentLength);
-
-                pd.setMax(contentLength/ 1024/1024);
                 InputStream is = conn.getInputStream();
                 file = new File(Environment.getExternalStorageDirectory(), "/anhubao.apk");
                 //如果目标文件已经存在，则删除。产生覆盖旧文件的效果
@@ -268,9 +290,6 @@ public class WelcomeActivity extends BaseActivity {
                 while ((len = bis.read(buffer)) != -1) {
                     fos.write(buffer, 0, len);
                     total += len;
-                    //获取当前下载量
-                    pd.setProgress(total/ 1024/1024);
-                    //System.out.println("进度+++" + total / 1024/1024);
                 }
                 fos.close();
                 bis.close();
@@ -285,31 +304,27 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void enterMain() {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (TextUtils.isEmpty(oldversionName)) {
-                    enterGuide();
-                } else if (!TextUtils.equals(versionName, oldversionName)) {
-                    enterGuide();
+
+        if (TextUtils.isEmpty(oldversionName)) {
+            enterGuide();
+        } else if (!TextUtils.equals(versionName, oldversionName)) {
+            enterGuide();
+        } else {
+            if (!TextUtils.isEmpty(uid)) {
+                if (!TextUtils.isEmpty(bulidingid) || !TextUtils.isEmpty(businessid)) {
+                    //跳转到主页面
+                    enterHome();
                 } else {
-                    if (!TextUtils.isEmpty(uid)) {
-                        if (!TextUtils.isEmpty(bulidingid) || !TextUtils.isEmpty(businessid)) {
-                            //跳转到主页面
-                            enterHome();
-                        } else {
-                            // 跳到注册第二个界面
-                            enterRegister2();
-                        }
-
-                    } else {
-                        // 无uid，跳到登录界面
-                        enterLogin();
-
-                    }
+                    // 跳到注册第二个界面
+                    enterRegister2();
                 }
+
+            } else {
+                // 无uid，跳到登录界面
+                enterLogin();
+
             }
-        }, 2000);
+        }
     }
 
     private void enterGuide() {

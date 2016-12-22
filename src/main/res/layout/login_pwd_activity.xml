@@ -70,4 +70,15 @@
         android:textColor="@color/btn_blue"
         android:textSize="16sp"/>
 
+    <Button
+        android:id="@+id/btn_find_Pwd"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"
+        android:background="@android:color/transparent"
+        android:text="找回密码"
+        android:layout_gravity="right"
+        android:textColor="@color/btn_blue"
+        android:textSize="14sp"/>
+
 </LinearLayout>

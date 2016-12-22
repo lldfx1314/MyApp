@@ -15,7 +15,7 @@ import com.anhubo.anhubo.ui.activity.unitDetial.BuildingActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.BusinessActivity;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
-import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -54,6 +54,7 @@ public class RegisterActivity2 extends BaseActivity {
     private String businessId;
     private String buildName1;
     private String businessName1;
+    private AlertDialog builder;
 
     @Override
     protected void initConfig() {
@@ -68,7 +69,7 @@ public class RegisterActivity2 extends BaseActivity {
 
     @Override
     protected void initViews() {
-
+        builder = new AlertDialog(mActivity).builder();
     }
 
 
@@ -119,22 +120,27 @@ public class RegisterActivity2 extends BaseActivity {
                 break;
             case R.id.btn_register2://完成的点击事件
                 if (TextUtils.isEmpty(buildName1)) {
-                    ToastUtils.showToast(mActivity, "请选择建筑");
+                    showdialog("请选择建筑");
                     return;
                 }
                 if (TextUtils.isEmpty(floorName)) {
-                    ToastUtils.showToast(mActivity, "请输入楼层");
+                    showdialog("请输入楼层");
                     return;
                 }
                 if (TextUtils.isEmpty(businessName1)) {
-                    ToastUtils.showToast(mActivity, "请选择单位");
+                    showdialog("请选择单位");
                     return;
                 }
                 registerComPlete();
                 break;
         }
     }
-
+    private void showdialog(String string) {
+        builder
+                .setTitle("提示")
+                .setMsg(string)
+                .setCancelable(true).show();
+    }
     /**
      * 注册完成的点击事件
      */

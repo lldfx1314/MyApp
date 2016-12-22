@@ -11,7 +11,6 @@ import android.widget.EditText;
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.Login_Bean;
-import com.anhubo.anhubo.protocol.RequestResultListener;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.HomeActivity;
 import com.anhubo.anhubo.utils.InputWatcher;
@@ -19,6 +18,7 @@ import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
+import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -46,9 +46,12 @@ public class Login_Pwd extends BaseActivity {
     Button btnLoginPwd;
     @InjectView(R.id.btn_pwdLogin_pwdx)
     Button btnPwdLoginPwdX;
+    @InjectView(R.id.btn_find_Pwd)
+    Button btnFindPwd;
     private String phoneNumber;
     private boolean pwdIsVisible;
     private String pwd;
+    private AlertDialog builder;
 
     @Override
     protected void initConfig() {
@@ -73,6 +76,7 @@ public class Login_Pwd extends BaseActivity {
     @Override
     protected void initEvents() {
         super.initEvents();
+        builder = new AlertDialog(mActivity).builder();
         // 设置手机号输入框的默认显示内容
         if (etPwdLoginPhone != null) {
             etPwdLoginPhone.setText(phoneNumber);
@@ -87,7 +91,7 @@ public class Login_Pwd extends BaseActivity {
 
     }
 
-    @OnClick({R.id.btn_pwdLogin_phone,R.id.btn_pwdLogin_pwdx, R.id.btn_pwdLogin_pwd, R.id.btn_loginPwd})
+    @OnClick({R.id.btn_pwdLogin_phone,R.id.btn_pwdLogin_pwdx, R.id.btn_pwdLogin_pwd, R.id.btn_loginPwd,R.id.btn_find_Pwd})
     public void onClick(View view) {
         getInputData();
         switch (view.getId()) {
@@ -107,29 +111,47 @@ public class Login_Pwd extends BaseActivity {
                 // 点击密码登录
 
                 if (TextUtils.isEmpty(phoneNumber)) {
-                    ToastUtils.showToast(mActivity, "请输入手机号码");
+                    showdialog("请输入手机号码");
                     return;
                 }
                 if (phoneNumber.length() != 11) {
-                    ToastUtils.showToast(mActivity, "手机号码长度为11");
+                    showdialog("请输入手机号码");
                     return;
                 }
                 if (!Utils.judgePhoneNumber(phoneNumber)) {
-                    ToastUtils.showToast(mActivity, "请输入正确的手机号码");
+                    showdialog("请输入正确的手机号码");
                     return;
                 }
                 if (TextUtils.isEmpty(pwd)) {
-                    ToastUtils.showToast(mActivity, "请输入密码");
+                    showdialog("请输入密码");
                     return;
                 }
 
                 if (!Utils.isRightPwd(pwd)) {
-                    ToastUtils.showLongToast(mActivity, "请输入8-16位数字和字母的组合");
+
+                    showdialog("请输入8-16位数字和字母的组合");
                     return;
                 }
                 pwdLogin();
                 break;
+            case R.id.btn_find_Pwd:
+                // 进入更改密码界面
+                enterAlterPwd();
+                break;
         }
+    }
+
+    private void showdialog(String string) {
+        builder
+                .setTitle("提示")
+                .setMsg(string)
+                .setCancelable(true).show();
+    }
+
+    /**进入更改密码界面 */
+    private void enterAlterPwd() {
+        Intent intent = new Intent(mActivity, FindPwdActivity.class);
+        startActivity(intent);
     }
 
     /**
@@ -192,7 +214,7 @@ public class Login_Pwd extends BaseActivity {
                 // 根据code值判断跳转到那个界面
                 switch (code) {
                     case "101"://网络错误
-                        ToastUtils.showToast(mActivity, msg);
+                        showdialog(msg);
                         break;
                     case "104"://该手机号码没注册，携带输入的手机号跳转到密码注册界面
                         goToPwdRegisterActivity();
@@ -205,7 +227,7 @@ public class Login_Pwd extends BaseActivity {
                         goTo_Activity(uid);
                         break;
                     case "107"://密码错误
-                        ToastUtils.showToast(mActivity, msg);
+                        showdialog(msg);
                         break;
                     case "108"://手机号码未注册
                         goToPwdRegisterActivity();
@@ -221,8 +243,6 @@ public class Login_Pwd extends BaseActivity {
                         enterHome();
                         break;
                 }
-            } else {
-                System.out.println("Login_Pwd界面没获取到bean对象");
             }
         }
     }
@@ -236,7 +256,7 @@ public class Login_Pwd extends BaseActivity {
                 intent.putExtra(Keys.UID, uid);
                 startActivity(intent);
             } else {
-                ToastUtils.showToast(mActivity, "网络错误，请重试");
+                showdialog("网络错误，请重试");
             }
         }
 
@@ -249,7 +269,7 @@ public class Login_Pwd extends BaseActivity {
                 intent.putExtra(Keys.PHONE, phoneNumber);
                 startActivity(intent);
             } else {
-                ToastUtils.showToast(mActivity, "网络错误，请重试");
+                showdialog("网络错误，请重试");
             }
         }
 

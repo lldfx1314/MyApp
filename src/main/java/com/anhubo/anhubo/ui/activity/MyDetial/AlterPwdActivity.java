@@ -42,6 +42,7 @@ public class AlterPwdActivity extends BaseActivity {
     private String oldPwd;
     private String newPwd1;
     private String newPwd2;
+    private AlertDialog builder;
 
     @Override
     protected void initConfig() {
@@ -74,13 +75,14 @@ public class AlterPwdActivity extends BaseActivity {
     public void onClick(View v) {
         /**获取输入的内容*/
         getInputData();
+        builder = new AlertDialog(mActivity).builder();
         switch (v.getId()) {
             case R.id.tv_sure_alter:
                 // 对密码做判断
                 if (!TextUtils.isEmpty(oldPwd)) {
                     boolean isoldPwd = Utils.isRightPwd(oldPwd);
                     if (!isoldPwd) {
-                        new AlertDialog(mActivity).builder()
+                        builder
                                 .setTitle("提示")
                                 .setMsg("原密码输入不合法")
                                 .setCancelable(true).show();
@@ -88,7 +90,7 @@ public class AlterPwdActivity extends BaseActivity {
                         return;
                     }
                 } else {
-                    new AlertDialog(mActivity).builder()
+                    builder
                             .setTitle("提示")
                             .setMsg("请输入原密码")
                             .setCancelable(true).show();
@@ -99,7 +101,7 @@ public class AlterPwdActivity extends BaseActivity {
                 if (!TextUtils.isEmpty(newPwd1)) {
                     boolean isnewPwd1 = Utils.isRightPwd(newPwd1);
                     if (!isnewPwd1) {
-                        new AlertDialog(mActivity).builder()
+                        builder
                                 .setTitle("提示")
                                 .setMsg("请输入8-16位数字和字母的组合")
                                 .setCancelable(true).show();
@@ -107,40 +109,40 @@ public class AlterPwdActivity extends BaseActivity {
                         return;
                     }
                 } else {
-                    new AlertDialog(mActivity).builder()
+                    builder
                             .setTitle("提示")
                             .setMsg("请输入新密码")
                             .setCancelable(true).show();
-                    //ToastUtils.showToast(mActivity, "请输入新密码");
                     return;
                 }
 
                 if (!TextUtils.isEmpty(newPwd2)) {
                     if (!TextUtils.equals(newPwd1, newPwd2)) {
-                        new AlertDialog(mActivity).builder()
+                        builder
                                 .setTitle("提示")
                                 .setMsg("两次输入不一致")
                                 .setCancelable(true).show();
-                        //ToastUtils.showToast(mActivity, "两次输入不一致");
                         return;
                     }
                 } else {
-                    new AlertDialog(mActivity).builder()
+                    builder
                             .setTitle("提示")
                             .setMsg("请再次输入新密码")
                             .setCancelable(true).show();
-                    //ToastUtils.showToast(mActivity, "请再次输入新密码");
                     return;
                 }
                 /**走网络，修改密码*/
-                alterPwd(oldPwd,newPwd2);
+                alterPwd(oldPwd, newPwd2);
                 break;
             default:
                 break;
         }
 
     }
-    /**走网络，修改密码*/
+
+    /**
+     * 走网络，修改密码
+     */
     private void alterPwd(String oldPwd, String newPwd2) {
         // 走网络，提交性别
         progressBar.setVisibility(View.VISIBLE);
@@ -155,6 +157,7 @@ public class AlterPwdActivity extends BaseActivity {
                 .build()//
                 .execute(new MyStringCallback());
     }
+
     private Handler handler = new Handler();
 
     @Override
@@ -162,7 +165,7 @@ public class AlterPwdActivity extends BaseActivity {
 
     }
 
-    class MyStringCallback extends StringCallback{
+    class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
@@ -174,22 +177,22 @@ public class AlterPwdActivity extends BaseActivity {
         public void onResponse(String response) {
             //System.out.println(response);
             MyAlterPwdBean bean = new Gson().fromJson(response, MyAlterPwdBean.class);
-            if(bean!=null){
+            if (bean != null) {
                 progressBar.setVisibility(View.GONE);
                 int code = bean.code;
                 String msg = bean.msg;
-                if(code != 0){
+                if (code != 0) {
                     // 没修改成功
-                    ToastUtils.showToast(mActivity,msg);
-                }else{
+                    ToastUtils.showToast(mActivity, msg);
+                } else {
                     // 修改成功
-                    ToastUtils.showToast(mActivity,"密码修改成功");
+                    ToastUtils.showToast(mActivity, "密码修改成功");
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             finish();
                         }
-                    },2000);
+                    }, 2000);
                 }
             }
         }

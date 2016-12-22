@@ -181,8 +181,10 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     private void getNum() {
         String url = Urls.Url_Get_Num;
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("uid", uid); //这是uid,登录后改成真正的用户
-        params.put("business_id", businessid);//这是business_id,登录后改成真正的business_id
+        params.put("uid", uid);
+        System.out.println("uid+"+uid);
+        params.put("business_id", businessid);
+        System.out.println("businessid+"+businessid);
 
         OkHttpUtils.post()//
                 .url(url)//
@@ -206,7 +208,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("获取进度条信息+"+response);
+//            System.out.println("QrScanActivity界面获取++进度条信息++++"+response);
             progressBar.setVisibility(View.GONE);
             CheckComplete_Bean bean = new Gson().fromJson(response, CheckComplete_Bean.class);
             if (bean != null) {
@@ -223,8 +225,8 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     }
     /**动态的设置进度条*/
     private void setProgressBar() {
-        proBar.setMax(Integer.parseInt(devicesNum));
         proBar.setProgress(deviceCheckedNum);
+        proBar.setMax(Integer.parseInt(devicesNum));
         tvBigQrNumber.setText(deviceCheckedNum + "");
         tvSmallQrNumber.setText(devicesNum);
     }
@@ -264,13 +266,31 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
 
     @Override
     public void onScanQRCodeSuccess(String result) {
-        cardNumber = result;
-        Log.i(TAG, "result:" + cardNumber);
-        // 调用震动的方法
-        vibrate();
-        mQRCodeView.stopSpot();
-        // 拿到数据后做相应的操作
-        processData(cardNumber);
+        boolean isanhuboCard = result.startsWith("anhubo", 0);
+        boolean isAHBCard = result.startsWith("AHB", 0);
+        if(isanhuboCard||isAHBCard){
+            cardNumber = result;
+            Log.i(TAG, "result:" + cardNumber);
+            // 调用震动的方法
+            vibrate();
+            mQRCodeView.stopSpot();
+            // 拿到数据后做相应的操作
+            processData(cardNumber);
+        }else{
+            AlertDialog builder = new AlertDialog(mActivity).builder();
+            builder
+                    .setTitle("提示")
+                    .setMsg("请使用安互保专用码")
+                    .setPositiveButton("确认", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mQRCodeView.startSpot();
+                        }
+                    })
+                    .setCancelable(false).show();
+
+        }
+
 
     }
 
@@ -763,6 +783,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
 
         @Override
         public void onResponse(String response) {
+//            System.out.println("QrScanActivity界面+checkComplete++"+response);
             progressBar.setVisibility(View.GONE);
             CheckComplete_Bean bean = new Gson().fromJson(response, CheckComplete_Bean.class);
             if (bean != null) {

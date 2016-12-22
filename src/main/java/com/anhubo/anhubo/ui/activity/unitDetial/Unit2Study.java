@@ -38,7 +38,6 @@ public class Unit2Study extends BaseActivity {
         // 设置状态栏显示的提示内容
         setTopBarDesc("学习");
         progressBar.setVisibility(View.VISIBLE);
-
     }
 
     @Override
@@ -89,7 +88,6 @@ public class Unit2Study extends BaseActivity {
 
     @Override
     protected void onLoadDatas() {
-
 
     }
 

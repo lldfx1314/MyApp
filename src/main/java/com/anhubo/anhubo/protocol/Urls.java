@@ -77,10 +77,11 @@ public interface Urls {
     String Url_PwdRegister = UrlBase + "User/registerSecond";
     /**密码登录*/
     String Url_LoginPwd = UrlBase + "User/mimaLogin";
+    /**登录  忘记密码*/
+    String Url_Login_AlterPwd = UrlBase +"Personal/reget_pa";
 
     /**注册完成，信息填写完整*/
     String Url_RegCom = UrlBase +"User/businessRegister";
-
     /**学习、检查记录*/
     String Url_studyRecord = UrlBase +"Record/get_re_list";
     String Url_Unit = UrlBase +"BusinessChart/index";
@@ -158,6 +159,5 @@ public interface Urls {
     String Delete_Device = UrlBase +"Device/del_dev";
     /**检查更新*/
     String Url_Check_Update = UrlBase +"Index/version_change";
-
 
 }

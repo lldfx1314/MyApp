@@ -14,8 +14,8 @@ import com.anhubo.anhubo.bean.Register1_Bean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.InputWatcher;
 import com.anhubo.anhubo.utils.Keys;
-import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
+import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -50,6 +50,7 @@ public class PwdRegisterActivity extends BaseActivity {
     private String firstPwd;
     private String secondPwd;
     private boolean pwdIsVisible = false;
+    private AlertDialog builder;
 
     @Override
     protected void initConfig() {
@@ -70,6 +71,7 @@ public class PwdRegisterActivity extends BaseActivity {
     @Override
     protected void initEvents() {
         super.initEvents();
+        builder = new AlertDialog(mActivity).builder();
         etPwdRegFirst.addTextChangedListener(new InputWatcher(btnPwdRegX1, etPwdRegFirst));
         etPwdRegSecond.addTextChangedListener(new InputWatcher(btnPwdRegX2, etPwdRegSecond));
     }
@@ -97,25 +99,32 @@ public class PwdRegisterActivity extends BaseActivity {
                 break;
             case R.id.btn_pwdRegister:
                 if (!Utils.isRightPwd(firstPwd)) {
-                    ToastUtils.showLongToast(mActivity, "请输入8-16位数字和字母的组合");
+                    showdialog("请输入8-16位数字和字母的组合");
                     return;
                 }
                 if (TextUtils.isEmpty(firstPwd)) {
-                    ToastUtils.showToast(mActivity, "请输入密码");
+                    showdialog("请输入密码");
                     return;
                 }
                 if (TextUtils.isEmpty(secondPwd)) {
-                    ToastUtils.showToast(mActivity, "请再次输入密码");
+                    showdialog("请再次输入密码");
                     return;
                 }
                 if (!TextUtils.equals(firstPwd, secondPwd)) {
-                    ToastUtils.showToast(mActivity, "两次密码输入不一致");
+                    showdialog("两次密码输入不一致");
                     return;
                 }
                 //　拿着号码和密码，调用接口
                 enterRegister();
                 break;
         }
+    }
+
+    private void showdialog(String string) {
+        builder
+                .setTitle("提示")
+                .setMsg(string)
+                .setCancelable(true).show();
     }
 
     /**
@@ -176,7 +185,7 @@ public class PwdRegisterActivity extends BaseActivity {
                     intent.putExtra(Keys.UID, String.valueOf(uid));
                     startActivity(intent);
                 } else {
-                    ToastUtils.showToast(mActivity, "网络错误，请重试");
+                    showdialog("网络错误，请重试");
                 }
 
             } else {

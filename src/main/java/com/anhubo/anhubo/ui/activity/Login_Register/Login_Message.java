@@ -1,15 +1,12 @@
 package com.anhubo.anhubo.ui.activity.Login_Register;
 
 import android.content.Intent;
-import android.telecom.Call;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
@@ -23,17 +20,16 @@ import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
+import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.UmengTool;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -57,6 +53,7 @@ public class Login_Message extends BaseActivity {
     private String screen_name;
     private String unionid;
     private UMShareAPI mShareAPI;
+    private AlertDialog builder;
 
 
     @Override
@@ -73,7 +70,7 @@ public class Login_Message extends BaseActivity {
 
     @Override
     protected void initViews() {
-
+        builder = new AlertDialog(mActivity).builder();
         // 找控件
         // 输入手机号
         etLoginMsgphoneNumber = (EditText) findViewById(R.id.et_loginMsg_phoneNmber);
@@ -273,22 +270,30 @@ public class Login_Message extends BaseActivity {
      */
     private void login() {
         if (TextUtils.isEmpty(phoneNumber)) {
-            ToastUtils.showToast(mActivity, "手机号码不能为空");
+            showdialog("请输入手机号码");
             return;
         }
         if (!Utils.judgePhoneNumber(phoneNumber)) {
-            ToastUtils.showToast(mActivity, "请输入正确的手机号码");
+            showdialog("请输入正确的手机号码");
             return;
         }
         if (TextUtils.isEmpty(securityCode)) {
-            ToastUtils.showToast(mActivity, "请输入验证码");
+            showdialog("请输入验证码");
             return;
         }
         if (securityCode.length() != 4) {
-            ToastUtils.showToast(mActivity, "验证码长度为4");
+            showdialog("验证码长度为4");
             return;
         }
         login_OKHttp();
+    }
+    /**弹窗提示*/
+    private void showdialog(String string) {
+
+        builder
+                .setTitle("提示")
+                .setMsg(string)
+                .setCancelable(true).show();
     }
 
 
@@ -339,10 +344,10 @@ public class Login_Message extends BaseActivity {
                 // 根据code值判断跳转到那个界面
                 switch (code) {
                     case "101"://网络错误
-                        ToastUtils.showToast(mActivity, msg);
+                        showdialog(msg);
                         break;
                     case "102"://验证码错误
-                        ToastUtils.showToast(mActivity, msg);
+                        showdialog(msg);
                         break;
                     case "104"://该手机号码没注册，携带输入的手机号跳转到密码注册界面
                         goToPwdRegisterActivity();
@@ -383,7 +388,8 @@ public class Login_Message extends BaseActivity {
             intent.putExtra(Keys.PHONE, phoneNumber);
             startActivity(intent);
         } else {
-            ToastUtils.showToast(mActivity, "网络错误，请重试");
+
+            showdialog("网络错误，请重试");
         }
     }
 
@@ -396,7 +402,10 @@ public class Login_Message extends BaseActivity {
             intent.putExtra(Keys.UID, uid);
             startActivity(intent);
         } else {
-            ToastUtils.showToast(mActivity, "网络错误，请重试");
+            builder
+                    .setTitle("提示")
+                    .setMsg("网络错误，请重试")
+                    .setCancelable(true).show();
         }
     }
 
@@ -414,11 +423,11 @@ public class Login_Message extends BaseActivity {
         // 调用方法先判断手机号码是否合法
         isLegal = Utils.judgePhoneNumber(phoneNumber);
         if (TextUtils.isEmpty(phoneNumber)) {
-            ToastUtils.showToast(mActivity, "手机号码不能为空");
+            showdialog("请输入手机号码");
             return;
         } else if (!isLegal) {
             // 不合法，弹出对话框提示用户
-            ToastUtils.showToast(mActivity, "请输入正确的手机号码");
+            showdialog("请输入正确的手机号码");
             return;
         } else {
             // 合法，就获取验证码
@@ -471,8 +480,7 @@ public class Login_Message extends BaseActivity {
 
                 } else {
                     // 为空，则弹吐司提示用户
-                    ToastUtils.showToast(mActivity, "网络有误，请稍后再点");
-
+                    showdialog("网络有误，请稍后再试");
                 }
             }
         }

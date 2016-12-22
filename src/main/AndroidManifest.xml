@@ -137,7 +137,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.Login_Register.Login_Message"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.Login_Register.FindPwdActivity"
+            android:screenOrientation="portrait"/>
 
         <!--单位界面-->
         <activity

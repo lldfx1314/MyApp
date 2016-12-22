@@ -15,6 +15,7 @@ import com.anhubo.anhubo.adapter.HomeAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.Alter_MateUnitBean;
 import com.anhubo.anhubo.bean.ExtrasBean;
+import com.anhubo.anhubo.bean.UploadRegistration_Id_Bean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.impl.BuildFragment;
 import com.anhubo.anhubo.ui.impl.FindFragment;
@@ -24,6 +25,7 @@ import com.anhubo.anhubo.utils.JPushManager;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.NoScrollViewPager;
 import com.google.gson.Gson;
@@ -185,6 +187,9 @@ public class HomeActivity extends BaseActivity {
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_EXTRAS = "extras";
 
+    public static final String MESSAGE_REGISTRATION_ID = "MESSAGE_REGISTRATION_ID";
+    public static final String REGISTRATION_ID = "registration_id";
+
     /**
      * 注册广播
      */
@@ -193,6 +198,7 @@ public class HomeActivity extends BaseActivity {
         IntentFilter filter = new IntentFilter();
         filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
         filter.addAction(MESSAGE_RECEIVED_ACTION);
+        filter.addAction(MESSAGE_REGISTRATION_ID);
         registerReceiver(mMessageReceiver, filter);
     }
 
@@ -212,8 +218,51 @@ public class HomeActivity extends BaseActivity {
                     }
                 }
 
+            }else if(MESSAGE_REGISTRATION_ID.equals(intent.getAction())){
+                String registration_id = intent.getStringExtra(REGISTRATION_ID);
+                String deviceId = Utils.getDeviceId(mActivity);
+                System.out.println("registration_id***MyReceiver*****++" + registration_id);
+                System.out.println("deviceId***MyReceiver*****++" + deviceId);
+                String uid = SpUtils.getStringParam(mActivity, Keys.UID);
+                System.out.println("uid***MyReceiver*****++" + uid);
+                String url = Urls.Url_Registration_Id;
+                HashMap<String, String> params = new HashMap<>();
+                // 把这个registration_id上传到服务器
+                params.put("uid", uid);
+                params.put("device_token", deviceId);
+                params.put("registration_id", registration_id);
+
+                OkHttpUtils.post()//
+                        .url(url)//
+                        .params(params)//
+                        .build()//
+                        .execute(new MyStringCallback1());
+
             }
         }
+    }
+    /**
+     * 上传Registration_Id
+     */
+    class MyStringCallback1 extends StringCallback {
+
+        @Override
+        public void onError(Call call, Exception e) {
+
+            System.out.println("WelcomeActivity界面+++上传Registration_Id===没拿到数据" + e.getMessage());
+        }
+
+        @Override
+        public void onResponse(String response) {
+            //System.out.println("上传Registration_Id+" + response);
+            UploadRegistration_Id_Bean bean = new Gson().fromJson(response, UploadRegistration_Id_Bean.class);
+            int code = bean.code;
+            String msg = bean.msg;
+            if (code == 0) {
+                //System.out.println("上传Registration_Id+++msg上传成功+++" + msg);
+            }
+        }
+
     }
 
     private void dialog(String messge, final String tableId) {

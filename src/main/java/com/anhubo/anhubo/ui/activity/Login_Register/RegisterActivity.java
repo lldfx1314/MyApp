@@ -26,6 +26,7 @@ import com.anhubo.anhubo.utils.InputWatcher;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
+import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -62,6 +63,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private String weixinName;
     private String weixinforzhuce;
     private String loginforzhuce;
+    private AlertDialog builder;
 
 
     @Override
@@ -83,8 +85,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
     @Override
     protected void initViews() {
+        builder = new AlertDialog(mActivity).builder();
         /*找控件*/
-
         // 下一步
         btnRegister1 = (Button) findViewById(R.id.btn_register1);
         // 获取验证码
@@ -248,31 +250,37 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
      */
     private void enterRegisterActivity2() {
         if (TextUtils.isEmpty(phoneNumber)) {
-            ToastUtils.showToast(mActivity, "请输入手机号码");
+
+            showdialog("请输入手机号码");
             return;
         }
         if (phoneNumber.length() != 11) {
-            ToastUtils.showToast(mActivity, "手机号码长度为11");
+
+            showdialog("手机号码长度为11");
             return;
         }
         if (!Utils.judgePhoneNumber(phoneNumber)) {
-            ToastUtils.showToast(mActivity, "请输入正确的手机号码");
+
+            showdialog("请输入正确的手机号码");
             return;
         }
         if (TextUtils.isEmpty(securityCode)) {
-            ToastUtils.showToast(mActivity, "请输入验证码");
+            showdialog("请输入验证码");
             return;
         }
         if (securityCode.length() != 4) {
-            ToastUtils.showToast(mActivity, "验证码长度为4");
+
+            showdialog("验证码长度为4");
             return;
         }
         if (TextUtils.isEmpty(pwd)) {
-            ToastUtils.showToast(mActivity, "请输入密码");
+
+            showdialog("请输入密码");
             return;
         }
         if (!Utils.isRightPwd(pwd)) {
-            ToastUtils.showLongToast(mActivity, "请输入8-16位数字和字母的组合");
+
+            showdialog("请输入8-16位数字和字母的组合");
             return;
         }
         if (!cbRegAnhubo.isChecked()) {
@@ -346,18 +354,25 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                         enterRegisterActivity2(uid);
                         break;
                     case "102":// 验证码错误
-                        ToastUtils.showToast(mActivity, msg);
+                        showdialog(msg);
                         break;
                     case "103":// 邀请码错误
-                        ToastUtils.showToast(mActivity, msg);
+                        showdialog(msg);
                         break;
                     case "108":// 该手机号码已注册
-                        ToastUtils.showToast(mActivity, msg);
+                        showdialog(msg);
                         break;
 
                 }
             }
         }
+    }
+    /**弹窗提示*/
+    private void showdialog(String string) {
+        builder
+                .setTitle("提示")
+                .setMsg(string)
+                .setCancelable(true).show();
     }
 
 
@@ -410,13 +425,13 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                         enterRegisterActivity2(uid);
                         break;
                     case "102":// 验证码错误
-                        ToastUtils.showToast(mActivity, msg);
+                        showdialog(msg);
                         break;
                     case "103":// 邀请码错误
-                        ToastUtils.showToast(mActivity, msg);
+                        showdialog(msg);
                         break;
                     case "108":// 该手机号码已注册
-                        ToastUtils.showToast(mActivity, msg);
+                        showdialog(msg);
                         break;
 
                 }
@@ -438,7 +453,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             intent.putExtra(Keys.UID, String.valueOf(uid));
             startActivity(intent);
         } else {
-            ToastUtils.showToast(mActivity, "网络错误，请重试");
+            showdialog("网络错误，请重试");
         }
     }
 
@@ -452,11 +467,11 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         // 调用方法先判断手机号码是否合法
         isLegal = Utils.judgePhoneNumber(phoneNumber);
         if (TextUtils.isEmpty(phoneNumber)) {
-            ToastUtils.showToast(mActivity, "手机号码不能为空");
+            showdialog("手机号码不能为空");
             return;
         } else if (!isLegal) {
             // 不合法，弹出对话框提示用户
-            ToastUtils.showToast(mActivity, "请输入正确的手机号码");
+            showdialog("请输入正确的手机号码");
             return;
         } else {
             // 合法，就获取验证码
@@ -506,12 +521,9 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
                 } else {
                     // 为空，则弹吐司提示用户
-                    ToastUtils.showToast(mActivity, "网络有误，请稍后再点");
+                    showdialog("网络有误，请稍后再试");
 
                 }
-            } else {
-                System.out.println("Login_Message+++===没拿到bean对象");
-
             }
         }
     }

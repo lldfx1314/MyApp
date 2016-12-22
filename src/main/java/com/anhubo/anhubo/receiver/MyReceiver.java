@@ -35,43 +35,36 @@ import okhttp3.Call;
  */
 public class MyReceiver extends BroadcastReceiver {
     private static final String TAG = "JPush";
-    Context mContent;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        mContent = context;
-        String deviceId = Utils.getDeviceId(mContent);
+
         Bundle bundle = intent.getExtras();
         //System.out.println( "[MyReceiver] onReceive - " + intent.getAction() + ", extras: " + printBundle(bundle));
         if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
-            String registration_id = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
-            System.out.println("registration_id********++" + registration_id);
-//            System.out.println("deviceId********++" + deviceId);
-            // 把这个registration_id上传到服务器
-            String uid = SpUtils.getStringParam(mContent, Keys.UID);
-            String url = Urls.Url_Registration_Id;
-            HashMap<String, String> params = new HashMap<>();
-            /**/
-            params.put("uid", uid);
-            params.put("device_token", deviceId);
-            params.put("registration_id", registration_id);
 
-            OkHttpUtils.post()//
-                    .url(url)//
-                    .params(params)//
-                    .build()//
-                    .execute(new MyStringCallback());
-        } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
+            String registration_id = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
+            Intent reg_intent = new Intent(HomeActivity.MESSAGE_REGISTRATION_ID);
+            reg_intent.putExtra(HomeActivity.REGISTRATION_ID, registration_id);
+            context.sendBroadcast(reg_intent);
+
+        } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction()))
+
+        {
             Log.d(TAG, "[MyReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
             // 拿到消息，解析后发送广播给HomeActivity
             processCustomMessage(context, bundle);
 
-        } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
+        } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction()))
+
+        {
             Log.d(TAG, "[MyReceiver] 接收到推送下来的通知");
             int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
             Log.d(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
 
-        } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
+        } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction()))
+
+        {
             Log.d(TAG, "[MyReceiver] 用户点击打开了通知");
 
             //打开自定义的Activity
@@ -80,35 +73,21 @@ public class MyReceiver extends BroadcastReceiver {
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             context.startActivity(i);
 
-        } else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
+        } else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction()))
+
+        {
             Log.d(TAG, "[MyReceiver] 用户收到到RICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
             //在这里根据 JPushInterface.EXTRA_EXTRA 的内容处理代码，比如打开新的Activity， 打开一个网页等..
 
-        } else if (JPushInterface.ACTION_CONNECTION_CHANGE.equals(intent.getAction())) {
+        } else if (JPushInterface.ACTION_CONNECTION_CHANGE.equals(intent.getAction()))
+
+        {
             boolean connected = intent.getBooleanExtra(JPushInterface.EXTRA_CONNECTION_CHANGE, false);
             Log.w(TAG, "[MyReceiver]" + intent.getAction() + " connected state change to " + connected);
-        } else {
+        } else
+
+        {
             Log.d(TAG, "[MyReceiver] Unhandled intent - " + intent.getAction());
-        }
-    }
-    /**上传Registration_Id*/
-    class MyStringCallback extends StringCallback {
-
-        @Override
-        public void onError(Call call, Exception e) {
-
-            System.out.println("WelcomeActivity界面+++上传Registration_Id===没拿到数据" + e.getMessage());
-        }
-
-        @Override
-        public void onResponse(String response) {
-            //System.out.println("上传Registration_Id+" + response);
-            UploadRegistration_Id_Bean bean = new Gson().fromJson(response, UploadRegistration_Id_Bean.class);
-            int code = bean.code;
-            String msg = bean.msg;
-            if (code == 0) {
-                //System.out.println("上传Registration_Id+++msg上传成功+++" + msg);
-            }
         }
     }
 
@@ -136,38 +115,38 @@ public class MyReceiver extends BroadcastReceiver {
 
 
     // 打印所有的 intent extra 数据
-	private static String printBundle(Bundle bundle) {
-		StringBuilder sb = new StringBuilder();
-		for (String key : bundle.keySet()) {
-			if (key.equals(JPushInterface.EXTRA_NOTIFICATION_ID)) {
-				sb.append("\nkey:" + key + ", value:" + bundle.getInt(key));
-			}else if(key.equals(JPushInterface.EXTRA_CONNECTION_CHANGE)){
-				sb.append("\nkey:" + key + ", value:" + bundle.getBoolean(key));
-			} else if (key.equals(JPushInterface.EXTRA_EXTRA)) {
-				if (bundle.getString(JPushInterface.EXTRA_EXTRA).isEmpty()) {
-					Log.i(TAG, "This message has no Extra data");
-					continue;
-				}
+    private static String printBundle(Bundle bundle) {
+        StringBuilder sb = new StringBuilder();
+        for (String key : bundle.keySet()) {
+            if (key.equals(JPushInterface.EXTRA_NOTIFICATION_ID)) {
+                sb.append("\nkey:" + key + ", value:" + bundle.getInt(key));
+            } else if (key.equals(JPushInterface.EXTRA_CONNECTION_CHANGE)) {
+                sb.append("\nkey:" + key + ", value:" + bundle.getBoolean(key));
+            } else if (key.equals(JPushInterface.EXTRA_EXTRA)) {
+                if (bundle.getString(JPushInterface.EXTRA_EXTRA).isEmpty()) {
+                    Log.i(TAG, "This message has no Extra data");
+                    continue;
+                }
 
-				try {
-					JSONObject json = new JSONObject(bundle.getString(JPushInterface.EXTRA_EXTRA));
-					Iterator<String> it =  json.keys();
+                try {
+                    JSONObject json = new JSONObject(bundle.getString(JPushInterface.EXTRA_EXTRA));
+                    Iterator<String> it = json.keys();
 
-					while (it.hasNext()) {
-						String myKey = it.next().toString();
-						sb.append("\nkey:" + key + ", value: [" +
-								myKey + " - " +json.optString(myKey) + "]");
-					}
-				} catch (Exception e) {
-					Log.e(TAG, "Get message extra JSON error!");
-				}
+                    while (it.hasNext()) {
+                        String myKey = it.next().toString();
+                        sb.append("\nkey:" + key + ", value: [" +
+                                myKey + " - " + json.optString(myKey) + "]");
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Get message extra JSON error!");
+                }
 
-			} else {
-				sb.append("\nkey:" + key + ", value:" + bundle.getString(key));
-			}
-		}
-		return sb.toString();
-	}
+            } else {
+                sb.append("\nkey:" + key + ", value:" + bundle.getString(key));
+            }
+        }
+        return sb.toString();
+    }
 
 
 }
