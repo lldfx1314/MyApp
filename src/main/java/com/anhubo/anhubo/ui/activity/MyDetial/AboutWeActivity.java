@@ -1,6 +1,7 @@
 package com.anhubo.anhubo.ui.activity.MyDetial;
 
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -27,7 +28,7 @@ public class AboutWeActivity extends BaseActivity {
     protected void initViews() {
 // 设置状态栏显示的提示内容
         setTopBarDesc("关于我们");
-        progressBar.setVisibility(View.VISIBLE);
+        topPb.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -35,6 +36,7 @@ public class AboutWeActivity extends BaseActivity {
         super.initEvents();
         url = Urls.Url_MyAboutWe;
         wvAboutwe.loadUrl(url);
+        wvAboutwe.setWebChromeClient(new WebChromeViewClient());
         wvAboutwe.setWebViewClient(new WebViewClient() {
             //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -42,14 +44,20 @@ public class AboutWeActivity extends BaseActivity {
                 view.loadUrl(url);
                 return true;
             }
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                // 当页面加载完成后调用,在此隐藏进度条
-                progressBar.setVisibility(View.GONE);
-                super.onPageFinished(view, url);
-            }
 
         });
+    }
+
+    private class WebChromeViewClient extends WebChromeClient {
+        @Override
+        public void onProgressChanged(WebView view, int newProgress) {
+            topPb.setProgress(newProgress);
+            if(newProgress==100){
+                topPb.setVisibility(View.GONE);
+            }
+            super.onProgressChanged(view, newProgress);
+        }
+
     }
 
     @Override

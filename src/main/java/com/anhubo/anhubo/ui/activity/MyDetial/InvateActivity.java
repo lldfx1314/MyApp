@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -57,7 +58,7 @@ public class InvateActivity extends BaseActivity {
     protected void initViews() {
         // 设置状态栏显示的提示内容
         setTopBarDesc("邀请");
-        progressBar.setVisibility(View.VISIBLE);
+        topPb.setVisibility(View.VISIBLE);
 
     }
 
@@ -73,24 +74,28 @@ public class InvateActivity extends BaseActivity {
 
         WebSettings settings = wvInvate.getSettings();
         settings.setJavaScriptEnabled(true);
-
+        wvInvate.setWebChromeClient(new WebChromeViewClient());
         wvInvate.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) { //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
                 view.loadUrl(url);
                 return true;
-            }
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                // 当页面加载完成后调用,在此隐藏进度条
-                progressBar.setVisibility(View.GONE);
-                super.onPageFinished(view, url);
             }
 
         });
         wvInvate.addJavascriptInterface(new MyJavaScriptInterface(), "ADAPP");
         wvInvate.loadUrl(newUrl_invate);
     }
+    private class WebChromeViewClient extends WebChromeClient {
+        @Override
+        public void onProgressChanged(WebView view, int newProgress) {
+            topPb.setProgress(newProgress);
+            if(newProgress==100){
+                topPb.setVisibility(View.GONE);
+            }
+            super.onProgressChanged(view, newProgress);
+        }
 
+    }
     Handler handler = new Handler();
 
     @Override

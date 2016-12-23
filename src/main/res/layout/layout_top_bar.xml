@@ -4,14 +4,16 @@
               android:fitsSystemWindows="true"
               android:clipToPadding="true"
               android:layout_width="match_parent"
-              android:layout_height="65dp"
+              android:layout_height="68dp"
               android:background="@color/bg_title"
               android:orientation="horizontal">
 
 
     <RelativeLayout
+        android:id="@+id/top_rl"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginBottom="3dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
@@ -89,4 +91,16 @@
             />
 
     </RelativeLayout>
+    <!--顶部加载的进度条-->
+    <ProgressBar
+        android:id="@+id/top_pb"
+        android:layout_alignParentBottom="true"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:indeterminateOnly="false"
+        android:visibility="gone"
+        android:max="100"
+        android:progressDrawable="@drawable/progress_top" >
+    </ProgressBar>
 </RelativeLayout>

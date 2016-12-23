@@ -182,9 +182,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         String url = Urls.Url_Get_Num;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("uid", uid);
-        System.out.println("uid+"+uid);
         params.put("business_id", businessid);
-        System.out.println("businessid+"+businessid);
 
         OkHttpUtils.post()//
                 .url(url)//

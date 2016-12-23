@@ -220,16 +220,13 @@ public class HomeActivity extends BaseActivity {
 
             }else if(MESSAGE_REGISTRATION_ID.equals(intent.getAction())){
                 String registration_id = intent.getStringExtra(REGISTRATION_ID);
-                String deviceId = Utils.getDeviceId(mActivity);
                 System.out.println("registration_id***MyReceiver*****++" + registration_id);
-                System.out.println("deviceId***MyReceiver*****++" + deviceId);
                 String uid = SpUtils.getStringParam(mActivity, Keys.UID);
                 System.out.println("uid***MyReceiver*****++" + uid);
                 String url = Urls.Url_Registration_Id;
                 HashMap<String, String> params = new HashMap<>();
                 // 把这个registration_id上传到服务器
                 params.put("uid", uid);
-                params.put("device_token", deviceId);
                 params.put("registration_id", registration_id);
 
                 OkHttpUtils.post()//

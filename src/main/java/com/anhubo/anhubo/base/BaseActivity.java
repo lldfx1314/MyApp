@@ -21,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -45,6 +46,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected TextView tvToptitle;
     protected TextView tvTopBarRight;
     protected RelativeLayout progressBar;
+    protected ProgressBar topPb;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -171,6 +173,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         ivTopBarleftBuildPen = (ImageView) findViewById(R.id.ivTopBarleft_build_pen);//左上角铅笔按钮
         tvToptitle = (TextView) findViewById(R.id.tvAddress);//标题
         llTop = (RelativeLayout) findViewById(R.id.ll_Top); // 顶部标题栏
+        topPb = (ProgressBar) findViewById(R.id.top_pb); // 顶部进度条
 
     }
     /**设置标题栏*/

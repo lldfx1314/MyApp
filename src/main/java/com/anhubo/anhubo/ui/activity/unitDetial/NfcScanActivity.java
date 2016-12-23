@@ -173,7 +173,10 @@ public class NfcScanActivity extends BaseActivity {
         listResult = new ArrayList<String>();
         getNum();
     }
-    /**获取进度条的信息*/
+
+    /**
+     * 获取进度条的信息
+     */
     private void getNum() {
         String url = Urls.Url_Get_Num;
         HashMap<String, String> params = new HashMap<String, String>();
@@ -202,7 +205,7 @@ public class NfcScanActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-            System.out.println("获取进度条信息+"+response);
+//            System.out.println("获取进度条信息+" + response);
             progressBar.setVisibility(View.GONE);
             CheckComplete_Bean bean = new Gson().fromJson(response, CheckComplete_Bean.class);
             if (bean != null) {
@@ -242,16 +245,6 @@ public class NfcScanActivity extends BaseActivity {
 
     }
 
-    /**
-     * 获取焦点的方法
-     */
-    @Override
-    protected void onResume() {
-        // TODO Auto-generated method stub
-        super.onResume();
-        // 获取焦点时开启前台分配
-        enableForegroundDispatch();
-    }
 
     /**
      * 拿到数据后做相应的操作
@@ -553,6 +546,7 @@ public class NfcScanActivity extends BaseActivity {
 
                 if (!TextUtils.isEmpty(time)) {
                     startTime = time;
+
                     // 拿到年龄,上传到网络
                 } else {
                     ToastUtils.showToast(mActivity, "您所选日期大于当前时间");
@@ -643,7 +637,10 @@ public class NfcScanActivity extends BaseActivity {
             }
         }
     }
-    /**动态的设置进度条*/
+
+    /**
+     * 动态的设置进度条
+     */
     private void setProgressBar() {
         pronfcBar.setMax(Integer.parseInt(devicesNum));
         pronfcBar.setProgress(deviceCheckedNum);
@@ -687,12 +684,25 @@ public class NfcScanActivity extends BaseActivity {
                 break;
         }
     }
+/*********************************************nfc扫描*******************************************/
+
+    /**
+     * 获取焦点的方法
+     */
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        // 获取焦点时开启前台分配
+        enableForegroundDispatch();
+    }
 
     @Override
     protected void onPause() {
         super.onPause();
         disableForegroundDispatch();
     }
+
 
     /**
      * 当获取到Tag信息的时候走这个方法 处理获取到的Tag信息
@@ -795,10 +805,6 @@ public class NfcScanActivity extends BaseActivity {
         }
         // 如果messages集合不为空，则遍历集合
         for (int i = 0; i < messages.length; i++) {
-            //获取每条信息记录的长度
-            int length = messages[i].getRecords().length;
-            //System.out.println("拿到的信息记录是===" + length + "条");
-            //ToastUtils.showToast(getApplicationContext(), "信息 的长度"+length);
             // 拿到每条信息里面的记录
             NdefRecord[] records = messages[i].getRecords();
             for (int j = 0; j < records.length; j++) {
@@ -816,13 +822,24 @@ public class NfcScanActivity extends BaseActivity {
     private void parseRTDUriRecord(NdefRecord record) {
         if (record != null) {
             String card = new String(record.getPayload());
-            /*******************************/
-            cardNumber = card.replace(card.substring(0, 7), "anhubo");
+            /**************************************************************/
+//            System.out.println("NFC扫描++card++" + card);
+            if (card.startsWith("anhubo", 1) || card.startsWith("AHB", 1)) {
+                cardNumber = card.replace(card.substring(0, 7), "anuhbo");// 拿到数据后做相应的操作
+                if (!TextUtils.isEmpty(cardNumber)) {
+                    processData(cardNumber);
+                }
 
-            // 拿到数据后做相应的操作
-            if (!TextUtils.isEmpty(cardNumber)) {
-                processData(cardNumber);
+//                System.out.println("NFC扫描++cardNumber++" + cardNumber);
+            }else {
+                AlertDialog builder = new AlertDialog(mActivity).builder();
+                builder
+                        .setTitle("提示")
+                        .setMsg("请扫描安互保专用卡片")
+                        .setCancelable(true).show();
             }
+
+
         }
     }
 

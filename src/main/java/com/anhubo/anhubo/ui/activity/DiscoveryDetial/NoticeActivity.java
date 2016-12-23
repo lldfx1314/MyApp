@@ -1,6 +1,7 @@
 package com.anhubo.anhubo.ui.activity.DiscoveryDetial;
 
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -30,7 +31,7 @@ public class NoticeActivity extends BaseActivity {
     protected void initViews() {
         // 设置状态栏显示的提示内容
         setTopBarDesc("公告");
-        progressBar.setVisibility(View.VISIBLE);
+        topPb.setVisibility(View.VISIBLE);
 
     }
 
@@ -44,6 +45,7 @@ public class NoticeActivity extends BaseActivity {
         String newUrl = url + "?uid=" + uid;
         WebSettings settings = wvNotice.getSettings();
         settings.setJavaScriptEnabled(true);
+        wvNotice.setWebChromeClient(new WebChromeViewClient());
         wvNotice.setWebViewClient(new WebViewClient() {
             //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -51,17 +53,22 @@ public class NoticeActivity extends BaseActivity {
                 view.loadUrl(url);
                 return true;
             }
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                // 当页面加载完成后调用,在此隐藏进度条
-                progressBar.setVisibility(View.GONE);
-                super.onPageFinished(view, url);
-            }
 
         });
 
         // 加载界面
         wvNotice.loadUrl(newUrl);
+    }
+    private class WebChromeViewClient extends WebChromeClient {
+        @Override
+        public void onProgressChanged(WebView view, int newProgress) {
+            topPb.setProgress(newProgress);
+            if(newProgress==100){
+                topPb.setVisibility(View.GONE);
+            }
+            super.onProgressChanged(view, newProgress);
+        }
+
     }
 
     @Override

@@ -206,7 +206,7 @@ public class UnitFragment extends BaseFragment {
             if (!TextUtils.isEmpty(studyTime)) {
                 Date studyDate = getDate(studyTime);
                 if (newDate != null && studyDate != null) {
-                    long time = (newDate.getTime() - studyDate.getTime()) / 1000 /*/ 60 / 60 / 24*/;
+                    long time = (newDate.getTime() - studyDate.getTime()) / 1000 / 60 / 60 / 24;
                     if (time >= 10) {
                         isShowDot_study = true;
                     }
@@ -218,7 +218,7 @@ public class UnitFragment extends BaseFragment {
             if (!TextUtils.isEmpty(checkTime)) {
                 Date checkDate = getDate(checkTime);
                 if (newDate != null && checkDate != null) {
-                    long time = (newDate.getTime() - checkDate.getTime()) / 1000 /*/ 60 / 60 / 24*/;
+                    long time = (newDate.getTime() - checkDate.getTime()) / 1000 / 60 / 60 / 24;
                     if (time >= 10) {
                         isShowDot_check = true;
                     }

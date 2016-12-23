@@ -54,7 +54,7 @@ public class AlterUnitActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
-
+        setTopBarDesc("修改单位");
     }
 
     @Override
