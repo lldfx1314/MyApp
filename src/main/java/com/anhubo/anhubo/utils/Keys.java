@@ -164,5 +164,6 @@ public interface Keys {
     String PLANID = "planId";
     /**互保计划  massId*/
     String MASSID = "massId";
-
+    /**取消更新时记录的版本号*/
+    String CANCEL_UPDATE_VERSION = "cancel_update_version";
 }
