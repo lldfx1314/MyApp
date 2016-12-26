@@ -195,12 +195,6 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     class MyStringCallback2 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-
-            new AlertDialog(mActivity).builder()
-                    .setTitle("提示")
-                    .setMsg("网络有问题，请检查")
-                    .setCancelable(true).show();
-
             System.out.println("QrScanActivity+++获取进度条信息===没拿到数据" + e.getMessage());
         }
 

@@ -167,6 +167,7 @@ public class NfcScanActivity extends BaseActivity {
         alterTime();
     }
 
+
     @Override
     protected void initEvents() {
         super.initEvents();
@@ -194,11 +195,6 @@ public class NfcScanActivity extends BaseActivity {
     class MyStringCallback2 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-
-            new AlertDialog(mActivity).builder()
-                    .setTitle("提示")
-                    .setMsg("网络有问题，请检查")
-                    .setCancelable(true).show();
 
             System.out.println("QrScanActivity+++获取进度条信息===没拿到数据" + e.getMessage());
         }
@@ -759,6 +755,7 @@ public class NfcScanActivity extends BaseActivity {
     /**
      * 拿到Tag之后判断是哪个类型然后做相应的处理
      */
+
     private void processIntent(Intent intent) {
         // 获取到意图对象里面的数据
         String action = intent.getAction();
@@ -790,7 +787,7 @@ public class NfcScanActivity extends BaseActivity {
             ToastUtils.showToast(getApplicationContext(), "是Tech类型的");
 
         } else if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
-
+            ToastUtils.showToast(getApplicationContext(), "是TAG类型的");
         } else {
             ToastUtils.showToast(getApplicationContext(), "未知类型");
         }

@@ -102,6 +102,7 @@ public class UnitFragment extends BaseFragment {
 
     private List<Build_Help_Plan_Bean.Data.Plans> plans;
     private BuildAdapter adapter1;
+    private AlertDialog builder;
 
     @Override
     public void initTitleBar() {
@@ -123,6 +124,7 @@ public class UnitFragment extends BaseFragment {
 
     @Override
     public void initView() {
+        builder = new AlertDialog(mActivity).builder();
 
         // 统计图
         rlUnit01 = findView(R.id.rl_unit_01);
@@ -267,6 +269,7 @@ public class UnitFragment extends BaseFragment {
             // 界面每次可见都设置一下单位，邀请同事以后单位可能会改变
             String businessName = SpUtils.getStringParam(mActivity, Keys.BUSINESSNAME);
             String bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
+            uid = SpUtils.getStringParam(mActivity, Keys.UID);
             if (tv_basepager_title != null) {
 
                 tv_basepager_title.setText(businessName);
@@ -274,10 +277,10 @@ public class UnitFragment extends BaseFragment {
             // 获取圆弧数据
             getData();
             //互保计划获取数据
-            //getPlanData();
+            getPlanData();
 
-            // 获取户主计划列表信息
-            getHelpPlan(bulidingid);
+            // 获取互助计划列表信息
+//            getHelpPlan(bulidingid);
         }
     }
 
@@ -309,31 +312,44 @@ public class UnitFragment extends BaseFragment {
         @Override
         public void onError(Call call, Exception e) {
             System.out.println("BuildFragment互助计划+++===获取数据失败" + e.getMessage());
+            // 获取数据失败后显示缓存
+            String response = SpUtils.getStringParam(mActivity, "HelpPlan");
+            //设置互助计划的数据展示
+            setHelpPlanData(response);
+
+
             // 获取数据失败后显示三色以及互助计划
-            if (plans != null) {
-                adapter1 = new BuildAdapter(mActivity, plans);
-            }
-            lvUnit.setAdapter(adapter1);
+//            if (plans != null) {
+//                adapter1 = new BuildAdapter(mActivity, plans);
+//            }
+//            lvUnit.setAdapter(adapter1);
         }
 
         @Override
         public void onResponse(String response) {
 //            System.out.println("BuildFragment互助计划+++===" + response);
-            Build_Help_Plan_Bean bean = new Gson().fromJson(response, Build_Help_Plan_Bean.class);
-            if (bean != null) {
-                int code = bean.code;
-                String msg = bean.msg;
-                Build_Help_Plan_Bean.Data data = bean.data;
-                plans = data.plans;
-                if (code == 0 && plans!=null) {
+            // 缓存一下
+            SpUtils.putParam(mActivity,"HelpPlan",response);
+            //设置互助计划的数据展示
+            setHelpPlanData(response);
 
-                    adapter1 = new BuildAdapter(mActivity, plans);
-                } else {
-                    adapter1 = new BuildAdapter(mActivity);
-                }
-                lvUnit.setAdapter(adapter1);
+        }
+    }
+    /**设置互助计划的数据展示*/
+    private void setHelpPlanData(String response) {
+        Build_Help_Plan_Bean bean = new Gson().fromJson(response, Build_Help_Plan_Bean.class);
+        if (bean != null) {
+            int code = bean.code;
+            String msg = bean.msg;
+            Build_Help_Plan_Bean.Data data = bean.data;
+            plans = data.plans;
+            if (code == 0 && plans!=null) {
+
+                adapter1 = new BuildAdapter(mActivity, plans);
+            } else {
+                adapter1 = new BuildAdapter(mActivity);
             }
-
+            lvUnit.setAdapter(adapter1);
         }
     }
 
@@ -368,40 +384,48 @@ public class UnitFragment extends BaseFragment {
         public void onError(Call call, Exception e) {
             System.out.println("UnitFragment界面+++互保计划===没拿到数据" + e.getMessage());
             tvNoPlan1.setVisibility(View.VISIBLE);
-            lvUnit.setDividerHeight(0);
-            adapter = new UnitAdapter(mActivity, certs);
-            lvUnit.setAdapter(adapter);
+//            lvUnit.setDividerHeight(0);
+//            adapter = new UnitAdapter(mActivity, certs);
+//            lvUnit.setAdapter(adapter);
+            String response = SpUtils.getStringParam(mActivity, "PlanData");
+            setPlanData(response);
 
         }
 
         @Override
         public void onResponse(String response) {
             //System.out.println("互保计划++" + response);
-            Unit_PlanBean bean = new Gson().fromJson(response, Unit_PlanBean.class);
-            if (bean != null) {
-                code = bean.code;
-                String msg = bean.msg;
-                certs = bean.data.certs;
-            }
-            // 没有任何保障时显示提示信息，并且不显示ListView的分割线
-            if (code == 0 && certs != null) {
-                adapter = new UnitAdapter(mActivity, certs);
-                if (certs.size() == 0) {
-                    tvNoPlan1.setVisibility(View.VISIBLE);
-
-                    lvUnit.setDividerHeight(0);
-                } else {
-                    tvNoPlan2.setVisibility(View.VISIBLE);
-                    tvNoPlan2.setText("动态保障凭证");
-                }
-
-            } else {
-                tvNoPlan1.setVisibility(View.VISIBLE);
-                lvUnit.setDividerHeight(0);
-            }
-
-            lvUnit.setAdapter(adapter);
+            SpUtils.putParam(mActivity,"PlanData",response);
+//            互保计划
+            setPlanData(response);
         }
+    }
+    /**互保计划*/
+    private void setPlanData(String response) {
+        Unit_PlanBean bean = new Gson().fromJson(response, Unit_PlanBean.class);
+        if (bean != null) {
+            code = bean.code;
+            String msg = bean.msg;
+            certs = bean.data.certs;
+        }
+        // 没有任何保障时显示提示信息，并且不显示ListView的分割线
+        if (code == 0 && certs != null) {
+            adapter = new UnitAdapter(mActivity, certs);
+            if (certs.size() == 0) {
+                tvNoPlan1.setVisibility(View.VISIBLE);
+
+                lvUnit.setDividerHeight(0);
+            } else {
+                tvNoPlan2.setVisibility(View.VISIBLE);
+                tvNoPlan2.setText("动态保障凭证");
+            }
+
+        } else {
+            tvNoPlan1.setVisibility(View.VISIBLE);
+            lvUnit.setDividerHeight(0);
+        }
+
+        lvUnit.setAdapter(adapter);
     }
 
     /**
@@ -442,58 +466,71 @@ public class UnitFragment extends BaseFragment {
             if (arrScores.length == 6 && myPolygonView != null) {
                 myPolygonView.setDataModel(getPolygonData());
             }
-            new AlertDialog(mActivity).builder()
-                    .setTitle("提示")
-                    .setMsg("网络有问题，请检查")
-                    .setCancelable(true).show();
+            // 网络不好，加载缓存数据
+            String response = SpUtils.getStringParam(mActivity, "getdata");
+            setData(response);
+
+            showdialog("您的网络异常，请检查");
         }
 
         @Override
         public void onResponse(String response) {
             //System.out.println(response);
-            UnitBean bean = new Gson().fromJson(response, UnitBean.class);
+            // 保存一下数据，以方便在网络不好的时候进行显示
+            SpUtils.putParam(mActivity,"getdata",response);
+            setData(response);
+        }
+    }
+    /**提示用户的弹窗*/
+    private void showdialog(String string) {
+        builder
+        .setTitle("提示")
+                .setMsg(string)
+                .setCancelable(true).show();
+    }
+    /**拿到圆弧数据数据后显示*/
+    private void setData(String string) {
+        UnitBean bean = new Gson().fromJson(string, UnitBean.class);
+        list.clear();
+        if (bean != null) {
+            data = bean.data;
+            // 获取到数据
+            datatime = data.datatime;
+            grade = data.grade;
+            sumScore = Integer.parseInt(data.sum_score.replace(".00", ""));
+            if (isLoading) {
+                // 动态的添加自定义控件，设置数据
+                scp = new SesameCreditPanel(mActivity);
+                scp.setDataModel(getData(sumScore, grade, datatime));
+                scp.setEnabled(true);
+                scp.setClickable(true);
+                sesameCreditPanelLL.addView(scp);
+                isLoading = false;
+            }
 
-
-            list.clear();
-            if (bean != null) {
-                data = bean.data;
-                // 获取到数据
-                datatime = data.datatime;
-                grade = data.grade;
-                sumScore = Integer.parseInt(data.sum_score.replace(".00", ""));
-                if (isLoading) {
-                    // 动态的添加自定义控件，设置数据
-                    scp = new SesameCreditPanel(mActivity);
-                    scp.setDataModel(getData(sumScore, grade, datatime));
-                    scp.setEnabled(true);
-                    scp.setClickable(true);
-                    sesameCreditPanelLL.addView(scp);
-                    isLoading = false;
-                }
-
-                // 获取多边形数据
-                subScore1 = data.sub_score1;
-                subScore2 = data.sub_score2;
-                subScore3 = data.sub_score3;
-                subScore4 = data.sub_score4;
-                subScore5 = data.sub_score5;
-                subScore6 = data.sub_score6;
-                list.add(0, subScore4);
-                list.add(1, subScore5);
-                list.add(2, subScore6);
-                list.add(3, subScore1);
-                list.add(4, subScore2);
-                list.add(5, subScore3);
-                // 遍历集合，把元素添加到数组里面
-                for (int i = 0; i < list.size(); i++) {
-                    arrScores[i] = Integer.parseInt(list.get(i)) * 6 / 100;
-                }
-                if (arrScores.length == 6) {
-                    myPolygonView.setDataModel(getPolygonData());
-                }
+            // 获取多边形数据
+            subScore1 = data.sub_score1;
+            subScore2 = data.sub_score2;
+            subScore3 = data.sub_score3;
+            subScore4 = data.sub_score4;
+            subScore5 = data.sub_score5;
+            subScore6 = data.sub_score6;
+            list.add(0, subScore4);
+            list.add(1, subScore5);
+            list.add(2, subScore6);
+            list.add(3, subScore1);
+            list.add(4, subScore2);
+            list.add(5, subScore3);
+            // 遍历集合，把元素添加到数组里面
+            for (int i = 0; i < list.size(); i++) {
+                arrScores[i] = Integer.parseInt(list.get(i)) * 6 / 100;
+            }
+            if (arrScores.length == 6) {
+                myPolygonView.setDataModel(getPolygonData());
             }
         }
     }
+
     /**接收消息让小圆点隐藏*/
     private Handler handler = new Handler() {
         @Override
@@ -564,7 +601,7 @@ public class UnitFragment extends BaseFragment {
 
     @Override
     public void processClick(View v) {
-        uid = SpUtils.getStringParam(mActivity, Keys.UID);
+
         switch (v.getId()) {
 
             case R.id.ivTopBarleft_unit_menu:// 执行记录

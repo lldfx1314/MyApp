@@ -19,6 +19,8 @@ import com.anhubo.anhubo.ui.activity.MyDetial.SettingActivity;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
@@ -92,6 +94,7 @@ public class MyFragment extends BaseFragment {
         llSetting.setOnClickListener(this);
         tvLogOut.setOnClickListener(this);
     }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -100,7 +103,7 @@ public class MyFragment extends BaseFragment {
     }
 
     private void getDataInternet(boolean isVisibleToUser) {
-        if(isVisibleToUser){
+        if (isVisibleToUser) {
             /**我的界面第一次请求网络*/
             getData();
         }
@@ -109,7 +112,10 @@ public class MyFragment extends BaseFragment {
     @Override
     public void initData() {
     }
-    /**我的界面第一次请求网络*/
+
+    /**
+     * 我的界面第一次请求网络
+     */
     private void getData() {
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
         Map<String, String> params = new HashMap<>();
@@ -128,31 +134,33 @@ public class MyFragment extends BaseFragment {
         public void onError(Call call, Exception e) {
 
             System.out.println("MyFragment+++===界面失败" + e.getMessage());
-
             //ToastUtils.showToast(mActivity, "网络有问题，请检查");
+            String response = SpUtils.getStringParam(mActivity, "headIcon");
+            setData(response);
         }
 
         @Override
         public void onResponse(String response) {
             //System.out.println("MyFragment界面+++="+response);
-            bean = new Gson().fromJson(response, MyFragmentBean.class);
-            if (bean != null) {
-                age = bean.data.age;
-                sex = bean.data.sex;
-                img = bean.data.img;
-                name = bean.data.name;
-                /**设置头像、姓名、年龄、性别的显示内容*/
-                setData();
+            SpUtils.putParam(mActivity, "headIcon", response);
 
+            setData(response);
 
-            }
         }
     }
 
     /**
      * 设置头像的显示内容
      */
-    private void setData() {
+    private void setData(String response) {
+        bean = new Gson().fromJson(response, MyFragmentBean.class);
+        if (bean != null) {
+            age = bean.data.age;
+            sex = bean.data.sex;
+            img = bean.data.img;
+            name = bean.data.name;
+        }
+        /**设置头像、姓名、年龄、性别的显示内容*/
         // 头像
         if (!TextUtils.isEmpty(img)) {
             // 用户自己设置过头像，就显示自己的头像
@@ -282,6 +290,7 @@ public class MyFragment extends BaseFragment {
     private void enterSetting() {
         startActivity(new Intent(mActivity, SettingActivity.class));
     }
+
     /**
      * 进入订单管理界面
      */
@@ -289,6 +298,7 @@ public class MyFragment extends BaseFragment {
         Intent intent = new Intent(mActivity, OrderManagerActivity.class);
         startActivity(intent);
     }
+
     /**
      * 进入邀请界面
      */
