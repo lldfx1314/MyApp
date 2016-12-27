@@ -61,6 +61,8 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
     protected void initViews() {
         tvDevice = (TextView) findViewById(R.id.tv_device);
         listview = (ListView) findViewById(R.id.listview_device);
+        // 显示初始值
+        tvDevice.setText("拥有设备总数: " + 0);
     }
 
     @Override

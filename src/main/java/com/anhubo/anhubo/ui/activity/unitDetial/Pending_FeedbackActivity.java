@@ -555,7 +555,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
                     @Override
                     public void onError(Call call, Exception e) {
 
-                        System.out.println("MyFragment获取头像+++===" + e.getMessage());
+                        System.out.println("Pending_FeedbackActivity设置图片+++===" + e.getMessage());
                     }
 
                     @Override

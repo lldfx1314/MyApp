@@ -99,6 +99,7 @@ public class UnitFragment extends BaseFragment {
     private boolean isShowDot_study = false;
     private boolean isShowDot_check = false;
     private boolean isShowDot_drill = false;
+    private static int dialog_i = 0;
 
     private List<Build_Help_Plan_Bean.Data.Plans> plans;
     private BuildAdapter adapter1;
@@ -213,7 +214,7 @@ public class UnitFragment extends BaseFragment {
                         isShowDot_study = true;
                     }
                 }
-            }else{
+            } else {
                 isShowDot_study = true;
             }
             // 检查
@@ -225,7 +226,7 @@ public class UnitFragment extends BaseFragment {
                         isShowDot_check = true;
                     }
                 }
-            }else{
+            } else {
                 isShowDot_check = true;
             }
             // 演练
@@ -329,13 +330,16 @@ public class UnitFragment extends BaseFragment {
         public void onResponse(String response) {
 //            System.out.println("BuildFragment互助计划+++===" + response);
             // 缓存一下
-            SpUtils.putParam(mActivity,"HelpPlan",response);
+            SpUtils.putParam(mActivity, "HelpPlan", response);
             //设置互助计划的数据展示
             setHelpPlanData(response);
 
         }
     }
-    /**设置互助计划的数据展示*/
+
+    /**
+     * 设置互助计划的数据展示
+     */
     private void setHelpPlanData(String response) {
         Build_Help_Plan_Bean bean = new Gson().fromJson(response, Build_Help_Plan_Bean.class);
         if (bean != null) {
@@ -343,7 +347,7 @@ public class UnitFragment extends BaseFragment {
             String msg = bean.msg;
             Build_Help_Plan_Bean.Data data = bean.data;
             plans = data.plans;
-            if (code == 0 && plans!=null) {
+            if (code == 0 && plans != null) {
 
                 adapter1 = new BuildAdapter(mActivity, plans);
             } else {
@@ -395,12 +399,15 @@ public class UnitFragment extends BaseFragment {
         @Override
         public void onResponse(String response) {
             //System.out.println("互保计划++" + response);
-            SpUtils.putParam(mActivity,"PlanData",response);
+            SpUtils.putParam(mActivity, "PlanData", response);
 //            互保计划
             setPlanData(response);
         }
     }
-    /**互保计划*/
+
+    /**
+     * 互保计划
+     */
     private void setPlanData(String response) {
         Unit_PlanBean bean = new Gson().fromJson(response, Unit_PlanBean.class);
         if (bean != null) {
@@ -455,6 +462,7 @@ public class UnitFragment extends BaseFragment {
                 .execute(new MyStringCallback());
 
     }
+
     /**
      * 分数、级别的网络请求
      */
@@ -469,26 +477,34 @@ public class UnitFragment extends BaseFragment {
             // 网络不好，加载缓存数据
             String response = SpUtils.getStringParam(mActivity, "getdata");
             setData(response);
-
-            showdialog("您的网络异常，请检查");
+            if (dialog_i == 0) {
+                showdialog("您的网络异常，请检查");
+                dialog_i++;
+            }
         }
 
         @Override
         public void onResponse(String response) {
             //System.out.println(response);
             // 保存一下数据，以方便在网络不好的时候进行显示
-            SpUtils.putParam(mActivity,"getdata",response);
+            SpUtils.putParam(mActivity, "getdata", response);
             setData(response);
         }
     }
-    /**提示用户的弹窗*/
+
+    /**
+     * 提示用户的弹窗
+     */
     private void showdialog(String string) {
         builder
-        .setTitle("提示")
+                .setTitle("提示")
                 .setMsg(string)
                 .setCancelable(true).show();
     }
-    /**拿到圆弧数据数据后显示*/
+
+    /**
+     * 拿到圆弧数据数据后显示
+     */
     private void setData(String string) {
         UnitBean bean = new Gson().fromJson(string, UnitBean.class);
         list.clear();
@@ -531,7 +547,9 @@ public class UnitFragment extends BaseFragment {
         }
     }
 
-    /**接收消息让小圆点隐藏*/
+    /**
+     * 接收消息让小圆点隐藏
+     */
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -765,11 +783,11 @@ public class UnitFragment extends BaseFragment {
         lvUnit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Build_Help_Plan_Bean.Data.Plans plan = plans.get(position-1);
+                Build_Help_Plan_Bean.Data.Plans plan = plans.get(position - 1);
                 String planId = plan.plan_id;
                 String massId = plan.mass_id;
                 Intent intent = new Intent();
-                intent.setClass(mActivity,HuBaoPlanActivity.class);
+                intent.setClass(mActivity, HuBaoPlanActivity.class);
                 intent.putExtra(Keys.PLANID, planId);
                 intent.putExtra(Keys.MASSID, massId);
                 startActivity(intent);

@@ -37,6 +37,7 @@ import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -761,7 +762,7 @@ public class NfcScanActivity extends BaseActivity {
         String action = intent.getAction();
         // 分别判断是哪个类型的Tag类型
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
-            //ToastUtils.showToast(getApplicationContext(), "是NDEF类型的");
+            //ToastUtils.showToast(mActivity, "是NDEF类型的");
             NdefMessage[] messages = null;
             // 拿到Tag里面的信息
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -783,13 +784,11 @@ public class NfcScanActivity extends BaseActivity {
             // 定义一个方法处理拿到的数据
             processNDEFMsg(messages);
         } else if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)) {
-
-            ToastUtils.showToast(getApplicationContext(), "是Tech类型的");
-
+            ToastUtils.showToast(mActivity, "是Tech类型的");
         } else if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
-            ToastUtils.showToast(getApplicationContext(), "是TAG类型的");
+            ToastUtils.showToast(mActivity, "是TAG类型的");
         } else {
-            ToastUtils.showToast(getApplicationContext(), "未知类型");
+            ToastUtils.showToast(mActivity, "未知类型");
         }
 
     }
@@ -818,25 +817,37 @@ public class NfcScanActivity extends BaseActivity {
      */
     private void parseRTDUriRecord(NdefRecord record) {
         if (record != null) {
-            String card = new String(record.getPayload());
-            /**************************************************************/
-//            System.out.println("NFC扫描++card++" + card);
-            if (card.startsWith("anhubo", 1) || card.startsWith("AHB", 1)) {
-                cardNumber = card.replace(card.substring(0, 7), "anuhbo");// 拿到数据后做相应的操作
+            try {
+                byte[] payload = record.getPayload();
+                //下面开始NDEF文本数据第一个字节，状态字节
+                //判断文本是基于UTF-8还是UTF-16的，取第一个字节"位与"上16进制的80，16进制的80也就是最高位是1，
+                //其他位都是0，所以进行"位与"运算后就会保留最高位
+                String textEncoding = ((payload[0] & 0x80) == 0) ? "UTF-8" : "UTF-16";
+                //3f最高两位是0，第六位是1，所以进行"位与"运算后获得第六位
+                int languageCodeLength = payload[0] & 0x3f;
+                //下面开始NDEF文本数据第二个字节，语言编码
+                //获得语言编码
+                String languageCode = new String(payload, 1, languageCodeLength, "US-ASCII");
+                //下面开始NDEF文本数据后面的字节，解析出文本
+                cardNumber = new String(payload, languageCodeLength + 1,
+                        payload.length - languageCodeLength - 1, textEncoding);
                 if (!TextUtils.isEmpty(cardNumber)) {
-                    processData(cardNumber);
+                    boolean isanhuboCard = cardNumber.startsWith("anhubo", 0);
+                    boolean isAHBCard = cardNumber.startsWith("AHB", 0);
+                    if (isanhuboCard || isAHBCard) {
+                        processData(cardNumber);
+                    } else {
+                        AlertDialog builder = new AlertDialog(mActivity).builder();
+                        builder
+                                .setTitle("提示")
+                                .setMsg("请扫描安互保专用卡片")
+                                .setCancelable(true).show();
+                    }
                 }
 
-//                System.out.println("NFC扫描++cardNumber++" + cardNumber);
-            }else {
-                AlertDialog builder = new AlertDialog(mActivity).builder();
-                builder
-                        .setTitle("提示")
-                        .setMsg("请扫描安互保专用卡片")
-                        .setCancelable(true).show();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-
         }
     }
 
