@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include android:id="@+id/top_title"
+        layout="@layout/layout_top_bar"></include>
+
+    <LinearLayout
+        android:layout_below="@+id/top_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:background="@color/bg_upload">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="15dp"
+            android:text="问题描述"
+            android:textColor="#070707"
+            android:textSize="14sp" />
+
+        <RelativeLayout
+            android:id="@+id/rl_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/backgroud_white">
+
+            <EditText
+                android:id="@+id/et_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:background="@color/backgroud_white"
+                android:maxLength="120"
+                android:paddingLeft="20dp"
+                android:hint="描述问题，字数不得超过120字"
+                android:textColorHint="@color/gray"
+                android:textColor="@color/gray"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@color/backgroud_white"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="添加照片"
+                android:textColor="#070707"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:paddingBottom="8dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="8dp"
+                android:text="请拍摄现场照片(最多可以添加3张)"
+                android:textColor="@color/gray"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroud_white"
+            android:paddingTop="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_feedback1"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:scaleType="fitXY"
+                android:background="@drawable/card" />
+
+            <ImageView
+                android:id="@+id/iv_feedback2"
+                android:layout_marginBottom="15dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:scaleType="fitXY"
+                android:background="@drawable/card" />
+            <ImageView
+                android:id="@+id/iv_feedback3"
+                android:layout_marginBottom="15dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:scaleType="fitXY"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/card" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_feedback_tag"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"
+            android:text="您的反馈将匿名提交给物业管理人员"
+            android:textSize="12sp"
+            android:textColor="@color/gray"/>
+        <TextView
+            android:id="@+id/tv_submit_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/backgroud_white"
+            android:enabled="true"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="提交"
+            android:textColor="#5e84ff"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+    <include layout="@layout/loading"/>
+</RelativeLayout>
