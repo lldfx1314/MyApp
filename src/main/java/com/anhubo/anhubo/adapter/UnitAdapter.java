@@ -76,9 +76,9 @@ public class UnitAdapter extends BaseAdapter {
         // 把这些信息赋值给相应的控件
         if (TextUtils.equals("运行期", status)) {
             // 设置运行期对应的样式
-            hold.ivHeighSecurity.setBackgroundResource(R.drawable.heigh_security);
-            hold.ivHeighSharing.setBackgroundResource(R.drawable.heigh_sharing);
-            hold.ivPrepayMoney.setBackgroundResource(R.drawable.prepay_money);
+//            hold.ivHeighSecurity.setBackgroundResource(R.drawable.heigh_security);
+//            hold.ivHeighSharing.setBackgroundResource(R.drawable.heigh_sharing);
+//            hold.ivPrepayMoney.setBackgroundResource(R.drawable.prepay_money);
 
             hold.rlHeighSecurity.setBackgroundResource(R.drawable.rl_normal);
             hold.rlHeighSharing.setBackgroundResource(R.drawable.rl_normal);
@@ -200,9 +200,9 @@ public class UnitAdapter extends BaseAdapter {
         TextView tvHeighSharing;
         TextView tvPrepayMoney;
         // 三个图标
-        ImageView ivHeighSecurity;
-        ImageView ivHeighSharing;
-        ImageView ivPrepayMoney;
+//        ImageView ivHeighSecurity;
+//        ImageView ivHeighSharing;
+//        ImageView ivPrepayMoney;
 
         public ViewHolder(View view) {
             // 计划名和时期
@@ -218,9 +218,9 @@ public class UnitAdapter extends BaseAdapter {
             tvHeighSharing = (TextView) view.findViewById(R.id.tv_height_sharing);
             tvPrepayMoney = (TextView) view.findViewById(R.id.tv_prepay_money);
             // 三个图标
-            ivHeighSecurity = (ImageView) view.findViewById(R.id.iv_heigh_security);
-            ivHeighSharing = (ImageView) view.findViewById(R.id.iv_heigh_sharing);
-            ivPrepayMoney = (ImageView) view.findViewById(R.id.iv_prepay_money);
+//            ivHeighSecurity = (ImageView) view.findViewById(R.id.iv_heigh_security);
+//            ivHeighSharing = (ImageView) view.findViewById(R.id.iv_heigh_sharing);
+//            ivPrepayMoney = (ImageView) view.findViewById(R.id.iv_prepay_money);
         }
     }
 }

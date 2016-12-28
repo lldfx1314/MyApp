@@ -414,6 +414,8 @@ public class UnitFragment extends BaseFragment {
             code = bean.code;
             String msg = bean.msg;
             certs = bean.data.certs;
+
+
         }
         // 没有任何保障时显示提示信息，并且不显示ListView的分割线
         if (code == 0 && certs != null) {
