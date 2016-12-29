@@ -17,7 +17,6 @@ import com.anhubo.anhubo.adapter.BuildAdapter;
 import com.anhubo.anhubo.adapter.UnitAdapter;
 import com.anhubo.anhubo.base.BaseFragment;
 import com.anhubo.anhubo.bean.Build_Help_Plan_Bean;
-import com.anhubo.anhubo.bean.Check_UpDateBean;
 import com.anhubo.anhubo.bean.MyPolygonBean;
 import com.anhubo.anhubo.bean.SesameItemModel;
 import com.anhubo.anhubo.bean.SesameModel;
@@ -277,7 +276,7 @@ public class UnitFragment extends BaseFragment {
             }
             // 获取圆弧数据
             getData();
-            //互保计划获取数据
+            //动态凭证获取数据
             getPlanData();
 
             // 获取互助计划列表信息
@@ -359,7 +358,7 @@ public class UnitFragment extends BaseFragment {
 
 
     /**
-     * 互保计划获取数据
+     * 动态凭证获取数据
      */
     private void getPlanData() {
 
@@ -367,7 +366,7 @@ public class UnitFragment extends BaseFragment {
 
         //　互保计划　请求网络
 
-        String url = Urls.Url_Unit_Plan;
+        String url = Urls.URL_UNIT_RUN_CERTIFICATE;
         HashMap<String, String> params = new HashMap<>();
 
         params.put("uid", uid);
@@ -386,22 +385,24 @@ public class UnitFragment extends BaseFragment {
     class MyStringCallback1 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            System.out.println("UnitFragment界面+++互保计划===没拿到数据" + e.getMessage());
+            System.out.println("UnitFragment界面+++互保凭证===没拿到数据" + e.getMessage());
             tvNoPlan1.setVisibility(View.VISIBLE);
 //            lvUnit.setDividerHeight(0);
 //            adapter = new UnitAdapter(mActivity, certs);
 //            lvUnit.setAdapter(adapter);
             String response = SpUtils.getStringParam(mActivity, "PlanData");
-            setPlanData(response);
+//            setPlanData(response);
 
         }
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("互保计划++" + response);
+            System.out.println("动态凭证++" + response);
             SpUtils.putParam(mActivity, "PlanData", response);
 //            互保计划
-            setPlanData(response);
+//            setPlanData(response);
+            adapter = new UnitAdapter(mActivity, certs);
+            lvUnit.setAdapter(adapter);
         }
     }
 
@@ -414,8 +415,6 @@ public class UnitFragment extends BaseFragment {
             code = bean.code;
             String msg = bean.msg;
             certs = bean.data.certs;
-
-
         }
         // 没有任何保障时显示提示信息，并且不显示ListView的分割线
         if (code == 0 && certs != null) {
@@ -434,7 +433,7 @@ public class UnitFragment extends BaseFragment {
             lvUnit.setDividerHeight(0);
         }
 
-        lvUnit.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     /**

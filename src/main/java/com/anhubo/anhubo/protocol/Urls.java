@@ -6,8 +6,8 @@ package com.anhubo.anhubo.protocol;
  */
 public interface Urls {
     /**  接入H5********************************************************************************/
-    String UrlBaseH5 = "http://anhubo.com/";
-    //String UrlBaseH5 = "http://115.28.56.139/";
+    //String UrlBaseH5 = "http://anhubo.com/";
+    String UrlBaseH5 = "http://test.anhubo.com/";
     /**发现，反馈*/
     String Url_FindFeed = UrlBaseH5+"s/html/feedBackSchedule.html";
     /**发现，公告*/
@@ -38,8 +38,8 @@ public interface Urls {
 
 
     /**  Android原生********************************************************************************/
-    String UrlBase = "http://anhubo.com/api/";
-    //String UrlBase = "http://115.28.56.139/api/";
+    //String UrlBase = "http://anhubo.com/api/";
+    String UrlBase = "http://test.anhubo.com/api/";
     /**新增界面*/
     String Url_Add = UrlBase+"Device/add_device_info";
     /**新增设备，检查设备是否已经添加*/
@@ -135,8 +135,8 @@ public interface Urls {
     String Url_FeedBack = UrlBase +"Issue/add_issue";
     /**微信分享*/
     String Url_MyShare = UrlBase +"Personal/share";
-    /**单位下的互保计划*/
-    String Url_Unit_Plan = UrlBase +"Plan/plan_certs";
+    /**单位下的动态凭证*/
+    String URL_UNIT_RUN_CERTIFICATE = UrlBase +"Plan/plan_certs";
     /**待处理反馈界面处理页*/
     String Url_Check_Pending_FeedBack = UrlBase +"Issue/issue_detail";
     /**待处理反馈界面提交*/
