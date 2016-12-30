@@ -14,12 +14,14 @@ public class Unit_PlanBean extends BaseEntity {
 
         public class Certs{
 
-            public String max_each_money;
-            public String plan_money_last;
-            public String max_plan_ensure;
-            public String plan_id;
-            public String plan_name;
-            public String status;
+            public String plan_ensure  ;
+            public String plan_money_proportion  ;
+            public String plan_money  ;
+            public String plan_ensure_proportion  ;
+            public String plan_id  ;
+            public String time  ;
+            public String plan_name  ;
+            public String score  ;
 
         }
     }

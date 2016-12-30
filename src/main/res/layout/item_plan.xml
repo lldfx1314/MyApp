@@ -51,7 +51,7 @@
             android:padding="5dp"
             android:background="@drawable/three_colour">
         <TextView
-            android:id="@+id/tv_heigh_security"
+            android:id="@+id/three_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -102,7 +102,7 @@
                     android:textSize="12sp"
                     android:textColor="@color/black1"/>
                 <TextView
-                    android:id="@+id/tv_height_sharing"
+                    android:id="@+id/heigh_help_m_proportion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
@@ -120,6 +120,7 @@
                     android:textSize="12sp"
                     android:textColor="@color/black1"/>
                 <TextView
+                    android:id="@+id/heigh_help_m"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="2dp"
@@ -173,7 +174,7 @@
                     android:textSize="12sp"
                     android:textColor="@color/black1"/>
                 <TextView
-                    android:id="@+id/tv_prepay_money"
+                    android:id="@+id/prepay_m_proportion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
@@ -191,6 +192,7 @@
                     android:textSize="12sp"
                     android:textColor="@color/black1"/>
                 <TextView
+                    android:id="@+id/prepay_share_m"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="2dp"

@@ -159,5 +159,6 @@ public interface Urls {
     String Delete_Device = UrlBase +"Device/del_dev";
     /**检查更新*/
     String Url_Check_Update = UrlBase +"Index/version_change";
-
+    /**动态凭证详情*/
+    String URL_RUN_CERTIFICATE = UrlBase +"Plan/change_ensure";
 }

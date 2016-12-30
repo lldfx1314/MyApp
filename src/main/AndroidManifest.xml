@@ -191,6 +191,12 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.unitDetial.HuBaoPlanActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.unitDetial.RunCertificateActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.unitDetial.Cell_Detail_Activity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.unitDetial.CellListActivity"
+            android:screenOrientation="portrait" />
 
         <!--建筑界面-->
         <activity

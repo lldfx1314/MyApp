@@ -13,7 +13,7 @@ import butterknife.OnClick;
 /**
  * Created by LUOLI on 2016/12/29.
  */
-public class Company_Detail_Activity extends BaseActivity {
+public class Cell_Detail_Activity extends BaseActivity {
     @InjectView(R.id.company_detail_listview)
     RefreshListview listview;
     @InjectView(R.id.exit_unit)
@@ -27,7 +27,7 @@ public class Company_Detail_Activity extends BaseActivity {
     @Override
     protected void initTitleBar() {
         super.initTitleBar();
-        setTopBarDesc("企业详情");
+        setTopBarDesc("单元详情");
     }
 
     @Override

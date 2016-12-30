@@ -27,6 +27,7 @@ import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.unitDetial.HuBaoPlanActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.MsgPerfectActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.QrScanActivity;
+import com.anhubo.anhubo.ui.activity.unitDetial.RunCertificateActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.Unit2Study;
 import com.anhubo.anhubo.ui.activity.unitDetial.UnitMenuActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.UnitMsgCenterActivity;
@@ -362,8 +363,6 @@ public class UnitFragment extends BaseFragment {
      */
     private void getPlanData() {
 
-        certs = new ArrayList<>();
-
         //　互保计划　请求网络
 
         String url = Urls.URL_UNIT_RUN_CERTIFICATE;
@@ -391,7 +390,7 @@ public class UnitFragment extends BaseFragment {
 //            adapter = new UnitAdapter(mActivity, certs);
 //            lvUnit.setAdapter(adapter);
             String response = SpUtils.getStringParam(mActivity, "PlanData");
-//            setPlanData(response);
+            setPlanData(response);
 
         }
 
@@ -400,9 +399,8 @@ public class UnitFragment extends BaseFragment {
             System.out.println("动态凭证++" + response);
             SpUtils.putParam(mActivity, "PlanData", response);
 //            互保计划
-//            setPlanData(response);
-            adapter = new UnitAdapter(mActivity, certs);
-            lvUnit.setAdapter(adapter);
+            setPlanData(response);
+
         }
     }
 
@@ -410,6 +408,8 @@ public class UnitFragment extends BaseFragment {
      * 互保计划
      */
     private void setPlanData(String response) {
+        certs = new ArrayList<>();
+
         Unit_PlanBean bean = new Gson().fromJson(response, Unit_PlanBean.class);
         if (bean != null) {
             code = bean.code;
@@ -418,12 +418,13 @@ public class UnitFragment extends BaseFragment {
         }
         // 没有任何保障时显示提示信息，并且不显示ListView的分割线
         if (code == 0 && certs != null) {
-            adapter = new UnitAdapter(mActivity, certs);
+
             if (certs.size() == 0) {
                 tvNoPlan1.setVisibility(View.VISIBLE);
-
+                tvNoPlan2.setVisibility(View.GONE);
                 lvUnit.setDividerHeight(0);
             } else {
+                tvNoPlan1.setVisibility(View.GONE);
                 tvNoPlan2.setVisibility(View.VISIBLE);
                 tvNoPlan2.setText("动态保障凭证");
             }
@@ -432,15 +433,16 @@ public class UnitFragment extends BaseFragment {
             tvNoPlan1.setVisibility(View.VISIBLE);
             lvUnit.setDividerHeight(0);
         }
+        adapter = new UnitAdapter(mActivity, certs);
+        lvUnit.setAdapter(adapter);
 
-        adapter.notifyDataSetChanged();
     }
 
     /**
      * 获取圆弧数据
      */
     private void getData() {
-        //每次请求网络之前（控件是在网络获取成功后动态添加上去的）先把上次的控件对象移除，否则会重复
+        // 每次请求网络之前（控件是在网络获取成功后动态添加上去的）先把上次的控件对象移除，否则会重复
         if (sesameCreditPanelLL != null) {
             sesameCreditPanelLL.removeView(scp);
         }
@@ -781,16 +783,16 @@ public class UnitFragment extends BaseFragment {
 
     @Override
     public void initData() {
+        //　ListView的条目点击事件
         lvUnit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Build_Help_Plan_Bean.Data.Plans plan = plans.get(position - 1);
-                String planId = plan.plan_id;
-                String massId = plan.mass_id;
+                List<Unit_PlanBean.Data.Certs> certs = UnitFragment.this.certs;
+                Unit_PlanBean.Data.Certs cert = certs.get(position - 1);
+                String planId = cert.plan_id;
                 Intent intent = new Intent();
-                intent.setClass(mActivity, HuBaoPlanActivity.class);
-                intent.putExtra(Keys.PLANID, planId);
-                intent.putExtra(Keys.MASSID, massId);
+                intent.setClass(mActivity, RunCertificateActivity.class);
+                intent.putExtra(Keys.PLANID,planId);
                 startActivity(intent);
             }
         });

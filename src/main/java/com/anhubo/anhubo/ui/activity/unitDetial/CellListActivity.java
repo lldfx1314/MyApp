@@ -11,7 +11,7 @@ import butterknife.InjectView;
 /**
  * Created by LUOLI on 2016/12/29.
  */
-public class UnitListActivity extends BaseActivity {
+public class CellListActivity extends BaseActivity {
     @InjectView(R.id.unit_list_listview)
     RefreshListview listview;
 
