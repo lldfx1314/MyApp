@@ -1,21 +1,16 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.RunCertificateBean;
 import com.anhubo.anhubo.protocol.Urls;
-import com.anhubo.anhubo.utils.DisplayUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.view.AlertDialog;
@@ -24,7 +19,6 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.InjectView;
@@ -69,6 +63,7 @@ public class RunCertificateActivity extends BaseActivity {
     TextView runTvPlanHelpCompany;
     private String planId;
     private String uid;
+    private String unitId;
 
 
     @Override
@@ -156,13 +151,14 @@ public class RunCertificateActivity extends BaseActivity {
             String sumMoney = data.sum_money;// 交互金余额
             int newPlanEnsure = data.plan_ensure;// 最高互助额
             int newPlanMoney = data.plan_money;// 最高分摊额
-            int today = data.score0;
+            int twoDaysAgo = data.score0;
             int last = data.score1;
-            int twoDaysAgo = data.score2;
+            int today = data.score2;
             // 单元
             String unitName = data.unit_name;// 所属单元
             String unitBusinessNum = data.unit_business_num;// 单元会员数
             int existFlag = data.exist_flag;// 是否加入单元
+            unitId = data.unit_id;
             // 计划
             String status = data.status;// 计划状态
             String planName = data.plan_name;// 计划名称
@@ -211,6 +207,7 @@ public class RunCertificateActivity extends BaseActivity {
             if (existFlag == 1) {
                 // 已加入单元
                 runTvUnitName.setVisibility(View.VISIBLE);
+                runTvUnitMember.setVisibility(View.VISIBLE);
                 runBtnJoinUnit.setVisibility(View.GONE);
                 runTvUnitName.setText(unitName);
 
@@ -222,6 +219,7 @@ public class RunCertificateActivity extends BaseActivity {
             } else if (existFlag == 0) {
                 // 尚未加入单元
                 runTvUnitName.setVisibility(View.GONE);
+                runTvUnitMember.setVisibility(View.GONE);
                 runBtnJoinUnit.setVisibility(View.VISIBLE);
             }
 
@@ -245,12 +243,14 @@ public class RunCertificateActivity extends BaseActivity {
                 // 加入单元,点击进入单元列表界面
                 Intent intent = new Intent();
                 intent.setClass(mActivity, CellListActivity.class);
+                intent.putExtra(Keys.PLANID,planId);
                 startActivity(intent);
                 break;
             case R.id.run_tv_unit_member:
                 // 单元会员数,点击进入单元详情界面
                 Intent intent1 = new Intent();
                 intent1.setClass(mActivity, Cell_Detail_Activity.class);
+                intent1.putExtra(Keys.UNITID,unitId);
                 startActivity(intent1);
                 break;
             case R.id.run_tv_plan_run_status:

@@ -9,19 +9,20 @@ import java.util.List;
 public class Unit_PlanBean extends BaseEntity {
     public Data data;
 
-    public class Data{
+    public class Data {
         public List<Certs> certs;
 
-        public class Certs{
+        public class Certs {
 
-            public String plan_ensure  ;
-            public String plan_money_proportion  ;
-            public String plan_money  ;
-            public String plan_ensure_proportion  ;
-            public String plan_id  ;
-            public String time  ;
-            public String plan_name  ;
-            public String score  ;
+            public String plan_ensure;
+            public String plan_money_proportion;
+            public String plan_money;
+            public String plan_ensure_proportion;
+            public String plan_id;
+            public String time;
+            public String plan_name;
+            public String score;
+            public String unit_id;
 
         }
     }

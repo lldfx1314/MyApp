@@ -87,24 +87,15 @@ public class UnitAdapter extends BaseAdapter {
 
         hold.tvPlanName.setText(planName);
         hold.tvPlanStatus.setText(time);
-        // 如果是"",就显示0
-//        if (TextUtils.equals(maxPlanEnsure, "")) {
-//            hold.tvHeighSecurity.setText(0 + "");
-//        }
-//        if (TextUtils.equals(maxEachMoney, "")) {
-//            hold.tvHeighSharing.setText(0 + "");
-//        }
-//        if (TextUtils.equals(planMoneyLast, "")) {
-//            hold.tvPrepayMoney.setText(0 + "");
-//        }
         //如果不过万，就在小数后保留2位，并且四舍五入
-        DecimalFormat df2  = new DecimalFormat("###.00");
+        DecimalFormat df2 = new DecimalFormat("###.00");
+
         // 上旬三色评分
         if (!TextUtils.isEmpty(score)) {
             hold.threeScore.setText(score);
         }
         // 最高互助额
-        if(!TextUtils.isEmpty(planEnsureProportion)){
+        if (!TextUtils.isEmpty(planEnsureProportion)) {
             hold.heighHelpProportion.setText(planEnsureProportion);
         }
 
@@ -112,23 +103,27 @@ public class UnitAdapter extends BaseAdapter {
             Double heighSharing = Double.parseDouble(planEnsure) / 10000;
 
             if (heighSharing < 1) {
-//                double parseDouble = Double.parseDouble(planEnsure.substring(0, 4));
                 hold.heighHelpMoney.setText(planEnsure.substring(0, 4));
             } else if (heighSharing >= 1) {
                 String str = String.valueOf(heighSharing);
-                if (str.length() >= 3) {
-                    setWan(str.substring(0, 3) + "万");
-                    hold.heighHelpMoney.setHorizontallyScrolling(true);
-                    hold.heighHelpMoney.setText(ss);
+                if (str.length() >= 4) {
+                    String substring = str.substring(0, 4);
+                    //　做判断，防止显示类似＂500.万＂这样的情况
+                    if (substring.endsWith(".")) {
+                        setWan(substring.substring(0, 3) + "万");
+                    } else {
+                        setWan(substring + "万");
+                    }
                 } else {
                     setWan(str + "万");
-                    hold.heighHelpMoney.setHorizontallyScrolling(true);
-                    hold.heighHelpMoney.setText(ss);
+
                 }
+                hold.heighHelpMoney.setHorizontallyScrolling(true);
+                hold.heighHelpMoney.setText(ss);
             }
         }
         // 预付分摊额
-        if(!TextUtils.isEmpty(planMoneyProportion)){
+        if (!TextUtils.isEmpty(planMoneyProportion)) {
             hold.prepayPproportion.setText(planMoneyProportion);
         }
         if (!TextUtils.isEmpty(planMoney)) {
@@ -136,32 +131,39 @@ public class UnitAdapter extends BaseAdapter {
 
             if (prepayMoney < 1) {
 
-//                double parseDouble = Double.parseDouble(planMoney.substring(0, 4));
                 hold.prepayShareMoney.setText(planMoney.substring(0, 4));
             } else if (prepayMoney >= 1) {
 
                 String str = String.valueOf(prepayMoney);
-                if (str.length() >= 3) {
-                    setWan(str.substring(0, 3) + "万");
-                    hold.prepayShareMoney.setHorizontallyScrolling(true);
-                    hold.prepayShareMoney.setText(ss);
+                if (str.length() >= 4) {
+                    String substring = str.substring(0, 4);
+                    //　做判断，防止显示类似＂500.万＂这样的情况
+                    if (substring.endsWith(".")) {
+                        setWan(substring.substring(0, 3) + "万");
+                    } else {
+                        setWan(substring + "万");
+                    }
                 } else {
                     setWan(str + "万");
-                    hold.prepayShareMoney.setHorizontallyScrolling(true);
-                    hold.prepayShareMoney.setText(ss);
                 }
+                hold.prepayShareMoney.setHorizontallyScrolling(true);
+                hold.prepayShareMoney.setText(ss);
 
             }
         }
         return convertView;
     }
-    /**设置万字大小*/
-    private void setWan(String string){
+
+    /**
+     * 设置万字大小
+     */
+    private void setWan(String string) {
 
         ss = new SpannableString(string);
         MyURLSpan myURLSpan = new MyURLSpan(string);
-        ss.setSpan(myURLSpan, string.length()-1, string.length(), SpannableString.SPAN_EXCLUSIVE_INCLUSIVE);
+        ss.setSpan(myURLSpan, string.length() - 1, string.length(), SpannableString.SPAN_EXCLUSIVE_INCLUSIVE);
     }
+
     class MyURLSpan extends URLSpan {
 
 
@@ -171,7 +173,7 @@ public class UnitAdapter extends BaseAdapter {
 
         @Override
         public void updateDrawState(TextPaint ds) {
-            ds.setTextSize(DisplayUtil.sp2px(mContext,8));
+            ds.setTextSize(DisplayUtil.sp2px(mContext, 8));
         }
     }
 

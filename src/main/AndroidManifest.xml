@@ -197,6 +197,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.unitDetial.CellListActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.unitDetial.CellActivity"
+            android:screenOrientation="portrait" />
 
         <!--建筑界面-->
         <activity

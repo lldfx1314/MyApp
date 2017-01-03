@@ -1,5 +1,8 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -14,44 +17,55 @@ import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * Created by Administrator on 2016/9/30.
+ * Created by LUOLI on 2017/1/3.
  */
-public class Unit2Study extends BaseActivity {
-    @InjectView(R.id.wv_study)
-    WebView wvStudy;
+public class CellActivity extends BaseActivity {
+    @InjectView(R.id.cell_webView)
+    WebView webView;
     private String url;
+    private String uid;
+    private String planId;
+    private String unitId;
 
     @Override
     protected void initConfig() {
-        url = Urls.Url_UnitStudy;
-    }
+        uid = SpUtils.getStringParam(mActivity, Keys.UID);
+        Intent intent = getIntent();
+        planId = intent.getStringExtra(Keys.PLANID);
+        unitId = intent.getStringExtra(Keys.UNITID);
+        if(TextUtils.isEmpty(unitId)){
+            unitId = "";
+        }
 
+        url = Urls.Url_Unit_Cell;
+    }
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_unitstudy;
+        return R.layout.activity_cell;
     }
 
     @Override
-    protected void initViews() {
-        // 设置状态栏显示的提示内容
-        setTopBarDesc("学习");
+    protected void initTitleBar() {
+        super.initTitleBar();
+        setTopBarDesc("加入单元");
         topPb.setVisibility(View.VISIBLE);
     }
 
     @Override
-    protected void initEvents() {
-        // 获取uid拼接参数
+    protected void initViews() {
+// 获取uid拼接参数
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
         //System.out.println("uid是==========" + uid);
-        String newUrl = url + "?uid=" + uid;
+        String newUrl = url + "?uid=" + uid+"&unit_id="+unitId+"&plan_id="+planId;
 
-        WebSettings settings = wvStudy.getSettings();
+        WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
-        wvStudy.setWebChromeClient(new WebChromeViewClient());
-        wvStudy.setWebViewClient(new WebViewClient() {
+        webView.setWebChromeClient(new WebChromeViewClient());
+        webView.setWebViewClient(new WebViewClient() {
             //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
@@ -60,9 +74,9 @@ public class Unit2Study extends BaseActivity {
 
         });
 
-        wvStudy.addJavascriptInterface(new MyJavaScriptInterface(), "ADAPP");
+        webView.addJavascriptInterface(new MyJavaScriptInterface(), "ADAPP");
         // 加载界面
-        wvStudy.loadUrl(newUrl);
+        webView.loadUrl(newUrl);
     }
 
     private class WebChromeViewClient extends WebChromeClient {
@@ -76,14 +90,13 @@ public class Unit2Study extends BaseActivity {
         }
 
     }
-
     class MyJavaScriptInterface {
         public MyJavaScriptInterface() {
         }
 
         @JavascriptInterface
         public void alertAPP() {
-            ToastUtils.showToast(mActivity, "请选择答案");
+            //ToastUtils.showToast(mActivity, "请选择答案");
         }
     }
 
@@ -96,6 +109,7 @@ public class Unit2Study extends BaseActivity {
     public void onClick(View v) {
 
     }
+
     @Override
     public void onSystemUiVisibilityChange(int visibility) {
 

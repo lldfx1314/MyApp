@@ -45,8 +45,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginBottom="25dp"
-        android:background="@drawable/btn_reg_login"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/btn_create_unit"
         android:text="退出单元"
         android:textColor="@color/btn_blue"
         android:textSize="16sp" />

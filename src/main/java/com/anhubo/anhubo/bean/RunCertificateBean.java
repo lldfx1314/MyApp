@@ -17,6 +17,7 @@ public class RunCertificateBean extends BaseEntity {
         public int pay_num;
         public int payed_num;
         public int plan_money;
+        public String unit_id;
         public String unit_business_num;
         public String u_status;
         public String business_num;
