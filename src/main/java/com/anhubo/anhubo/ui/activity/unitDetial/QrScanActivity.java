@@ -109,6 +109,8 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     private ScanBean scanBean;
     private ArrayList<String> listResult;
     private boolean isZero;
+    private Dialog showDialog;
+    private Dialog showDialog1;
 
     @Override
     protected void initConfig() {
@@ -168,7 +170,25 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         // 出厂时间的弹窗
         alterTime();
     }
+    private void alterTime() {
+        popBirthHelper = new PopBirthHelper(mActivity);
+        popBirthHelper.setOnClickOkListener(new PopBirthHelper.OnClickOkListener() {
+            @Override
+            public void onClickOk(String time) {
+                /*dialog.dismiss();
+                mQRCodeView.startSpot();*/
+                if (!TextUtils.isEmpty(time)) {
 
+                    startTime = time;
+                } else {
+                    ToastUtils.showToast(mActivity, "您所选日期大于当前时间");
+                }
+
+            }
+
+
+        });
+    }
 
     @Override
     protected void initEvents() {
@@ -201,7 +221,6 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         @Override
         public void onResponse(String response) {
 //            System.out.println("QrScanActivity界面获取++进度条信息++++"+response);
-            progressBar.setVisibility(View.GONE);
             CheckComplete_Bean bean = new Gson().fromJson(response, CheckComplete_Bean.class);
             if (bean != null) {
 
@@ -353,7 +372,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     private void getData() {
         String[] split = Utils.getAppInfo(mActivity).split("#");
         versionName = split[1];
-        progressBar.setVisibility(View.VISIBLE);
+        showDialog = loadProgressDialog.show(mActivity, "正在加载...");
         String url = Urls.Url_Check;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("device_id", cardNumber);
@@ -368,7 +387,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            progressBar.setVisibility(View.GONE);
+            showDialog.dismiss();
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -381,6 +400,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
             //System.out.println("查询"+response);
             scanBean = new Gson().fromJson(response, ScanBean.class);
             if (scanBean != null) {
+                showDialog.dismiss();
                 // 获取到数据置为true
                 isGetDeviceInfo = true;
                 parseMessage(scanBean);
@@ -395,8 +415,6 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
      * 拿到数据后判断设备ID是否绑定而跳转到相应界面
      */
     private void parseMessage(ScanBean scanBean) {
-
-        progressBar.setVisibility(View.GONE);
         int isExist = scanBean.data.device_exist;//设备号是否在后台存在
         //设备ID
         deviceId = scanBean.data.device_id;
@@ -590,25 +608,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
 
     }
 
-    private void alterTime() {
-        popBirthHelper = new PopBirthHelper(mActivity);
-        popBirthHelper.setOnClickOkListener(new PopBirthHelper.OnClickOkListener() {
-            @Override
-            public void onClickOk(String time) {
-                /*dialog.dismiss();
-                mQRCodeView.startSpot();*/
-                if (!TextUtils.isEmpty(time)) {
 
-                    startTime = time;
-                } else {
-                    ToastUtils.showToast(mActivity, "您所选日期大于当前时间");
-                }
-
-            }
-
-
-        });
-    }
 
     /**
      * 进入测试页
@@ -741,7 +741,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     private void checkComplete() {
 
         // 这里是完成的点击事件
-        progressBar.setVisibility(View.VISIBLE);
+        showDialog1 = loadProgressDialog.show(mActivity, "正在提交...");
         String url = Urls.Url_Check_Complete;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("uid", uid); //这是uid,登录后改成真正的用户
@@ -763,7 +763,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     class MyStringCallback1 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            progressBar.setVisibility(View.GONE);
+            showDialog1.dismiss();
 
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
@@ -776,7 +776,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         @Override
         public void onResponse(String response) {
 //            System.out.println("QrScanActivity界面+checkComplete++"+response);
-            progressBar.setVisibility(View.GONE);
+            showDialog1.dismiss();
             CheckComplete_Bean bean = new Gson().fromJson(response, CheckComplete_Bean.class);
             if (bean != null) {
 

@@ -135,6 +135,5 @@
         android:textColor="@color/blue"
         android:textSize="14sp" />
     </LinearLayout>
-    <include layout="@layout/loading"/>
 
 </RelativeLayout>

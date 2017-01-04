@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.interfaces.UiInterface;
+import com.anhubo.anhubo.view.LoadProgressDialog;
 
 
 /**
@@ -34,6 +35,7 @@ public abstract class BaseFragment extends Fragment  implements View.OnClickList
     protected RelativeLayout llTop;
     protected FrameLayout fl_basepager_content;
     protected TextView tvTopBarRight;
+    protected LoadProgressDialog loadProgressDialog;
 
     @Nullable
     @Override
@@ -45,6 +47,7 @@ public abstract class BaseFragment extends Fragment  implements View.OnClickList
             rootView = changeToView(getContentView());
             initTitleView();
             initTitleBar();
+            initProgressBar();//初始化加载进度条
             initView();
             initListener();
             //所有Activity中共同的点击处理
@@ -61,6 +64,11 @@ public abstract class BaseFragment extends Fragment  implements View.OnClickList
 
         return view;
     }
+
+    private void initProgressBar() {
+        loadProgressDialog = LoadProgressDialog.newInstance();
+    }
+
     /**加载Title布局*/
     private void initTitleView() {
         // 找到控件

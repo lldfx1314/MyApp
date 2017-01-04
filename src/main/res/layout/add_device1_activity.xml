@@ -6,7 +6,6 @@
     <include
         android:id="@+id/top_title"
         layout="@layout/layout_top_bar"></include>
-    <include layout="@layout/loading"/>
     <LinearLayout
         android:id="@+id/llayout"
         android:layout_below="@+id/top_title"
@@ -62,4 +61,4 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+    </RelativeLayout>

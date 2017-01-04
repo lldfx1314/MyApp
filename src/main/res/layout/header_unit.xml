@@ -131,7 +131,7 @@
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:drawableTop="@drawable/unit_drill"
-                        android:text="演练"
+                        android:text="疏散"
                         android:textColor="@color/gray"
                         android:textSize="14sp" />
 

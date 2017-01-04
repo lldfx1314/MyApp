@@ -85,6 +85,7 @@ public class EngineerActivity extends BaseActivity {
     private ArrayList<String> list;
     private PopupWindow popupWindow;
     private String str;
+    private Dialog showDialog;
 
     @Override
     protected int getContentViewId() {
@@ -242,7 +243,7 @@ public class EngineerActivity extends BaseActivity {
                     .setCancelable(true).show();
             return;
         }
-        progressBar.setVisibility(View.VISIBLE);
+        showDialog = loadProgressDialog.show(mActivity, "正在提交...");
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         params.put("re_num", engineerPhone);
@@ -269,6 +270,7 @@ public class EngineerActivity extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
+            showDialog.dismiss();
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -282,7 +284,7 @@ public class EngineerActivity extends BaseActivity {
             //System.out.println(response);
             EngineerBean bean = new Gson().fromJson(response, EngineerBean.class);
             if (bean != null) {
-                progressBar.setVisibility(View.GONE);
+                showDialog.dismiss();
                 int code = bean.code;
                 final String msg = bean.msg;
                 if (code != 0) {

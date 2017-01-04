@@ -1,5 +1,6 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -46,6 +47,7 @@ public class CellListActivity extends BaseActivity implements CellListAdapter.On
     private boolean isLoadMore = false;
     private String uid;
     private String unitId;
+    private Dialog showDialog;
 
     @Override
     protected void initConfig() {
@@ -106,6 +108,7 @@ public class CellListActivity extends BaseActivity implements CellListAdapter.On
     @Override
     protected void onLoadDatas() {
         // 获取数据
+        showDialog = loadProgressDialog.show(mActivity, "正在加载...");
         getData();
     }
 
@@ -129,13 +132,14 @@ public class CellListActivity extends BaseActivity implements CellListAdapter.On
 
         @Override
         public void onError(Call call, Exception e) {
-
             System.out.println("CellListActivity界面+获取数据失败+" + e.getMessage());
+            showDialog.dismiss();
         }
 
         @Override
         public void onResponse(String response) {
             System.out.println("CellListActivity界面+" + response);
+            showDialog.dismiss();
             setData(response);
         }
     }
@@ -149,15 +153,16 @@ public class CellListActivity extends BaseActivity implements CellListAdapter.On
             page = data.page;
             units = data.units;
         }
-        if (units == null) {
-            listview.loadMoreFinished();
-            ToastUtils.showToast(mActivity, "已经是最后一条了");
-        }
+
         if (!isLoadMore) {
             adapter = new CellListAdapter(mActivity, units, CellListActivity.this);
             listview.setAdapter(adapter);
         } else {
             adapter.notifyDataSetChanged();
+        }
+        if (units == null && adapter.getCount() != 0) {
+            listview.loadMoreFinished();
+            ToastUtils.showToast(mActivity, "已经是最后一条了");
         }
 
     }
@@ -167,7 +172,10 @@ public class CellListActivity extends BaseActivity implements CellListAdapter.On
         // 创建单元
         enterUnitActivity();
     }
-    /**加入和创建单元*/
+
+    /**
+     * 加入和创建单元
+     */
     private void enterUnitActivity() {
         Intent intent = new Intent();
         intent.setClass(mActivity, CellActivity.class);

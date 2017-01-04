@@ -1,5 +1,6 @@
 package com.anhubo.anhubo.ui.activity.Login_Register;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -52,6 +53,7 @@ public class Login_Pwd extends BaseActivity {
     private boolean pwdIsVisible;
     private String pwd;
     private AlertDialog builder;
+    private Dialog showDialog;
 
     @Override
     protected void initConfig() {
@@ -169,7 +171,7 @@ public class Login_Pwd extends BaseActivity {
     }
 
     private void pwdLogin() {
-
+        showDialog = loadProgressDialog.show(mActivity, "正在登录...");
         // 创建网络请求登录
         String url = Urls.Url_LoginPwd;
         HashMap<String, String> params = new HashMap<>();
@@ -193,12 +195,13 @@ public class Login_Pwd extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-
+            showDialog.dismiss();
             System.out.println("Login_Pwd+++===没拿到数据" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
+            showDialog.dismiss();
             Login_Bean bean = new Gson().fromJson(response, Login_Bean.class);
             if (bean != null) {
                 // 获取到数据

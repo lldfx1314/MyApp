@@ -5,7 +5,6 @@
     <include
         android:id="@+id/top_title"
         layout="@layout/layout_top_bar"/>
-    <include layout="@layout/loading"></include>
     <com.anhubo.anhubo.view.RefreshListview
         android:id="@+id/lv_study"
         android:layout_below="@+id/top_title"

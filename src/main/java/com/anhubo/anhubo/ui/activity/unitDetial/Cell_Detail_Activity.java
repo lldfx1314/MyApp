@@ -1,19 +1,23 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
+import android.app.Dialog;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.CellDetailAdapter;
-import com.anhubo.anhubo.adapter.CellListAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.CellDeiailBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
-import com.anhubo.anhubo.view.RefreshListview;
+import com.anhubo.anhubo.view.ShowBottonDialog;
 import com.google.gson.Gson;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -30,7 +34,7 @@ import okhttp3.Call;
  */
 public class Cell_Detail_Activity extends BaseActivity {
     @InjectView(R.id.company_detail_listview)
-    RefreshListview listview;
+    ListView listview;
     @InjectView(R.id.exit_unit)
     Button exitUnit;
     private String unitId;
@@ -38,8 +42,11 @@ public class Cell_Detail_Activity extends BaseActivity {
     private int pager = 0;
     private int page;
     private List<CellDeiailBean.Data.Businesses> businesses;
-    private boolean isLoadMore = false;
     private CellDetailAdapter adapter;
+    private Dialog showDialog;
+    private Dialog dialog;
+    private Button btnWeixin;
+    private Button btnweixinCircle;
 
     @Override
     protected void initConfig() {
@@ -61,32 +68,15 @@ public class Cell_Detail_Activity extends BaseActivity {
 
     @Override
     protected void initViews() {
-// 监听listview的滑动监听
-        listview.setOnRefreshingListener(new MyOnRefreshingListener());
+        ivTopBarRightUnitShare.setVisibility(View.VISIBLE);
+        ivTopBarRightUnitShare.setOnClickListener(this);
     }
 
-    class MyOnRefreshingListener implements RefreshListview.OnRefreshingListener {
-
-        @Override
-        public void onLoadMore() {
-
-
-            // 判断是否有更多数据，moreurl是否为空
-            if (pager <= page) {
-                // 加载更多业务
-                isLoadMore = true;
-                getData();
-            } else {
-                // 恢复Listview的加载更多状态
-                listview.loadMoreFinished();
-                ToastUtils.showToast(mActivity, "没有更多数据了");
-            }
-        }
-    }
 
     @Override
     protected void onLoadDatas() {
         //　获取数据
+        showDialog = loadProgressDialog.show(mActivity, "正在加载...");
         getData();
     }
 
@@ -112,11 +102,13 @@ public class Cell_Detail_Activity extends BaseActivity {
         public void onError(Call call, Exception e) {
 
             System.out.println("CellListActivity界面+获取数据失败+" + e.getMessage());
+            showDialog.dismiss();
         }
 
         @Override
         public void onResponse(String response) {
             System.out.println("CellListActivity界面+" + response);
+            showDialog.dismiss();
             setData(response);
         }
     }
@@ -130,22 +122,76 @@ public class Cell_Detail_Activity extends BaseActivity {
             page = data.page;
             businesses = data.businesses;
         }
-        if (businesses == null) {
-            listview.loadMoreFinished();
-            ToastUtils.showToast(mActivity, "已经是最后一条了");
-        }
-        if (!isLoadMore) {
-            adapter = new CellDetailAdapter(mActivity, businesses);
-            listview.setAdapter(adapter);
-        } else {
-            adapter.notifyDataSetChanged();
-        }
+
+        adapter = new CellDetailAdapter(mActivity, businesses);
+        listview.setAdapter(adapter);
     }
 
     @OnClick(R.id.exit_unit)
+    @Override
     public void onClick(View v) {
+        ShareAction shareAction = new ShareAction(mActivity);
+        switch (v.getId()){
+            case R.id.ivTopBarRight_unit_share:
+                showDialog();
+                break;
+            case R.id.btn_weixin:
 
+                shareAction
+                        .setPlatform(SHARE_MEDIA.WEIXIN)
+                        .withText("hello")
+                        .withTitle("标题")
+                        .setCallback(umShareListener)
+                        .share();
+                break;
+            case R.id.btn_weixin_circle:
+                shareAction
+                        .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
+                        .withText("hello")
+                        .withTitle("标题")
+                        .setCallback(umShareListener)
+                        .share();
+                break;
+        }
     }
+
+    /**
+     * 弹出对话框
+     */
+    private void showDialog() {
+        // 创建一个对象
+        View view = View.inflate(mActivity, R.layout.dialog_share, null);
+        View btnCancel = view.findViewById(R.id.btn_share_Dialog_cancel);//取消按钮
+        //显示对话框
+        ShowBottonDialog showBottonDialog = new ShowBottonDialog(mActivity, view, btnCancel);
+        dialog = showBottonDialog.show();
+        //拍照按钮
+        btnWeixin = (Button) view.findViewById(R.id.btn_weixin);
+        //相册获取
+        btnweixinCircle = (Button) view.findViewById(R.id.btn_weixin_circle);
+        // 设置监听
+        btnWeixin.setOnClickListener(this);
+        btnweixinCircle.setOnClickListener(this);
+    }
+
+    private UMShareListener umShareListener = new UMShareListener() {
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            //System.out.println(platform + "分享成功");
+            dialog.dismiss();
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            ToastUtils.showToast(mActivity, "分享失败");
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            ToastUtils.showToast(mActivity, "分享取消");
+
+        }
+    };
 
     @Override
     public void onSystemUiVisibilityChange(int visibility) {

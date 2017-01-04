@@ -132,6 +132,7 @@ public class PersonMsgActivity extends BaseActivity {
     private String newAge;
     private String buildingName;
     private UMShareAPI mShareAPI;
+    private Dialog showDialog;
 
     @Override
     protected void initConfig() {
@@ -809,6 +810,7 @@ public class PersonMsgActivity extends BaseActivity {
         if (newFile == null) {
             return;
         }
+//        showDialog = loadProgressDialog.show(mActivity, "正在上传...");
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         String url = Urls.Url_UpLoadingHeaderIcon;
@@ -827,6 +829,7 @@ public class PersonMsgActivity extends BaseActivity {
     class MyStringCallback1 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
+//            showDialog.dismiss();
             System.out.println("PersonMsgActivity+++界面上传头像===" + e.getMessage());
 
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
@@ -838,6 +841,7 @@ public class PersonMsgActivity extends BaseActivity {
             //System.out.println("PersonMsgActivity个人信息页面+" + response);
             My_HeaderIconBean bean = new Gson().fromJson(response, My_HeaderIconBean.class);
             if (bean != null) {
+//                showDialog.dismiss();
                 int code = bean.code;
                 final String img1 = bean.data.img;
                 String msg = bean.msg;

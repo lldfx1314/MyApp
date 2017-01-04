@@ -1,5 +1,6 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -11,6 +12,7 @@ import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.RunCertificateBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.ui.activity.DiscoveryDetial.NoticeActivity;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.view.AlertDialog;
@@ -64,6 +66,7 @@ public class RunCertificateActivity extends BaseActivity {
     private String planId;
     private String uid;
     private String unitId;
+    private Dialog showDialog;
 
 
     @Override
@@ -99,6 +102,8 @@ public class RunCertificateActivity extends BaseActivity {
      * 获取数据
      */
     private void getData() {
+        showDialog = loadProgressDialog.show(mActivity, "正在上传...");
+
         String url = Urls.URL_RUN_CERTIFICATE;
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
@@ -116,6 +121,7 @@ public class RunCertificateActivity extends BaseActivity {
         public void onError(Call call, Exception e) {
 
             System.out.println("RunCertificateActivity+++===界面失败" + e.getMessage());
+            showDialog.dismiss();
             AlertDialog builder = new AlertDialog(mActivity).builder();
             builder
                     .setTitle("提示")
@@ -137,6 +143,7 @@ public class RunCertificateActivity extends BaseActivity {
         @Override
         public void onResponse(String response) {
             System.out.println("RunCertificateActivity+++" + response);
+            showDialog.dismiss();
             setPlanData(response);
         }
     }
@@ -255,7 +262,7 @@ public class RunCertificateActivity extends BaseActivity {
                 break;
             case R.id.run_tv_plan_run_status:
                 // 运行情况
-
+                startActivity(new Intent(mActivity, NoticeActivity.class));
                 break;
         }
     }

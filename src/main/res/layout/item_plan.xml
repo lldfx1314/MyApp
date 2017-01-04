@@ -76,7 +76,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:text="上旬三色评分"
+                android:text="上次三色评分"
                 android:textColor="@color/gray"
                 android:textSize="14sp"/>
         </RelativeLayout>
@@ -220,7 +220,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:text="预付分摊额"
+                android:text="最高分摊额"
                 android:textColor="@color/gray"
                 android:textSize="14sp"/>
         </RelativeLayout>

@@ -1,5 +1,6 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,6 +10,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
@@ -16,6 +18,10 @@ import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.view.ShowBottonDialog;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -30,6 +36,10 @@ public class CellActivity extends BaseActivity {
     private String uid;
     private String planId;
     private String unitId;
+    private Dialog dialog;
+    private Button btnWeixin;
+    private Button btnweixinCircle;
+    private String shareString;
 
     @Override
     protected void initConfig() {
@@ -92,12 +102,33 @@ public class CellActivity extends BaseActivity {
     }
     class MyJavaScriptInterface {
         public MyJavaScriptInterface() {
+
         }
 
         @JavascriptInterface
-        public void alertAPP() {
-            //ToastUtils.showToast(mActivity, "请选择答案");
+        public void shareAPP(String string) {
+            shareString = string;
+            showDialog();
         }
+    }
+
+    /**
+     * 弹出对话框
+     */
+    private void showDialog() {
+        // 创建一个对象
+        View view = View.inflate(mActivity, R.layout.dialog_share, null);
+        View btnCancel = view.findViewById(R.id.btn_share_Dialog_cancel);//取消按钮
+        //显示对话框
+        ShowBottonDialog showBottonDialog = new ShowBottonDialog(mActivity, view, btnCancel);
+        dialog = showBottonDialog.show();
+        //拍照按钮
+        btnWeixin = (Button) view.findViewById(R.id.btn_weixin);
+        //相册获取
+        btnweixinCircle = (Button) view.findViewById(R.id.btn_weixin_circle);
+        // 设置监听
+        btnWeixin.setOnClickListener(this);
+        btnweixinCircle.setOnClickListener(this);
     }
 
     @Override
@@ -107,8 +138,47 @@ public class CellActivity extends BaseActivity {
 
     @Override
     public void onClick(View v) {
+        ShareAction shareAction = new ShareAction(mActivity);
+        switch (v.getId()){
+            case R.id.btn_weixin:
 
+                shareAction
+                        .setPlatform(SHARE_MEDIA.WEIXIN)
+                        .withText("hello")
+                        .withTitle(shareString)
+                        .setCallback(umShareListener)
+                        .share();
+                break;
+            case R.id.btn_weixin_circle:
+                shareAction
+                        .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
+                        .withText("hello")
+                        .withTitle(shareString)
+                        .setCallback(umShareListener)
+                        .share();
+                break;
+        }
     }
+
+    private UMShareListener umShareListener = new UMShareListener() {
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            //System.out.println(platform + "分享成功");
+            dialog.dismiss();
+
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            ToastUtils.showToast(mActivity, "分享失败");
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            ToastUtils.showToast(mActivity, "分享取消");
+
+        }
+    };
 
     @Override
     public void onSystemUiVisibilityChange(int visibility) {

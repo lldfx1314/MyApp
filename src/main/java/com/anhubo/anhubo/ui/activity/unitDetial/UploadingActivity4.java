@@ -82,6 +82,7 @@ public class UploadingActivity4 extends BaseActivity {
     private PopDateHelper popDateHelper;
     private String newTime;
     private String timeLong;
+    private Dialog showDialog;
 
     @Override
     protected int getContentViewId() {
@@ -184,7 +185,7 @@ public class UploadingActivity4 extends BaseActivity {
             return;
         }
 
-        progressBar.setVisibility(View.VISIBLE);
+        showDialog = loadProgressDialog.show(mActivity, "正在上传...");
         Map<String, String> params = new HashMap<>();
         params.put("business_id", businessid);
         params.put("rent_time", timeLong);
@@ -211,7 +212,7 @@ public class UploadingActivity4 extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            progressBar.setVisibility(View.GONE);
+            showDialog.dismiss();
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -223,6 +224,7 @@ public class UploadingActivity4 extends BaseActivity {
         @Override
         public void onResponse(String response) {
             //System.out.println("UploadingActivity4-------"+response);
+            showDialog.dismiss();
             MsgPerfectRentingBean rentingBean = new Gson().fromJson(response, MsgPerfectRentingBean.class);
             int code = rentingBean.code;
             final String msg = rentingBean.msg;
@@ -234,14 +236,13 @@ public class UploadingActivity4 extends BaseActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        progressBar.setVisibility(View.GONE);
                         ToastUtils.showToast(mActivity, "上传成功");
                         Intent intent = new Intent();
                         intent.putExtra(Keys.ISCLICK4, true);
                         setResult(4, intent);
                         finish();
                     }
-                }, 2000);
+                }, 500);
             }
         }
     }

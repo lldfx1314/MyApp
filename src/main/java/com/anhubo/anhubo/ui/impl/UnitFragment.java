@@ -1,5 +1,6 @@
 package com.anhubo.anhubo.ui.impl;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
@@ -146,7 +147,7 @@ public class UnitFragment extends BaseFragment {
         Utils.setUnderline(tvUnitFrag, tvUnitFragMsg, tvUnitFragInvite, tvUnitFragAdd);
         // listView
         lvUnit = findView(R.id.lv_unit);
-
+        // 头布局
         View view = View.inflate(mActivity, R.layout.header_unit, null);
 
         // 安全提升级别的button
@@ -426,7 +427,7 @@ public class UnitFragment extends BaseFragment {
             } else {
                 tvNoPlan1.setVisibility(View.GONE);
                 tvNoPlan2.setVisibility(View.VISIBLE);
-                tvNoPlan2.setText("动态保障凭证");
+                tvNoPlan2.setText("动态互保凭证");
             }
 
         } else {
@@ -663,15 +664,19 @@ public class UnitFragment extends BaseFragment {
                 intentCheck.putExtra(Keys.CHECK, "Check");
                 startActivity(intentCheck);
                 break;
-            case R.id.btn_drill: // 演练
+            case R.id.btn_drill: // 疏散
                 /****************************************************/
                 isShowDot_drill = false;
                 if (!isShowDot_drill) {
                     handler.sendEmptyMessage(DRILL);
                 }
-                Intent intentExercise = new Intent(mActivity, QrScanActivity.class);
-                intentExercise.putExtra(Keys.EXERCISE, "Exercise");
-                startActivity(intentExercise);
+//                Intent intentExercise = new Intent(mActivity, QrScanActivity.class);
+//                intentExercise.putExtra(Keys.EXERCISE, "Exercise");
+//                startActivity(intentExercise);
+                new AlertDialog(mActivity).builder()
+                        .setTitle("提示")
+                        .setMsg("此功能暂未开放")
+                        .setCancelable(false).show();
                 break;
             case R.id.rl_unit_01:
                 rlUnit.setVisibility(View.GONE);

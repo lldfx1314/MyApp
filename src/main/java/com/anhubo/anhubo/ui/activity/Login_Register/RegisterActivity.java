@@ -1,5 +1,6 @@
 package com.anhubo.anhubo.ui.activity.Login_Register;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.SpannableString;
@@ -64,6 +65,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private String weixinforzhuce;
     private String loginforzhuce;
     private AlertDialog builder;
+    private Dialog showDialog;
 
 
     @Override
@@ -288,7 +290,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             return;
         }
 
-
+        showDialog = loadProgressDialog.show(mActivity, "正在处理...");
         if (!TextUtils.isEmpty(loginforzhuce)) {
             // 再次请求网络，获取uid
             //System.out.println("=======正常注册=======");
@@ -337,11 +339,13 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     class MyStringCallback3 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
+            showDialog.dismiss();
             System.out.println("RegisterActivity+++===微信没拿到数据" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
+            showDialog.dismiss();
             //System.out.println("1111111122222222"+response);
             Register1_Bean register1Bean = new Gson().fromJson(response, Register1_Bean.class);
             if (register1Bean != null) {
@@ -405,12 +409,13 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-
+            showDialog.dismiss();
             System.out.println("RegisterActivity+++===没拿到数据" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
+            showDialog.dismiss();
             Register1_Bean register1Bean = new Gson().fromJson(response, Register1_Bean.class);
             if (register1Bean != null) {
                 String code = register1Bean.code;

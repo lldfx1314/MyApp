@@ -1,10 +1,12 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -69,6 +71,7 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     private String businessname;
     private File newFile;
     private TextView tvAddDevice;
+    private Dialog showDialog;
 
     @Override
     protected void initConfig() {
@@ -358,7 +361,7 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
             return;
         }
 
-        progressBar.setVisibility(View.VISIBLE);
+        showDialog = loadProgressDialog.show(mActivity, "正在提交...");
         String url = Urls.Url_Add;
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
@@ -383,12 +386,12 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     public void onSystemUiVisibilityChange(int visibility) {
 
     }
-
+    private Handler handler = new Handler();
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
             System.out.println("Add_Device_Activity+++===获取数据失败+++===" + e.getMessage());
-            progressBar.setVisibility(View.GONE);
+            showDialog.dismiss();
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -398,16 +401,20 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         @Override
         public void onResponse(String response) {
             //System.out.println("添加界面+++==="+response);
+            showDialog.dismiss();
             if (!TextUtils.isEmpty(response)) {
                 Add_Device_Bean addDeviceBean = new Gson().fromJson(response, Add_Device_Bean.class);
                 if (addDeviceBean != null) {
-
-                    progressBar.setVisibility(View.GONE);
                     deviceId = addDeviceBean.data.device_id;
-                    ToastUtils.showToast(mActivity, "添加成功");
-                    finish();
-                } else {
-                    System.out.println("Add_Device_Activity+++===没获取bean对象");
+                    if(!TextUtils.isEmpty(deviceId)){
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtils.showToast(mActivity, "添加成功");
+                                finish();
+                            }
+                        }, 500);
+                    }
                 }
             }
 

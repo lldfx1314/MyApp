@@ -106,11 +106,11 @@ public class UnitAdapter extends BaseAdapter {
                 hold.heighHelpMoney.setText(planEnsure.substring(0, 4));
             } else if (heighSharing >= 1) {
                 String str = String.valueOf(heighSharing);
-                if (str.length() >= 4) {
-                    String substring = str.substring(0, 4);
-                    //　做判断，防止显示类似＂500.万＂这样的情况
+                if (str.length() >= 3) {
+                    String substring = str.substring(0, 3);
+                    //　做判断，防止显示类似＂50.万＂这样的情况
                     if (substring.endsWith(".")) {
-                        setWan(substring.substring(0, 3) + "万");
+                        setWan(substring.substring(0, 2) + "万");
                     } else {
                         setWan(substring + "万");
                     }
@@ -135,11 +135,11 @@ public class UnitAdapter extends BaseAdapter {
             } else if (prepayMoney >= 1) {
 
                 String str = String.valueOf(prepayMoney);
-                if (str.length() >= 4) {
-                    String substring = str.substring(0, 4);
-                    //　做判断，防止显示类似＂500.万＂这样的情况
+                if (str.length() >= 3) {
+                    String substring = str.substring(0, 3);
+                    //　做判断，防止显示类似＂50.万＂这样的情况
                     if (substring.endsWith(".")) {
-                        setWan(substring.substring(0, 3) + "万");
+                        setWan(substring.substring(0, 2) + "万");
                     } else {
                         setWan(substring + "万");
                     }

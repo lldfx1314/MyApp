@@ -1,5 +1,6 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -41,6 +42,7 @@ import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
+import com.anhubo.anhubo.view.LoadProgressDialog;
 import com.anhubo.anhubo.view.RefreshListview;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -67,7 +69,6 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
     private ImageView ivTopBarleftBuildPen;
     private TextView tvToptitle;
     private RelativeLayout llTop;
-    private RelativeLayout progressBar;
     private AMapLocationClient mlocationClient;
     private double latitude;
     private double longitude;
@@ -81,6 +82,8 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
     //声明mListener对象，定位监听器
     private LocationSource.OnLocationChangedListener mListener = null;
     private ArrayList<String> listBuilding;
+    private LoadProgressDialog loadProgressDialog;
+    private Dialog showDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +111,6 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
         //获取地图控件引用
         mMapView = (MapView) findViewById(R.id.map_business);
         lvBusiness = (RefreshListview) findViewById(R.id.lv_business);
-        progressBar = (RelativeLayout) findViewById(R.id.rl_progress);
         // 监听listview的滑动监听
         lvBusiness.setOnRefreshingListener(new MyOnRefreshingListener());
         lvBusiness.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -273,7 +275,7 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                         isFirstLoc = false;
                     }
                     // 拿到经纬度请求网络
-                    progressBar.setVisibility(View.VISIBLE);
+
                     getData();
 
 
@@ -343,8 +345,9 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
      * 拿到经纬度请求网络
      */
     private void getData() {
+        loadProgressDialog = LoadProgressDialog.newInstance();
+        showDialog = loadProgressDialog.show(this, "正在加载...");
         String location = String.valueOf(latitude) + "," + String.valueOf(longitude);
-
         String url = Urls.Location;
         Map<String, String> params = new HashMap<>();
         params.put("location", location);
@@ -365,7 +368,7 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            progressBar.setVisibility(View.GONE);
+            showDialog.dismiss();
             new AlertDialog(BusinessActivity.this).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -378,7 +381,7 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
             //System.out.println("地图单位界面+++==="+response);
             LocationBean bean = new Gson().fromJson(response, LocationBean.class);
             if (bean != null) {
-                progressBar.setVisibility(View.GONE);
+                showDialog.dismiss();
                 processData(bean);
                 isLoadMore = false;
                 // 恢复加载更多状态

@@ -81,6 +81,7 @@ public class MsgPerfectActivity extends BaseActivity {
     private ListView morelist;
     private MsgPerfectAdapterSecond adapterSecond;
     private String strSecondList;
+    private Dialog showDialog;
 
     @Override
     protected void initConfig() {
@@ -350,6 +351,7 @@ public class MsgPerfectActivity extends BaseActivity {
     }
 
     private void getData() {
+        showDialog = loadProgressDialog.show(mActivity, "正在加载...");
         String url = Urls.Url_GetUsePro;
         OkHttpUtils.post()//
                 .url(url)
@@ -361,16 +363,17 @@ public class MsgPerfectActivity extends BaseActivity {
 
         @Override
         public void onError(Call call, Exception e) {
-            progressBar.setVisibility(View.GONE);
+            showDialog.dismiss();
+            System.out.println("MsgPerfectActivity+++===界面没获取到数据");
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(false).show();
-            System.out.println("MsgPerfectActivity+++===界面没获取到数据");
         }
 
         @Override
         public void onResponse(String response) {
+            showDialog.dismiss();
             MsgPerfect_UsePro_Bean bean = new Gson().fromJson(response, MsgPerfect_UsePro_Bean.class);
             if (bean != null) {
                 showData(bean);
@@ -415,7 +418,7 @@ public class MsgPerfectActivity extends BaseActivity {
                 TextView tv = (TextView) view.findViewById(R.id.moreitem_txt);
                 // 获取到从第二例数组里面的字符串
                 strSecondList = tv.getText().toString().trim();
-                // 拿着数据去走网络传到服务器   这里用OKhttp
+                // 拿着数据去走网络传到服务器
                 Map<String, String> params = new HashMap<>();
                 params.put("business_id", businessId);
                 params.put("property1", strSecondList);

@@ -32,7 +32,7 @@
             android:text="三色分数"/>
 
     </LinearLayout>
-    <com.anhubo.anhubo.view.RefreshListview
+    <ListView
         android:id="@+id/company_detail_listview"
         android:layout_below="@+id/linearLayout"
         android:layout_width="match_parent"
@@ -48,6 +48,7 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/btn_create_unit"
         android:text="退出单元"
+        android:visibility="gone"
         android:textColor="@color/btn_blue"
         android:textSize="16sp" />
 

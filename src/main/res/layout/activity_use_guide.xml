@@ -6,7 +6,6 @@
     <include
         android:id="@+id/top_title"
         layout="@layout/layout_top_bar"/>
-    <include layout="@layout/loading"/>
 
     <WebView
         android:id="@+id/wv_useGuide"

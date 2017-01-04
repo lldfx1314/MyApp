@@ -105,6 +105,8 @@ public class NfcScanActivity extends BaseActivity {
     private View viewTime;
     private String versionName;
     private ArrayList<String> listResult;
+    private Dialog showDialog;
+    private Dialog showDialog1;
 
     @Override
     protected void initConfig() {
@@ -203,7 +205,6 @@ public class NfcScanActivity extends BaseActivity {
         @Override
         public void onResponse(String response) {
 //            System.out.println("获取进度条信息+" + response);
-            progressBar.setVisibility(View.GONE);
             CheckComplete_Bean bean = new Gson().fromJson(response, CheckComplete_Bean.class);
             if (bean != null) {
 
@@ -320,7 +321,7 @@ public class NfcScanActivity extends BaseActivity {
     private void getData() {
         String[] split = Utils.getAppInfo(mActivity).split("#");
         versionName = split[1];
-        progressBar.setVisibility(View.VISIBLE);
+        showDialog = loadProgressDialog.show(mActivity, "请稍后...");
         String url = Urls.Url_Check;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("device_id", cardNumber);
@@ -346,7 +347,7 @@ public class NfcScanActivity extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            progressBar.setVisibility(View.GONE);
+            showDialog.dismiss();
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -356,6 +357,7 @@ public class NfcScanActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
+            showDialog.dismiss();
             //System.out.println("nfc++"+response);
             ScanBean bean = new Gson().fromJson(response, ScanBean.class);
             if (bean != null) {
@@ -374,7 +376,7 @@ public class NfcScanActivity extends BaseActivity {
      */
     private void parseMessage(ScanBean scanBean) {
         int isExist = scanBean.data.device_exist;//设备号是否在后台存在
-        progressBar.setVisibility(View.GONE);
+
 
         //设备ID
         deviceId = scanBean.data.device_id;
@@ -561,6 +563,7 @@ public class NfcScanActivity extends BaseActivity {
     private void checkComplete() {
 
         // 这里是完成的点击事件
+        showDialog1 = loadProgressDialog.show(mActivity, "正在提交...");
         String url = Urls.Url_Check_Complete;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("uid", uid); //这是uid,登录后改成真正的用户
@@ -582,7 +585,7 @@ public class NfcScanActivity extends BaseActivity {
     class MyStringCallback1 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            progressBar.setVisibility(View.GONE);
+            showDialog1.dismiss();
 
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
@@ -594,6 +597,7 @@ public class NfcScanActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
+            showDialog1.dismiss();
             CheckComplete_Bean bean = new Gson().fromJson(response, CheckComplete_Bean.class);
             if (bean != null) {
                 dialog.dismiss();

@@ -94,6 +94,8 @@ public class Pending_FeedbackActivity extends BaseActivity {
     private File file2;
     private File file3;
     private String uid;
+    private Dialog showDialog;
+    private Dialog showDialog1;
 
     @Override
     protected void initConfig() {
@@ -116,7 +118,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
         super.initEvents();
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
         // 这里是完成的点击事件
-        progressBar.setVisibility(View.VISIBLE);
+        showDialog = loadProgressDialog.show(mActivity, "正在加载...");
         String url = Urls.Url_Check_Pending_FeedBack;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("is_id", isId);
@@ -188,7 +190,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
             dialog();
             return;
         }
-        progressBar.setVisibility(View.VISIBLE);
+        showDialog1 = loadProgressDialog.show(mActivity, "正在提交...");
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         params.put("is_id", isId);
@@ -222,7 +224,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
 
         @Override
         public void onError(Call call, Exception e) {
-            progressBar.setVisibility(View.GONE);
+            showDialog1.dismiss();
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -232,7 +234,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-            progressBar.setVisibility(View.GONE);
+            showDialog1.dismiss();
 
             //System.out.println("待反馈界面Pending_FeedbackActivity+++===" + response);
 
@@ -271,7 +273,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            progressBar.setVisibility(View.GONE);
+            showDialog.dismiss();
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -284,7 +286,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
             //System.out.println("Pending_FeedbackActivity" + response);
             Pending_FeedbackBean bean = new Gson().fromJson(response, Pending_FeedbackBean.class);
             if (bean != null) {
-                progressBar.setVisibility(View.GONE);
+                showDialog.dismiss();
                 String msg = bean.msg;
                 int code = bean.code;
                 String isContent = bean.data.is_content;

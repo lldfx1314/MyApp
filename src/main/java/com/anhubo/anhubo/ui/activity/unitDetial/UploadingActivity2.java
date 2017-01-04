@@ -71,6 +71,7 @@ public class UploadingActivity2 extends BaseActivity {
     private Button btnTakephoto;
     private Button btnPhoto;
     private boolean isClick = false;//判断是正面还是反面
+    private Dialog showDialog;
 
     @Override
     protected int getContentViewId() {
@@ -143,10 +144,10 @@ public class UploadingActivity2 extends BaseActivity {
                     .setCancelable(true).show();
             return;
         }
-        progressBar.setVisibility(View.VISIBLE);
+        showDialog = loadProgressDialog.show(mActivity, "正在上传...");
+        String url = Urls.Url_UpLoading02;
         Map<String, String> params = new HashMap<>();
         params.put("business_id", businessid);
-        String url = Urls.Url_UpLoading02;
 
         OkHttpUtils.post()//
                 .addFile("file1", "file01.png", file1)//
@@ -169,7 +170,7 @@ public class UploadingActivity2 extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            progressBar.setVisibility(View.GONE);
+            showDialog.dismiss();
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -180,6 +181,7 @@ public class UploadingActivity2 extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
+            showDialog.dismiss();
             MsgPerfectLowerBean lowerBean = new Gson().fromJson(response, MsgPerfectLowerBean.class);
             int code = lowerBean.code;
             final String msg = lowerBean.msg;
@@ -189,14 +191,14 @@ public class UploadingActivity2 extends BaseActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        progressBar.setVisibility(View.GONE);
+
                         ToastUtils.showToast(mActivity, "上传成功");
                         Intent intent = new Intent();
                         intent.putExtra(Keys.ISCLICK2, true);
                         setResult(2, intent);
                         finish();
                     }
-                }, 2000);
+                }, 500);
             }
         }
     }

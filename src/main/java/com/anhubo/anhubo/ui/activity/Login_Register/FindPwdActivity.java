@@ -1,5 +1,6 @@
 package com.anhubo.anhubo.ui.activity.Login_Register;
 
+import android.app.Dialog;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -61,6 +62,7 @@ public class FindPwdActivity extends BaseActivity {
     private String pwd2;
     private String token;
     private AlertDialog builder;
+    private Dialog showDialog;
 
     @Override
     protected int getContentViewId() {
@@ -165,7 +167,7 @@ public class FindPwdActivity extends BaseActivity {
             return;
         }
 
-
+        showDialog = loadProgressDialog.show(mActivity, "正在找回密码...");
         String url = Urls.Url_Login_AlterPwd;
         HashMap<String, String> params = new HashMap<>();
         params.put("phone", phoneNumber);
@@ -192,6 +194,7 @@ public class FindPwdActivity extends BaseActivity {
 
         @Override
         public void onError(Call call, Exception e) {
+            showDialog.dismiss();
             System.out.println("UnitMenuActivity+++上传更改密码===没拿到数据" + e.getMessage());
         }
 
@@ -200,6 +203,7 @@ public class FindPwdActivity extends BaseActivity {
             System.out.println("FindPwdActivity界面修改密码+" + response);
             Login_AlterPwdBean bean = new Gson().fromJson(response, Login_AlterPwdBean.class);
             if (bean != null) {
+                showDialog.dismiss();
                 int code = bean.code;
                 if (code == 0) {
                    builder

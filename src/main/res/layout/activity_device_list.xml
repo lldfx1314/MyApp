@@ -39,7 +39,4 @@
         android:paddingRight="15dp"
         android:background="#F7F7F7"/>
     </RelativeLayout>
-
-    <include layout="@layout/loading"/>
-
 </RelativeLayout>

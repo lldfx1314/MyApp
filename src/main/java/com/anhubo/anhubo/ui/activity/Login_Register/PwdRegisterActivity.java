@@ -1,5 +1,6 @@
 package com.anhubo.anhubo.ui.activity.Login_Register;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -51,6 +52,7 @@ public class PwdRegisterActivity extends BaseActivity {
     private String secondPwd;
     private boolean pwdIsVisible = false;
     private AlertDialog builder;
+    private Dialog showDialog;
 
     @Override
     protected void initConfig() {
@@ -147,6 +149,7 @@ public class PwdRegisterActivity extends BaseActivity {
      * 拿着号码和密码，调用接口
      */
     private void enterRegister() {
+        showDialog = loadProgressDialog.show(mActivity, "正在处理...");
         String url = Urls.Url_PwdRegister;
         // 封装请求参数
         HashMap<String, String> params = new HashMap<String, String>();
@@ -168,12 +171,13 @@ public class PwdRegisterActivity extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-
+            showDialog.dismiss();
             System.out.println("PwdRegisterActivity+++===没拿到数据" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
+            showDialog.dismiss();
             Register1_Bean bean = new Gson().fromJson(response, Register1_Bean.class);
             if (bean != null) {
                 int uid = bean.data.uid;

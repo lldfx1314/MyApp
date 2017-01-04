@@ -56,8 +56,4 @@
             style="@style/btn_msg_perfect"
             android:text="提交" />
     </LinearLayout>
-
-    <include layout="@layout/loading" />
-
-
 </RelativeLayout>

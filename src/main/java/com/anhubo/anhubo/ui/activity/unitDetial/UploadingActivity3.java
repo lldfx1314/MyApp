@@ -66,6 +66,7 @@ public class UploadingActivity3 extends BaseActivity {
     private Dialog dialog;
     private Button btnTakephoto;
     private Button btnPhoto;
+    private Dialog showDialog;
 
     @Override
     protected int getContentViewId() {
@@ -124,7 +125,7 @@ public class UploadingActivity3 extends BaseActivity {
                     .setCancelable(true).show();
             return;
         }
-        progressBar.setVisibility(View.VISIBLE);
+        showDialog = loadProgressDialog.show(mActivity, "正在上传...");
         Map<String, String> params = new HashMap<>();
         params.put("business_id", businessid);
         String url = Urls.Url_UpLoading03;
@@ -149,7 +150,7 @@ public class UploadingActivity3 extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            progressBar.setVisibility(View.GONE);
+            showDialog.dismiss();
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -160,6 +161,7 @@ public class UploadingActivity3 extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
+            showDialog.dismiss();
             MsgPerfectFireBean perfectFireBean = new Gson().fromJson(response, MsgPerfectFireBean.class);
             int code = perfectFireBean.code;
             final String msg = perfectFireBean.msg;
@@ -171,14 +173,13 @@ public class UploadingActivity3 extends BaseActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        progressBar.setVisibility(View.GONE);
                         ToastUtils.showToast(mActivity, "上传成功");
                         Intent intent = new Intent();
                         intent.putExtra(Keys.ISCLICK3, true);
                         setResult(3, intent);
                         finish();
                     }
-                }, 2000);
+                }, 500);
             }
         }
     }

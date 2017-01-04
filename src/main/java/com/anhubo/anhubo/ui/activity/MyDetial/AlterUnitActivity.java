@@ -1,5 +1,6 @@
 package com.anhubo.anhubo.ui.activity.MyDetial;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
@@ -46,6 +47,7 @@ public class AlterUnitActivity extends BaseActivity {
     private String buildingName;
     private String building;
     private String unit;
+    private Dialog showDialog;
 
     @Override
     protected int getContentViewId() {
@@ -126,6 +128,7 @@ public class AlterUnitActivity extends BaseActivity {
      */
     private void submitAlter() {
         getText();
+        showDialog = loadProgressDialog.show(mActivity, "正在提交...");
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
@@ -153,7 +156,7 @@ public class AlterUnitActivity extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-
+            showDialog.dismiss();
             System.out.println("AlterUnitActivity+++===界面失败" + e.getMessage());
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
@@ -164,6 +167,7 @@ public class AlterUnitActivity extends BaseActivity {
         @Override
         public void onResponse(String response) {
             //System.out.println("AlterUnitActivity界面+++"+response);
+            showDialog.dismiss();
             final Alter_UnitBean bean = new Gson().fromJson(response, Alter_UnitBean.class);
             if (bean != null) {
                 int code = bean.code;

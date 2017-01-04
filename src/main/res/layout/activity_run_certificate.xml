@@ -26,7 +26,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:text="企业"
+                    android:text="会员"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
 
@@ -41,7 +41,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="5dp"
-                        android:text="交互金余额"
+                        android:text="保证金余额"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
@@ -91,7 +91,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="5dp"
-                        android:text="最高分摊额"
+                        android:text="单次分摊额"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
@@ -109,7 +109,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:text="近期三色情况"
+                    android:text="三旬三色情况"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
 
@@ -217,7 +217,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="5dp"
-                        android:text="单元企业数"
+                        android:text="单元会员数"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
@@ -308,7 +308,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="5dp"
-                        android:text="参与企业数"
+                        android:text="参与会员数"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
@@ -360,7 +360,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="5dp"
-                        android:text="可互助企业数"
+                        android:text="可互助会员数"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 

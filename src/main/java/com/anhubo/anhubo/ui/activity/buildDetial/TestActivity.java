@@ -1,5 +1,6 @@
 package com.anhubo.anhubo.ui.activity.buildDetial;
 
+import android.app.Dialog;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
@@ -56,6 +57,8 @@ public class TestActivity extends BaseActivity {
     private HashMap<Integer, Integer> hm;               // 用于记录每组 子item的数量，以便于创建对应于组头的集合，方便记录被选中的状态
     private ArrayList<Integer> completeList;            // 根据hm创建的对应于组头的子item集合
     private HashMap<Integer, String> hmBindTestId;      //把组头和testId绑定
+    private Dialog showDialog1;
+    private Dialog showDialog;
 
     @Override
     protected void initConfig() {
@@ -146,7 +149,7 @@ public class TestActivity extends BaseActivity {
             requireIds.add(string);
         }
 
-        progressBar.setVisibility(View.VISIBLE);
+        showDialog1 = loadProgressDialog.show(mActivity, "正在提交...");
         Map<String, String> params = new HashMap<>();
         if (!TextUtils.isEmpty(cardnumber)) {
             params.put("device_id", cardnumber);
@@ -175,7 +178,7 @@ public class TestActivity extends BaseActivity {
     class MyStringCallback1 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            progressBar.setVisibility(View.GONE);
+            showDialog1.dismiss();
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -186,7 +189,7 @@ public class TestActivity extends BaseActivity {
         @Override
         public void onResponse(String response) {
             //System.out.println(response);
-            progressBar.setVisibility(View.GONE);
+            showDialog1.dismiss();
             TestSubmitBean bean = new Gson().fromJson(response, TestSubmitBean.class);
             if (bean != null) {
                 int code = bean.code;
@@ -287,7 +290,7 @@ public class TestActivity extends BaseActivity {
      * 获取测试项
      */
     private void getData() {
-        progressBar.setVisibility(View.VISIBLE);
+        showDialog = loadProgressDialog.show(mActivity, "长在获取...");
         Map<String, String> params = new HashMap<>();
         if (!TextUtils.isEmpty(cardnumber)) {
             params.put("device_id", cardnumber);
@@ -309,7 +312,7 @@ public class TestActivity extends BaseActivity {
 
             System.out.println("TestActivity+++获取测试项===界面失败" + e.getMessage());
 
-            progressBar.setVisibility(View.GONE);
+            showDialog.dismiss();
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -319,7 +322,7 @@ public class TestActivity extends BaseActivity {
         @Override
         public void onResponse(String response) {
             //System.out.println("获取测试项+++===" + response);
-            progressBar.setVisibility(View.GONE);
+            showDialog.dismiss();
             TestItemBean bean = new Gson().fromJson(response, TestItemBean.class);
             if (bean != null) {
                 int code = bean.code;

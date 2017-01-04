@@ -1,5 +1,6 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
+import android.app.Dialog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -38,6 +39,7 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
     private DeviceListAdapter adapter;
     private int mPosition;
     private int newDevices;
+    private Dialog showDialog;
 
     @Override
     protected void initConfig() {
@@ -80,7 +82,7 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
     protected void onLoadDatas() {
 
         // 先获取网络数据
-        progressBar.setVisibility(View.VISIBLE);
+        showDialog = loadProgressDialog.show(mActivity, "正在加载...");
         String url = Urls.Device_List;
         Map<String, String> params = new HashMap<>();
         params.put("business_id", businessid);
@@ -100,7 +102,7 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            progressBar.setVisibility(View.GONE);
+            showDialog.dismiss();
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -110,8 +112,7 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
         @Override
         public void onResponse(String response) {
             // System.out.println("单位列表界面+++===" + response);
-
-            progressBar.setVisibility(View.GONE);
+            showDialog.dismiss();
             DeviceListBean listBean = new Gson().fromJson(response, DeviceListBean.class);
             if (listBean != null) {
                 List<DeviceListBean.Data.Devices> devices = listBean.data.devices;

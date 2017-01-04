@@ -1,5 +1,6 @@
 package com.anhubo.anhubo.ui.activity.Login_Register;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
@@ -35,7 +36,7 @@ public class RegisterActivity2 extends BaseActivity {
     @InjectView(R.id.et_reg2_building)
     EditText etReg2JianZhu;
     @InjectView(R.id.et_reg2_business)// 单位名称
-    EditText etReg2DanWei;
+            EditText etReg2DanWei;
     @InjectView(R.id.et_reg2_floorName)
     EditText etReg2floorName;
     @InjectView(R.id.et_reg2_area)
@@ -55,6 +56,7 @@ public class RegisterActivity2 extends BaseActivity {
     private String buildName1;
     private String businessName1;
     private AlertDialog builder;
+    private Dialog showDialog;
 
     @Override
     protected void initConfig() {
@@ -135,16 +137,19 @@ public class RegisterActivity2 extends BaseActivity {
                 break;
         }
     }
+
     private void showdialog(String string) {
         builder
                 .setTitle("提示")
                 .setMsg(string)
                 .setCancelable(true).show();
     }
+
     /**
      * 注册完成的点击事件
      */
     private void registerComPlete() {
+        showDialog = loadProgressDialog.show(mActivity, "正在登录...");
         String url = Urls.Url_RegCom;
         HashMap<String, String> params = new HashMap<>();
         params.put("uid", uid);
@@ -167,12 +172,13 @@ public class RegisterActivity2 extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-
+            showDialog.dismiss();
             System.out.println("RegisterActivity2+++===没拿到数据" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
+            showDialog.dismiss();
             Register_Com_Bean bean = new Gson().fromJson(response, Register_Com_Bean.class);
             if (bean != null) {
                 // 拿到数据，开始存储数据，并跳转到主界面

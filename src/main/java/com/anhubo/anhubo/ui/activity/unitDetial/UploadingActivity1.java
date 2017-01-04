@@ -2,12 +2,9 @@ package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,7 +21,6 @@ import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.MsgPerfectLicenseBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.ImageFactory;
-import com.anhubo.anhubo.utils.ImageTools;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
@@ -39,9 +35,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -67,6 +61,7 @@ public class UploadingActivity1 extends BaseActivity {
     private Button btnTakephoto;
     private Button btnPhoto;
     private Dialog dialog;
+    private Dialog showDialog;
 
 
     @Override
@@ -126,8 +121,7 @@ public class UploadingActivity1 extends BaseActivity {
             return;
         }
 
-
-        progressBar.setVisibility(View.VISIBLE);
+        showDialog = loadProgressDialog.show(mActivity, "正在上传...");
         String url = Urls.Url_UpLoading01;
         Map<String, String> params = new HashMap<>();
         params.put("business_id", businessid);
@@ -153,7 +147,7 @@ public class UploadingActivity1 extends BaseActivity {
         @Override
         public void onError(Call call, Exception e) {
             System.out.println("UploadingActivity1+++===界面失败" + e.getMessage());
-            progressBar.setVisibility(View.GONE);
+            showDialog.dismiss();
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -166,7 +160,7 @@ public class UploadingActivity1 extends BaseActivity {
 
             MsgPerfectLicenseBean licenseBean = new Gson().fromJson(response, MsgPerfectLicenseBean.class);
             if (licenseBean != null) {
-
+                showDialog.dismiss();
                 int code = licenseBean.code;
                 final String msg = licenseBean.msg;
                 if (code != 0) {
@@ -175,14 +169,13 @@ public class UploadingActivity1 extends BaseActivity {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            progressBar.setVisibility(View.GONE);
                             ToastUtils.showToast(mActivity, "上传成功");
                             Intent intent = new Intent();
                             intent.putExtra(Keys.ISCLICK1, true);
                             setResult(1, intent);
                             finish();
                         }
-                    }, 2000);
+                    }, 500);
                 }
             }
 

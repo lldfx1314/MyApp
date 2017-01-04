@@ -1,5 +1,6 @@
 package com.anhubo.anhubo.ui.activity.Login_Register;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
@@ -54,6 +55,7 @@ public class Login_Message extends BaseActivity {
     private String unionid;
     private UMShareAPI mShareAPI;
     private AlertDialog builder;
+    private Dialog showDialog;
 
 
     @Override
@@ -132,7 +134,7 @@ public class Login_Message extends BaseActivity {
                 break;
             case R.id.btn_login_register://跳到注册
                 Intent intent = new Intent(mActivity, RegisterActivity.class);
-                intent.putExtra(Keys.LOGINFORZHUCE,"LoginforZhuce");
+                intent.putExtra(Keys.LOGINFORZHUCE, "LoginforZhuce");
                 startActivity(intent);
                 break;
             case R.id.ib_weichat://跳到微信界面
@@ -145,7 +147,9 @@ public class Login_Message extends BaseActivity {
     }
 
 
-    /**微信授权*/
+    /**
+     * 微信授权
+     */
     private UMAuthListener umAuthListener = new UMAuthListener() {
         @Override
         public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
@@ -202,8 +206,9 @@ public class Login_Message extends BaseActivity {
     };
 
 
-
-    /**微信登录*/
+    /**
+     * 微信登录
+     */
     class MyStringCallback3 extends StringCallback {
         @Override
         public void onError(okhttp3.Call call, Exception e) {
@@ -241,10 +246,10 @@ public class Login_Message extends BaseActivity {
                 } else if (exict == 2) {
                     // 去注册uid unionid 头像 profile_image_url   姓名  screen_name
                     Intent intent = new Intent(mActivity, RegisterActivity.class);
-                    intent.putExtra(Keys.WEIXINFORZHUCE,"weixinforzhuce");
-                    intent.putExtra(Keys.UNIONID,unionid);
-                    intent.putExtra(Keys.PROFILE_IMAGE_URL,profile_image_url);
-                    intent.putExtra(Keys.SCREEN_NAME,screen_name);
+                    intent.putExtra(Keys.WEIXINFORZHUCE, "weixinforzhuce");
+                    intent.putExtra(Keys.UNIONID, unionid);
+                    intent.putExtra(Keys.PROFILE_IMAGE_URL, profile_image_url);
+                    intent.putExtra(Keys.SCREEN_NAME, screen_name);
                     startActivity(intent);
                 }
 
@@ -287,7 +292,10 @@ public class Login_Message extends BaseActivity {
         }
         login_OKHttp();
     }
-    /**弹窗提示*/
+
+    /**
+     * 弹窗提示
+     */
     private void showdialog(String string) {
 
         builder
@@ -298,6 +306,7 @@ public class Login_Message extends BaseActivity {
 
 
     private void login_OKHttp() {
+        showDialog = loadProgressDialog.show(mActivity, "正在登录...");
         String url = Urls.Url_LoginMsg;
         // 封装请求参数
         HashMap<String, String> params = new HashMap<String, String>();
@@ -322,12 +331,13 @@ public class Login_Message extends BaseActivity {
 
         @Override
         public void onError(okhttp3.Call call, Exception e) {
+            showDialog.dismiss();
             System.out.println("Login_Message+++===没拿到数据" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
-
+            showDialog.dismiss();
 //            System.out.println("Login_Message++"+response);
             Login_Bean bean = new Gson().fromJson(response, Login_Bean.class);
             if (bean != null) {
@@ -372,8 +382,6 @@ public class Login_Message extends BaseActivity {
                         break;
                 }
 
-            } else {
-                System.out.println("Login_Message+++===没拿到bean对象");
             }
         }
     }
@@ -522,8 +530,6 @@ public class Login_Message extends BaseActivity {
             Security_Bean bean = new Gson().fromJson(response, Security_Bean.class);
         }
     }
-
-
 
 
     /**

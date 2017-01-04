@@ -72,6 +72,7 @@ public class IdCardActivity extends BaseActivity {
     private Dialog dialog;
     private Button btnTakephoto;
     private Button btnPhoto;
+    private Dialog showDialog;
 
     @Override
     protected int getContentViewId() {
@@ -175,7 +176,7 @@ public class IdCardActivity extends BaseActivity {
                     .setCancelable(true).show();
             return;
         }
-        progressBar.setVisibility(View.VISIBLE);
+        showDialog = loadProgressDialog.show(mActivity, "正在提交...");
         String url = Urls.Url_IdCard;
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
@@ -201,7 +202,7 @@ public class IdCardActivity extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            progressBar.setVisibility(View.GONE);
+            showDialog.dismiss();
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -214,7 +215,7 @@ public class IdCardActivity extends BaseActivity {
             //System.out.println(response);
             IdCardBean bean = new Gson().fromJson(response, IdCardBean.class);
             if (bean != null) {
-                progressBar.setVisibility(View.GONE);
+                showDialog.dismiss();
                 int code = bean.code;
                 final String msg = bean.msg;
                 if (code != 0) {

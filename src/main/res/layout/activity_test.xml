@@ -52,5 +52,4 @@
 
         </ExpandableListView>
     </LinearLayout>
-    <include layout="@layout/loading"/>
 </RelativeLayout>
