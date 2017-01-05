@@ -127,13 +127,19 @@ public class FeedbackActivity extends BaseActivity {
                 flowLayout.addView(textView);
             }
         }
+        // 初始化结束的广播监听
+        initFinishReceiver();
+    }
 
+    /**
+     * 初始化结束的广播监听
+     */
+    private void initFinishReceiver() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(FEEDBACK_FINISH);
-        //注册广播接收
-        registerReceiver(finishReceiver,filter);
-
+        registerReceiver(finishReceiver, filter);
     }
+
     /**广播接收*/
     private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
         @Override

@@ -436,7 +436,16 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                         showdialog(msg);
                         break;
                     case "108":// 该手机号码已注册
-                        showdialog(msg);
+                        builder
+                                .setTitle("提示")
+                                .setMsg(msg)
+                                .setPositiveButton("去登陆", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        finish();
+                                    }
+                                })
+                                .setCancelable(false).show();
                         break;
 
                 }

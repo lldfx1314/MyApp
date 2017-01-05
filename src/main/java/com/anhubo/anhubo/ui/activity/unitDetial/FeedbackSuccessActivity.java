@@ -46,6 +46,7 @@ public class FeedbackSuccessActivity extends BaseActivity {
     protected void initViews() {
         setTopBarDesc("反馈成功");
         topPb.setVisibility(View.VISIBLE);
+        iv_basepager_left.setOnClickListener(this);
     }
 
     @Override
@@ -87,18 +88,8 @@ public class FeedbackSuccessActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (wvFeedback.canGoBack()){
-            if(wvFeedback.getUrl().equals(newUrl)){
-                ToastUtils.showToast(mActivity,"点击了");
-                sendBroadcast(new Intent(FeedbackActivity.FEEDBACK_FINISH));
-                super.onBackPressed();
-            }else{
-                wvFeedback.goBack();
-            }
-        }else{
-            super.onBackPressed();
-        }
-
+        sendBroadcast(new Intent(FeedbackActivity.FEEDBACK_FINISH));
+        finish();
     }
 
 
@@ -112,18 +103,8 @@ public class FeedbackSuccessActivity extends BaseActivity {
 
         switch (v.getId()){
             case R.id.ivTopBarLeft:
-                if (wvFeedback.canGoBack()){
-                    if(wvFeedback.getUrl().equals(newUrl)){
-
-                        ToastUtils.showToast(mActivity,"点击了");
-                        sendBroadcast(new Intent(FeedbackActivity.FEEDBACK_FINISH));
-                        super.onBackPressed();
-                    }else{
-                        wvFeedback.goBack();
-                    }
-                }else{
-                    super.onBackPressed();
-                }
+                sendBroadcast(new Intent(FeedbackActivity.FEEDBACK_FINISH));
+                finish();
                 break;
         }
     }

@@ -385,7 +385,7 @@ public class UnitFragment extends BaseFragment {
     class MyStringCallback1 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            System.out.println("UnitFragment界面+++互保凭证===没拿到数据" + e.getMessage());
+            //System.out.println("UnitFragment界面+++互保凭证===没拿到数据" + e.getMessage());
             tvNoPlan1.setVisibility(View.VISIBLE);
 //            lvUnit.setDividerHeight(0);
 //            adapter = new UnitAdapter(mActivity, certs);
@@ -397,7 +397,7 @@ public class UnitFragment extends BaseFragment {
 
         @Override
         public void onResponse(String response) {
-            System.out.println("动态凭证++" + response);
+//            System.out.println("动态凭证++" + response);
             SpUtils.putParam(mActivity, "PlanData", response);
 //            互保计划
             setPlanData(response);

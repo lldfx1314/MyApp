@@ -104,7 +104,7 @@ public class UnitMenuAdapter extends BaseAdapter {
                 hold.tvStudy.setText(record.user_name + " 完成了一次" + typeIDStr);
                 hold.tvdeviceTime.setText(record.time_ext);
                 if (TextUtils.equals(typeIDStr, "学习")) {
-                    hold.tvdeviceName.setText("学习成绩:" + record.study_score);
+                    hold.tvdeviceName.setText("学习成绩:" + record.study_score+"分");
                 } else if (TextUtils.equals(typeIDStr, "设备检查")) {
                     String deviceTypeName = record.device_type_name;
                     if (TextUtils.equals("", deviceTypeName)) {

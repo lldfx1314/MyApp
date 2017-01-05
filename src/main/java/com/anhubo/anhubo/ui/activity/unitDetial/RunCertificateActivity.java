@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
@@ -31,6 +32,8 @@ import okhttp3.Call;
  * Created by LUOLI on 2016/12/29.
  */
 public class RunCertificateActivity extends BaseActivity {
+    @InjectView(R.id.run_ll_sum)
+    LinearLayout runllSum;
     @InjectView(R.id.run_tv_company)
     TextView runTvCompany;
     @InjectView(R.id.run_tv_interaction_m)
@@ -94,6 +97,12 @@ public class RunCertificateActivity extends BaseActivity {
 
     @Override
     protected void onLoadDatas() {
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         // 获取数据
         getData();
     }
@@ -142,7 +151,8 @@ public class RunCertificateActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-            System.out.println("RunCertificateActivity+++" + response);
+//            System.out.println("RunCertificateActivity+++" + response);
+            runllSum.setVisibility(View.VISIBLE);
             showDialog.dismiss();
             setPlanData(response);
         }
@@ -192,21 +202,21 @@ public class RunCertificateActivity extends BaseActivity {
             // 黄
             if(last == 0){
                 runTvYellow.setBackgroundResource(R.drawable.tv_shap_bottom3);
-            }else if(twoDaysAgo<=60){
+            }else if(last<=60){
                 runTvYellow.setBackgroundResource(R.drawable.tv_shap_red3);
-            }else if(twoDaysAgo<=80){
+            }else if(last<=80){
                 runTvYellow.setBackgroundResource(R.drawable.tv_shap_yellow3);
-            }else if(twoDaysAgo<=100){
+            }else if(last<=100){
                 runTvYellow.setBackgroundResource(R.drawable.tv_shap_green3);
             }
             // 绿
             if(today == 0){
                 runTvGreen.setBackgroundResource(R.drawable.tv_shap_bottom2);
-            }else if(twoDaysAgo<=60){
+            }else if(today<=60){
                 runTvGreen.setBackgroundResource(R.drawable.tv_shap_red2);
-            }else if(twoDaysAgo<=80){
+            }else if(today<=80){
                 runTvGreen.setBackgroundResource(R.drawable.tv_shap_yellow2);
-            }else if(twoDaysAgo<=100){
+            }else if(today<=100){
                 runTvGreen.setBackgroundResource(R.drawable.tv_shap_green2);
             }
 
@@ -258,6 +268,7 @@ public class RunCertificateActivity extends BaseActivity {
                 Intent intent1 = new Intent();
                 intent1.setClass(mActivity, Cell_Detail_Activity.class);
                 intent1.putExtra(Keys.UNITID,unitId);
+                intent1.putExtra(Keys.PLANID,planId);
                 startActivity(intent1);
                 break;
             case R.id.run_tv_plan_run_status:

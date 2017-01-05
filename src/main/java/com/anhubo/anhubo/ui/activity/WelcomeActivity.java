@@ -127,7 +127,7 @@ public class WelcomeActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-            System.out.println("WelcomeActivity界面+++版本升级" + response);
+//            System.out.println("WelcomeActivity界面+++版本升级" + response);
             Check_UpDateBean bean = new Gson().fromJson(response, Check_UpDateBean.class);
             if (bean != null) {
                 int code = bean.code;

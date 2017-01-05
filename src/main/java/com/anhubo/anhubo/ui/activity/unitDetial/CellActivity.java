@@ -2,7 +2,8 @@ package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -23,13 +24,14 @@ import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
  * Created by LUOLI on 2017/1/3.
  */
 public class CellActivity extends BaseActivity {
+    private static final int SHARE_FAIL = 1;
+    private static final int SHARE_CANCLE = 2;
     @InjectView(R.id.cell_webView)
     WebView webView;
     private String url;
@@ -47,12 +49,13 @@ public class CellActivity extends BaseActivity {
         Intent intent = getIntent();
         planId = intent.getStringExtra(Keys.PLANID);
         unitId = intent.getStringExtra(Keys.UNITID);
-        if(TextUtils.isEmpty(unitId)){
+        if (TextUtils.isEmpty(unitId)) {
             unitId = "";
         }
 
         url = Urls.Url_Unit_Cell;
     }
+
     @Override
     protected int getContentViewId() {
         return R.layout.activity_cell;
@@ -67,10 +70,11 @@ public class CellActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
-// 获取uid拼接参数
+        iv_basepager_left.setOnClickListener(this);
+        // 获取uid拼接参数
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
         //System.out.println("uid是==========" + uid);
-        String newUrl = url + "?uid=" + uid+"&unit_id="+unitId+"&plan_id="+planId;
+        String newUrl = url + "?uid=" + uid + "&unit_id=" + unitId + "&plan_id=" + planId;
 
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
@@ -93,13 +97,14 @@ public class CellActivity extends BaseActivity {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             topPb.setProgress(newProgress);
-            if(newProgress==100){
+            if (newProgress == 100) {
                 topPb.setVisibility(View.GONE);
             }
             super.onProgressChanged(view, newProgress);
         }
 
     }
+
     class MyJavaScriptInterface {
         public MyJavaScriptInterface() {
 
@@ -138,47 +143,91 @@ public class CellActivity extends BaseActivity {
 
     @Override
     public void onClick(View v) {
-        ShareAction shareAction = new ShareAction(mActivity);
-        switch (v.getId()){
+        final String newUrl = Urls.Url_Cell_WeiXin + "?plan_id=" + planId;
+        final String content = TextUtils.isEmpty(shareString) ? Urls.Url_Cell_WeiXin : shareString;
+        final String context = "加入互助计划,时刻享用安全保障,前行路上更安心";
+        switch (v.getId()) {
+            case R.id.ivTopBarLeft:
+                sendBroadcast(new Intent(CellListActivity.CELLLIST_FINISH));
+                finish();
+                break;
             case R.id.btn_weixin:
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ShareAction shareAction = new ShareAction(mActivity);
+                        shareAction
+                                .setPlatform(SHARE_MEDIA.WEIXIN)
+                                .withText(context)
+                                .withTitle(content)
+                                .withTargetUrl(newUrl)
+                                .setCallback(umShareListener)
+                                .share();
+                    }
+                });
 
-                shareAction
-                        .setPlatform(SHARE_MEDIA.WEIXIN)
-                        .withText("hello")
-                        .withTitle(shareString)
-                        .setCallback(umShareListener)
-                        .share();
                 break;
             case R.id.btn_weixin_circle:
-                shareAction
-                        .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
-                        .withText("hello")
-                        .withTitle(shareString)
-                        .setCallback(umShareListener)
-                        .share();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ShareAction shareweinCircle = new ShareAction(mActivity);
+
+                        shareweinCircle
+                                .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
+                                .withText(context)
+                                .withTitle(content)
+                                .withTargetUrl(newUrl)
+                                .setCallback(umShareListener)
+                                .share();
+                    }
+                });
+
                 break;
         }
     }
 
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case SHARE_FAIL:
+                    ToastUtils.showToast(mActivity, "分享失败");
+                    break;
+                case SHARE_CANCLE:
+                    ToastUtils.showToast(mActivity, "分享取消");
+                    break;
+            }
+        }
+    };
     private UMShareListener umShareListener = new UMShareListener() {
         @Override
         public void onResult(SHARE_MEDIA platform) {
             //System.out.println(platform + "分享成功");
-            dialog.dismiss();
 
         }
 
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
-            ToastUtils.showToast(mActivity, "分享失败");
+            handler.sendEmptyMessage(SHARE_FAIL);
+
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
-            ToastUtils.showToast(mActivity, "分享取消");
+            handler.sendEmptyMessage(SHARE_CANCLE);
 
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        sendBroadcast(new Intent(CellListActivity.CELLLIST_FINISH));
+        finish();
+    }
+
+
 
     @Override
     public void onSystemUiVisibilityChange(int visibility) {

@@ -1,8 +1,12 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +39,7 @@ import okhttp3.Call;
  * Created by LUOLI on 2016/12/29.
  */
 public class CellListActivity extends BaseActivity implements CellListAdapter.OnBtnClickListener {
+    public static final String CELLLIST_FINISH = "celllist_finish";
     @InjectView(R.id.unit_list_listview)
     RefreshListview listview;
     @InjectView(R.id.create_unit)
@@ -72,7 +77,7 @@ public class CellListActivity extends BaseActivity implements CellListAdapter.On
         // 监听listview的滑动监听
         listview.setOnRefreshingListener(new MyOnRefreshingListener());
 
-
+        initFinishReceiver();
     }
 
     /**
@@ -138,7 +143,7 @@ public class CellListActivity extends BaseActivity implements CellListAdapter.On
 
         @Override
         public void onResponse(String response) {
-            System.out.println("CellListActivity界面+" + response);
+//            System.out.println("CellListActivity界面+" + response);
             showDialog.dismiss();
             setData(response);
         }
@@ -167,16 +172,43 @@ public class CellListActivity extends BaseActivity implements CellListAdapter.On
 
     }
 
+    /**
+     * 初始化结束的广播监听
+     */
+    private void initFinishReceiver() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(CELLLIST_FINISH);
+        registerReceiver(finishReceiver, filter);
+    }
+    /**注册广播接收*/
+    private BroadcastReceiver finishReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //收到广播后finishing
+            if (CELLLIST_FINISH.equals(intent.getAction())) {
+                finish();
+            }
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(finishReceiver);
+    }
+
     @OnClick(R.id.create_unit)
     public void onClick(View v) {
         // 创建单元
         enterUnitActivity();
+
     }
 
     /**
      * 加入和创建单元
      */
     private void enterUnitActivity() {
+
         Intent intent = new Intent();
         intent.setClass(mActivity, CellActivity.class);
         intent.putExtra(Keys.PLANID, planId);

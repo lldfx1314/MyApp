@@ -30,6 +30,7 @@ public interface Urls {
      * 邀请 微信
      */
     String Url_MyInvare_WeiXin = UrlBaseH5 + "s/html/InviteShare.html";
+
     /**
      * 关于我们
      */
@@ -56,6 +57,8 @@ public interface Urls {
     String Url_HuBaoPlan = UrlBaseH5 + "anhubo_s/anhubo_concur/html/concurProgram.html";
     /**加入单元&&创建单元*/
     String Url_Unit_Cell = UrlBaseH5 + "anhubo_s/anhubo_concur/html/addCellOk.html";
+    /**单元 分享*/
+    String Url_Cell_WeiXin= UrlBaseH5 + "anhubo_s/anhubo_concur/html/concurProgram.html";
 
     /**
      * Android原生
@@ -291,6 +294,7 @@ public interface Urls {
      * 检查更新
      */
     String Url_Check_Update = UrlBase + "Index/version_change";
+
 
 
 }

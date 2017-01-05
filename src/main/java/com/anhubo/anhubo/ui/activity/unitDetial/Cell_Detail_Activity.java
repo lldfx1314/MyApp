@@ -1,6 +1,7 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.app.Dialog;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -47,11 +48,13 @@ public class Cell_Detail_Activity extends BaseActivity {
     private Dialog dialog;
     private Button btnWeixin;
     private Button btnweixinCircle;
+    private String planId;
 
     @Override
     protected void initConfig() {
         super.initConfig();
         unitId = getIntent().getStringExtra(Keys.UNITID);
+        planId = getIntent().getStringExtra(Keys.PLANID);
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
     }
 
@@ -131,6 +134,9 @@ public class Cell_Detail_Activity extends BaseActivity {
     @Override
     public void onClick(View v) {
         ShareAction shareAction = new ShareAction(mActivity);
+        String newUrl = Urls.Url_Cell_WeiXin + "?plan_id=" + planId;
+        String title = "好友邀请你一起加入\"计划名称\"下\"单元名称\"单元,获取安全保障";
+        String context = "加入互助计划,时刻享用安全保障,前行路上更安心";
         switch (v.getId()){
             case R.id.ivTopBarRight_unit_share:
                 showDialog();
@@ -139,16 +145,18 @@ public class Cell_Detail_Activity extends BaseActivity {
 
                 shareAction
                         .setPlatform(SHARE_MEDIA.WEIXIN)
-                        .withText("hello")
-                        .withTitle("标题")
+                        .withText(context)
+                        .withTitle(title)
+                        .withTargetUrl(newUrl)
                         .setCallback(umShareListener)
                         .share();
                 break;
             case R.id.btn_weixin_circle:
                 shareAction
                         .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
-                        .withText("hello")
-                        .withTitle("标题")
+                        .withText(context)
+                        .withTitle(title)
+                        .withTargetUrl(newUrl)
                         .setCallback(umShareListener)
                         .share();
                 break;
@@ -178,7 +186,6 @@ public class Cell_Detail_Activity extends BaseActivity {
         @Override
         public void onResult(SHARE_MEDIA platform) {
             //System.out.println(platform + "分享成功");
-            dialog.dismiss();
         }
 
         @Override
