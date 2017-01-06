@@ -34,7 +34,7 @@
                 android:layout_weight="1">
 
                 <RelativeLayout
-                    android:layout_width="90dp"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:gravity="center_vertical">
@@ -51,22 +51,20 @@
 
                     <View
                         android:id="@+id/dot_study"
-                        android:layout_width="6dp"
-                        android:layout_height="6dp"
+                        android:layout_width="5dp"
+                        android:layout_height="5dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="5dp"
-                        android:visibility="gone"
-                        android:background="@drawable/dot_red_shape" />
+                        android:background="@drawable/dot_red_shape"
+                        android:visibility="gone" />
 
                 </RelativeLayout>
-
-
             </RelativeLayout>
 
 
             <View
-                android:layout_width="1dp"
-                android:layout_height="30dp"
+                android:layout_width="0.5dp"
+                android:layout_height="25dp"
                 android:layout_gravity="center_vertical"
                 android:background="@color/gray" />
 
@@ -76,7 +74,7 @@
                 android:layout_weight="1">
 
                 <RelativeLayout
-                    android:layout_width="90dp"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:gravity="center_vertical">
@@ -87,19 +85,18 @@
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:drawableTop="@drawable/unit_check"
-                        android:gravity="center_horizontal"
                         android:text="检查"
                         android:textColor="@color/gray"
                         android:textSize="14sp" />
 
                     <View
                         android:id="@+id/dot_check"
-                        android:layout_width="6dp"
-                        android:layout_height="6dp"
+                        android:layout_width="5dp"
+                        android:layout_height="5dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="5dp"
-                        android:visibility="gone"
-                        android:background="@drawable/dot_red_shape" />
+                        android:background="@drawable/dot_red_shape"
+                        android:visibility="gone" />
 
                 </RelativeLayout>
 
@@ -107,8 +104,8 @@
 
 
             <View
-                android:layout_width="1dp"
-                android:layout_height="30dp"
+                android:layout_width="0.5dp"
+                android:layout_height="25dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
@@ -120,7 +117,7 @@
                 android:layout_weight="1">
 
                 <RelativeLayout
-                    android:layout_width="90dp"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:gravity="center_vertical">
@@ -137,12 +134,12 @@
 
                     <View
                         android:id="@+id/dot_drill"
-                        android:layout_width="6dp"
-                        android:layout_height="6dp"
+                        android:layout_width="5dp"
+                        android:layout_height="5dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="5dp"
-                        android:visibility="gone"
-                        android:background="@drawable/dot_red_shape" />
+                        android:background="@drawable/dot_red_shape"
+                        android:visibility="gone" />
                 </RelativeLayout>
 
             </RelativeLayout>
@@ -157,10 +154,10 @@
         android:layout_below="@+id/ll_unit_listview"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
-        android:visibility="gone"
         android:text="您暂时还没有加入任何互保计划"
         android:textColor="@color/gray"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_no_plan2"
@@ -169,8 +166,8 @@
         android:layout_below="@+id/ll_unit_listview"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:visibility="gone"
         android:text="动态保障凭证"
         android:textColor="@color/gray"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:visibility="gone" />
 </RelativeLayout>

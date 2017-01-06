@@ -18,6 +18,7 @@ import com.anhubo.anhubo.ui.activity.MyDetial.PersonMsgActivity;
 import com.anhubo.anhubo.ui.activity.MyDetial.SettingActivity;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
+import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
@@ -189,7 +190,23 @@ public class MyFragment extends BaseFragment {
                 enterSetting();
                 break;
             case R.id.tv_logOut:
-                logOut();
+                new AlertDialog(mActivity).builder()
+                        .setTitle("提示")
+                        .setMsg("您确定要退出登录吗？")
+                        .setPositiveButton("退出", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                logOut();
+                            }
+                        })
+                        .setNegativeButton("", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        })
+                        .setCancelable(false).show();
+
                 break;
             default:
                 break;

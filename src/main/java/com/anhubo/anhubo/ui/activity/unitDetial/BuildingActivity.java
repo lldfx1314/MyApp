@@ -57,7 +57,7 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
     private ImageButton iv_basepager_left;
     private ImageView ivTopBarleftUnitMenu;
     private ImageView ivTopBarRightUnitMsg;
-    private TextView tvTopBarRight;
+    private ImageView ivTopBarRight;
     private ImageView ivTopBarleftBuildPen;
     private TextView tvToptitle;
     private RelativeLayout llTop;
@@ -141,9 +141,8 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
     }
 
     private void addBuilding() {
-        tvTopBarRight.setVisibility(View.VISIBLE);
-        tvTopBarRight.setText("添加");
-        tvTopBarRight.setOnClickListener(new View.OnClickListener() {
+        ivTopBarRight.setVisibility(View.VISIBLE);
+        ivTopBarRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog();
@@ -410,8 +409,6 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
 
             // 判断是否有更多数据，moreurl是否为空
             if (pager <= page) {
-                System.out.println("pager+++==="+pager);
-                System.out.println("page+++==="+page);
                 // 加载更多业务
                 isLoadMore = true;
                 getData();
@@ -460,7 +457,7 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
         iv_basepager_left = (ImageButton) findViewById(R.id.ivTopBarLeft);//左上角返回按钮
         ivTopBarleftUnitMenu = (ImageView) findViewById(R.id.ivTopBarleft_unit_menu);//左上角菜单按钮
         ivTopBarRightUnitMsg = (ImageView) findViewById(R.id.ivTopBarRight_unit_msg);//右上角信息按钮
-        tvTopBarRight = (TextView) findViewById(R.id.tvTopBarRight);//右上角列表
+        ivTopBarRight = (ImageView) findViewById(R.id.ivTopBarRight_add);//右上角加号
         ivTopBarleftBuildPen = (ImageView) findViewById(R.id.ivTopBarleft_build_pen);//左上角铅笔按钮
         tvToptitle = (TextView) findViewById(R.id.tvAddress);//标题
         llTop = (RelativeLayout) findViewById(R.id.ll_Top); // 顶部标题栏

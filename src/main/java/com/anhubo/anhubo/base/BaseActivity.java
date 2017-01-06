@@ -49,6 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected ProgressBar topPb;
     protected LoadProgressDialog loadProgressDialog;
     protected ImageView ivTopBarRightUnitShare;
+    protected ImageView ivTopBarRight;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -173,6 +174,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         ivTopBarRightUnitMsg = (ImageView) findViewById(R.id.ivTopBarRight_unit_msg);//右上角信息按钮
         ivTopBarRightUnitShare = (ImageView) findViewById(R.id.ivTopBarRight_unit_share);//右上角分享按钮
         tvTopBarRight = (TextView) findViewById(R.id.tvTopBarRight);//右上角列表
+        ivTopBarRight = (ImageView) findViewById(R.id.ivTopBarRight_add);//右上角加号
         ivTopBarleftBuildPen = (ImageView) findViewById(R.id.ivTopBarleft_build_pen);//左上角铅笔按钮
         tvToptitle = (TextView) findViewById(R.id.tvAddress);//标题
         llTop = (RelativeLayout) findViewById(R.id.ll_Top); // 顶部标题栏

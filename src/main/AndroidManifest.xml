@@ -343,9 +343,8 @@
         <meta-data android:name="JPUSH_APPKEY" android:value="4c79125d89e7344f623afb9a"/>
 
         <!--友盟-->
-        <!--友盟-->
         <meta-data android:name="UMENG_APPKEY" android:value="5819590dcae7e74aff00035c"></meta-data>
-        <meta-data android:value="ying_yong_bao" android:name="UMENG_CHANNEL"/>
+        <meta-data android:value="anhubo" android:name="UMENG_CHANNEL"/>
         <!--高德服务-->
         <service android:name="com.amap.api.location.APSService"></service>
         <!--高德meta-data-->

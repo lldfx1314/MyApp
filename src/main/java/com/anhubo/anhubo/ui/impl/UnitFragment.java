@@ -421,8 +421,8 @@ public class UnitFragment extends BaseFragment {
         if (code == 0 && certs != null) {
 
             if (certs.size() == 0) {
-                tvNoPlan1.setVisibility(View.VISIBLE);
                 tvNoPlan2.setVisibility(View.GONE);
+                tvNoPlan1.setVisibility(View.VISIBLE);
                 lvUnit.setDividerHeight(0);
             } else {
                 tvNoPlan1.setVisibility(View.GONE);
@@ -431,6 +431,7 @@ public class UnitFragment extends BaseFragment {
             }
 
         } else {
+            tvNoPlan2.setVisibility(View.GONE);
             tvNoPlan1.setVisibility(View.VISIBLE);
             lvUnit.setDividerHeight(0);
         }

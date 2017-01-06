@@ -18,6 +18,7 @@
         android:layout_height="62dp"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
+        android:textSize="13sp"
         android:background="#F7F7F7" />
     <View
         android:id="@+id/view"

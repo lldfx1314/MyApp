@@ -11,7 +11,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.WindowInsetsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -19,7 +18,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -36,7 +34,6 @@ import com.amap.api.maps2d.UiSettings;
 import com.amap.api.maps2d.model.LatLng;
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.Business_Location_Adapter;
-import com.anhubo.anhubo.adapter.UnitMenuAdapter;
 import com.anhubo.anhubo.bean.LocationBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
@@ -65,7 +62,7 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
     private ImageButton iv_basepager_left;
     private ImageView ivTopBarleftUnitMenu;
     private ImageView ivTopBarRightUnitMsg;
-    private TextView tvTopBarRight;
+    private ImageView ivTopBarRight;
     private ImageView ivTopBarleftBuildPen;
     private TextView tvToptitle;
     private RelativeLayout llTop;
@@ -152,9 +149,8 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
 
 
     private void addBusiness() {
-        tvTopBarRight.setVisibility(View.VISIBLE);
-        tvTopBarRight.setText("添加");
-        tvTopBarRight.setOnClickListener(new View.OnClickListener() {
+        ivTopBarRight.setVisibility(View.VISIBLE);
+        ivTopBarRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog();
@@ -473,7 +469,7 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
         iv_basepager_left = (ImageButton) findViewById(R.id.ivTopBarLeft);//左上角返回按钮
         ivTopBarleftUnitMenu = (ImageView) findViewById(R.id.ivTopBarleft_unit_menu);//左上角菜单按钮
         ivTopBarRightUnitMsg = (ImageView) findViewById(R.id.ivTopBarRight_unit_msg);//右上角信息按钮
-        tvTopBarRight = (TextView) findViewById(R.id.tvTopBarRight);//右上角列表
+        ivTopBarRight = (ImageView) findViewById(R.id.ivTopBarRight_add);//右上角加号
         ivTopBarleftBuildPen = (ImageView) findViewById(R.id.ivTopBarleft_build_pen);//左上角铅笔按钮
         tvToptitle = (TextView) findViewById(R.id.tvAddress);//标题
         llTop = (RelativeLayout) findViewById(R.id.ll_Top); // 顶部标题栏

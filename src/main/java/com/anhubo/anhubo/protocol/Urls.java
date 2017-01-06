@@ -8,8 +8,8 @@ public interface Urls {
     /**
      * 接入H5
      ********************************************************************************/
-    //String UrlBaseH5 = "http://anhubo.com/";
-    String UrlBaseH5 = "http://test.anhubo.com/";
+    String UrlBaseH5 = "http://anhubo.com/";
+    //String UrlBaseH5 = "http://test.anhubo.com/";
     /**
      * 发现，反馈
      */
@@ -63,8 +63,8 @@ public interface Urls {
     /**
      * Android原生
      ********************************************************************************/
-    //String UrlBase = "http://anhubo.com/api/";
-    String UrlBase = "http://test.anhubo.com/api/";
+    String UrlBase = "http://anhubo.com/api/";
+    //String UrlBase = "http://test.anhubo.com/api/";
     /**
      * 新增界面
      */

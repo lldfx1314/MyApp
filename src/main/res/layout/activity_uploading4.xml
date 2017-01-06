@@ -33,7 +33,7 @@
                     android:layout_weight="1"
                     android:text="开始日期"
                     android:textColor="@color/text_biack"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tv_startTime"
@@ -80,7 +80,7 @@
                     android:layout_weight="1"
                     android:text="租房时长"
                     android:textColor="@color/text_biack"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tv_Time"
@@ -89,7 +89,7 @@
                     android:layout_marginRight="10dp"
                     android:text="显示日期"
                     android:textColor="@color/text_biack"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:visibility="gone" />
 
                 <ImageView
@@ -133,7 +133,7 @@
                     android:layout_marginTop="8dp"
                     android:text="点击图标开始拍照"
                     android:textColor="@color/upload_photo"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 

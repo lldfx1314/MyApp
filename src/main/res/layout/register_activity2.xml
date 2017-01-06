@@ -9,13 +9,12 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:gravity="center">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:background="@drawable/anhuboicon"/>
     </LinearLayout>
     <!-- 选择建筑 -->
@@ -60,7 +59,7 @@
     <!--完成-->
     <Button
         android:id="@+id/btn_register2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="15dp"
         android:background="@drawable/btn_reg_login"

@@ -38,7 +38,7 @@
                 android:layout_marginTop="8dp"
                 android:text="身份证正面照片"
                 android:textColor="@color/upload_photo"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 />
 
         </LinearLayout>
@@ -77,7 +77,7 @@
                 android:layout_marginTop="8dp"
                 android:text="身份证背面照片"
                 android:textColor="@color/upload_photo"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 />
 
 
