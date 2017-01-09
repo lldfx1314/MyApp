@@ -350,10 +350,6 @@
         <!--高德meta-data-->
         <meta-data android:name="com.amap.api.v2.apikey" android:value="a302f9a3355d276c96844f55c2b6ffd5"/>
 
-
-
-
-
     </application>
 
 </manifest>

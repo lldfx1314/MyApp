@@ -54,6 +54,7 @@ public class HomeActivity extends BaseActivity {
     private ArrayList<Fragment> list;
     private long exitTime = 0;
     public static boolean isForeground = false;
+    private String uid;
 
     @Override
     protected void initConfig() {

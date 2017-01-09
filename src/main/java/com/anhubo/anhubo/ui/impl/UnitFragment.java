@@ -1,7 +1,7 @@
 package com.anhubo.anhubo.ui.impl;
 
-import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -25,7 +25,6 @@ import com.anhubo.anhubo.bean.UnitBean;
 import com.anhubo.anhubo.bean.Unit_Invate_WorkMateBean;
 import com.anhubo.anhubo.bean.Unit_PlanBean;
 import com.anhubo.anhubo.protocol.Urls;
-import com.anhubo.anhubo.ui.activity.unitDetial.HuBaoPlanActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.MsgPerfectActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.QrScanActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.RunCertificateActivity;
@@ -39,6 +38,7 @@ import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.MyPolygonView;
 import com.anhubo.anhubo.view.SesameCreditPanel;
+import com.anhubo.anhubo.view.ShowZheZhaoDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -105,6 +105,7 @@ public class UnitFragment extends BaseFragment {
     private List<Build_Help_Plan_Bean.Data.Plans> plans;
     private BuildAdapter adapter1;
     private AlertDialog builder;
+    private ShowZheZhaoDialog zheZhaoDialog;
 
     @Override
     public void initTitleBar() {
@@ -269,19 +270,69 @@ public class UnitFragment extends BaseFragment {
         if (isVisibleToUser) {
             isLoading = true;
             // 界面每次可见都设置一下单位，邀请同事以后单位可能会改变
-            String businessName = SpUtils.getStringParam(mActivity, Keys.BUSINESSNAME);
-            String bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
-            uid = SpUtils.getStringParam(mActivity, Keys.UID);
-            if (tv_basepager_title != null) {
+            String businessName = SpUtils.getStringParam(getActivity(), Keys.BUSINESSNAME, null);
+
+            if (tv_basepager_title != null && !TextUtils.isEmpty(businessName)) {
 
                 tv_basepager_title.setText(businessName);
             }
-            // 获取圆弧数据
-            getData();
+            String businessId = SpUtils.getStringParam(getActivity(), Keys.BUSINESSID);
+            if (TextUtils.isEmpty(businessId)) {
+
+                if (isLoading) {
+                    // 动态的添加自定义控件，设置数据
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 加载遮罩层
+                            View view = View.inflate(getActivity(), R.layout.unit_zhezhao, null);
+                            TextView tvZhezhao = (TextView) view.findViewById(R.id.tv_zhezhao);
+//                            tvZhezhao.setBackgroundColor(Color.argb(0, 0, 0, 0));
+                            tvZhezhao.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    ToastUtils.showToast(getActivity(),"哈哈");
+                                }
+                            });
+                            zheZhaoDialog = new ShowZheZhaoDialog(getActivity(), view);
+
+                            zheZhaoDialog.show();
+
+//                            FrameLayout.LayoutParams params3 = new FrameLayout.LayoutParams
+//                                    (FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+//                            getActivity().addContentView(view, );
+
+
+                            SimpleDateFormat df = new SimpleDateFormat("MM-dd");//设置日期格式
+                            String time = df.format(new Date());
+                            if (sesameCreditPanelLL != null) {
+                                sesameCreditPanelLL.removeView(scp);
+                            }
+                            // 初始化加载弧型进度条
+                            scp = new SesameCreditPanel(getActivity());
+                            scp.setDataModel(getData(60, "中", time));
+                            scp.setEnabled(true);
+                            scp.setClickable(true);
+                            sesameCreditPanelLL.addView(scp);
+                            isLoading = false;
+                        }
+                    }, 500);
+
+                }
+            } else {
+                if (zheZhaoDialog!=null) {
+                    zheZhaoDialog.dismiss();
+
+                }
+                // 获取圆弧数据
+                getData(businessId);
+            }
+            uid = SpUtils.getStringParam(getActivity(), Keys.UID);
             //动态凭证获取数据
             getPlanData();
 
             // 获取互助计划列表信息
+//            String bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
 //            getHelpPlan(bulidingid);
         }
     }
@@ -318,13 +369,6 @@ public class UnitFragment extends BaseFragment {
             String response = SpUtils.getStringParam(mActivity, "HelpPlan");
             //设置互助计划的数据展示
             setHelpPlanData(response);
-
-
-            // 获取数据失败后显示三色以及互助计划
-//            if (plans != null) {
-//                adapter1 = new BuildAdapter(mActivity, plans);
-//            }
-//            lvUnit.setAdapter(adapter1);
         }
 
         @Override
@@ -387,9 +431,6 @@ public class UnitFragment extends BaseFragment {
         public void onError(Call call, Exception e) {
             //System.out.println("UnitFragment界面+++互保凭证===没拿到数据" + e.getMessage());
             tvNoPlan1.setVisibility(View.VISIBLE);
-//            lvUnit.setDividerHeight(0);
-//            adapter = new UnitAdapter(mActivity, certs);
-//            lvUnit.setAdapter(adapter);
             String response = SpUtils.getStringParam(mActivity, "PlanData");
             setPlanData(response);
 
@@ -443,7 +484,7 @@ public class UnitFragment extends BaseFragment {
     /**
      * 获取圆弧数据
      */
-    private void getData() {
+    private void getData(String businessId) {
         // 每次请求网络之前（控件是在网络获取成功后动态添加上去的）先把上次的控件对象移除，否则会重复
         if (sesameCreditPanelLL != null) {
             sesameCreditPanelLL.removeView(scp);
@@ -457,9 +498,8 @@ public class UnitFragment extends BaseFragment {
         /**只有当该Fragment被用户可见的时候,才加载网络数据*/
         // 获取网络数据
         String url = Urls.Url_Unit;
-        String businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
         HashMap<String, String> params = new HashMap<>();
-        params.put("business_id", businessid);
+        params.put("business_id", businessId);
         OkHttpUtils.post()//
                 .url(url)//
                 .params(params)//
@@ -798,7 +838,7 @@ public class UnitFragment extends BaseFragment {
                 String planId = cert.plan_id;
                 Intent intent = new Intent();
                 intent.setClass(mActivity, RunCertificateActivity.class);
-                intent.putExtra(Keys.PLANID,planId);
+                intent.putExtra(Keys.PLANID, planId);
                 startActivity(intent);
             }
         });

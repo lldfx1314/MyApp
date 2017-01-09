@@ -167,6 +167,10 @@ public class FindPwdActivity extends BaseActivity {
             return;
         }
 
+        submit2();
+    }
+
+    private void submit2() {
         showDialog = loadProgressDialog.show(mActivity, "正在找回密码...");
         String url = Urls.Url_Login_AlterPwd;
         HashMap<String, String> params = new HashMap<>();

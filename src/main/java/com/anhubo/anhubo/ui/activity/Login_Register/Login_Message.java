@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.Login_Bean;
+import com.anhubo.anhubo.bean.Login_WeiXin_Bean;
 import com.anhubo.anhubo.bean.Security_Bean;
 import com.anhubo.anhubo.bean.Security_Token_Bean;
 import com.anhubo.anhubo.protocol.Urls;
@@ -218,32 +219,29 @@ public class Login_Message extends BaseActivity {
         @Override
         public void onResponse(String response) {
             //System.out.println("微信登录" + response);
-            Login_Bean bean = new Gson().fromJson(response, Login_Bean.class);
+            Login_WeiXin_Bean bean = new Gson().fromJson(response, Login_WeiXin_Bean.class);
             if (bean != null) {
                 String code = bean.code;
                 String msg = bean.msg;
-                Login_Bean.Data data = bean.data;
+                Login_WeiXin_Bean.Data data = bean.data;
                 String uid = data.uid;
                 String businessId = data.business_id;
-                String buildingId = data.building_id;
-                String buildingName = data.building_name;
+//                String buildingId = data.building_id;
+//                String buildingName = data.building_name;
                 String businessName = data.business_name;
                 int exict = data.exict;
-                if (exict == 1) {
+                if (exict == 0||exict == 1) {
                     // 正常登录
 
                     SpUtils.putParam(mActivity, Keys.UID, uid);
                     SpUtils.putParam(mActivity, Keys.BUSINESSID, businessId);
-                    SpUtils.putParam(mActivity, Keys.BULIDINGID, buildingId);
-                    SpUtils.putParam(mActivity, Keys.BUILDINGNAME, buildingName);
                     SpUtils.putParam(mActivity, Keys.BUSINESSNAME, businessName);
+//                    SpUtils.putParam(mActivity, Keys.BULIDINGID, buildingId);
+//                    SpUtils.putParam(mActivity, Keys.BUILDINGNAME, buildingName);
 
                     //跳转到主页面
-                    enterHome();
-                } else if (exict == 0) {
-                    // 注册的第二步
-                    goTo_Activity(uid);
-                } else if (exict == 2) {
+                    enterHome(uid);
+                }else if (exict == 2) {
                     // 去注册uid unionid 头像 profile_image_url   姓名  screen_name
                     Intent intent = new Intent(mActivity, RegisterActivity.class);
                     intent.putExtra(Keys.WEIXINFORZHUCE, "weixinforzhuce");
@@ -323,11 +321,6 @@ public class Login_Message extends BaseActivity {
     }
 
     class MyStringCallback2 extends StringCallback {
-        /*@Override
-        public void onError(Call call, Exception e) {
-
-            System.out.println("Login_Message+++===没拿到数据" + e.getMessage());
-        }*/
 
         @Override
         public void onError(okhttp3.Call call, Exception e) {
@@ -338,47 +331,47 @@ public class Login_Message extends BaseActivity {
         @Override
         public void onResponse(String response) {
             showDialog.dismiss();
-//            System.out.println("Login_Message++"+response);
+            System.out.println("Login_Message++"+response);
             Login_Bean bean = new Gson().fromJson(response, Login_Bean.class);
             if (bean != null) {
                 // 获取到数据
-                String code = bean.code;
+                int code = bean.code;
                 String msg = bean.msg;
                 Login_Bean.Data data = bean.data;
                 String uid = data.uid;
                 String businessId = data.business_id;
-                String buildingId = data.building_id;
-                String buildingName = data.building_name;
                 String businessName = data.business_name;
+//                String buildingId = data.building_id;
+//                String buildingName = data.building_name;
 
                 // 根据code值判断跳转到那个界面
                 switch (code) {
-                    case "101"://网络错误
+                    case 101://网络错误
                         showdialog(msg);
                         break;
-                    case "102"://验证码错误
+                    case 102://验证码错误
                         showdialog(msg);
                         break;
-                    case "104"://该手机号码没注册，携带输入的手机号跳转到密码注册界面
+                    case 104://该手机号码没注册，携带输入的手机号跳转到密码注册界面
                         goToPwdRegisterActivity();
                         break;
-                    case "105":// 跳转到注册的第二步
+//                    case "105":// 跳转到注册的第二步
                         // 获取到uid后携带uid跳转到RegisterActivity2界面
-                        goTo_Activity(uid);
-                        break;
-                    case "106":// 跳转到注册的第二步
-                        goTo_Activity(uid);
-                        break;
-                    case "0":// 登录成功，携带返回的参数跳转到单位界面，同时存一下把uid等参数保存到本地
+//                        goTo_Activity(uid);
+//                        break;
+//                    case "106":// 跳转到注册的第二步
+//                        goTo_Activity(uid);
+//                        break;
+                    case 0:// 登录成功，携带返回的参数跳转到单位界面，同时存一下把uid等参数保存到本地
 
                         // 保存参数
                         SpUtils.putParam(mActivity, Keys.UID, uid);
                         SpUtils.putParam(mActivity, Keys.BUSINESSID, businessId);
-                        SpUtils.putParam(mActivity, Keys.BULIDINGID, buildingId);
-                        SpUtils.putParam(mActivity, Keys.BUILDINGNAME, buildingName);
                         SpUtils.putParam(mActivity, Keys.BUSINESSNAME, businessName);
+//                        SpUtils.putParam(mActivity, Keys.BULIDINGID, buildingId);
+//                        SpUtils.putParam(mActivity, Keys.BUILDINGNAME, buildingName);
                         //跳转到主页面
-                        enterHome();
+                        enterHome(uid);
                         break;
                 }
 
@@ -392,9 +385,25 @@ public class Login_Message extends BaseActivity {
      */
     private void goToPwdRegisterActivity() {
         if (phoneNumber != null) {
-            Intent intent = new Intent(Login_Message.this, PwdRegisterActivity.class);
-            intent.putExtra(Keys.PHONE, phoneNumber);
-            startActivity(intent);
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("该账号不存在，请注册")
+                    .setPositiveButton("去注册", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(mActivity, PwdRegisterActivity.class);
+                            intent.putExtra(Keys.PHONE, phoneNumber);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("取消", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    })
+                    .setCancelable(false).show();
+
         } else {
 
             showdialog("网络错误，请重试");
@@ -418,8 +427,11 @@ public class Login_Message extends BaseActivity {
     }
 
 
-    private void enterHome() {
-        startActivity(new Intent(Login_Message.this, HomeActivity.class));
+    private void enterHome(String uid) {
+        Intent intent = new Intent(mActivity, HomeActivity.class);
+        startActivity(intent);
+        // 把uid保存起来
+        SpUtils.putParam(mActivity, Keys.UID, uid);
         // 发送一条广播，登录完成后关闭登录的所有界面
         mActivity.sendBroadcast(new Intent(INTENT_FINISH));
     }

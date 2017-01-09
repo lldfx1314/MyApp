@@ -86,14 +86,28 @@
             android:layout_marginRight="50dp"
             />
     </RelativeLayout>
-    <!--邀请码-->
-    <EditText
-        android:id="@+id/et_reg_inviteCode"
-        style="@style/reg_login_edit_style"
+    <!--再次输入密码-->
+    <RelativeLayout
         android:layout_marginTop="15dp"
-        android:hint="请输入邀请码(可不填)"
-        android:background="@drawable/edit_text"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <EditText
+            android:id="@+id/et_reg_pwd2"
+            style="@style/reg_login_edit_style"
+            android:hint="请再次输入密码"
+            android:background="@drawable/edit_text"
+            />
+        <Button
+            android:id="@+id/btn_reg_pwdIsVisible2"
+            style="@style/btn_eye"/>
+        <Button
+            android:id="@+id/btn_reg_pwdx2"
+            style="@style/btn_etPhoneNumber"
+            android:layout_marginRight="50dp"
+            />
+    </RelativeLayout>
+
     <Button
         android:id="@+id/btn_register1"
         android:layout_marginTop="15dp"
@@ -102,7 +116,7 @@
         android:background="@drawable/btn_reg_login"
         android:textColor="@color/btn_blue"
         android:textSize="16sp"
-        android:text="下一步"/>
+        android:text="注册"/>
     <LinearLayout
         android:layout_marginTop="15dp"
         android:gravity="center"

@@ -95,7 +95,7 @@ public class GuideActivity extends BaseActivity {
     protected void initEvents() {
         super.initEvents();
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
-        bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
+//        bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
         businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
         String[] split = Utils.getAppInfo(mActivity).split("#");
         versionName = split[1];
@@ -130,13 +130,15 @@ public class GuideActivity extends BaseActivity {
         SpUtils.putParam(mActivity, Keys.VERSIONNAME,versionName);
         //System.out.println("versionName+111+"+versionName);
         if(!TextUtils.isEmpty(uid)) {
-            if(!TextUtils.isEmpty(bulidingid)||!TextUtils.isEmpty(businessid)) {
-                //跳转到主页面
-                enterHome();
-            }else{
-                // 跳到注册第二个界面
-                enterRegister2();
-            }
+            enterHome(uid);
+
+//            if(!TextUtils.isEmpty(bulidingid)||!TextUtils.isEmpty(businessid)) {
+//                //跳转到主页面
+//                enterHome();
+//            }else{
+//                // 跳到注册第二个界面
+//                enterRegister2();
+//            }
 
         }else{
             // 无uid，跳到登录界面
@@ -188,8 +190,11 @@ public class GuideActivity extends BaseActivity {
         finish();
     }
 
-    private void enterHome() {
-        startActivity(new Intent(mActivity, HomeActivity.class));
+    private void enterHome(String uid) {
+        Intent intent = new Intent(mActivity, HomeActivity.class);
+        //System.out.println("要传递的uid+++===+++" + uid);
+        intent.putExtra(Keys.UID, String.valueOf(uid));
+        startActivity(intent);
         finish();
     }
 

@@ -50,7 +50,8 @@ public class LoadProgressDialog {
         // 创建自定义样式dialog
         loadingDialog = new Dialog(context, R.style.loading_dialog);
 
-        loadingDialog.setCancelable(false);// 不可以用“返回键”取消
+//        loadingDialog.setCancelable(false);// 不可以用“返回键”取消
+        loadingDialog.setCanceledOnTouchOutside(false);//点击外围不消失
         loadingDialog.setContentView(layout, new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.FILL_PARENT,
                 LinearLayout.LayoutParams.FILL_PARENT));// 设置布局

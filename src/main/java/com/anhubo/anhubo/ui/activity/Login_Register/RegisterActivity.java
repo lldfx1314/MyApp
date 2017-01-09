@@ -23,8 +23,10 @@ import com.anhubo.anhubo.bean.Register1_Bean;
 import com.anhubo.anhubo.bean.Security_Bean;
 import com.anhubo.anhubo.bean.Security_Token_Bean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.ui.activity.HomeActivity;
 import com.anhubo.anhubo.utils.InputWatcher;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
@@ -48,15 +50,14 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private EditText etRegphoneNumber;
     private String phoneNumber;
     private EditText etRegPwd;
-    private EditText etRegInviteCode;
     private CheckBox cbRegAnhubo;
     private EditText etRegSecurity;
     private String securityCode;
     private String pwd;
-    private String inviteCode;
     private Button btnRegphoneNumber;
     private boolean pwdIsVisible = false;//记录密码是否显示
     private Button btnRegPwdIsVisible;
+    private Button btnRegPwd2IsVisible;
     private TextView tvDeal;
     private Button btnRegPwdX;
     private String unionid;
@@ -66,18 +67,21 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private String loginforzhuce;
     private AlertDialog builder;
     private Dialog showDialog;
+    private EditText etRegPwd2;
+    private Button btnRegPwdX2;
+    private String pwd2;
 
 
     @Override
     protected void initConfig() {
         super.initConfig();
+        Intent intent = getIntent();
+        loginforzhuce = intent.getStringExtra(Keys.LOGINFORZHUCE);
+        weixinforzhuce = intent.getStringExtra(Keys.WEIXINFORZHUCE);
 
-        loginforzhuce = getIntent().getStringExtra(Keys.LOGINFORZHUCE);
-        weixinforzhuce = getIntent().getStringExtra(Keys.WEIXINFORZHUCE);
-
-        unionid = getIntent().getStringExtra(Keys.UNIONID);
-        imageUrl = getIntent().getStringExtra(Keys.PROFILE_IMAGE_URL);
-        weixinName = getIntent().getStringExtra(Keys.SCREEN_NAME);
+        unionid = intent.getStringExtra(Keys.UNIONID);
+        imageUrl = intent.getStringExtra(Keys.PROFILE_IMAGE_URL);
+        weixinName = intent.getStringExtra(Keys.SCREEN_NAME);
     }
 
     @Override
@@ -100,16 +104,27 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         // 输入密码
         etRegPwd = (EditText) findViewById(R.id.et_reg_pwd);
         // 输入邀请码
-        etRegInviteCode = (EditText) findViewById(R.id.et_reg_inviteCode);
+        etRegPwd2 = (EditText) findViewById(R.id.et_reg_pwd2);
         // 协议的CheckBox
         cbRegAnhubo = (CheckBox) findViewById(R.id.cb_reg_anhubo);
         // 电话号码的小圆叉
         btnRegphoneNumber = (Button) findViewById(R.id.btn_reg_phoneNumber);
-        // 密码可见btn_reg_pwdIsVisible
+        // 密码1可见
         btnRegPwdIsVisible = (Button) findViewById(R.id.btn_reg_pwdIsVisible);
-        // 密码小圆叉
+        // 密码1小圆叉
         btnRegPwdX = (Button) findViewById(R.id.btn_reg_pwdx);
+        // 密码2可见
+        btnRegPwd2IsVisible = (Button) findViewById(R.id.btn_reg_pwdIsVisible2);
+        // 密码2小圆叉
+        btnRegPwdX2 = (Button) findViewById(R.id.btn_reg_pwdx2);
 
+
+        String phone = getIntent().getStringExtra(Keys.PHONE);
+        // 设置显示电话号码
+        if(!TextUtils.isEmpty(phone)){
+            etRegphoneNumber.setText(phone);
+
+        }
 
         // 协议
         tvDeal = (TextView) findViewById(R.id.tv_deal);
@@ -162,12 +177,17 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         cbRegAnhubo.setOnCheckedChangeListener(this);
         // 右边小圆叉
         btnRegphoneNumber.setOnClickListener(this);
-        // 密码小圆叉
+        // 密码1小圆叉
         btnRegPwdX.setOnClickListener(this);
-        // 监听号码输入框状态，控制机右边小圆叉
+        // 密码2小圆叉
+        btnRegPwdX2.setOnClickListener(this);
+        // 监听号码输入框状态，控制右边小圆叉
         etRegphoneNumber.addTextChangedListener(new InputWatcher(btnRegphoneNumber, etRegphoneNumber));
         etRegPwd.addTextChangedListener(new InputWatcher(btnRegPwdX, etRegPwd));
+        etRegPwd2.addTextChangedListener(new InputWatcher(btnRegPwdX2, etRegPwd2));
+
         btnRegPwdIsVisible.setOnClickListener(this);
+        btnRegPwd2IsVisible.setOnClickListener(this);
     }
 
     /**
@@ -194,8 +214,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         getInputData();
         switch (v.getId()) {
 
-            case R.id.btn_register1: // 注册的下一步
-                enterRegisterActivity2();
+            case R.id.btn_register1: // 注册提交
+                submit();
                 break;
             case R.id.tv_reg_security: // 获取验证码
                 // 定义一个方法获取验证码
@@ -205,12 +225,19 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             case R.id.btn_reg_phoneNumber: // 号码的小圆叉
                 etRegphoneNumber.setText("");
                 break;
-            case R.id.btn_reg_pwdx: // 密码的小圆叉
+            case R.id.btn_reg_pwdx: // 密码1的小圆叉
                 etRegPwd.setText("");
                 break;
-            case R.id.btn_reg_pwdIsVisible: // 使密码可见
-                //  改变密码的可见状态
+            case R.id.btn_reg_pwdIsVisible: // 使密码1可见
+                //  改变密码1的可见状态
                 changePwdVisible(etRegPwd);
+                break;
+            case R.id.btn_reg_pwdx2: // 密码2的小圆叉
+                etRegPwd2.setText("");
+                break;
+            case R.id.btn_reg_pwdIsVisible2: // 使密码2可见
+                //  改变密码2的可见状态
+                changePwdVisible(etRegPwd2);
                 break;
             default:
                 break;
@@ -240,17 +267,17 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         phoneNumber = etRegphoneNumber.getText().toString().trim();
         //验证码
         securityCode = etRegSecurity.getText().toString().trim();
-        //密码
+        //密码1
         pwd = etRegPwd.getText().toString().trim();
-        //邀请码
-        inviteCode = etRegInviteCode.getText().toString().trim();
+        //密码2
+        pwd2 = etRegPwd2.getText().toString().trim();
 
     }
 
     /**
      * 进入注册的第二个页面
      */
-    private void enterRegisterActivity2() {
+    private void submit() {
         if (TextUtils.isEmpty(phoneNumber)) {
 
             showdialog("请输入手机号码");
@@ -285,6 +312,16 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             showdialog("请输入8-16位数字和字母的组合");
             return;
         }
+
+        if (TextUtils.isEmpty(pwd2)) {
+            showdialog("请再次输入密码");
+            return;
+        }
+        if (!TextUtils.equals(pwd, pwd2)) {
+            showdialog("两次密码输入不一致");
+            return;
+        }
+
         if (!cbRegAnhubo.isChecked()) {
             ToastUtils.showToast(mActivity, "请先阅读协议");
             return;
@@ -317,9 +354,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
         params.put("password", pwd);
 
-        if (!TextUtils.isEmpty(inviteCode)) {
-            params.put("users_qrcode", inviteCode);
-        }
+
 
         params.put("third_type", 2 + "");//第三方类型，2代表微信
         params.put("pic_url", imageUrl);// 头像
@@ -354,8 +389,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 int uid = register1Bean.data.uid;
                 switch (code) {
                     case "0":// 注册成功
-                        // 进入注册的第二个界面
-                        enterRegisterActivity2(uid);
+                        // 进入首页
+                        enterHomeActivity(uid);
                         break;
                     case "102":// 验证码错误
                         showdialog(msg);
@@ -391,10 +426,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         params.put("telphone", phoneNumber);
         params.put("verify_code", securityCode);
         params.put("password", pwd);
-        if (!TextUtils.isEmpty(inviteCode)) {
-
-            params.put("users_qrcode", inviteCode);
-        }
 
         OkHttpUtils.post()//
                 .url(url)//
@@ -426,8 +457,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 //System.out.println("uid+++===" + uid);
                 switch (code) {
                     case "0":// 注册成功
-                        // 进入注册的第二个界面
-                        enterRegisterActivity2(uid);
+                        // 进入首页
+                        enterHomeActivity(uid);
                         break;
                     case "102":// 验证码错误
                         showdialog(msg);
@@ -457,15 +488,17 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
 
     /**
-     * 进入注册的第二个界面
+     * 进入首页界面
      */
-    private void enterRegisterActivity2(int uid) {
+    private void enterHomeActivity(int uid) {
         // 获取到uid后携带uid跳转到RegisterActivity2界面
         if (uid != 0) {
-            Intent intent = new Intent(RegisterActivity.this, RegisterActivity2.class);
-            //System.out.println("要传递的uid+++===+++" + uid);
-            intent.putExtra(Keys.UID, String.valueOf(uid));
+            Intent intent = new Intent(mActivity, HomeActivity.class);
             startActivity(intent);
+            // 把uid保存起来
+            SpUtils.putParam(mActivity, Keys.UID, uid);
+            // 发送一条广播，登录完成后关闭登录的所有界面
+            mActivity.sendBroadcast(new Intent(INTENT_FINISH));
         } else {
             showdialog("网络错误，请重试");
         }

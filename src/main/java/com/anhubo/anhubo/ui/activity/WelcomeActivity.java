@@ -67,7 +67,7 @@ public class WelcomeActivity extends BaseActivity {
     @Override
     protected void initEvents() {
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
-        bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
+//        bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
         businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
         oldversionName = SpUtils.getStringParam(mActivity, Keys.VERSIONNAME);
         String[] split = Utils.getAppInfo(mActivity).split("#");
@@ -351,13 +351,14 @@ public class WelcomeActivity extends BaseActivity {
             enterGuide();
         } else {
             if (!TextUtils.isEmpty(uid)) {
-                if (!TextUtils.isEmpty(bulidingid) || !TextUtils.isEmpty(businessid)) {
-                    //跳转到主页面
-                    enterHome();
-                } else {
-                    // 跳到注册第二个界面
-                    enterRegister2();
-                }
+                enterHome();
+//                if (!TextUtils.isEmpty(bulidingid) || !TextUtils.isEmpty(businessid)) {
+//                    //跳转到主页面
+//                    enterHome();
+//                } else {
+//                    // 跳到注册第二个界面
+//                    enterRegister2();
+//                }
 
             } else {
                 // 无uid，跳到登录界面
@@ -384,7 +385,8 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void enterHome() {
-        startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
+        Intent intent = new Intent(mActivity, HomeActivity.class);
+        startActivity(intent);
         finish();
     }
 

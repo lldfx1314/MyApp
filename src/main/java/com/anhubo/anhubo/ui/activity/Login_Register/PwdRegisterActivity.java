@@ -13,8 +13,10 @@ import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.Register1_Bean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.ui.activity.HomeActivity;
 import com.anhubo.anhubo.utils.InputWatcher;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
@@ -108,14 +110,18 @@ public class PwdRegisterActivity extends BaseActivity {
                     showdialog("请输入密码");
                     return;
                 }
-                if (TextUtils.isEmpty(secondPwd)) {
-                    showdialog("请再次输入密码");
+
+                if (!TextUtils.isEmpty(secondPwd)) {
+                    if (!TextUtils.equals(firstPwd, secondPwd)) {
+
+                        showdialog("两次密码输入不一致");
+                        return;
+                    }
+                } else {
+                    showdialog("请再次输入新密码");
                     return;
                 }
-                if (!TextUtils.equals(firstPwd, secondPwd)) {
-                    showdialog("两次密码输入不一致");
-                    return;
-                }
+
                 //　拿着号码和密码，调用接口
                 enterRegister();
                 break;
@@ -184,10 +190,9 @@ public class PwdRegisterActivity extends BaseActivity {
                 //System.out.println("拿到uid了"+uid);
                 // 获取到uid后携带uid跳转到RegisterActivity2界面
                 if (uid != 0) {
-                    Intent intent = new Intent(PwdRegisterActivity.this, RegisterActivity2.class);
-                    //System.out.println("要传递的uid+++===+++" + uid);
-                    intent.putExtra(Keys.UID, String.valueOf(uid));
-                    startActivity(intent);
+                    // 进入主界面
+                    enterHome(uid);
+
                 } else {
                     showdialog("网络错误，请重试");
                 }
@@ -197,7 +202,14 @@ public class PwdRegisterActivity extends BaseActivity {
             }
         }
     }
-
+    private void enterHome(int uid) {
+        Intent intent = new Intent(mActivity, HomeActivity.class);
+        startActivity(intent);
+        // 把uid保存起来
+        SpUtils.putParam(mActivity, Keys.UID, uid);
+        // 发送一条广播，登录完成后关闭登录的所有界面
+        mActivity.sendBroadcast(new Intent(INTENT_FINISH));
+    }
 
     /**
      * 获取输入的内容

@@ -17,15 +17,3 @@ public class Register1_Bean {
 }
 
 
-
-
-/* public String code  ;
-    public String msg  ;
-    public List<Data> datas;
-    public class Data {
-        public int uid;
-        public int info_exist;
-    }*/
-
-   /* */
-
