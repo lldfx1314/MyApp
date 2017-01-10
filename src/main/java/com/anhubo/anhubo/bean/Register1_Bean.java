@@ -10,7 +10,8 @@ public class Register1_Bean {
     public Data data;
 
     public class Data {
-        public int uid;
+        public String uid;
+        public int unique_id;
         public int info_exist;
     }
 

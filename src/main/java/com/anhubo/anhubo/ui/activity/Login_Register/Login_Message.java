@@ -18,7 +18,9 @@ import com.anhubo.anhubo.bean.Security_Token_Bean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.HomeActivity;
 import com.anhubo.anhubo.utils.InputWatcher;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
@@ -39,6 +41,7 @@ import java.util.Map;
  */
 public class Login_Message extends BaseActivity {
 
+    private static final String TAG = "Login_Message";
     private Button btnLoginPwd;
     private Button btnLoginRegister;
     private EditText etLoginMsgphoneNumber;
@@ -127,7 +130,7 @@ public class Login_Message extends BaseActivity {
                 break;
             case R.id.btn_loginMsg:        // 登录
                 // 调用接口登录的方法
-                login();
+                submit();
                 break;
             case R.id.btn_loginPwd:// 密码登录
                 // 当用户点击密码登录时携带本页面里的手机号到另一个界面
@@ -271,7 +274,7 @@ public class Login_Message extends BaseActivity {
     /**
      * 调用接口登录的方法
      */
-    private void login() {
+    private void submit() {
         if (TextUtils.isEmpty(phoneNumber)) {
             showdialog("请输入手机号码");
             return;
@@ -288,7 +291,7 @@ public class Login_Message extends BaseActivity {
             showdialog("验证码长度为4");
             return;
         }
-        login_OKHttp();
+        login();
     }
 
     /**
@@ -303,7 +306,7 @@ public class Login_Message extends BaseActivity {
     }
 
 
-    private void login_OKHttp() {
+    private void login() {
         showDialog = loadProgressDialog.show(mActivity, "正在登录...");
         String url = Urls.Url_LoginMsg;
         // 封装请求参数
@@ -325,14 +328,14 @@ public class Login_Message extends BaseActivity {
         @Override
         public void onError(okhttp3.Call call, Exception e) {
             showDialog.dismiss();
-            System.out.println("Login_Message+++===没拿到数据" + e.getMessage());
+            LogUtils.e(TAG,":login:",e);
         }
 
         @Override
         public void onResponse(String response) {
             showDialog.dismiss();
-            System.out.println("Login_Message++"+response);
-            Login_Bean bean = new Gson().fromJson(response, Login_Bean.class);
+            LogUtils.eNormal(TAG+":login:",response);
+            Login_Bean bean = JsonUtil.json2Bean(response, Login_Bean.class);
             if (bean != null) {
                 // 获取到数据
                 int code = bean.code;

@@ -32,6 +32,7 @@ import com.anhubo.anhubo.adapter.Business_Location_Adapter;
 import com.anhubo.anhubo.bean.LocationBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.LoadProgressDialog;
@@ -52,6 +53,7 @@ import okhttp3.Call;
  */
 public class BuildingActivity extends AppCompatActivity implements View.OnSystemUiVisibilityChangeListener {
 
+    private static final String TAG = "BuildingActivity";
     MapView mMapView = null;
     private RefreshListview lvBuilding;
     private ImageButton iv_basepager_left;
@@ -73,6 +75,7 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
     //声明mListener对象，定位监听器
     private LocationSource.OnLocationChangedListener mListener = null;
     private ArrayList<String> listBuilding;
+    private ArrayList<String> listBuildingPoi;
     private LoadProgressDialog loadProgressDialog;
     private Dialog showDialog;
 
@@ -124,6 +127,7 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
 
     private void initEvents() {
         listBuilding = new ArrayList<String>();
+        listBuildingPoi = new ArrayList<String>();
 
     }
 
@@ -264,6 +268,9 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
                         isFirstLoc = false;
                     }
                     // 拿到经纬度请求网络
+
+                    loadProgressDialog = LoadProgressDialog.newInstance();
+                    showDialog = loadProgressDialog.show(BuildingActivity.this, "正在加载...");
                     getData();
 
 
@@ -330,8 +337,6 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
     };
 
     private void getData() {
-        loadProgressDialog = LoadProgressDialog.newInstance();
-        showDialog = loadProgressDialog.show(this, "正在加载...");
         String location = String.valueOf(latitude) + "," + String.valueOf(longitude);
 
         String url = Urls.Location;
@@ -346,11 +351,6 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
                 .execute(new MyStringCallback());
     }
 
-    @Override
-    public void onSystemUiVisibilityChange(int visibility) {
-
-    }
-
 
     class MyStringCallback extends StringCallback {
         @Override
@@ -360,12 +360,12 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(true).show();
-            System.out.println("定位+" + e.getMessage());
+            LogUtils.e(TAG,":getData:",e);
         }
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("地图建筑界面+++===" + response);
+            LogUtils.eNormal(TAG+":getData:",response);
             LocationBean bean = new Gson().fromJson(response, LocationBean.class);
             if (bean != null) {
                 showDialog.dismiss();
@@ -385,11 +385,14 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
         int code = bean.code;
         String msg = bean.msg;
         page = bean.data.page;
-        List<String> building = bean.data.building;
+        List<LocationBean.Data.Building> building = bean.data.building;
         if (!building.isEmpty()) {
             for (int i = 0; i < building.size(); i++) {
-                String s = building.get(i);
+                LocationBean.Data.Building build = building.get(i);
+                String s = build.name;
                 listBuilding.add(s);
+                String poiId = build.poi_id;
+                listBuildingPoi.add(poiId);
             }
         }
         if (!isLoadMore) {
@@ -516,6 +519,11 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
         }else{
             //Log.d("CP_Common", "SDK 小于19不设置状态栏透明效果");
         }
+
+    }
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
 
     }
 

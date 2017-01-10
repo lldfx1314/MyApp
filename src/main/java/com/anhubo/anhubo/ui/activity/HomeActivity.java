@@ -8,7 +8,11 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.HomeAdapter;
@@ -17,6 +21,7 @@ import com.anhubo.anhubo.bean.Alter_MateUnitBean;
 import com.anhubo.anhubo.bean.ExtrasBean;
 import com.anhubo.anhubo.bean.UploadRegistration_Id_Bean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.ui.activity.unitDetial.BusinessActivity;
 import com.anhubo.anhubo.ui.impl.BuildFragment;
 import com.anhubo.anhubo.ui.impl.FindFragment;
 import com.anhubo.anhubo.ui.impl.MyFragment;
@@ -46,6 +51,7 @@ import okhttp3.Call;
 
 public class HomeActivity extends BaseActivity {
 
+    private static final int UNIT_REGISTER = 0;
     @InjectView(R.id.viewpager)
     NoScrollViewPager viewpager;
 
@@ -54,7 +60,7 @@ public class HomeActivity extends BaseActivity {
     private ArrayList<Fragment> list;
     private long exitTime = 0;
     public static boolean isForeground = false;
-    private String uid;
+    private View view;
 
     @Override
     protected void initConfig() {
@@ -91,7 +97,24 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void initEvents() {
 
-
+        String businessId = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
+        if (TextUtils.isEmpty(businessId)) {
+            view = View.inflate(mActivity, R.layout.home_zhezhao, null);
+            addContentView(view, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+            View rlZheZhao = view.findViewById(R.id.rl_unit_zhezhao);
+            rlZheZhao.setOnClickListener(null);
+            TextView tvZhezhao = (TextView) view.findViewById(R.id.tv_unit_zhezhao);
+            // 设置下划线
+            Utils.setUnderline(tvZhezhao);
+            tvZhezhao.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(mActivity, BusinessActivity.class);
+                                    intent.putExtra(Keys.UNIT_ZHEZHAO,"zhezhao");
+                                    startActivityForResult(intent,UNIT_REGISTER);
+                                }
+                            });
+        }
         // 初始化集合
         list = new ArrayList();
         list.add(new UnitFragment());
@@ -109,7 +132,31 @@ public class HomeActivity extends BaseActivity {
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data != null){
+            switch (requestCode){
+                case UNIT_REGISTER:
+                    if(resultCode == 1){
+                        view.setVisibility(View.GONE);
+                        if(updateFragmentUIFromActivity!=null){
+                            updateFragmentUIFromActivity.UIChange();
+                        }
+                    }
+                    break;
+            }
+        }
+    }
 
+    public void setUpdateFragmentUIFromActivity(UpdateFragmentUIFromActivity updateFragmentUIFromActivity) {
+        this.updateFragmentUIFromActivity = updateFragmentUIFromActivity;
+    }
+
+    public UpdateFragmentUIFromActivity updateFragmentUIFromActivity;
+    public interface UpdateFragmentUIFromActivity{
+        void UIChange();
+    }
     @Override
     protected void onLoadDatas() {
 
@@ -219,7 +266,7 @@ public class HomeActivity extends BaseActivity {
                     }
                 }
 
-            }else if(MESSAGE_REGISTRATION_ID.equals(intent.getAction())){
+            } else if (MESSAGE_REGISTRATION_ID.equals(intent.getAction())) {
                 String registration_id = intent.getStringExtra(REGISTRATION_ID);
                 System.out.println("registration_id***MyReceiver*****++" + registration_id);
                 String uid = SpUtils.getStringParam(mActivity, Keys.UID);
@@ -239,6 +286,7 @@ public class HomeActivity extends BaseActivity {
             }
         }
     }
+
     /**
      * 上传Registration_Id
      */

@@ -1,9 +1,10 @@
 package com.anhubo.anhubo.ui.impl;
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.nfc.Tag;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,6 +26,7 @@ import com.anhubo.anhubo.bean.UnitBean;
 import com.anhubo.anhubo.bean.Unit_Invate_WorkMateBean;
 import com.anhubo.anhubo.bean.Unit_PlanBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.ui.activity.HomeActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.MsgPerfectActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.QrScanActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.RunCertificateActivity;
@@ -32,13 +34,13 @@ import com.anhubo.anhubo.ui.activity.unitDetial.Unit2Study;
 import com.anhubo.anhubo.ui.activity.unitDetial.UnitMenuActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.UnitMsgCenterActivity;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.MyPolygonView;
 import com.anhubo.anhubo.view.SesameCreditPanel;
-import com.anhubo.anhubo.view.ShowZheZhaoDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -56,10 +58,11 @@ import okhttp3.Call;
 /**
  * Created by Administrator on 2016/10/8.
  */
-public class UnitFragment extends BaseFragment {
+public class UnitFragment extends BaseFragment{
     private static final int STUDY = 1;
     private static final int CHECK = 2;
     private static final int DRILL = 3;
+    private static final String TAG = "UnitFragment";
     private ListView lvUnit;
     private RelativeLayout rlUnit01;
     private RelativeLayout rlUnit02;
@@ -105,7 +108,108 @@ public class UnitFragment extends BaseFragment {
     private List<Build_Help_Plan_Bean.Data.Plans> plans;
     private BuildAdapter adapter1;
     private AlertDialog builder;
-    private ShowZheZhaoDialog zheZhaoDialog;
+
+    /**
+     * 接收消息让小圆点隐藏
+     */
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case STUDY:
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            dotStudy.setVisibility(View.GONE);
+                            String oldTime = getSystemTime();
+                            SpUtils.putParam(mActivity, Keys.STUDY_TIME, oldTime);
+                        }
+                    }, 300);
+
+                    break;
+                case CHECK:
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            dotCheck.setVisibility(View.GONE);
+                            String oldTime = getSystemTime();
+                            SpUtils.putParam(mActivity, Keys.CHECK_TIME, oldTime);
+                        }
+                    }, 300);
+                    break;
+                case DRILL:
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+//                            dotDrill.setVisibility(View.GONE);
+//                            String oldTime = getSystemTime();
+//                            SpUtils.putParam(mActivity, Keys.DRILL_TIME, oldTime);
+                        }
+                    }, 300);
+                    break;
+            }
+        }
+    };
+
+    private boolean isLoading = false;// 页面已经加载过
+    private String businessId;
+    private String businessName;
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        // 每次界面可见的时候请求网络获取数据
+        getDataInternet(isVisibleToUser);
+    }
+
+
+    private void getDataInternet(boolean isVisibleToUser) {
+        if (isVisibleToUser) {
+            isLoading = true;
+            // 界面每次可见都设置一下单位，邀请同事以后单位可能会改变
+            businessName = SpUtils.getStringParam(getActivity(), Keys.BUSINESSNAME, null);
+
+            if (tv_basepager_title != null && !TextUtils.isEmpty(businessName)) {
+
+                tv_basepager_title.setText(businessName);
+            }
+            businessId = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
+            if (TextUtils.isEmpty(businessId)) {
+
+                if (isLoading) {
+                    // 动态的添加自定义控件，设置数据
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            SimpleDateFormat df = new SimpleDateFormat("MM-dd");//设置日期格式
+                            String time = df.format(new Date());
+                            if (sesameCreditPanelLL != null) {
+                                sesameCreditPanelLL.removeView(scp);
+                            }
+                            // 初始化加载弧型进度条
+                            scp = new SesameCreditPanel(getActivity());
+                            scp.setDataModel(getData(60, "中", time));
+                            scp.setEnabled(true);
+                            scp.setClickable(true);
+                            sesameCreditPanelLL.addView(scp);
+                            isLoading = false;
+                        }
+                    }, 500);
+                }
+            } else {
+                // 获取圆弧数据
+                getData(businessId);
+            }
+            uid = SpUtils.getStringParam(getActivity(), Keys.UID);
+            //动态凭证获取数据
+            getPlanData();
+
+            // 获取互助计划列表信息
+//            String bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
+//            getHelpPlan(bulidingid);
+        }
+    }
 
     @Override
     public void initTitleBar() {
@@ -163,6 +267,7 @@ public class UnitFragment extends BaseFragment {
         tvNoPlan1 = (TextView) view.findViewById(R.id.tv_no_plan1);
         tvNoPlan2 = (TextView) view.findViewById(R.id.tv_no_plan2);
 
+
         // 添加头布局
         lvUnit.addHeaderView(view, null, true);
         // 去掉头布局的分割线
@@ -186,7 +291,18 @@ public class UnitFragment extends BaseFragment {
         btnStudy.setOnClickListener(this);
         btnCheck.setOnClickListener(this);
         btnDrill.setOnClickListener(this);
-
+        // 监听，从遮罩层回来后，重新加载数据
+        HomeActivity activity = (HomeActivity) getActivity();
+        activity.setUpdateFragmentUIFromActivity(new HomeActivity.UpdateFragmentUIFromActivity() {
+            @Override
+            public void UIChange() {
+                isLoading = true;
+                businessName = SpUtils.getStringParam(getActivity(), Keys.BUSINESSNAME, null);
+                businessId = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
+                tv_basepager_title.setText(businessName);
+                getData(businessId);
+            }
+        });
     }
 
     @Override
@@ -256,86 +372,7 @@ public class UnitFragment extends BaseFragment {
 //        }
     }
 
-    private boolean isLoading = false;// 页面已经加载过
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        // 每次界面可见的时候请求网络获取数据
-        getDataInternet(isVisibleToUser);
-    }
-
-
-    private void getDataInternet(boolean isVisibleToUser) {
-        if (isVisibleToUser) {
-            isLoading = true;
-            // 界面每次可见都设置一下单位，邀请同事以后单位可能会改变
-            String businessName = SpUtils.getStringParam(getActivity(), Keys.BUSINESSNAME, null);
-
-            if (tv_basepager_title != null && !TextUtils.isEmpty(businessName)) {
-
-                tv_basepager_title.setText(businessName);
-            }
-            String businessId = SpUtils.getStringParam(getActivity(), Keys.BUSINESSID);
-            if (TextUtils.isEmpty(businessId)) {
-
-                if (isLoading) {
-                    // 动态的添加自定义控件，设置数据
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            // 加载遮罩层
-                            View view = View.inflate(getActivity(), R.layout.unit_zhezhao, null);
-                            TextView tvZhezhao = (TextView) view.findViewById(R.id.tv_zhezhao);
-//                            tvZhezhao.setBackgroundColor(Color.argb(0, 0, 0, 0));
-                            tvZhezhao.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    ToastUtils.showToast(getActivity(),"哈哈");
-                                }
-                            });
-                            zheZhaoDialog = new ShowZheZhaoDialog(getActivity(), view);
-
-                            zheZhaoDialog.show();
-
-//                            FrameLayout.LayoutParams params3 = new FrameLayout.LayoutParams
-//                                    (FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-//                            getActivity().addContentView(view, );
-
-
-                            SimpleDateFormat df = new SimpleDateFormat("MM-dd");//设置日期格式
-                            String time = df.format(new Date());
-                            if (sesameCreditPanelLL != null) {
-                                sesameCreditPanelLL.removeView(scp);
-                            }
-                            // 初始化加载弧型进度条
-                            scp = new SesameCreditPanel(getActivity());
-                            scp.setDataModel(getData(60, "中", time));
-                            scp.setEnabled(true);
-                            scp.setClickable(true);
-                            sesameCreditPanelLL.addView(scp);
-                            isLoading = false;
-                        }
-                    }, 500);
-
-                }
-            } else {
-                if (zheZhaoDialog!=null) {
-                    zheZhaoDialog.dismiss();
-
-                }
-                // 获取圆弧数据
-                getData(businessId);
-            }
-            uid = SpUtils.getStringParam(getActivity(), Keys.UID);
-            //动态凭证获取数据
-            getPlanData();
-
-            // 获取互助计划列表信息
-//            String bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
-//            getHelpPlan(bulidingid);
-        }
-    }
 
     /**
      * ****************************************************
@@ -358,6 +395,7 @@ public class UnitFragment extends BaseFragment {
                 .execute(new MyStringCallback3());
     }
 
+
     /**
      * 互助计划
      */
@@ -365,6 +403,7 @@ public class UnitFragment extends BaseFragment {
         @Override
         public void onError(Call call, Exception e) {
             System.out.println("BuildFragment互助计划+++===获取数据失败" + e.getMessage());
+            LogUtils.e(TAG,"+互助计划:",e);
             // 获取数据失败后显示缓存
             String response = SpUtils.getStringParam(mActivity, "HelpPlan");
             //设置互助计划的数据展示
@@ -374,6 +413,7 @@ public class UnitFragment extends BaseFragment {
         @Override
         public void onResponse(String response) {
 //            System.out.println("BuildFragment互助计划+++===" + response);
+            LogUtils.eNormal(TAG+"互助计划:",response);
             // 缓存一下
             SpUtils.putParam(mActivity, "HelpPlan", response);
             //设置互助计划的数据展示
@@ -429,7 +469,7 @@ public class UnitFragment extends BaseFragment {
     class MyStringCallback1 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            //System.out.println("UnitFragment界面+++互保凭证===没拿到数据" + e.getMessage());
+            LogUtils.e(TAG,"互保凭证:",e);
             tvNoPlan1.setVisibility(View.VISIBLE);
             String response = SpUtils.getStringParam(mActivity, "PlanData");
             setPlanData(response);
@@ -438,7 +478,7 @@ public class UnitFragment extends BaseFragment {
 
         @Override
         public void onResponse(String response) {
-//            System.out.println("动态凭证++" + response);
+            LogUtils.eNormal(TAG+"动态凭证:",response);
             SpUtils.putParam(mActivity, "PlanData", response);
 //            互保计划
             setPlanData(response);
@@ -484,7 +524,7 @@ public class UnitFragment extends BaseFragment {
     /**
      * 获取圆弧数据
      */
-    private void getData(String businessId) {
+    public void getData(String businessId) {
         // 每次请求网络之前（控件是在网络获取成功后动态添加上去的）先把上次的控件对象移除，否则会重复
         if (sesameCreditPanelLL != null) {
             sesameCreditPanelLL.removeView(scp);
@@ -514,7 +554,7 @@ public class UnitFragment extends BaseFragment {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            System.out.println("UnitFragment界面+++分数、级别===没拿到数据" + e.getMessage());
+            LogUtils.e(TAG,"+分数、级别:",e);
             // 获取数据时报后显示多边形（主要显示各维度问题，分数默认显示0）
             if (arrScores.length == 6 && myPolygonView != null) {
                 myPolygonView.setDataModel(getPolygonData());
@@ -530,7 +570,7 @@ public class UnitFragment extends BaseFragment {
 
         @Override
         public void onResponse(String response) {
-            //System.out.println(response);
+            LogUtils.eNormal(TAG,"分数、级别:"+response);
             // 保存一下数据，以方便在网络不好的时候进行显示
             SpUtils.putParam(mActivity, "getdata", response);
             setData(response);
@@ -592,48 +632,7 @@ public class UnitFragment extends BaseFragment {
         }
     }
 
-    /**
-     * 接收消息让小圆点隐藏
-     */
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case STUDY:
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            dotStudy.setVisibility(View.GONE);
-                            String oldTime = getSystemTime();
-                            SpUtils.putParam(mActivity, Keys.STUDY_TIME, oldTime);
-                        }
-                    }, 300);
 
-                    break;
-                case CHECK:
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            dotCheck.setVisibility(View.GONE);
-                            String oldTime = getSystemTime();
-                            SpUtils.putParam(mActivity, Keys.CHECK_TIME, oldTime);
-                        }
-                    }, 300);
-                    break;
-                case DRILL:
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-//                            dotDrill.setVisibility(View.GONE);
-//                            String oldTime = getSystemTime();
-//                            SpUtils.putParam(mActivity, Keys.DRILL_TIME, oldTime);
-                        }
-                    }, 300);
-                    break;
-            }
-        }
-    };
 
     /**
      * 获取系统当前时间
@@ -794,12 +793,12 @@ public class UnitFragment extends BaseFragment {
 
         @Override
         public void onError(Call call, Exception e) {
-            System.out.println("UnitFragment界面+++邀请同事===没拿到数据" + e.getMessage());
+            LogUtils.e(TAG,"+邀请同事:",e);
         }
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("邀请同事" + response);
+           LogUtils.eNormal(TAG+"邀请同事:",response);
             Unit_Invate_WorkMateBean bean = new Gson().fromJson(response, Unit_Invate_WorkMateBean.class);
             int code = bean.code;
             String msg = bean.msg;

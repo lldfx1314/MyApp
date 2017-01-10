@@ -96,6 +96,7 @@
             android:id="@+id/et_reg_pwd2"
             style="@style/reg_login_edit_style"
             android:hint="请再次输入密码"
+            android:inputType="textPassword"
             android:background="@drawable/edit_text"
             />
         <Button

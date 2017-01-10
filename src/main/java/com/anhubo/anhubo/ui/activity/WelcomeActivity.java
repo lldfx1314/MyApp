@@ -46,8 +46,6 @@ public class WelcomeActivity extends BaseActivity {
     private static final int ENTER_MAIN = 4;
     private static final int SELECT_UPDATA_CLIENT = 5;
     private String uid;
-    private String bulidingid;
-    private String businessid;
     private String oldversionName;
     private String versionName;
     private String url;
@@ -67,8 +65,6 @@ public class WelcomeActivity extends BaseActivity {
     @Override
     protected void initEvents() {
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
-//        bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
-        businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
         oldversionName = SpUtils.getStringParam(mActivity, Keys.VERSIONNAME);
         String[] split = Utils.getAppInfo(mActivity).split("#");
         versionName = split[1];

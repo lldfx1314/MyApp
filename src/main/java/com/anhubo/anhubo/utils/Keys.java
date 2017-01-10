@@ -114,6 +114,11 @@ public interface Keys {
      * 微信登录界面跳到注册界面
      */
     String WEIXINFORZHUCE = "weixinforzhuce";
+
+    /**
+     * 密码登录界面进入注册界面
+     */
+    String PWDREGISTER = "PwdRegister";
     /**
      * 微信绑定后显示头像并传到我的界面
      */
@@ -152,21 +157,41 @@ public interface Keys {
      * 保存修改过的单位
      */
     String NEWBUSINESSNAME = "newBusinessName";
-    /**保存学习的时间*/
+    /**
+     * 保存学习的时间
+     */
     String STUDY_TIME = "study_time";
-    /**保存检查的时间*/
+    /**
+     * 保存检查的时间
+     */
     String CHECK_TIME = "check_time";
-    /**保存演练的时间*/
+    /**
+     * 保存演练的时间
+     */
     String DRILL_TIME = "drill_time";
-    /**反馈标签传递内容*/
+    /**
+     * 反馈标签传递内容
+     */
     String REQUIRE_LIST = "require_list";
-    /**互保计划  planId*/
+    /**
+     * 互保计划  planId
+     */
     String PLANID = "planId";
-    /**互保计划  unitId*/
+    /**
+     * 互保计划  unitId
+     */
     String UNITID = "unitId";
-    /**互保计划  massId*/
+    /**
+     * 互保计划  massId
+     */
     String MASSID = "massId";
-    /**取消更新时记录的版本号*/
+    /**
+     * 取消更新时记录的版本号
+     */
     String CANCEL_UPDATE_VERSION = "cancel_update_version";
+    /**
+     * 单位注册,遮罩点击
+     */
+    String UNIT_ZHEZHAO = "unit_zhezhao";
 
 }

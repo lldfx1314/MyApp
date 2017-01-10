@@ -48,7 +48,7 @@ public class UnitMenuActivity extends BaseActivity {
     protected void initConfig() {
         super.initConfig();
         // 获取business_id
-        businessId = SpUtils.getStringParam(mActivity, Keys.BUSINESSID).trim();
+        businessId = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
         // 定义一个数，记录页数
         pager = 0;
     }

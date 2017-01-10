@@ -15,7 +15,9 @@ import com.anhubo.anhubo.bean.Login_Bean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.HomeActivity;
 import com.anhubo.anhubo.utils.InputWatcher;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
@@ -35,6 +37,7 @@ import okhttp3.Call;
  */
 public class Login_Pwd extends BaseActivity {
 
+    private static final String TAG = "Login_Pwd";
     @InjectView(R.id.et_pwdLogin_phone)
     EditText etPwdLoginPhone;
     @InjectView(R.id.btn_pwdLogin_phone)
@@ -187,22 +190,20 @@ public class Login_Pwd extends BaseActivity {
 
     }
 
-    @Override
-    public void onSystemUiVisibilityChange(int visibility) {
 
-    }
 
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
             showDialog.dismiss();
-            System.out.println("Login_Pwd+++===没拿到数据" + e.getMessage());
+            LogUtils.e(TAG,":pwdLogin:",e);
         }
 
         @Override
         public void onResponse(String response) {
             showDialog.dismiss();
-            Login_Bean bean = new Gson().fromJson(response, Login_Bean.class);
+            LogUtils.eNormal(TAG+":pwdLogin:",response);
+            Login_Bean bean = JsonUtil.json2Bean(response, Login_Bean.class);
             if (bean != null) {
                 // 获取到数据
                 int code = bean.code;
@@ -225,23 +226,11 @@ public class Login_Pwd extends BaseActivity {
                     case 107://密码错误
                         showdialog(msg);
                         break;
-//                    case "105":// 跳转到注册的第二步
-//                        // 获取到uid后携带uid跳转到RegisterActivity2界面
-//                        goTo_Activity(uid);
-//                        break;
-//                    case "106":// 跳转到注册的第二步
-//                        goTo_Activity(uid);
-//                        break;
-//                    case "108"://手机号码未注册
-//                        goToRegisterActivity();
-//                        break;
                     case 0:// 登录成功，携带返回的参数跳转到单位界面，同时存一下把uid等参数保存到本地
                         // 保存参数
                         SpUtils.putParam(mActivity,Keys.UID,uid);
                         SpUtils.putParam(mActivity,Keys.BUSINESSID,businessId);
                         SpUtils.putParam(mActivity,Keys.BUSINESSNAME,businessName);
-//                        SpUtils.putParam(mActivity,Keys.BULIDINGID,buildingId);
-//                        SpUtils.putParam(mActivity,Keys.BUILDINGNAME,buildingName);
                         //跳转到主页面
                         enterHome(uid);
                         break;
@@ -277,6 +266,7 @@ public class Login_Pwd extends BaseActivity {
                             public void onClick(View v) {
                                 Intent intent = new Intent(mActivity, RegisterActivity.class);
                                 intent.putExtra(Keys.PHONE, phoneNumber);
+                                intent.putExtra(Keys.PWDREGISTER,"PwdRegister");
                                 startActivity(intent);
                             }
                         })
@@ -321,5 +311,10 @@ public class Login_Pwd extends BaseActivity {
             editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
         }
         pwdIsVisible = !pwdIsVisible;
+    }
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
     }
 }

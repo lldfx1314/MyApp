@@ -2,21 +2,15 @@ package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.view.OnApplyWindowInsetsListener;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.WindowInsetsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,8 +29,12 @@ import com.amap.api.maps2d.model.LatLng;
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.Business_Location_Adapter;
 import com.anhubo.anhubo.bean.LocationBean;
+import com.anhubo.anhubo.bean.Unit_RegisterBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
+import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.LoadProgressDialog;
@@ -57,13 +55,10 @@ import okhttp3.Call;
  */
 public class BusinessActivity extends AppCompatActivity implements View.OnSystemUiVisibilityChangeListener {
 
+    private static final String TAG = "BusinessActivity";
     MapView mMapView = null;
     private RefreshListview lvBusiness;
-    private ImageButton iv_basepager_left;
-    private ImageView ivTopBarleftUnitMenu;
-    private ImageView ivTopBarRightUnitMsg;
     private ImageView ivTopBarRight;
-    private ImageView ivTopBarleftBuildPen;
     private TextView tvToptitle;
     private RelativeLayout llTop;
     private AMapLocationClient mlocationClient;
@@ -78,9 +73,13 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
     private UiSettings settings;
     //声明mListener对象，定位监听器
     private LocationSource.OnLocationChangedListener mListener = null;
-    private ArrayList<String> listBuilding;
+    private ArrayList<String> listBusiness;
+    private ArrayList<String> listBusinessPoi;
     private LoadProgressDialog loadProgressDialog;
     private Dialog showDialog;
+    private Dialog showDialog1;
+    private String businessName;
+    private String zhezhao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,17 +107,83 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
         //获取地图控件引用
         mMapView = (MapView) findViewById(R.id.map_business);
         lvBusiness = (RefreshListview) findViewById(R.id.lv_business);
+
+        zhezhao = getIntent().getStringExtra(Keys.UNIT_ZHEZHAO);
+
         // 监听listview的滑动监听
         lvBusiness.setOnRefreshingListener(new MyOnRefreshingListener());
         lvBusiness.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String poi = listBusinessPoi.get(position);
                 TextView tv = (TextView) view.findViewById(R.id.tv_location);
                 String str = tv.getText().toString().trim();
-                // 返回增加界面
-                returnAddActivity(str);
+                // 判断是从哪个界面点进来的，便于做相应操作
+                if (!TextUtils.isEmpty(zhezhao)) {
+                    // 从遮罩点击进来的，直接注册单位
+                    unitRegister(str, poi);
+                } else {
+                    // 返回修改界面
+                    returnAddActivity(str);
+                }
+
             }
         });
+    }
+
+    /**
+     * 单位注册
+     */
+    private void unitRegister(String string, String poi) {
+        businessName = string;
+        Map<String, String> params = new HashMap<>();
+        String uid = SpUtils.getStringParam(this, Keys.UID);
+        params.put("uid", uid);
+        params.put("business_name", string);
+        params.put("latitude", String.valueOf(latitude));
+        params.put("longitude", String.valueOf(longitude));
+        if (!TextUtils.isEmpty(poi)) {
+            params.put("poi_id", poi);
+        }
+        String url = Urls.Url_Unit_Register;
+        showDialog1 = loadProgressDialog.show(this, "正在提交...");
+        OkHttpUtils.post()
+                .url(url)
+                .params(params)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e) {
+                        showDialog1.dismiss();
+
+                        new AlertDialog(BusinessActivity.this).builder()
+                                .setTitle("提示")
+                                .setMsg("网络有问题，请检查")
+                                .setCancelable(true).show();
+                        LogUtils.e(TAG + "+unitRegister", "单位注册", e);
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        showDialog1.dismiss();
+                        LogUtils.eNormal(TAG + "+unitRegister", "单位注册: " + response);
+                        Unit_RegisterBean bean = JsonUtil.json2Bean(response, Unit_RegisterBean.class);
+                        if (bean != null) {
+                            int code = bean.code;
+                            String businessId = bean.data.business_id;
+                            if (code == 0) {
+                                SpUtils.putParam(BusinessActivity.this, Keys.BUSINESSID, businessId);
+                                SpUtils.putParam(BusinessActivity.this, Keys.BUSINESSNAME, businessName);
+                                Intent intent = new Intent();
+                                intent.putExtra(Keys.BUSINESSID, businessId);
+                                intent.putExtra(Keys.BUSINESSNAME, businessName);
+                                setResult(1, intent);
+                                finish();
+                            }
+
+                        }
+                    }
+                });
     }
 
     private void returnAddActivity(String str) {
@@ -129,7 +194,8 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
     }
 
     private void initEvents() {
-        listBuilding = new ArrayList<String>();
+        listBusiness = new ArrayList<String>();
+        listBusinessPoi = new ArrayList<String>();
 
 
     }
@@ -170,8 +236,14 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                     public void onClick(View v) {
                         String string = alertDialog.et_msg.getText().toString().trim();
                         if (!TextUtils.isEmpty(string)) {
-                            // 返回增加界面
-                            returnAddActivity(string);
+                            // 判断是从哪个界面点进来的，便于做相应操作
+                            if (!TextUtils.isEmpty(zhezhao)) {
+                                // 从遮罩点击进来的，直接注册单位
+                                unitRegister(string, "");
+                            } else {
+                                // 返回修改界面
+                                returnAddActivity(string);
+                            }
                         }
                     }
                 }).setNegativeButton("取消", new View.OnClickListener() {
@@ -272,6 +344,8 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                     }
                     // 拿到经纬度请求网络
 
+                    loadProgressDialog = LoadProgressDialog.newInstance();
+                    showDialog = loadProgressDialog.show(BusinessActivity.this, "正在加载...");
                     getData();
 
 
@@ -341,8 +415,6 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
      * 拿到经纬度请求网络
      */
     private void getData() {
-        loadProgressDialog = LoadProgressDialog.newInstance();
-        showDialog = loadProgressDialog.show(this, "正在加载...");
         String location = String.valueOf(latitude) + "," + String.valueOf(longitude);
         String url = Urls.Location;
         Map<String, String> params = new HashMap<>();
@@ -356,11 +428,6 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                 .execute(new MyStringCallback());
     }
 
-    @Override
-    public void onSystemUiVisibilityChange(int visibility) {
-
-    }
-
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
@@ -369,12 +436,12 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(true).show();
-            System.out.println("定位+" + e.getMessage());
+            LogUtils.e(TAG,":getData定位:",e);
         }
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("地图单位界面+++==="+response);
+            LogUtils.eNormal(TAG+":getData定位:",response);
             LocationBean bean = new Gson().fromJson(response, LocationBean.class);
             if (bean != null) {
                 showDialog.dismiss();
@@ -414,23 +481,25 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
         int code = bean.code;
         String msg = bean.msg;
         page = bean.data.page;
-        List<String> business = bean.data.business;
+        List<LocationBean.Data.Business> business = bean.data.business;
 
         if (!business.isEmpty()) {
             for (int i = 0; i < business.size(); i++) {
-                String s = business.get(i);
-                listBuilding.add(s);
+                LocationBean.Data.Business busines = business.get(i);
+                String s = busines.name;
+                listBusiness.add(s);
+                String poiId = busines.poi_id;
+                listBusinessPoi.add(poiId);
             }
         }
         if (!isLoadMore) {
             // 给listView设置适配器
-            adapter = new Business_Location_Adapter(this, listBuilding);
+            adapter = new Business_Location_Adapter(this, listBusiness);
             lvBusiness.setAdapter(adapter);
         } else {
             adapter.notifyDataSetChanged();
         }
     }
-
 
     /**
      * 设置标题栏
@@ -466,11 +535,7 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
      */
     private void initTitleView() {
         // 找到顶部控件
-        iv_basepager_left = (ImageButton) findViewById(R.id.ivTopBarLeft);//左上角返回按钮
-        ivTopBarleftUnitMenu = (ImageView) findViewById(R.id.ivTopBarleft_unit_menu);//左上角菜单按钮
-        ivTopBarRightUnitMsg = (ImageView) findViewById(R.id.ivTopBarRight_unit_msg);//右上角信息按钮
         ivTopBarRight = (ImageView) findViewById(R.id.ivTopBarRight_add);//右上角加号
-        ivTopBarleftBuildPen = (ImageView) findViewById(R.id.ivTopBarleft_build_pen);//左上角铅笔按钮
         tvToptitle = (TextView) findViewById(R.id.tvAddress);//标题
         llTop = (RelativeLayout) findViewById(R.id.ll_Top); // 顶部标题栏
 
@@ -530,37 +595,9 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
 
     }
 
-    /**
-     * 设置浸入式状态栏
-     */
-    private void setBar() {
-        Window window = getWindow();
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
 
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        boolean hideStatusBarBackground = false;
-        if (hideStatusBarBackground) {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                window.setStatusBarColor(Color.TRANSPARENT);
-            }
-            //隐藏状态栏的阴影window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        } else {
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-        }
-
-        ViewGroup mContentView = (ViewGroup) window.findViewById(Window.ID_ANDROID_CONTENT);
-        View mChildView = mContentView.getChildAt(0);
-        if (mChildView != null) {
-            ViewCompat.setOnApplyWindowInsetsListener(mChildView, new OnApplyWindowInsetsListener() {
-                @Override
-                public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
-                    return insets;
-                }
-            });
-            ViewCompat.setFitsSystemWindows(mChildView, false);
-            ViewCompat.requestApplyInsets(mChildView);
-
-        }
     }
+
 }

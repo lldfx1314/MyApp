@@ -15,7 +15,9 @@ import com.anhubo.anhubo.bean.Register1_Bean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.HomeActivity;
 import com.anhubo.anhubo.utils.InputWatcher;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
@@ -35,6 +37,7 @@ import okhttp3.Call;
  */
 public class PwdRegisterActivity extends BaseActivity {
 
+    private static final String TAG = "PwdRegisterActivity";
     @InjectView(R.id.et_pwdReg1)
     EditText etPwdRegFirst;
     @InjectView(R.id.btn_pwdReg1)
@@ -178,18 +181,19 @@ public class PwdRegisterActivity extends BaseActivity {
         @Override
         public void onError(Call call, Exception e) {
             showDialog.dismiss();
-            System.out.println("PwdRegisterActivity+++===没拿到数据" + e.getMessage());
+            LogUtils.e(TAG,":enterRegister:",e);
         }
 
         @Override
         public void onResponse(String response) {
+            LogUtils.eNormal(TAG+":enterRegister:",response);
             showDialog.dismiss();
-            Register1_Bean bean = new Gson().fromJson(response, Register1_Bean.class);
+            Register1_Bean bean = JsonUtil.json2Bean(response, Register1_Bean.class);
             if (bean != null) {
-                int uid = bean.data.uid;
+                String uid = bean.data.uid;
                 //System.out.println("拿到uid了"+uid);
                 // 获取到uid后携带uid跳转到RegisterActivity2界面
-                if (uid != 0) {
+                if (!TextUtils.isEmpty(uid)) {
                     // 进入主界面
                     enterHome(uid);
 
@@ -197,12 +201,10 @@ public class PwdRegisterActivity extends BaseActivity {
                     showdialog("网络错误，请重试");
                 }
 
-            } else {
-                System.out.println("PwdRegisterActivity没拿到uid");
             }
         }
     }
-    private void enterHome(int uid) {
+    private void enterHome(String uid) {
         Intent intent = new Intent(mActivity, HomeActivity.class);
         startActivity(intent);
         // 把uid保存起来

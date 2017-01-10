@@ -25,7 +25,9 @@ import com.anhubo.anhubo.bean.Security_Token_Bean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.HomeActivity;
 import com.anhubo.anhubo.utils.InputWatcher;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
@@ -44,6 +46,7 @@ import okhttp3.Call;
  */
 public class RegisterActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
 
+    private static final String TAG = "RegisterActivity";
     private Button btnRegister1;
     private TextView tvRegSecurity;
     private String token;
@@ -65,6 +68,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private String weixinName;
     private String weixinforzhuce;
     private String loginforzhuce;
+    private String PwdRegister;
     private AlertDialog builder;
     private Dialog showDialog;
     private EditText etRegPwd2;
@@ -78,6 +82,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         Intent intent = getIntent();
         loginforzhuce = intent.getStringExtra(Keys.LOGINFORZHUCE);
         weixinforzhuce = intent.getStringExtra(Keys.WEIXINFORZHUCE);
+        PwdRegister = intent.getStringExtra(Keys.PWDREGISTER);
 
         unionid = intent.getStringExtra(Keys.UNIONID);
         imageUrl = intent.getStringExtra(Keys.PROFILE_IMAGE_URL);
@@ -123,7 +128,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         // 设置显示电话号码
         if(!TextUtils.isEmpty(phone)){
             etRegphoneNumber.setText(phone);
-
         }
 
         // 协议
@@ -328,7 +332,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         }
 
         showDialog = loadProgressDialog.show(mActivity, "正在处理...");
-        if (!TextUtils.isEmpty(loginforzhuce)) {
+
+        if (!TextUtils.isEmpty(loginforzhuce)||!TextUtils.isEmpty(PwdRegister)) {
             // 再次请求网络，获取uid
             //System.out.println("=======正常注册=======");
             getUId();
@@ -336,8 +341,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             //System.out.println("=======微信注册=======");
             getUId_weixin();
         }
-        /*Intent intent = new Intent(RegisterActivity.this, RegisterActivity2.class);
-        startActivity(intent);*/
     }
 
     /**
@@ -375,18 +378,18 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         @Override
         public void onError(Call call, Exception e) {
             showDialog.dismiss();
-            System.out.println("RegisterActivity+++===微信没拿到数据" + e.getMessage());
+            LogUtils.e(TAG,":getUId_weixin:",e);
         }
 
         @Override
         public void onResponse(String response) {
             showDialog.dismiss();
-            //System.out.println("1111111122222222"+response);
-            Register1_Bean register1Bean = new Gson().fromJson(response, Register1_Bean.class);
+            LogUtils.eNormal(TAG+":getUId_weixin:",response);
+            Register1_Bean register1Bean = JsonUtil.json2Bean(response, Register1_Bean.class);
             if (register1Bean != null) {
                 String code = register1Bean.code;
                 String msg = register1Bean.msg;
-                int uid = register1Bean.data.uid;
+                String uid = register1Bean.data.uid;
                 switch (code) {
                     case "0":// 注册成功
                         // 进入首页
@@ -431,68 +434,62 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 .url(url)//
                 .params(params)//
                 .build()//
-                .execute(new MyStringCallback());
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e) {
+                        showDialog.dismiss();
+                        LogUtils.e(TAG,":getUId:",e);
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        showDialog.dismiss();
+                        LogUtils.eNormal(TAG+":getUId:",response);
+                        Register1_Bean bean = JsonUtil.json2Bean(response, Register1_Bean.class);
+                        dealBean(bean);
+                    }
+                });
     }
 
-    /**
-     * 请求结果的监听器
-     */
-    class MyStringCallback extends StringCallback {
-        @Override
-        public void onError(Call call, Exception e) {
-            showDialog.dismiss();
-            System.out.println("RegisterActivity+++===没拿到数据" + e.getMessage());
-        }
+    private void dealBean(Register1_Bean bean) {
+        if (bean != null) {
+            String code = bean.code;
+            String msg = bean.msg;
+            String uid = bean.data.uid;
+            switch (code) {
+                case "0":// 注册成功
+                    // 进入首页
+                    enterHomeActivity(uid);
+                    break;
+                case "102":// 验证码错误
+                    showdialog(msg);
+                    break;
+                case "103":// 邀请码错误
+                    showdialog(msg);
+                    break;
+                case "108":// 该手机号码已注册
+                    builder
+                            .setTitle("提示")
+                            .setMsg(msg)
+                            .setPositiveButton("去登陆", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    finish();
+                                }
+                            })
+                            .setCancelable(false).show();
+                    break;
 
-        @Override
-        public void onResponse(String response) {
-            showDialog.dismiss();
-            Register1_Bean register1Bean = new Gson().fromJson(response, Register1_Bean.class);
-            if (register1Bean != null) {
-                String code = register1Bean.code;
-                //System.out.println(code);
-                String msg = register1Bean.msg;
-                //System.out.println(msg);
-                int uid = register1Bean.data.uid;
-                //System.out.println("uid+++===" + uid);
-                switch (code) {
-                    case "0":// 注册成功
-                        // 进入首页
-                        enterHomeActivity(uid);
-                        break;
-                    case "102":// 验证码错误
-                        showdialog(msg);
-                        break;
-                    case "103":// 邀请码错误
-                        showdialog(msg);
-                        break;
-                    case "108":// 该手机号码已注册
-                        builder
-                                .setTitle("提示")
-                                .setMsg(msg)
-                                .setPositiveButton("去登陆", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        finish();
-                                    }
-                                })
-                                .setCancelable(false).show();
-                        break;
-
-                }
-            } else {
-                System.out.println("RegisterActivity界面+++===没获取到bean");
             }
         }
     }
 
-
     /**
      * 进入首页界面
      */
-    private void enterHomeActivity(int uid) {
+    private void enterHomeActivity(String uid) {
         // 获取到uid后携带uid跳转到RegisterActivity2界面
-        if (uid != 0) {
+        if (!TextUtils.isEmpty(uid)) {
             Intent intent = new Intent(mActivity, HomeActivity.class);
             startActivity(intent);
             // 把uid保存起来

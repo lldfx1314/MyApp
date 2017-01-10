@@ -295,6 +295,6 @@ public interface Urls {
      */
     String Url_Check_Update = UrlBase + "Index/version_change";
 
-
-
+    /**遮罩  单位注册*/
+    String Url_Unit_Register = UrlBase + "Business/business_register";
 }

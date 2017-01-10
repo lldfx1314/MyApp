@@ -17,6 +17,8 @@ import com.anhubo.anhubo.bean.Security_Bean;
 import com.anhubo.anhubo.bean.Security_Token_Bean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.InputWatcher;
+import com.anhubo.anhubo.utils.JsonUtil;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
@@ -33,6 +35,7 @@ import okhttp3.Call;
  * Created by LUOLI on 2016/12/22.
  */
 public class FindPwdActivity extends BaseActivity {
+    private static final String TAG = "FindPwdActivity";
     @InjectView(R.id.et_alterPwd_phoneNumber)
     EditText etAlterPwdPhoneNumber;
     @InjectView(R.id.btn_alterPwd_phoneNumber)
@@ -167,10 +170,10 @@ public class FindPwdActivity extends BaseActivity {
             return;
         }
 
-        submit2();
+        findPwd();
     }
 
-    private void submit2() {
+    private void findPwd() {
         showDialog = loadProgressDialog.show(mActivity, "正在找回密码...");
         String url = Urls.Url_Login_AlterPwd;
         HashMap<String, String> params = new HashMap<>();
@@ -199,13 +202,13 @@ public class FindPwdActivity extends BaseActivity {
         @Override
         public void onError(Call call, Exception e) {
             showDialog.dismiss();
-            System.out.println("UnitMenuActivity+++上传更改密码===没拿到数据" + e.getMessage());
+            LogUtils.e(TAG,":findPwd:",e);
         }
 
         @Override
         public void onResponse(String response) {
-            System.out.println("FindPwdActivity界面修改密码+" + response);
-            Login_AlterPwdBean bean = new Gson().fromJson(response, Login_AlterPwdBean.class);
+            LogUtils.eNormal(TAG+":findPwd:",response);
+            Login_AlterPwdBean bean = JsonUtil.json2Bean(response, Login_AlterPwdBean.class);
             if (bean != null) {
                 showDialog.dismiss();
                 int code = bean.code;
