@@ -27,12 +27,14 @@ import com.anhubo.anhubo.bean.Unit_Invate_WorkMateBean;
 import com.anhubo.anhubo.bean.Unit_PlanBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.HomeActivity;
+import com.anhubo.anhubo.ui.activity.unitDetial.EmployeeListActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.MsgPerfectActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.QrScanActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.RunCertificateActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.Unit2Study;
 import com.anhubo.anhubo.ui.activity.unitDetial.UnitMenuActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.UnitMsgCenterActivity;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
@@ -97,9 +99,7 @@ public class UnitFragment extends BaseFragment{
     private int code;
     private List<Unit_PlanBean.Data.Certs> certs;
     private String uid;
-    private String tableId;
     private UnitAdapter adapter;
-    private String versionName;
     private boolean isShowDot_study = false;
     private boolean isShowDot_check = false;
     private boolean isShowDot_drill = false;
@@ -189,7 +189,7 @@ public class UnitFragment extends BaseFragment{
                             }
                             // 初始化加载弧型进度条
                             scp = new SesameCreditPanel(getActivity());
-                            scp.setDataModel(getData(60, "中", time));
+                            scp.setDataModel(getData(31, "低", time));
                             scp.setEnabled(true);
                             scp.setClickable(true);
                             sesameCreditPanelLL.addView(scp);
@@ -302,6 +302,13 @@ public class UnitFragment extends BaseFragment{
                 tv_basepager_title.setText(businessName);
                 getData(businessId);
             }
+
+            @Override
+            public void changeUnit(String string) {
+                //　接受同事邀请后刷新单位按钮的显示
+//                LogUtils.eNormal(TAG,":界面修改单位+"+string);
+                tv_basepager_title.setText(string);
+            }
         });
     }
 
@@ -403,7 +410,7 @@ public class UnitFragment extends BaseFragment{
         @Override
         public void onError(Call call, Exception e) {
             System.out.println("BuildFragment互助计划+++===获取数据失败" + e.getMessage());
-            LogUtils.e(TAG,"+互助计划:",e);
+            LogUtils.e(TAG,"+:getHelpPlan",e);
             // 获取数据失败后显示缓存
             String response = SpUtils.getStringParam(mActivity, "HelpPlan");
             //设置互助计划的数据展示
@@ -413,7 +420,7 @@ public class UnitFragment extends BaseFragment{
         @Override
         public void onResponse(String response) {
 //            System.out.println("BuildFragment互助计划+++===" + response);
-            LogUtils.eNormal(TAG+"互助计划:",response);
+            LogUtils.eNormal(TAG+":getHelpPlan",response);
             // 缓存一下
             SpUtils.putParam(mActivity, "HelpPlan", response);
             //设置互助计划的数据展示
@@ -426,7 +433,7 @@ public class UnitFragment extends BaseFragment{
      * 设置互助计划的数据展示
      */
     private void setHelpPlanData(String response) {
-        Build_Help_Plan_Bean bean = new Gson().fromJson(response, Build_Help_Plan_Bean.class);
+        Build_Help_Plan_Bean bean = JsonUtil.json2Bean(response, Build_Help_Plan_Bean.class);
         if (bean != null) {
             int code = bean.code;
             String msg = bean.msg;
@@ -469,7 +476,7 @@ public class UnitFragment extends BaseFragment{
     class MyStringCallback1 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            LogUtils.e(TAG,"互保凭证:",e);
+            LogUtils.e(TAG,":getPlanData",e);
             tvNoPlan1.setVisibility(View.VISIBLE);
             String response = SpUtils.getStringParam(mActivity, "PlanData");
             setPlanData(response);
@@ -478,7 +485,7 @@ public class UnitFragment extends BaseFragment{
 
         @Override
         public void onResponse(String response) {
-            LogUtils.eNormal(TAG+"动态凭证:",response);
+            LogUtils.eNormal(TAG+":getPlanData",response);
             SpUtils.putParam(mActivity, "PlanData", response);
 //            互保计划
             setPlanData(response);
@@ -492,7 +499,7 @@ public class UnitFragment extends BaseFragment{
     private void setPlanData(String response) {
         certs = new ArrayList<>();
 
-        Unit_PlanBean bean = new Gson().fromJson(response, Unit_PlanBean.class);
+        Unit_PlanBean bean = JsonUtil.json2Bean(response, Unit_PlanBean.class);
         if (bean != null) {
             code = bean.code;
             String msg = bean.msg;
@@ -554,7 +561,7 @@ public class UnitFragment extends BaseFragment{
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            LogUtils.e(TAG,"+分数、级别:",e);
+            LogUtils.e(TAG,"+:getData",e);
             // 获取数据时报后显示多边形（主要显示各维度问题，分数默认显示0）
             if (arrScores.length == 6 && myPolygonView != null) {
                 myPolygonView.setDataModel(getPolygonData());
@@ -570,7 +577,7 @@ public class UnitFragment extends BaseFragment{
 
         @Override
         public void onResponse(String response) {
-            LogUtils.eNormal(TAG,"分数、级别:"+response);
+            LogUtils.eNormal(TAG,":getData"+response);
             // 保存一下数据，以方便在网络不好的时候进行显示
             SpUtils.putParam(mActivity, "getdata", response);
             setData(response);
@@ -591,7 +598,7 @@ public class UnitFragment extends BaseFragment{
      * 拿到圆弧数据数据后显示
      */
     private void setData(String string) {
-        UnitBean bean = new Gson().fromJson(string, UnitBean.class);
+        UnitBean bean = JsonUtil.json2Bean(string, UnitBean.class);
         list.clear();
         if (bean != null) {
             data = bean.data;
@@ -678,8 +685,8 @@ public class UnitFragment extends BaseFragment{
             case R.id.tv_unit_frag_02_msg: //信息完善
                 startActivity(new Intent(mActivity, MsgPerfectActivity.class));
                 break;
-            case R.id.tv_unit_frag_02_invite://邀请同事
-                dialog();
+            case R.id.tv_unit_frag_02_invite://员工列表
+                startActivity(new Intent(mActivity, EmployeeListActivity.class));
                 break;
             case R.id.tv_unit_frag_02_add:  //新增设备
                 Intent intent = new Intent(mActivity, QrScanActivity.class);
@@ -738,80 +745,7 @@ public class UnitFragment extends BaseFragment{
 
     }
 
-    private void dialog() {
-        final AlertDialog alertDialog = new AlertDialog(mActivity);
-        alertDialog
-                .builder()
-                .setTitle("提示")
-                .setEditHint("请输入电话号码")
-                .setCancelable(false)
-                .setPositiveButton("确认", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String string = alertDialog.et_msg.getText().toString().trim();
-                        if (!TextUtils.isEmpty(string)) {
-                            boolean b = Utils.judgePhoneNumber(string);
-                            if (!b) {
-                                ToastUtils.showToast(mActivity, "号码输入不正确，请重新输入");
-                                return;
-                            } else {
-                                // 拿着号码和uid请求网络
-                                invateWorkMate(string);
-                            }
 
-                        }
-                    }
-                }).setNegativeButton("取消", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        }).show();
-    }
-
-    /**
-     * 邀请同事网络请求
-     */
-    private void invateWorkMate(String phone) {
-
-        String[] split = Utils.getAppInfo(mActivity).split("#");
-        versionName = split[1];
-
-        String url = Urls.Url_Unit_InvateWorkMate;
-        Map<String, String> params = new HashMap<>();
-        params.put("uid", uid);
-        params.put("phone", phone);
-        params.put("version", versionName);
-
-        OkHttpUtils.post()//
-                .url(url)//
-                .params(params)//
-                .build()//
-                .execute(new MyStringCallback2());
-    }
-
-    class MyStringCallback2 extends StringCallback {
-
-        @Override
-        public void onError(Call call, Exception e) {
-            LogUtils.e(TAG,"+邀请同事:",e);
-        }
-
-        @Override
-        public void onResponse(String response) {
-           LogUtils.eNormal(TAG+"邀请同事:",response);
-            Unit_Invate_WorkMateBean bean = new Gson().fromJson(response, Unit_Invate_WorkMateBean.class);
-            int code = bean.code;
-            String msg = bean.msg;
-            tableId = bean.data.table_id;
-            if (code == 0 && !TextUtils.isEmpty(tableId)) {
-                // 邀请成功，等待服务器给被邀请同事发消息就行了
-
-            } else if (code == 1) {
-                ToastUtils.showToast(mActivity, msg);
-            }
-
-        }
-    }
 
 
     /**

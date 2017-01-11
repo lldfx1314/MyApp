@@ -15,7 +15,6 @@ import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.Check_UpDateBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.Login_Register.Login_Message;
-import com.anhubo.anhubo.ui.activity.Login_Register.RegisterActivity2;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.Utils;
@@ -369,11 +368,11 @@ public class WelcomeActivity extends BaseActivity {
         finish();
     }
 
-    private void enterRegister2() {
-        Intent intent = new Intent(WelcomeActivity.this, RegisterActivity2.class);
-        intent.putExtra(Keys.UID, uid);
-        startActivity(intent);
-    }
+//    private void enterRegister2() {
+//        Intent intent = new Intent(WelcomeActivity.this, RegisterActivity2.class);
+//        intent.putExtra(Keys.UID, uid);
+//        startActivity(intent);
+//    }
 
     private void enterLogin() {
         startActivity(new Intent(WelcomeActivity.this, Login_Message.class));

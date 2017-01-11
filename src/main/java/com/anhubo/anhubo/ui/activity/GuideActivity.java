@@ -13,14 +13,12 @@ import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.GuidePagerAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.ui.activity.Login_Register.Login_Message;
-import com.anhubo.anhubo.ui.activity.Login_Register.RegisterActivity2;
 import com.anhubo.anhubo.ui.fragment.GuideFragmentA;
 import com.anhubo.anhubo.ui.fragment.GuideFragmentB;
 import com.anhubo.anhubo.ui.fragment.GuideFragmentC;
 import com.anhubo.anhubo.utils.DisplayUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
-import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
 
 import java.util.ArrayList;
@@ -179,11 +177,11 @@ public class GuideActivity extends BaseActivity {
 
         }
     };
-    private void enterRegister2() {
-        Intent intent = new Intent(mActivity, RegisterActivity2.class);
-        intent.putExtra(Keys.UID, uid);
-        startActivity(intent);
-    }
+//    private void enterRegister2() {
+//        Intent intent = new Intent(mActivity, RegisterActivity2.class);
+//        intent.putExtra(Keys.UID, uid);
+//        startActivity(intent);
+//    }
 
     private void enterLogin() {
         startActivity(new Intent(mActivity, Login_Message.class));

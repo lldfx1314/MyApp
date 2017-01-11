@@ -27,7 +27,9 @@ import com.anhubo.anhubo.ui.impl.FindFragment;
 import com.anhubo.anhubo.ui.impl.MyFragment;
 import com.anhubo.anhubo.ui.impl.UnitFragment;
 import com.anhubo.anhubo.utils.JPushManager;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
@@ -52,6 +54,7 @@ import okhttp3.Call;
 public class HomeActivity extends BaseActivity {
 
     private static final int UNIT_REGISTER = 0;
+    private static final String TAG = "HomeActivity";
     @InjectView(R.id.viewpager)
     NoScrollViewPager viewpager;
 
@@ -156,6 +159,7 @@ public class HomeActivity extends BaseActivity {
     public UpdateFragmentUIFromActivity updateFragmentUIFromActivity;
     public interface UpdateFragmentUIFromActivity{
         void UIChange();
+        void changeUnit(String string);
     }
     @Override
     protected void onLoadDatas() {
@@ -262,6 +266,7 @@ public class HomeActivity extends BaseActivity {
                 String tableId = bean.table_id;
                 if (tableId != null) {
                     if (!TextUtils.isEmpty(messge) && !TextUtils.isEmpty(tableId)) {
+                        // 弹窗提示修改单位
                         dialog(messge, tableId);
                     }
                 }
@@ -294,23 +299,22 @@ public class HomeActivity extends BaseActivity {
 
         @Override
         public void onError(Call call, Exception e) {
-
-            System.out.println("WelcomeActivity界面+++上传Registration_Id===没拿到数据" + e.getMessage());
+            LogUtils.e(TAG,":Registration_Id上传",e);
         }
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("上传Registration_Id+" + response);
-            UploadRegistration_Id_Bean bean = new Gson().fromJson(response, UploadRegistration_Id_Bean.class);
+            LogUtils.eNormal(TAG+":Registration_Id上传",response);
+            UploadRegistration_Id_Bean bean = JsonUtil.json2Bean(response, UploadRegistration_Id_Bean.class);
             int code = bean.code;
             String msg = bean.msg;
             if (code == 0) {
-                //System.out.println("上传Registration_Id+++msg上传成功+++" + msg);
+                LogUtils.eNormal(TAG+":","Registration_Id上传成功");
             }
         }
 
     }
-
+    // 弹窗提示修改单位
     private void dialog(String messge, final String tableId) {
         new AlertDialog(mActivity).builder()
                 .setTitle("通知")
@@ -354,25 +358,26 @@ public class HomeActivity extends BaseActivity {
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(true).show();
-            System.out.println("HomeActivity，界面同事修改单位+" + e.getMessage());
+            LogUtils.e(TAG,":alterUnit",e);
         }
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("同事修改单位+" + response);
-            Alter_MateUnitBean bean = new Gson().fromJson(response, Alter_MateUnitBean.class);
+            LogUtils.eNormal(TAG+":alterUnit",response);
+            Alter_MateUnitBean bean = JsonUtil.json2Bean(response, Alter_MateUnitBean.class);
             if (bean != null) {
                 int code = bean.code;
                 String msg = bean.msg;
                 Alter_MateUnitBean.Data data = bean.data;
                 String businessId = data.business_id;
                 String businessName = data.business_name;
-                String buildingId = data.building_id;
-                String buildingName = data.building_name;
-                SpUtils.putParam(mActivity, Keys.BUSINESSID, businessId);
-                SpUtils.putParam(mActivity, Keys.BUSINESSNAME, businessName);
-                SpUtils.putParam(mActivity, Keys.BULIDINGID, buildingId);
-                SpUtils.putParam(mActivity, Keys.BUILDINGNAME, buildingName);
+                if(code == 0){
+                    SpUtils.putParam(mActivity, Keys.BUSINESSID, businessId);
+                    SpUtils.putParam(mActivity, Keys.BUSINESSNAME, businessName);
+                    if(updateFragmentUIFromActivity!=null){
+                        updateFragmentUIFromActivity.changeUnit(businessName);
+                    }
+                }
             }
         }
     }

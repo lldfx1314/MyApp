@@ -27,7 +27,9 @@ import com.anhubo.anhubo.bean.MsgPerfectRentingBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.ImageFactory;
 import com.anhubo.anhubo.utils.ImageTools;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.PopBirthHelper;
 import com.anhubo.anhubo.utils.PopDateHelper;
 import com.anhubo.anhubo.utils.SpUtils;
@@ -61,6 +63,7 @@ public class UploadingActivity4 extends BaseActivity {
 
     private static final int PICTURE = 0;
     private static final int CAMERA = 1;
+    private static final String TAG = "UploadingActivity4";
     @InjectView(R.id.ll_msgPerRenting01)
     LinearLayout llMsgPerRenting01;
     @InjectView(R.id.ll_msgPerRenting02)
@@ -204,11 +207,6 @@ public class UploadingActivity4 extends BaseActivity {
 
     private Handler handler = new Handler();
 
-    @Override
-    public void onSystemUiVisibilityChange(int visibility) {
-
-    }
-
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
@@ -217,15 +215,15 @@ public class UploadingActivity4 extends BaseActivity {
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(true).show();
-
+            LogUtils.e(TAG ,":upLoading:", e);
             System.out.println("UploadingActivity4+++===界面失败" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("UploadingActivity4-------"+response);
             showDialog.dismiss();
-            MsgPerfectRentingBean rentingBean = new Gson().fromJson(response, MsgPerfectRentingBean.class);
+            LogUtils.eNormal(TAG + ":upLoading:", response);
+            MsgPerfectRentingBean rentingBean = JsonUtil.json2Bean(response, MsgPerfectRentingBean.class);
             int code = rentingBean.code;
             final String msg = rentingBean.msg;
             if (code != 0) {
@@ -390,6 +388,11 @@ public class UploadingActivity4 extends BaseActivity {
         btnTakephoto.setOnClickListener(this);
         btnPhoto.setOnClickListener(this);
 
+
+    }
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
 
     }
 

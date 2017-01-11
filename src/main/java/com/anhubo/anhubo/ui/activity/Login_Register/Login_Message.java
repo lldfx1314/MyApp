@@ -58,7 +58,6 @@ public class Login_Message extends BaseActivity {
     private String screen_name;
     private String unionid;
     private UMShareAPI mShareAPI;
-    private AlertDialog builder;
     private Dialog showDialog;
 
 
@@ -76,7 +75,6 @@ public class Login_Message extends BaseActivity {
 
     @Override
     protected void initViews() {
-        builder = new AlertDialog(mActivity).builder();
         // 找控件
         // 输入手机号
         etLoginMsgphoneNumber = (EditText) findViewById(R.id.et_loginMsg_phoneNmber);
@@ -216,13 +214,13 @@ public class Login_Message extends BaseActivity {
     class MyStringCallback3 extends StringCallback {
         @Override
         public void onError(okhttp3.Call call, Exception e) {
-            System.out.println("Login_Message+++微信登录===没拿到数据" + e.getMessage());
+            LogUtils.e(TAG,":Login_Message+++微信登录:",e);
         }
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("微信登录" + response);
-            Login_WeiXin_Bean bean = new Gson().fromJson(response, Login_WeiXin_Bean.class);
+            LogUtils.eNormal(TAG+":Login_Message+++微信登录:",response);
+            Login_WeiXin_Bean bean = JsonUtil.json2Bean(response, Login_WeiXin_Bean.class);
             if (bean != null) {
                 String code = bean.code;
                 String msg = bean.msg;
@@ -299,7 +297,7 @@ public class Login_Message extends BaseActivity {
      */
     private void showdialog(String string) {
 
-        builder
+        new AlertDialog(mActivity).builder()
                 .setTitle("提示")
                 .setMsg(string)
                 .setCancelable(true).show();
@@ -416,18 +414,18 @@ public class Login_Message extends BaseActivity {
     /**
      * 携带参数跳转到注册的第二个界面
      */
-    private void goTo_Activity(String uid) {
-        if (uid != null) {
-            Intent intent = new Intent(Login_Message.this, RegisterActivity2.class);
-            intent.putExtra(Keys.UID, uid);
-            startActivity(intent);
-        } else {
-            builder
-                    .setTitle("提示")
-                    .setMsg("网络错误，请重试")
-                    .setCancelable(true).show();
-        }
-    }
+//    private void goTo_Activity(String uid) {
+//        if (uid != null) {
+//            Intent intent = new Intent(Login_Message.this, RegisterActivity2.class);
+//            intent.putExtra(Keys.UID, uid);
+//            startActivity(intent);
+//        } else {
+//            new AlertDialog(mActivity).builder()
+//                    .setTitle("提示")
+//                    .setMsg("网络错误，请重试")
+//                    .setCancelable(true).show();
+//        }
+//    }
 
 
     private void enterHome(String uid) {

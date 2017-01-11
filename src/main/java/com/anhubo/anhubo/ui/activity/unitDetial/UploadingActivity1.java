@@ -21,7 +21,9 @@ import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.MsgPerfectLicenseBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.ImageFactory;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
@@ -51,6 +53,7 @@ public class UploadingActivity1 extends BaseActivity {
 
     private static final int CAMERA = 0;
     private static final int PICTURE = 1;
+    private static final String TAG = "UploadingActivity1";
     @InjectView(R.id.ll_takePhoto01)
     LinearLayout llTakePhoto01;
     @InjectView(R.id.btn_unloading01)
@@ -108,6 +111,7 @@ public class UploadingActivity1 extends BaseActivity {
      * 拿到拍到的照片去上传
      */
     private File newFile = null;
+
     private void upLoading() {
         // 获取
         String businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
@@ -138,15 +142,10 @@ public class UploadingActivity1 extends BaseActivity {
 
     private Handler handler = new Handler();
 
-    @Override
-    public void onSystemUiVisibilityChange(int visibility) {
-
-    }
-
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            System.out.println("UploadingActivity1+++===界面失败" + e.getMessage());
+            LogUtils.e(TAG, ":upLoading:", e);
             showDialog.dismiss();
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
@@ -157,10 +156,10 @@ public class UploadingActivity1 extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-
-            MsgPerfectLicenseBean licenseBean = new Gson().fromJson(response, MsgPerfectLicenseBean.class);
+            showDialog.dismiss();
+            LogUtils.eNormal(TAG + ":upLoading:", response);
+            MsgPerfectLicenseBean licenseBean = JsonUtil.json2Bean(response, MsgPerfectLicenseBean.class);
             if (licenseBean != null) {
-                showDialog.dismiss();
                 int code = licenseBean.code;
                 final String msg = licenseBean.msg;
                 if (code != 0) {
@@ -224,7 +223,7 @@ public class UploadingActivity1 extends BaseActivity {
         c.moveToFirst();
         int columnIndex = c.getColumnIndex(filePathColumns[0]);
         String imagePath = c.getString(columnIndex);
-        Bitmap photo = ImageFactory.ratio(imagePath,120f,240f);
+        Bitmap photo = ImageFactory.ratio(imagePath, 120f, 240f);
 
         try {
             if (photo != null) {
@@ -233,21 +232,19 @@ public class UploadingActivity1 extends BaseActivity {
                 //显示图片
                 ivShowPhoto01.setImageBitmap(photo);
                 // 把本文件压缩后缓存到本地文件里面
-                savePicture(photo,"photo02");
+                savePicture(photo, "photo02");
                 File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
                 newFile = filePhoto02;
 
 
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
 
             c.close();
         }
     }
-
-
 
 
     private void showPhoto01(Intent data) {
@@ -282,19 +279,20 @@ public class UploadingActivity1 extends BaseActivity {
         //显示图片
         ivShowPhoto01.setImageBitmap(bitmap);
         // 把本文件压缩后缓存到本地文件里面
-        savePicture(bitmap,"photo01");
+        savePicture(bitmap, "photo01");
         File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
         newFile = filePhoto01;
     }
+
     /**
      * 保存图片到本应用下
      **/
-    private void savePicture(Bitmap bitmap,String fileName) {
+    private void savePicture(Bitmap bitmap, String fileName) {
 
         FileOutputStream fos = null;
         try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新写入内容会被覆盖
             //fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
-            OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() +"/"+fileName);
+            OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() + "/" + fileName);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);// 把图片写入指定文件夹中
 
         } catch (Exception e) {
@@ -310,6 +308,7 @@ public class UploadingActivity1 extends BaseActivity {
             }
         }
     }
+
     /**
      * 弹出对话框
      */
@@ -329,4 +328,8 @@ public class UploadingActivity1 extends BaseActivity {
         btnPhoto.setOnClickListener(this);
     }
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
 }

@@ -20,7 +20,9 @@ import com.anhubo.anhubo.bean.MsgPerfectUseProBean;
 import com.anhubo.anhubo.bean.MsgPerfect_UsePro_Bean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.DatePackerUtil;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.PopOneHelper;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
@@ -47,6 +49,7 @@ public class MsgPerfectActivity extends BaseActivity {
     private static final int MSGPERFECT02 = 2;
     private static final int MSGPERFECT03 = 3;
     private static final int MSGPERFECT04 = 4;
+    private static final String TAG = "MsgPerfectActivity";
     @InjectView(R.id.iv_msg_per01)
     ImageView ivMsgPer01;
     @InjectView(R.id.iv_msg_per02)
@@ -98,7 +101,12 @@ public class MsgPerfectActivity extends BaseActivity {
     @Override
     protected void initViews() {
         setTopBarDesc("完善信息");
+        // 修改员工数
+        alterEmploy();
+    }
 
+    // 修改员工数
+    private void alterEmploy() {
         popOneHelper = new PopOneHelper(this);
         popOneHelper.setListItem(DatePackerUtil.getList());
         popOneHelper.setOnClickOkListener(new PopOneHelper.OnClickOkListener() {
@@ -120,11 +128,44 @@ public class MsgPerfectActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 员工数的网络强求
+     */
+    class MyStringCallback1 extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("网络有问题，请检查")
+                    .setCancelable(false).show();
+            LogUtils.e(TAG, ":alterEmploy:", e);
+        }
+
+        @Override
+        public void onResponse(String response) {
+            LogUtils.eNormal(TAG + ":alterEmploy:", response);
+            MsgPerfectMemberBean bean = JsonUtil.json2Bean(response, MsgPerfectMemberBean.class);
+            if (bean != null) {
+                int code = bean.code;
+                String msg = bean.msg;
+                if (code == 0) {
+                    ToastUtils.showToast(mActivity, msg);
+                }
+
+            }
+        }
+    }
+
     @Override
     protected void initEvents() {
         super.initEvents();
         // 刚进来走网络获取数据
+        getData();
 
+    }
+
+    //　获取初始数据
+    private void getData() {
         String url = Urls.Url_MsgPerfect;
         HashMap<String, String> params = new HashMap<>();
         String businessId = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
@@ -136,44 +177,6 @@ public class MsgPerfectActivity extends BaseActivity {
                 .execute(new MyStringCallback());
     }
 
-
-    @Override
-    protected void onLoadDatas() {
-
-    }
-
-    @Override
-    public void onSystemUiVisibilityChange(int visibility) {
-
-    }
-
-    /**
-     * 员工数的网络强求
-     */
-    class MyStringCallback1 extends StringCallback {
-        @Override
-        public void onError(Call call, Exception e) {
-            new AlertDialog(mActivity).builder()
-                    .setTitle("提示")
-                    .setMsg("网络有问题，请检查")
-                    .setCancelable(false).show();
-            System.out.println("MsgPerfectActivity+++员工人数===没拿到数据" + e.getMessage());
-        }
-
-        @Override
-        public void onResponse(String response) {
-            MsgPerfectMemberBean bean = new Gson().fromJson(response, MsgPerfectMemberBean.class);
-            if (bean != null) {
-                int code = bean.code;
-                String msg = bean.msg;
-                ToastUtils.showLongToast(mActivity, msg);
-
-            } else {
-                System.out.println("MsgPerfectActivity上传员工数量+++===界面没拿到bean对象");
-            }
-        }
-    }
-
     /**
      * 首次加载网络
      */
@@ -181,13 +184,13 @@ public class MsgPerfectActivity extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-
-            System.out.println("MsgPerfectActivity+++首次加载网络===没拿到数据" + e.getMessage());
+            LogUtils.e(TAG, ":getData:", e);
         }
 
         @Override
         public void onResponse(String response) {
-            MsgPerfectBean bean = new Gson().fromJson(response, MsgPerfectBean.class);
+            LogUtils.eNormal(TAG + ":getData:", response);
+            MsgPerfectBean bean = JsonUtil.json2Bean(response, MsgPerfectBean.class);
             if (bean != null) {
 
                 // 营业执照
@@ -203,11 +206,13 @@ public class MsgPerfectActivity extends BaseActivity {
                 // 场所性质
                 property1 = bean.data.property1;
                 isShowView();
-            } else {
-                // 没拿到bean对象
-                System.out.println("MsgPerfectActivity界面+++===没拿到bean对象");
             }
         }
+    }
+
+    @Override
+    protected void onLoadDatas() {
+
     }
 
 
@@ -346,35 +351,37 @@ public class MsgPerfectActivity extends BaseActivity {
         mainlist = (ListView) view.findViewById(R.id.lv_MsgPerfect_01);
         morelist = (ListView) view.findViewById(R.id.lv_MsgPerfect_02);
         // 定义方法，获取数据
-        getData();
+        getPlaceData();
 
     }
 
-    private void getData() {
+    // 场所使用性质
+    private void getPlaceData() {
         showDialog = loadProgressDialog.show(mActivity, "正在加载...");
         String url = Urls.Url_GetUsePro;
         OkHttpUtils.post()//
                 .url(url)
                 .build()//
-                .execute(new MyStringCallback3());
+                .execute(new MyStringCallback2());
     }
 
-    class MyStringCallback3 extends StringCallback {
+    class MyStringCallback2 extends StringCallback {
 
         @Override
         public void onError(Call call, Exception e) {
             showDialog.dismiss();
-            System.out.println("MsgPerfectActivity+++===界面没获取到数据");
+            LogUtils.e(TAG, ":getPlaceData:", e);
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
         }
 
         @Override
         public void onResponse(String response) {
             showDialog.dismiss();
-            MsgPerfect_UsePro_Bean bean = new Gson().fromJson(response, MsgPerfect_UsePro_Bean.class);
+            LogUtils.eNormal(TAG + ":getPlaceData:", response);
+            MsgPerfect_UsePro_Bean bean = JsonUtil.json2Bean(response, MsgPerfect_UsePro_Bean.class);
             if (bean != null) {
                 showData(bean);
                 // 设置第一个适配器
@@ -414,7 +421,6 @@ public class MsgPerfectActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 adapterSecond.setSelectItem(position);
-
                 TextView tv = (TextView) view.findViewById(R.id.moreitem_txt);
                 // 获取到从第二例数组里面的字符串
                 strSecondList = tv.getText().toString().trim();
@@ -428,8 +434,8 @@ public class MsgPerfectActivity extends BaseActivity {
                         .url(url)
                         .params(params)//
                         .build()//
-                        .execute(new MyStringCallback2());
-                adapterSecond.notifyDataSetChanged();
+                        .execute(new MyStringCallback3());
+
 
             }
         });
@@ -438,32 +444,32 @@ public class MsgPerfectActivity extends BaseActivity {
     /**
      * 场所使用性质
      */
-    class MyStringCallback2 extends StringCallback {
+    class MyStringCallback3 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            ToastUtils.showToast(mActivity, "网络有问题，请检查");
-
             dialog.dismiss();
+            ToastUtils.showToast(mActivity, "网络有问题，请检查");
+            LogUtils.e(TAG, ":setAdapterSecond+上传性质:", e);
         }
 
         @Override
         public void onResponse(String response) {
-            MsgPerfectUseProBean bean = new Gson().fromJson(response, MsgPerfectUseProBean.class);
+            LogUtils.eNormal(TAG + ":setAdapterSecond+上传性质:", response);
+            MsgPerfectUseProBean bean = JsonUtil.json2Bean(response, MsgPerfectUseProBean.class);
             int code = bean.code;
             if (code != 0) {
                 ToastUtils.showToast(mActivity, "上传失败");
                 tvMsgPer06.setVisibility(View.VISIBLE);
                 // 把字符串设置给场所使用性质的控件
                 tvMsgPer06.setText(strSecondList);
-                dialog.dismiss();
+
             } else {
                 ToastUtils.showToast(mActivity, "上传成功");
                 tvMsgPer06.setVisibility(View.VISIBLE);
                 // 把字符串设置给场所使用性质的控件
                 tvMsgPer06.setText(strSecondList);
-                dialog.dismiss();
             }
-
+            dialog.dismiss();
         }
     }
 
@@ -509,5 +515,10 @@ public class MsgPerfectActivity extends BaseActivity {
             String[] newArr = string.split(",");
             data[i] = newArr;
         }
+    }
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
     }
 }

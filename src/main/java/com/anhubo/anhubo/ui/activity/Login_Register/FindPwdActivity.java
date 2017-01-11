@@ -18,6 +18,7 @@ import com.anhubo.anhubo.bean.Security_Token_Bean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.InputWatcher;
 import com.anhubo.anhubo.utils.JsonUtil;
+import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
@@ -64,8 +65,14 @@ public class FindPwdActivity extends BaseActivity {
     private String pwd1;
     private String pwd2;
     private String token;
-    private AlertDialog builder;
     private Dialog showDialog;
+    private String phone;
+
+    @Override
+    protected void initConfig() {
+        super.initConfig();
+        phone = getIntent().getStringExtra(Keys.PHONE);
+    }
 
     @Override
     protected int getContentViewId() {
@@ -74,7 +81,13 @@ public class FindPwdActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
-        builder = new AlertDialog(mActivity).builder();
+
+        // 设置手机号输入框的默认显示内容
+        if (etAlterPwdPhoneNumber != null&&!TextUtils.isEmpty(phone)) {
+            etAlterPwdPhoneNumber.setText(phone);
+        }
+
+
         //设置当号码输入框有内容时显示小圆叉
         etAlterPwdPhoneNumber.addTextChangedListener(new InputWatcher(btnAlterPwdPhoneNumber, etAlterPwdPhoneNumber));
         etAlterPwd1.addTextChangedListener(new InputWatcher(btnAlterPwdX1, etAlterPwd1));
@@ -189,7 +202,7 @@ public class FindPwdActivity extends BaseActivity {
     }
 
     private void showdialog(String string) {
-        builder
+        new AlertDialog(mActivity).builder()
                 .setTitle("提示")
                 .setMsg(string)
                 .setCancelable(true).show();
@@ -213,7 +226,7 @@ public class FindPwdActivity extends BaseActivity {
                 showDialog.dismiss();
                 int code = bean.code;
                 if (code == 0) {
-                   builder
+                    new AlertDialog(mActivity).builder()
                             .setTitle("提示")
                             .setMsg("找回密码成功，前去登录")
                             .setPositiveButton("", new View.OnClickListener() {
@@ -229,7 +242,7 @@ public class FindPwdActivity extends BaseActivity {
                             })
                             .setCancelable(false).show();
                 }else if(code == 1){
-                    builder
+                    new AlertDialog(mActivity).builder()
                             .setTitle("提示")
                             .setMsg("验证码错误")
                             .setCancelable(true).show();

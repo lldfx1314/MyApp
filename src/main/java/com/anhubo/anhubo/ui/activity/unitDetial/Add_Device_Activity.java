@@ -22,7 +22,9 @@ import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.AddDevice_CheckName_Bean;
 import com.anhubo.anhubo.bean.Add_Device_Bean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
@@ -51,6 +53,7 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     private static final int REQUEST_CODE = 2;
     private static final int REQUESTCODE1 = 3;
     private static final int REQUESTCODE2 = 4;
+    private static final String TAG = "Add_Device_Activity";
     private Button complete;
     private LinearLayout takePhoto;
     private EditText device_Name;
@@ -135,7 +138,6 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         super.initEvents();
         //　查询该设备号是否已经添加到设备里里面
         getData_Device();
-        //tvAddDevice
     }
 
     /**
@@ -156,17 +158,18 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
 
         @Override
         public void onError(Call call, Exception e) {
-            System.out.println("Add_Device_Activity+++===界面失败" + e.getMessage());
+            LogUtils.e(TAG , ":getData_Device", e);
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(true).show();
+
         }
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("Add_Device_Activity界面+++" + response);
-            AddDevice_CheckName_Bean bean = new Gson().fromJson(response, AddDevice_CheckName_Bean.class);
+            LogUtils.eNormal(TAG + ":getData_Device", response);
+            AddDevice_CheckName_Bean bean = JsonUtil.json2Bean(response, AddDevice_CheckName_Bean.class);
             if (bean != null) {
                 int code = bean.code;
                 String typeName = bean.data.device_dev_type_name;
@@ -382,15 +385,11 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
 
     }
 
-    @Override
-    public void onSystemUiVisibilityChange(int visibility) {
-
-    }
     private Handler handler = new Handler();
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            System.out.println("Add_Device_Activity+++===获取数据失败+++===" + e.getMessage());
+            LogUtils.e(TAG , ":addComplete", e);
             showDialog.dismiss();
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
@@ -400,10 +399,10 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("添加界面+++==="+response);
+            LogUtils.eNormal(TAG + ":addComplete", response);
             showDialog.dismiss();
             if (!TextUtils.isEmpty(response)) {
-                Add_Device_Bean addDeviceBean = new Gson().fromJson(response, Add_Device_Bean.class);
+                Add_Device_Bean addDeviceBean = JsonUtil.json2Bean(response, Add_Device_Bean.class);
                 if (addDeviceBean != null) {
                     deviceId = addDeviceBean.data.device_id;
                     if(!TextUtils.isEmpty(deviceId)){
@@ -431,5 +430,10 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         area = device_Area.getText().toString().trim();//所属区域
         devicePlace = device_Place.getText().toString().trim();//设备位置
         deviceName = device_Name.getText().toString().trim();//设备名称
+    }
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
     }
 }

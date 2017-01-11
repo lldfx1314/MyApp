@@ -206,7 +206,7 @@ public class RegisterActivity2 extends BaseActivity {
 
 
     private void enterHome() {
-        Intent intent = new Intent(RegisterActivity2.this, HomeActivity.class);
+        Intent intent = new Intent(mActivity, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         // 发送一条广播，登录完成后关闭登录的所有界面

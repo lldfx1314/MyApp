@@ -25,7 +25,9 @@ import com.anhubo.anhubo.bean.MsgPerfectLowerBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.ImageFactory;
 import com.anhubo.anhubo.utils.ImageTools;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
@@ -57,6 +59,7 @@ public class UploadingActivity2 extends BaseActivity {
 
     private static final int CAMERA = 0;
     private static final int PICTURE = 1;
+    private static final String TAG = "UploadingActivity2";
     @InjectView(R.id.ll_card01)
     LinearLayout llCard01;
     @InjectView(R.id.iv_showCardFront02)
@@ -162,10 +165,7 @@ public class UploadingActivity2 extends BaseActivity {
 
     private Handler handler = new Handler();
 
-    @Override
-    public void onSystemUiVisibilityChange(int visibility) {
 
-    }
 
     class MyStringCallback extends StringCallback {
         @Override
@@ -175,14 +175,14 @@ public class UploadingActivity2 extends BaseActivity {
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(false).show();
-
-            System.out.println("UploadingActivity2+++===界面失败" + e.getMessage());
+            LogUtils.e(TAG , ":upLoading:", e);
         }
 
         @Override
         public void onResponse(String response) {
             showDialog.dismiss();
-            MsgPerfectLowerBean lowerBean = new Gson().fromJson(response, MsgPerfectLowerBean.class);
+            LogUtils.eNormal(TAG + ":upLoading:", response);
+            MsgPerfectLowerBean lowerBean = JsonUtil.json2Bean(response, MsgPerfectLowerBean.class);
             int code = lowerBean.code;
             final String msg = lowerBean.msg;
             if (code != 0) {
@@ -395,5 +395,9 @@ public class UploadingActivity2 extends BaseActivity {
 
     }
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
 
 }

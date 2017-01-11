@@ -55,10 +55,14 @@ public interface Urls {
      * 互保计划
      */
     String Url_HuBaoPlan = UrlBaseH5 + "anhubo_s/anhubo_concur/html/concurProgram.html";
-    /**加入单元&&创建单元*/
+    /**
+     * 加入单元&&创建单元
+     */
     String Url_Unit_Cell = UrlBaseH5 + "anhubo_s/anhubo_concur/html/addCellOk.html";
-    /**单元 分享*/
-    String Url_Cell_WeiXin= UrlBaseH5 + "anhubo_s/anhubo_concur/html/concurProgram.html";
+    /**
+     * 单元 分享
+     */
+    String Url_Cell_WeiXin = UrlBaseH5 + "anhubo_s/anhubo_concur/html/concurProgram.html";
 
     /**
      * Android原生
@@ -230,6 +234,16 @@ public interface Urls {
      */
     String Url_Unit_Detail = UrlBase + "Unit/unit_business";
 
+    /**
+     * 遮罩  单位注册
+     */
+    String Url_Unit_Register = UrlBase + "Business/business_register";
+    /**
+     * 单位 员工列表
+     */
+    String Url_EmployList = UrlBase + "Business/business_users_list";
+
+
 //    建筑
     /**
      * 建筑下建筑安全指数，三色环比
@@ -295,6 +309,5 @@ public interface Urls {
      */
     String Url_Check_Update = UrlBase + "Index/version_change";
 
-    /**遮罩  单位注册*/
-    String Url_Unit_Register = UrlBase + "Business/business_register";
+
 }

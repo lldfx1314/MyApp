@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#EEEEEE"
-    android:orientation="vertical">
-
-    <ListView
-        android:id="@+id/lv_engineer"
+    android:layout_height="wrap_content"
+    cardview:cardCornerRadius="5dp"
+    cardview:cardElevation="5dp"
+    cardview:cardUseCompatPadding="true">
+    <!--cardElevation效果阴影-->
+    <!--cardCornerRadius效果圆角-->
+    <!--cardUseCompatPadding contentPadding效果缩进-->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"
-        android:cacheColorHint="#00000000"
-        android:scrollbars="none"
-        android:overScrollMode="never"/>
-</LinearLayout>
+        android:background="#ffffff"
+        android:orientation="vertical">
+        <ListView
+            android:id="@+id/lv_engineer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="16dp"
+            android:cacheColorHint="#00000000"
+            android:divider="#c7c7c7"
+            android:dividerHeight="0.5dp"/>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

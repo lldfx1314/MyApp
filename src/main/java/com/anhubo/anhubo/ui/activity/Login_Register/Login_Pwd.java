@@ -55,14 +55,14 @@ public class Login_Pwd extends BaseActivity {
     private String phoneNumber;
     private boolean pwdIsVisible;
     private String pwd;
-    private AlertDialog builder;
     private Dialog showDialog;
+    private int pwdCount = 0;
+    private String phone;
 
     @Override
     protected void initConfig() {
         super.initConfig();
-        // 在这儿先获取到uid
-        phoneNumber = getIntent().getStringExtra(Keys.PHONE);
+        phone = getIntent().getStringExtra(Keys.PHONE);
 
 
     }
@@ -81,10 +81,10 @@ public class Login_Pwd extends BaseActivity {
     @Override
     protected void initEvents() {
         super.initEvents();
-        builder = new AlertDialog(mActivity).builder();
+
         // 设置手机号输入框的默认显示内容
-        if (etPwdLoginPhone != null) {
-            etPwdLoginPhone.setText(phoneNumber);
+        if (etPwdLoginPhone != null&&!TextUtils.isEmpty(phone)) {
+            etPwdLoginPhone.setText(phone);
         }
         //设置当号码输入框有内容时显示小圆叉
         etPwdLoginPhone.addTextChangedListener(new InputWatcher(btnPwdLoginPhone, etPwdLoginPhone));
@@ -147,7 +147,7 @@ public class Login_Pwd extends BaseActivity {
     }
 
     private void showdialog(String string) {
-        builder
+        new AlertDialog(mActivity).builder()
                 .setTitle("提示")
                 .setMsg(string)
                 .setCancelable(true).show();
@@ -156,6 +156,7 @@ public class Login_Pwd extends BaseActivity {
     /**进入更改密码界面 */
     private void enterAlterPwd() {
         Intent intent = new Intent(mActivity, FindPwdActivity.class);
+        intent.putExtra(Keys.PHONE,phoneNumber);
         startActivity(intent);
     }
 
@@ -164,9 +165,6 @@ public class Login_Pwd extends BaseActivity {
      */
     private void getInputData() {
 
-
-        // 在这儿获取到传过来的手机号
-        phoneNumber = getIntent().getStringExtra(Keys.PHONE);
         //获取输入的手机号
         phoneNumber = etPwdLoginPhone.getText().toString().trim();
         //第二次密码
@@ -224,7 +222,17 @@ public class Login_Pwd extends BaseActivity {
                         goToRegisterActivity();
                         break;
                     case 107://密码错误
-                        showdialog(msg);
+                        pwdCount = pwdCount+1;
+                        LogUtils.eNormal(TAG+":pwdCount:",pwdCount);
+                        if(pwdCount == 3){
+                            pwdCount = 0;
+                            // 密码错误超过3次，弹窗提醒
+                            showPwdErrorDialog();
+                        }else {
+                            // 密码错误弹窗
+                            showdialog(msg);
+                        }
+
                         break;
                     case 0:// 登录成功，携带返回的参数跳转到单位界面，同时存一下把uid等参数保存到本地
                         // 保存参数
@@ -238,28 +246,46 @@ public class Login_Pwd extends BaseActivity {
             }
         }
     }
+    /**密码错误超过3次，弹窗*/
+    private void showPwdErrorDialog() {
+       new AlertDialog(mActivity).builder()
+                .setTitle("提示")
+                .setMsg("连续输错3次密码,建议找回密码或者验证码登录")
+                .setPositiveButton("验证码登录", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("找回密码", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        enterAlterPwd();
+                    }
+                })
+                .setCancelable(false).show();
+    }
 
-        /**
+    /**
          * 携带参数跳转到注册的第二个界面
          */
-        private void goTo_Activity(String uid) {
-            if (uid != null) {
-                Intent intent = new Intent(Login_Pwd.this, RegisterActivity2.class);
-                intent.putExtra(Keys.UID, uid);
-                startActivity(intent);
-            } else {
-                showdialog("网络错误，请重试");
-            }
-        }
+//        private void goTo_Activity(String uid) {
+//            if (uid != null) {
+//                Intent intent = new Intent(Login_Pwd.this, RegisterActivity2.class);
+//                intent.putExtra(Keys.UID, uid);
+//                startActivity(intent);
+//            } else {
+//                showdialog("网络错误，请重试");
+//            }
+//        }
 
         /**
          * 携带输入的手机号跳转到密码注册界面
          */
         private void goToRegisterActivity() {
             if (phoneNumber != null) {
-
                 new AlertDialog(mActivity).builder()
-                        .setTitle("提示")
+                .setTitle("提示")
                         .setMsg("该账号不存在，请注册")
                         .setPositiveButton("去注册", new View.OnClickListener() {
                             @Override

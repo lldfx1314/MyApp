@@ -69,7 +69,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private String weixinforzhuce;
     private String loginforzhuce;
     private String PwdRegister;
-    private AlertDialog builder;
     private Dialog showDialog;
     private EditText etRegPwd2;
     private Button btnRegPwdX2;
@@ -96,7 +95,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
     @Override
     protected void initViews() {
-        builder = new AlertDialog(mActivity).builder();
+
         /*找控件*/
         // 下一步
         btnRegister1 = (Button) findViewById(R.id.btn_register1);
@@ -352,12 +351,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         // 封装请求参数
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("telphone", phoneNumber);
-
         params.put("verify_code", securityCode);
-
         params.put("password", pwd);
-
-
 
         params.put("third_type", 2 + "");//第三方类型，2代表微信
         params.put("pic_url", imageUrl);// 头像
@@ -411,7 +406,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     }
     /**弹窗提示*/
     private void showdialog(String string) {
-        builder
+        new AlertDialog(mActivity).builder()
                 .setTitle("提示")
                 .setMsg(string)
                 .setCancelable(true).show();
@@ -468,7 +463,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                     showdialog(msg);
                     break;
                 case "108":// 该手机号码已注册
-                    builder
+                    new AlertDialog(mActivity).builder()
                             .setTitle("提示")
                             .setMsg(msg)
                             .setPositiveButton("去登陆", new View.OnClickListener() {

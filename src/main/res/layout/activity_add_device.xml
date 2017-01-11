@@ -50,6 +50,7 @@
                     android:drawableRight="@drawable/arrow_right"
                     android:enabled="true"
                     android:focusable="false"
+                    android:hint="请选择建筑"
                     android:textColor="@color/text_gray" />
             </LinearLayout>
             <!-- 所属单位 -->

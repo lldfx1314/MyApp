@@ -56,7 +56,6 @@ public class PwdRegisterActivity extends BaseActivity {
     private String firstPwd;
     private String secondPwd;
     private boolean pwdIsVisible = false;
-    private AlertDialog builder;
     private Dialog showDialog;
 
     @Override
@@ -78,7 +77,6 @@ public class PwdRegisterActivity extends BaseActivity {
     @Override
     protected void initEvents() {
         super.initEvents();
-        builder = new AlertDialog(mActivity).builder();
         etPwdRegFirst.addTextChangedListener(new InputWatcher(btnPwdRegX1, etPwdRegFirst));
         etPwdRegSecond.addTextChangedListener(new InputWatcher(btnPwdRegX2, etPwdRegSecond));
     }
@@ -132,7 +130,7 @@ public class PwdRegisterActivity extends BaseActivity {
     }
 
     private void showdialog(String string) {
-        builder
+        new AlertDialog(mActivity).builder()
                 .setTitle("提示")
                 .setMsg(string)
                 .setCancelable(true).show();

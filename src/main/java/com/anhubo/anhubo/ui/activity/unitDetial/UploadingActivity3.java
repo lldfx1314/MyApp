@@ -25,7 +25,9 @@ import com.anhubo.anhubo.bean.MsgPerfectFireBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.ImageFactory;
 import com.anhubo.anhubo.utils.ImageTools;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
@@ -57,6 +59,7 @@ public class UploadingActivity3 extends BaseActivity {
 
     private static final int CAMERA = 0;
     private static final int PICTURE = 1;
+    private static final String TAG = "UploadingActivity3";
     @InjectView(R.id.ll_takePhoto03)
     LinearLayout llTakePhoto03;
     @InjectView(R.id.iv_showPhoto03)
@@ -142,11 +145,6 @@ public class UploadingActivity3 extends BaseActivity {
 
     private Handler handler = new Handler();
 
-    @Override
-    public void onSystemUiVisibilityChange(int visibility) {
-
-    }
-
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
@@ -155,14 +153,14 @@ public class UploadingActivity3 extends BaseActivity {
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(true).show();
-
-            System.out.println("UploadingActivity3+++===界面失败"+e.getMessage());
+            LogUtils.e(TAG , ":upLoading:", e);
         }
 
         @Override
         public void onResponse(String response) {
             showDialog.dismiss();
-            MsgPerfectFireBean perfectFireBean = new Gson().fromJson(response, MsgPerfectFireBean.class);
+            LogUtils.eNormal(TAG + ":upLoading:", response);
+            MsgPerfectFireBean perfectFireBean = JsonUtil.json2Bean(response, MsgPerfectFireBean.class);
             int code = perfectFireBean.code;
             final String msg = perfectFireBean.msg;
             if (code != 0) {
@@ -328,7 +326,11 @@ public class UploadingActivity3 extends BaseActivity {
         // 设置监听
         btnTakephoto.setOnClickListener(this);
         btnPhoto.setOnClickListener(this);
+    }
 
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
 
     }
+
 }

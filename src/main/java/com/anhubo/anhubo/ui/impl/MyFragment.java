@@ -16,7 +16,9 @@ import com.anhubo.anhubo.ui.activity.MyDetial.InvateActivity;
 import com.anhubo.anhubo.ui.activity.MyDetial.OrderManagerActivity;
 import com.anhubo.anhubo.ui.activity.MyDetial.PersonMsgActivity;
 import com.anhubo.anhubo.ui.activity.MyDetial.SettingActivity;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
@@ -36,7 +38,7 @@ import okhttp3.Call;
 public class MyFragment extends BaseFragment {
 
 
-    private static final int REQUESTCODE = 0;
+    private static final String TAG = "MyFragment";
     private LinearLayout llMyDetial;
     private LinearLayout llInvate;
     private LinearLayout llOrderManager;
@@ -108,6 +110,13 @@ public class MyFragment extends BaseFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        // 界面重新可见时加载数据
+        getData();
+    }
+
+    @Override
     public void initData() {
     }
 
@@ -119,7 +128,6 @@ public class MyFragment extends BaseFragment {
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         String url = Urls.Url_My_GetUserInfo;
-
         OkHttpUtils.post()//
                 .url(url)//
                 .params(params)//
@@ -131,17 +139,15 @@ public class MyFragment extends BaseFragment {
         @Override
         public void onError(Call call, Exception e) {
 
-            System.out.println("MyFragment+++===界面失败" + e.getMessage());
-            //ToastUtils.showToast(mActivity, "网络有问题，请检查");
+            LogUtils.e(TAG, ":getData:", e);
             String response = SpUtils.getStringParam(mActivity, "headIcon");
             setData(response);
         }
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("MyFragment界面+++="+response);
+            LogUtils.eNormal(TAG + ":getData:", response);
             SpUtils.putParam(mActivity, "headIcon", response);
-
             setData(response);
 
         }
@@ -151,7 +157,7 @@ public class MyFragment extends BaseFragment {
      * 设置头像的显示内容
      */
     private void setData(String response) {
-        bean = new Gson().fromJson(response, MyFragmentBean.class);
+        bean = JsonUtil.json2Bean(response, MyFragmentBean.class);
         if (bean != null) {
             age = bean.data.age;
             sex = bean.data.sex;
@@ -159,16 +165,18 @@ public class MyFragment extends BaseFragment {
             name = bean.data.name;
         }
         /**设置头像、姓名、年龄、性别的显示内容*/
-        // 头像
         if (!TextUtils.isEmpty(img)) {
-            // 用户自己设置过头像，就显示自己的头像
             setHeaderIcon(img);
         }
-
-        //姓名、年龄、性别
-        tvMyName.setText(name);
-        tvMyAge.setText(age);
-        tvMyGebder.setText(sex);
+        if (!TextUtils.isEmpty(name)) {
+            tvMyName.setText(name);
+        }
+        if (!TextUtils.isEmpty(age)) {
+            tvMyAge.setText(age);
+        }
+        if (!TextUtils.isEmpty(sex)) {
+            tvMyGebder.setText(sex);
+        }
     }
 
     @Override
@@ -214,54 +222,6 @@ public class MyFragment extends BaseFragment {
 
     }
 
-    /***/
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (intent != null && requestCode == REQUESTCODE) {
-            switch (resultCode) {
-                case 1:// 保存头像后返回的url，显示更改后的头像
-                    String imgurl = intent.getStringExtra(Keys.HEADERICON);
-                    if (!TextUtils.isEmpty(imgurl)) {
-                        setHeaderIcon(imgurl);
-                    }
-                    break;
-                case 2:// 更改姓名后返回的url，显示更改后的姓名
-                    String newName = intent.getStringExtra(Keys.NEWNAME);
-                    if (!TextUtils.isEmpty(newName)) {
-                        name_new = newName;
-
-                        tvMyName.setText(newName);
-                    }
-                    break;
-                case 3:// 更改年龄后返回的url，显示更改后的年龄
-                    String newAge = intent.getStringExtra(Keys.NEWAGE);
-                    if (!TextUtils.isEmpty(newAge)) {
-                        age_new = newAge;
-
-                        tvMyAge.setText(newAge);
-                    }
-                    break;
-
-                case 4:// 更改性别后返回的url，显示更改后的性别
-                    String newGender = intent.getStringExtra(Keys.NEWGENDER);
-                    if (!TextUtils.isEmpty(newGender)) {
-                        gender_new = newGender;
-                        tvMyGebder.setText(newGender);
-                    }
-                    break;
-                case 5:// 更改头像后返回的微信url，显示更改后的微信头像
-                    String headericon_weixin = intent.getStringExtra(Keys.HEADERICON_WEIXIN);
-                    // 这里得把微信的头像地址保存起来
-                    if (!TextUtils.isEmpty(headericon_weixin)) {
-                        setHeaderIcon(headericon_weixin);
-                    }
-                    break;
-            }
-        }
-
-    }
-
     /**
      * 设置头像的方法
      */
@@ -277,8 +237,7 @@ public class MyFragment extends BaseFragment {
                 .execute(new BitmapCallback() {
                     @Override
                     public void onError(Call call, Exception e) {
-
-                        System.out.println("MyFragment设置头像头像+++===" + e.getMessage());
+                        LogUtils.e(TAG, ":setHeaderIcon:", e);
                     }
 
                     @Override
@@ -295,7 +254,7 @@ public class MyFragment extends BaseFragment {
     private void enterPersonMsg() {
         Intent intent = new Intent(mActivity, PersonMsgActivity.class);
         intent.putExtra(Keys.MYBEAN, bean);
-        startActivityForResult(intent, REQUESTCODE);
+        startActivity(intent);
     }
 
     /**

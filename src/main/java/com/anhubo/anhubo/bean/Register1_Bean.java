@@ -11,7 +11,7 @@ public class Register1_Bean {
 
     public class Data {
         public String uid;
-        public int unique_id;
+        public String unique_id;
         public int info_exist;
     }
 

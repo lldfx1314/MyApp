@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -37,6 +38,7 @@ import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.impl.MyFragment;
 import com.anhubo.anhubo.utils.DatePackerUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.PopBirthHelper;
 import com.anhubo.anhubo.utils.PopGenderHelper;
 import com.anhubo.anhubo.utils.SpUtils;
@@ -75,6 +77,7 @@ public class PersonMsgActivity extends BaseActivity {
     private static final int PICTURE = 0;
     private static final int CAMERA = 1;
     private static final int REQUESTCODE = 2;
+    private static final String TAG = "PersonMsgActivity";
     @InjectView(R.id.ll_psHeaderIcon)
     LinearLayout llPsHeaderIcon;
     @InjectView(R.id.ll_psUsername)
@@ -330,25 +333,10 @@ public class PersonMsgActivity extends BaseActivity {
                 unionid = map.get("unionid");
                 profileImageUrl = map.get("profile_image_url");
                 screenName = map.get("screen_name");
-
             }
+            // 绑定微信
+            bindWeixin();
 
-            /**获取微信信息后走绑定接口*/
-            String url = Urls.Url_BindWEIXIN;
-            // 封装请求参数
-            HashMap<String, String> params = new HashMap<String, String>();
-
-            params.put("uid", uid);
-            params.put("third_type", 2 + "");// 2代表微信
-            params.put("unique_name", screenName);
-            params.put("unique_id", unionid);
-            params.put("pic_url", profileImageUrl);
-
-            OkHttpUtils.post()//
-                    .url(url)//
-                    .params(params)//
-                    .build()//
-                    .execute(new MyStringCallback5());
 
         }
 
@@ -362,30 +350,43 @@ public class PersonMsgActivity extends BaseActivity {
 
         }
     };
+    //绑定微信
+    private void bindWeixin() {
+        /**获取微信信息后走绑定接口*/
+        String url = Urls.Url_BindWEIXIN;
+        // 封装请求参数
+        HashMap<String, String> params = new HashMap<String, String>();
+
+        params.put("uid", uid);
+        params.put("third_type", 2 + "");// 2代表微信
+        params.put("unique_name", screenName);
+        params.put("unique_id", unionid);
+        params.put("pic_url", profileImageUrl);
+
+        OkHttpUtils.post()//
+                .url(url)//
+                .params(params)//
+                .build()//
+                .execute(new MyStringCallback5());
+    }
 
     class MyStringCallback5 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
-
-            System.out.println("PersonMsgActivity+++界面绑定微信===" + e.getMessage());
+            LogUtils.e(TAG,":bindWeixin:",e);
         }
 
         @Override
         public void onResponse(String response) {
-//            System.out.println("PersonMsgActivity界面+绑定微信+"+response);
+            LogUtils.eNormal(TAG+":bindWeixin:",response);
             PersonMsgBindBean bean = new Gson().fromJson(response, PersonMsgBindBean.class);
             if (bean != null) {
                 int code = bean.code;
                 if (code == 0) {
                     if (TextUtils.isEmpty(img)) {
-                        // 代表用户没设置过自己的头像，因此显示自己的微信头像
+                        // 代表用户没设置过自己的头像，因此显示自己的微信头像// 我的界面头像重新刷一遍
                         setHeaderIcon(profileImageUrl);
-
-                        // 设置完后通知我的界面也改变显示内容
-                        Intent intent = new Intent();
-                        intent.putExtra(Keys.HEADERICON_WEIXIN, profileImageUrl);
-                        setResult(5, intent);
                     }
                     // 显示微信名
                     tvMyWechat.setText(screenName);
@@ -463,13 +464,12 @@ public class PersonMsgActivity extends BaseActivity {
         @Override
         public void onError(Call call, Exception e) {
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
-
-            System.out.println("PersonMsgActivity+++界面上传性别===" + e.getMessage());
+            LogUtils.e(TAG,":alterGender:",e);
         }
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("PersonMsgActivity+++界面上传性别"+response);
+            LogUtils.eNormal(TAG+":alterGender:",response);
             MyAlterGenderBean bean = new Gson().fromJson(response, MyAlterGenderBean.class);
             if (bean != null) {
                 int code = bean.code;
@@ -477,11 +477,7 @@ public class PersonMsgActivity extends BaseActivity {
                 if (code != 0) {
                     ToastUtils.showToast(mActivity, msg);
                 } else {
-                    //ToastUtils.showToast(mActivity,"性别修改成功");
-                    // 每次更改成功后要通知我的界面也要改变显示内容
-                    Intent intent = new Intent();
-                    intent.putExtra(Keys.NEWGENDER, newGender);
-                    setResult(4, intent);
+                    ToastUtils.showToast(mActivity,"性别修改成功");
                 }
             }
         }
@@ -543,11 +539,12 @@ public class PersonMsgActivity extends BaseActivity {
         @Override
         public void onError(Call call, Exception e) {
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
-            System.out.println("PersonMsgActivity+++界面上传年龄===" + e.getMessage());
+            LogUtils.e(TAG,":uploadAge:",e);
         }
 
         @Override
         public void onResponse(String response) {
+            LogUtils.eNormal(TAG+":uploadAge:",response);
             MyAlterAgeBean bean = new Gson().fromJson(response, MyAlterAgeBean.class);
             if (bean != null) {
                 int code = bean.code;
@@ -556,10 +553,7 @@ public class PersonMsgActivity extends BaseActivity {
                     ToastUtils.showToast(mActivity, msg);
                 } else {
 
-                    //ToastUtils.showToast(mActivity, "年龄修改成功");
-                    Intent intent = new Intent();
-                    intent.putExtra(Keys.NEWAGE, newAge);
-                    setResult(3, intent);
+                    ToastUtils.showToast(mActivity, "年龄修改成功");
                 }
             }
         }
@@ -731,12 +725,12 @@ public class PersonMsgActivity extends BaseActivity {
         @Override
         public void onError(Call call, Exception e) {
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
-            System.out.println("PersonMsgActivity+++界面上传name===" + e.getMessage());
+            LogUtils.e(TAG,":uploadName:",e);
         }
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("PersonMsgActivity+界面修改用户名" + response);
+            LogUtils.eNormal(TAG+":uploadName:",response);
             MyAlterNameBean bean = new Gson().fromJson(response, MyAlterNameBean.class);
             if (bean != null) {
                 int code = bean.code;
@@ -744,12 +738,7 @@ public class PersonMsgActivity extends BaseActivity {
                 if (code != 0) {
                     ToastUtils.showToast(mActivity, msg);
                 } else {
-                    //ToastUtils.showToast(mActivity, "修改成功");
-                    // 每次更改成功后要通知我的界面也要改变显示内容
-                    Intent intent = new Intent();
-                    intent.putExtra(Keys.NEWNAME, newName);
-                    setResult(2, intent);
-
+                    LogUtils.eNormal(TAG+":uploadName:","姓名修改成功");
                 }
             }
         }
@@ -789,7 +778,7 @@ public class PersonMsgActivity extends BaseActivity {
         if (isShow) {
 
             // 说明图片已经显示，上传头像到网络
-            upLoading();
+            upLoadIcon();
             isShow = false;
         } else {
             // 图片没显示
@@ -803,7 +792,7 @@ public class PersonMsgActivity extends BaseActivity {
      */
     private File newFile = null;
 
-    private void upLoading() {
+    private void upLoadIcon() {
 
         // 获取
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
@@ -830,18 +819,16 @@ public class PersonMsgActivity extends BaseActivity {
         @Override
         public void onError(Call call, Exception e) {
 //            showDialog.dismiss();
-            System.out.println("PersonMsgActivity+++界面上传头像===" + e.getMessage());
-
+            LogUtils.e(TAG,":upLoadIcon:",e);
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
 
         }
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("PersonMsgActivity个人信息页面+" + response);
+            LogUtils.eNormal(TAG+":upLoadIcon:",response);
             My_HeaderIconBean bean = new Gson().fromJson(response, My_HeaderIconBean.class);
             if (bean != null) {
-//                showDialog.dismiss();
                 int code = bean.code;
                 final String img1 = bean.data.img;
                 String msg = bean.msg;
@@ -849,9 +836,6 @@ public class PersonMsgActivity extends BaseActivity {
                     ToastUtils.showToast(mActivity, msg);
                 } else {
                     ToastUtils.showToast(mActivity, "保存成功");
-                    Intent intent = new Intent();
-                    intent.putExtra(Keys.HEADERICON, img1);
-                    setResult(1, intent);
 
                 }
             }
@@ -1026,8 +1010,7 @@ public class PersonMsgActivity extends BaseActivity {
                 .execute(new BitmapCallback() {
                     @Override
                     public void onError(Call call, Exception e) {
-
-                        System.out.println("MyFragment获取头像+++===" + e.getMessage());
+                        LogUtils.e(TAG,":setHeaderIcon:",e);
                     }
 
                     @Override

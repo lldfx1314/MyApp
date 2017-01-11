@@ -92,8 +92,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="15dp"
             android:enabled="true"
-            android:text="邀请同事"
-
+            android:text="员工列表"
             android:textColor="@color/tv_gray"
             android:textSize="16sp"
             android:visibility="gone" />
