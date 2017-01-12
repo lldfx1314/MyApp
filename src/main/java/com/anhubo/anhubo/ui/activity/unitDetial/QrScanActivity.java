@@ -579,7 +579,6 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ImageView imageView = (ImageView) view.findViewById(R.id.iv_check_device);
-                //你大爷
                 // 获取当前position对应位置的点击记录
                 Boolean isClick = map.get(position);
                 if (!isClick) {

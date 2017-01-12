@@ -1,17 +1,22 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.app.Dialog;
-import android.os.Bundle;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.EmployeeListAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.EmployeeListBean;
+import com.anhubo.anhubo.bean.EmployeeOperate;
 import com.anhubo.anhubo.bean.Unit_Invate_WorkMateBean;
+import com.anhubo.anhubo.interfaces.InterClick;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
@@ -21,6 +26,7 @@ import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
@@ -28,25 +34,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 
 /**
  * Created by LUOLI on 2017/1/11.
  */
-public class EmployeeListActivity extends BaseActivity {
+public class EmployeeListActivity extends BaseActivity implements InterClick {
     private static final String TAG = "EmployeeListActivity";
+    @InjectView(R.id.rl_employee_adm)
+    RelativeLayout rlEmployeeAdm;
     @InjectView(R.id.lv_employ)
     ListView lvEmploy;
     @InjectView(R.id.employee_num)
     TextView employeeNum;
     private String versionName;
     private Dialog showDialog;
-    private String uid;
     private String businessId;
     private ArrayList<EmployeeListBean.Data.User_info> list;
     private EmployeeListAdapter adapter;
+    private CircleImageView ivIcon;
+    private TextView tvName;
+    private Button btnEmployee;
+    private View viewEmployee;
+    private String uid;
+    private boolean isAdm;
+    private boolean isHaveAdm;
+    private EmployeeListBean bean;
 
     @Override
     protected int getContentViewId() {
@@ -63,7 +78,10 @@ public class EmployeeListActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
-
+        ivIcon = (CircleImageView) findViewById(R.id.iv_employee_icon);
+        tvName = (TextView) findViewById(R.id.tv_employee_name);
+        btnEmployee = (Button) findViewById(R.id.btn_employee);
+        viewEmployee = findViewById(R.id.view_employee);
     }
 
     @Override
@@ -71,11 +89,12 @@ public class EmployeeListActivity extends BaseActivity {
         super.initEvents();
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
         businessId = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
-
         list = new ArrayList<>();
-        adapter = new EmployeeListAdapter(mActivity, list);
-        lvEmploy.setAdapter(adapter);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         // 请求数据
         getData();
     }
@@ -114,34 +133,128 @@ public class EmployeeListActivity extends BaseActivity {
      */
     private void dealData(String response) {
         if (!TextUtils.isEmpty(response)) {
-            EmployeeListBean bean = JsonUtil.json2Bean(response, EmployeeListBean.class);
+            bean = JsonUtil.json2Bean(response, EmployeeListBean.class);
             int code = bean.code;
             String msg = bean.msg;
             EmployeeListBean.Data data = bean.data;
             String userNum = data.user_num;
-            if (!TextUtils.isEmpty(userNum)) {
-                int i = Integer.parseInt(userNum) - 1;
-                employeeNum.setText(i+"人");
-            }
+
             List<EmployeeListBean.Data.User_info> userInfo = data.user_info;
+            for (int i = 0; i < userInfo.size(); i++) {
+                EmployeeListBean.Data.User_info info = userInfo.get(i);
+                int userType = info.user_type;
+                int status = info.status;
+                String picPath = info.pic_path;
+                String username = info.username;
+                if(userType == 1){
+                    // 有管理员,显示管理员信息
+                    isHaveAdm = true;
+                    rlEmployeeAdm.setVisibility(View.VISIBLE);
+                    setHeaderIcon(ivIcon,picPath);
+                    tvName.setText(username);
+                    // 显示的员工人数-1
+                    if (!TextUtils.isEmpty(userNum)) {
+                        int m = Integer.parseInt(userNum) - 1;
+                        employeeNum.setText(m + "人");
+                    }
+                    if(status == 1){
+                        // 是管理员本人，显示转让按钮
+                        isAdm = true;
+                        btnEmployee.setVisibility(View.VISIBLE);
+                        btnEmployee.setText("转让");
+                    }
+                    // 把管理员从列表里面删除
+                    userInfo.remove(i);
+                }
+
+            }
+            if(!isHaveAdm){
+                // 没有管理员，显示员工人数
+                if (!TextUtils.isEmpty(userNum)) {
+                    employeeNum.setText(userNum + "人");
+                }
+            }
+            list.clear();
             list.addAll(userInfo);
-            adapter.notifyDataSetChanged();
+            adapter = new EmployeeListAdapter(mActivity, list,EmployeeListActivity.this, isAdm);
+            lvEmploy.setAdapter(adapter);
         }
     }
 
     @Override
     protected void onLoadDatas() {
+        btnEmployee.setOnClickListener(this);
+    }
 
+    /**转让管理员*/
+    private void assignmentAdministrator() {
+        Intent intent = new Intent(mActivity, AssignmentAdminActivity.class);
+        intent.putExtra(Keys.EMPLOYEELISTBEAN, bean);
+        startActivity(intent);
+    }
+    /**listView条目的点击事件*/
+    @Override
+    public void onBtnClick(View v) {
+        EmployeeOperate operateg = (EmployeeOperate)v.getTag();
+        int mPosition = operateg.position;
+        String mOperate = operateg.operate;
+        if(TextUtils.equals(mOperate,"del")){
+            // 弹窗提示用户是否删除用户
+            dialogDel(mPosition);
+        }else if(TextUtils.equals(mOperate,"quit")){
+            // 弹窗提示用户是否退出按钮
+            dialogQuit(mPosition);
+        }
+
+    }
+
+    private void dialogDel(int mPosition) {
+        ToastUtils.showToast(mActivity,"删除+"+mPosition);
+    }
+
+    private void dialogQuit(int mPosition) {
+        ToastUtils.showToast(mActivity,"退出+"+mPosition);
+    }
+
+    /**
+     * 设置头像的方法
+     */
+    private void setHeaderIcon(final CircleImageView ivIcon, String imgurl) {
+        OkHttpUtils
+                .get()//
+                .url(imgurl)//
+                .tag(this)//
+                .build()//
+                .connTimeOut(15000)
+                .readTimeOut(15000)
+                .writeTimeOut(15000)
+                .execute(new BitmapCallback() {
+                    @Override
+                    public void onError(Call call, Exception e) {
+                        LogUtils.e(TAG, ":setHeaderIcon:", e);
+                    }
+
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        ivIcon.setImageBitmap(bitmap);
+                    }
+                });
     }
 
     @Override
     public void onClick(View v) {
+        uid =  SpUtils.getStringParam(mActivity, Keys.UID);
         switch (v.getId()) {
             case R.id.ivTopBarRight_add:
                 dialog();
                 break;
+            case R.id.btn_employee:
+                // 转让管理员
+                assignmentAdministrator();
+                break;
         }
     }
+
 
     private void dialog() {
         final AlertDialog alertDialog = new AlertDialog(mActivity);
@@ -169,6 +282,7 @@ public class EmployeeListActivity extends BaseActivity {
                 }).setNegativeButton("取消", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
             }
         }).show();
     }
@@ -178,7 +292,7 @@ public class EmployeeListActivity extends BaseActivity {
      */
     private void invateWorkMate(String phone) {
         showDialog = loadProgressDialog.show(mActivity, "正在请求...");
-        String uid = SpUtils.getStringParam(mActivity, Keys.UID);
+
         String[] split = Utils.getAppInfo(mActivity).split("#");
         versionName = split[1];
 

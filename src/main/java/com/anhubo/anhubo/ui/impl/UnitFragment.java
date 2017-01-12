@@ -304,10 +304,12 @@ public class UnitFragment extends BaseFragment{
             }
 
             @Override
-            public void changeUnit(String string) {
+            public void changeUnit(String string,String str) {
                 //　接受同事邀请后刷新单位按钮的显示
 //                LogUtils.eNormal(TAG,":界面修改单位+"+string);
                 tv_basepager_title.setText(string);
+                // 重新刷一遍界面
+                getData(str);
             }
         });
     }

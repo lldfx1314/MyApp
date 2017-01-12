@@ -25,18 +25,28 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:textColor="@color/black"
-            android:text="李四"
             android:textSize="13sp"/>
+        <!--删除或者退出按钮-->
         <Button
             android:id="@+id/btn_employee"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
-            android:text="转让"
+            android:visibility="gone"
+            android:text=""
             android:textSize="13sp"
             android:textColor="@color/blue"
             android:background="@drawable/btn_shap_blue"/>
-
+        <!--选择管理员按钮-->
+        <ImageView
+            android:id="@+id/iv_employee_choose"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:clickable="true"
+            android:focusable="false"
+            android:visibility="gone"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/fuxuan_input02" />
     </RelativeLayout>
     <View
         android:id="@+id/view_employee"

@@ -159,7 +159,7 @@ public class HomeActivity extends BaseActivity {
     public UpdateFragmentUIFromActivity updateFragmentUIFromActivity;
     public interface UpdateFragmentUIFromActivity{
         void UIChange();
-        void changeUnit(String string);
+        void changeUnit(String string,String str);
     }
     @Override
     protected void onLoadDatas() {
@@ -375,7 +375,7 @@ public class HomeActivity extends BaseActivity {
                     SpUtils.putParam(mActivity, Keys.BUSINESSID, businessId);
                     SpUtils.putParam(mActivity, Keys.BUSINESSNAME, businessName);
                     if(updateFragmentUIFromActivity!=null){
-                        updateFragmentUIFromActivity.changeUnit(businessName);
+                        updateFragmentUIFromActivity.changeUnit(businessName,businessId);
                     }
                 }
             }

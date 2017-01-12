@@ -339,7 +339,13 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     private void addComplete() {
         // 点击完成的时候获取输入框内的内容，调用接口，使用post方法把数据添加到后台
         getInputData();
-
+        if (TextUtils.isEmpty(build)) {
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("请选择建筑")
+                    .setCancelable(true).show();
+            return;
+        }
         if (TextUtils.isEmpty(devicePlace)) {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")

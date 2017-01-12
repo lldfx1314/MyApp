@@ -14,29 +14,10 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <RelativeLayout
-            android:id="@+id/rl_employee_adm"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="85dp">
-            <include
-                android:id="@+id/employee_adm"
-                layout="@layout/item_employee" />
-            <View
-                android:layout_below="@+id/employee_adm"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/actionsheet_gray" />
-        </RelativeLayout>
-
-
-
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -48,7 +29,7 @@
                 android:textSize="13sp" />
 
             <TextView
-                android:id="@+id/employee_num"
+                android:id="@+id/tv_ass_admin_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -58,7 +39,7 @@
         </RelativeLayout>
 
         <ListView
-            android:id="@+id/lv_employ"
+            android:id="@+id/lv_ass_admin"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@null"

@@ -193,5 +193,6 @@ public interface Keys {
      * 单位注册,遮罩点击
      */
     String UNIT_ZHEZHAO = "unit_zhezhao";
-
+    /**转让管理员*/
+    String EMPLOYEELISTBEAN = "EmployeeListBean";
 }

@@ -128,8 +128,17 @@ public class AlterUnitActivity extends BaseActivity {
      */
     private void submitAlter() {
         getText();
-        showDialog = loadProgressDialog.show(mActivity, "正在提交...");
+
+        if (!TextUtils.isEmpty(building)) {
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("请选择建筑")
+                    .setCancelable(false).show();
+            return;
+        }
+
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
+        showDialog = loadProgressDialog.show(mActivity, "正在提交...");
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         params.put("building_name", building);

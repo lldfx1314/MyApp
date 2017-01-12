@@ -11,13 +11,17 @@ import com.anhubo.anhubo.adapter.DeviceListAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.DeleteDeviceBean;
 import com.anhubo.anhubo.bean.DeviceListBean;
+import com.anhubo.anhubo.interfaces.InterClick;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+import com.zhy.http.okhttp.utils.L;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +33,8 @@ import okhttp3.Call;
 /**
  * Created by LUOLI on 2016/10/22.
  */
-public class DeviceList extends BaseActivity implements AdapterView.OnItemClickListener, DeviceListAdapter.InterClick {
+public class DeviceList extends BaseActivity implements AdapterView.OnItemClickListener, InterClick {
+    private static final String TAG = "DeviceList";
     private TextView tvDevice;
     private ListView listview;
     private String businessid;
@@ -82,6 +87,10 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
     protected void onLoadDatas() {
 
         // 先获取网络数据
+        getData();
+    }
+
+    private void getData() {
         showDialog = loadProgressDialog.show(mActivity, "正在加载...");
         String url = Urls.Device_List;
         Map<String, String> params = new HashMap<>();
@@ -93,27 +102,22 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
                 .execute(new MyStringCallback());
     }
 
-    @Override
-    public void onSystemUiVisibilityChange(int visibility) {
-
-    }
-
-
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
             showDialog.dismiss();
+            LogUtils.e(TAG,":getData",e);
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
-                    .setCancelable(false).show();
+                    .setCancelable(true).show();
         }
 
         @Override
         public void onResponse(String response) {
-            // System.out.println("单位列表界面+++===" + response);
             showDialog.dismiss();
-            DeviceListBean listBean = new Gson().fromJson(response, DeviceListBean.class);
+            LogUtils.eNormal(TAG+":getData", response);
+            DeviceListBean listBean = JsonUtil.json2Bean(response, DeviceListBean.class);
             if (listBean != null) {
                 List<DeviceListBean.Data.Devices> devices = listBean.data.devices;
                 if (devices != null && !devices.isEmpty()) {
@@ -160,7 +164,7 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
     public void onBtnClick(View v) {
         // 弹窗提示用户删除设备
         mPosition = (int) v.getTag();
-
+        // 弹窗提示用户是否删除
         dialog(mPosition);
     }
 
@@ -180,11 +184,7 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
                         // 删除设备
                         deleteDevice(position);
                     }
-                }).setNegativeButton("取消", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        }).show();
+                }).setNegativeButton("取消", null).show();
     }
 
     /**
@@ -210,6 +210,7 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
 
         @Override
         public void onError(Call call, Exception e) {
+            LogUtils.e(TAG,":deleteDevice",e);
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -218,7 +219,7 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("删除设备+" + response);
+            LogUtils.eNormal(TAG+":deleteDevice",response);
             DeleteDeviceBean bean = new Gson().fromJson(response, DeleteDeviceBean.class);
 
             if (bean != null) {
@@ -240,6 +241,11 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
 
     @Override
     public void onClick(View v) {
+
+    }
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
 
     }
 }

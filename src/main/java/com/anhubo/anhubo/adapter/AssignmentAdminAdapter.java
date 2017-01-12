@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
@@ -25,20 +26,17 @@ import okhttp3.Call;
 /**
  * Created by LUOLI on 2017/1/11.
  */
-public class EmployeeListAdapter extends BaseAdapter implements View.OnClickListener {
-    private static final String TAG = "EmployeeListAdapter";
+public class AssignmentAdminAdapter extends BaseAdapter implements View.OnClickListener {
+    private static final String TAG = "AssignmentAdminAdapter";
     private Context mContext;
     private ArrayList<EmployeeListBean.Data.User_info> mList;
     private ViewHolder hold;
     private InterClick mCallback;
-    private boolean isAdm;
-    private EmployeeOperate operate;
 
-    public EmployeeListAdapter(Context context, ArrayList<EmployeeListBean.Data.User_info> list, InterClick callback, boolean isAdm) {
+    public AssignmentAdminAdapter(Context context, ArrayList<EmployeeListBean.Data.User_info> list, InterClick callback) {
         this.mContext = context;
         this.mList = list;
         this.mCallback = callback;
-        this.isAdm = isAdm;
     }
 
     @Override
@@ -58,8 +56,6 @@ public class EmployeeListAdapter extends BaseAdapter implements View.OnClickList
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // 对员工的操作记录
-        operate = new EmployeeOperate();
         if (convertView == null) {
             convertView = View.inflate(mContext, R.layout.item_employee, null);
             hold = new ViewHolder(convertView);
@@ -79,25 +75,15 @@ public class EmployeeListAdapter extends BaseAdapter implements View.OnClickList
                 setHeaderIcon(hold.ivIcon, picPath);
             }
             hold.tvName.setText(userInfo.username);
+            // 显示选择小圈
+            hold.ivEmployeeChoose.setVisibility(View.VISIBLE);
+
             // 显示分割线
             hold.viewEmployee.setVisibility(View.VISIBLE);
         }
-        if (userType == 0 && status == 1) {
-            // 不是管理员，并且员工本人
-            hold.btnEmployee.setVisibility(View.VISIBLE);
-            hold.btnEmployee.setText("退出");
-            operate.operate = "quit";
 
-        }
-        // 是管理员，其他成员显示删除按钮
-        if (isAdm) {
-            hold.btnEmployee.setVisibility(View.VISIBLE);
-            hold.btnEmployee.setText("删除");
-            operate.operate = "del";
-        }
         hold.btnEmployee.setOnClickListener(this);
-        operate.position = position;
-        hold.btnEmployee.setTag(operate);
+        hold.btnEmployee.setTag(position);
 
 
 
@@ -122,12 +108,14 @@ public class EmployeeListAdapter extends BaseAdapter implements View.OnClickList
         CircleImageView ivIcon;
         TextView tvName;
         Button btnEmployee;
+        ImageView ivEmployeeChoose;
         View viewEmployee;
 
         public ViewHolder(View view) {
             ivIcon = (CircleImageView) view.findViewById(R.id.iv_employee_icon);
             tvName = (TextView) view.findViewById(R.id.tv_employee_name);
             btnEmployee = (Button) view.findViewById(R.id.btn_employee);
+            ivEmployeeChoose = (ImageView) view.findViewById(R.id.iv_employee_choose);
             viewEmployee = view.findViewById(R.id.view_employee);
         }
     }
