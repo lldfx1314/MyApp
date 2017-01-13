@@ -29,7 +29,7 @@
         <!--删除或者退出按钮-->
         <Button
             android:id="@+id/btn_employee"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
             android:visibility="gone"

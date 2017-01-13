@@ -2,6 +2,7 @@ package com.anhubo.anhubo.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ public class AssignmentAdminAdapter extends BaseAdapter implements View.OnClickL
     private ArrayList<EmployeeListBean.Data.User_info> mList;
     private ViewHolder hold;
     private InterClick mCallback;
+    private int selectedPosition = -1;
 
     public AssignmentAdminAdapter(Context context, ArrayList<EmployeeListBean.Data.User_info> list, InterClick callback) {
         this.mContext = context;
@@ -66,25 +68,36 @@ public class AssignmentAdminAdapter extends BaseAdapter implements View.OnClickL
         EmployeeListBean.Data.User_info userInfo = mList.get(position);
         int status = userInfo.status;
         int userType = userInfo.user_type;
-        LogUtils.eNormal(TAG+":haha",userInfo.username);
+//        LogUtils.eNormal(TAG+":haha",userInfo.username);
         // 显示头像、姓名、分割线
-        if(userType == 0){
+        if (userType == 0) {
             // 把除管理员之外的员工显示在列表上
+            hold.ivIcon.setTag(position);
+            int tag = (int) hold.ivIcon.getTag();
             String picPath = userInfo.pic_path;
             if (!TextUtils.isEmpty(picPath)) {
-                setHeaderIcon(hold.ivIcon, picPath);
+                if (tag == position) {
+                    // 防止图片错位
+                    setHeaderIcon(hold.ivIcon, picPath);
+                }
             }
             hold.tvName.setText(userInfo.username);
             // 显示选择小圈
             hold.ivEmployeeChoose.setVisibility(View.VISIBLE);
 
+
             // 显示分割线
             hold.viewEmployee.setVisibility(View.VISIBLE);
+            // 显示选中条目的效果
+            if (selectedPosition == position) {
+                hold.ivEmployeeChoose.setImageResource(R.drawable.fuxuan_input01);
+            } else {
+                hold.ivEmployeeChoose.setImageResource(R.drawable.fuxuan_input02);
+            }
         }
 
         hold.btnEmployee.setOnClickListener(this);
         hold.btnEmployee.setTag(position);
-
 
 
         return convertView;
@@ -102,6 +115,10 @@ public class AssignmentAdminAdapter extends BaseAdapter implements View.OnClickL
             default:
                 break;
         }
+    }
+
+    public void setSelectedPosition(int position) {
+        selectedPosition = position;
     }
 
     static class ViewHolder {

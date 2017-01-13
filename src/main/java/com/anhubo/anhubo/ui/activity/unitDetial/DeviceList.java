@@ -184,7 +184,12 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
                         // 删除设备
                         deleteDevice(position);
                     }
-                }).setNegativeButton("取消", null).show();
+                }).setNegativeButton("取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        }).show();
     }
 
     /**

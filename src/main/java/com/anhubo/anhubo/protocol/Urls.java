@@ -69,31 +69,8 @@ public interface Urls {
      ********************************************************************************/
     //String UrlBase = "http://anhubo.com/api/";
     String UrlBase = "http://test.anhubo.com/api/";
-    /**
-     * 新增界面
-     */
-    String Url_Add = UrlBase + "Device/add_device_info";
-    /**
-     * 新增设备，检查设备是否已经添加
-     */
-    String Url_Add_Check = UrlBase + "Device/dev_check_name";
-    /**
-     * 扫描界面的接口
-     */
-    String Url_Check = UrlBase + "Device/get_device_detail";
-    /**
-     * 设备名称选择
-     */
-    String Url_GetDevName = UrlBase + "Device/de_list";
-    /**
-     * 完成设备检查
-     */
-    String Url_Check_Complete = UrlBase + "Device/check_device_re";
-    /**
-     * 获取进度条信息
-     */
-    String Url_Get_Num = UrlBase + "Device/get_num";
 
+/***************************登录注册*******************************/
     /**
      * 获取验证的token
      */
@@ -123,14 +100,42 @@ public interface Urls {
      */
     String Url_Login_AlterPwd = UrlBase + "Personal/reget_pa";
     /**
-     * 正常登录绑定微信
-     */
-    String Url_BindWEIXIN = UrlBase + "Personal/bind_third";
-//    单位
-    /**
      * 注册完成，信息填写完整
      */
     String Url_RegCom = UrlBase + "User/businessRegister";
+    /**
+     * 正常登录绑定微信
+     */
+    String Url_BindWEIXIN = UrlBase + "Personal/bind_third";
+
+    /***************************单位*******************************/
+
+
+    /**
+     * 新增界面
+     */
+    String Url_Add = UrlBase + "Device/add_device_info";
+    /**
+     * 新增设备，检查设备是否已经添加
+     */
+    String Url_Add_Check = UrlBase + "Device/dev_check_name";
+    /**
+     * 扫描界面的接口
+     */
+    String Url_Check = UrlBase + "Device/get_device_detail";
+    /**
+     * 设备名称选择
+     */
+    String Url_GetDevName = UrlBase + "Device/de_list";
+    /**
+     * 完成设备检查
+     */
+    String Url_Check_Complete = UrlBase + "Device/check_device_re";
+    /**
+     * 获取进度条信息
+     */
+    String Url_Get_Num = UrlBase + "Device/get_num";
+
     /**
      * 学习、检查记录
      */
@@ -242,9 +247,17 @@ public interface Urls {
      * 单位 员工列表
      */
     String Url_EmployList = UrlBase + "Business/business_users_list";
+    /**
+     * 管理员转让
+     */
+    String Url_Assi_Admin = UrlBase + "Business/change_role";
+    /**
+     * 退出企业
+     */
+    String Url_Quit_Business = UrlBase + "Business/quit_business";
 
 
-//    建筑
+/***************************建筑*******************************/
     /**
      * 建筑下建筑安全指数，三色环比
      */
@@ -257,7 +270,7 @@ public interface Urls {
      * 建筑,互助计划
      */
     String Url_Build_Help_Plan = UrlBase + "Plan/plan_list";
-//    我的
+/***************************我的*******************************/
     /**
      * 我的，上传头像
      */
@@ -308,6 +321,5 @@ public interface Urls {
      * 检查更新
      */
     String Url_Check_Update = UrlBase + "Index/version_change";
-
 
 }

@@ -70,14 +70,24 @@ public class EmployeeListAdapter extends BaseAdapter implements View.OnClickList
         EmployeeListBean.Data.User_info userInfo = mList.get(position);
         int status = userInfo.status;
         int userType = userInfo.user_type;
-        LogUtils.eNormal(TAG+":haha",userInfo.username);
+//        LogUtils.eNormal(TAG+":haha",userInfo.username);
         // 显示头像、姓名、分割线
-        if(userType == 0){
+        if (userType == 0) {
             // 把除管理员之外的员工显示在列表上
             String picPath = userInfo.pic_path;
+            hold.ivIcon.setTag(position);
+            int tag = (int) hold.ivIcon.getTag();
+
             if (!TextUtils.isEmpty(picPath)) {
-                setHeaderIcon(hold.ivIcon, picPath);
+                if (tag == position) {
+
+                    setHeaderIcon(hold.ivIcon, picPath);
+                }
+            } else {
+                hold.ivIcon.setImageResource(R.drawable.newicon);
             }
+
+
             hold.tvName.setText(userInfo.username);
             // 显示分割线
             hold.viewEmployee.setVisibility(View.VISIBLE);
@@ -91,14 +101,14 @@ public class EmployeeListAdapter extends BaseAdapter implements View.OnClickList
         }
         // 是管理员，其他成员显示删除按钮
         if (isAdm) {
-            hold.btnEmployee.setVisibility(View.VISIBLE);
+            // 删除暂缓
+//            hold.btnEmployee.setVisibility(View.VISIBLE);
             hold.btnEmployee.setText("删除");
             operate.operate = "del";
         }
         hold.btnEmployee.setOnClickListener(this);
         operate.position = position;
         hold.btnEmployee.setTag(operate);
-
 
 
         return convertView;

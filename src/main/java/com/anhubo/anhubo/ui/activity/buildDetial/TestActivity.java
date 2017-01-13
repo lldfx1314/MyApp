@@ -290,7 +290,7 @@ public class TestActivity extends BaseActivity {
      * 获取测试项
      */
     private void getData() {
-        showDialog = loadProgressDialog.show(mActivity, "长在获取...");
+        showDialog = loadProgressDialog.show(mActivity, "正在获取...");
         Map<String, String> params = new HashMap<>();
         if (!TextUtils.isEmpty(cardnumber)) {
             params.put("device_id", cardnumber);

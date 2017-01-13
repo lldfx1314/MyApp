@@ -2,22 +2,22 @@ package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.EmployeeListAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
+import com.anhubo.anhubo.bean.AssignmentAdminBean;
 import com.anhubo.anhubo.bean.EmployeeListBean;
 import com.anhubo.anhubo.bean.EmployeeOperate;
 import com.anhubo.anhubo.bean.Unit_Invate_WorkMateBean;
 import com.anhubo.anhubo.interfaces.InterClick;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.ui.activity.HomeActivity;
 import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
@@ -25,8 +25,9 @@ import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
+import com.anhubo.anhubo.view.FooterListview;
+import com.bumptech.glide.Glide;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
@@ -46,9 +47,13 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
     @InjectView(R.id.rl_employee_adm)
     RelativeLayout rlEmployeeAdm;
     @InjectView(R.id.lv_employ)
-    ListView lvEmploy;
+    FooterListview lvEmploy;
+    @InjectView(R.id.tv_employee)
+    TextView tvEmployee;
     @InjectView(R.id.employee_num)
     TextView employeeNum;
+    @InjectView(R.id.btn_employee_invate)
+    Button btnEmployeeInvate;
     private String versionName;
     private Dialog showDialog;
     private String businessId;
@@ -72,8 +77,8 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
     protected void initTitleBar() {
         super.initTitleBar();
         setTopBarDesc("员工列表");
-        ivTopBarRight.setVisibility(View.VISIBLE);
-        ivTopBarRight.setOnClickListener(this);
+//        ivTopBarRight.setVisibility(View.VISIBLE);
+//        ivTopBarRight.setOnClickListener(this);
     }
 
     @Override
@@ -93,8 +98,18 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
     }
 
     @Override
+    protected void onLoadDatas() {
+        btnEmployee.setOnClickListener(this);
+        btnEmployeeInvate.setOnClickListener(this);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+        // 界面重新可见时让管理员布局隐藏
+        rlEmployeeAdm.setVisibility(View.GONE);
+        tvEmployee.setVisibility(View.GONE);
+        list.clear();
         // 请求数据
         getData();
     }
@@ -146,62 +161,77 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
                 int status = info.status;
                 String picPath = info.pic_path;
                 String username = info.username;
-                if(userType == 1){
+                if (userType == 1) {
                     // 有管理员,显示管理员信息
                     isHaveAdm = true;
+                    tvEmployee.setVisibility(View.VISIBLE);
                     rlEmployeeAdm.setVisibility(View.VISIBLE);
-                    setHeaderIcon(ivIcon,picPath);
+                    if (!TextUtils.isEmpty(picPath)) {
+
+                        setHeaderIcon(ivIcon, picPath);
+                    } else {
+                        ivIcon.setImageResource(R.drawable.newicon);
+                    }
                     tvName.setText(username);
                     // 显示的员工人数-1
                     if (!TextUtils.isEmpty(userNum)) {
                         int m = Integer.parseInt(userNum) - 1;
                         employeeNum.setText(m + "人");
                     }
-                    if(status == 1){
-                        // 是管理员本人，显示转让按钮
-                        isAdm = true;
-                        btnEmployee.setVisibility(View.VISIBLE);
-                        btnEmployee.setText("转让");
+
+                    if (status == 1) {
+                        if (Integer.parseInt(userNum) > 1) {
+                        // 是管理员本人，并且人数大于1，显示转让按钮
+                            isAdm = true;
+                            btnEmployee.setVisibility(View.VISIBLE);
+                            btnEmployee.setText("转让");
+                        }else{
+                            isAdm = false;
+                            btnEmployee.setVisibility(View.GONE);
+                        }
+                    } else {
+                        isAdm = false;
+                        btnEmployee.setVisibility(View.GONE);
                     }
                     // 把管理员从列表里面删除
                     userInfo.remove(i);
                 }
 
             }
-            if(!isHaveAdm){
+            if (!isHaveAdm) {
                 // 没有管理员，显示员工人数
                 if (!TextUtils.isEmpty(userNum)) {
                     employeeNum.setText(userNum + "人");
                 }
             }
-            list.clear();
             list.addAll(userInfo);
-            adapter = new EmployeeListAdapter(mActivity, list,EmployeeListActivity.this, isAdm);
+            adapter = new EmployeeListAdapter(mActivity, list, EmployeeListActivity.this, isAdm);
             lvEmploy.setAdapter(adapter);
         }
     }
 
-    @Override
-    protected void onLoadDatas() {
-        btnEmployee.setOnClickListener(this);
-    }
 
-    /**转让管理员*/
+    /**
+     * 转让管理员
+     */
     private void assignmentAdministrator() {
         Intent intent = new Intent(mActivity, AssignmentAdminActivity.class);
         intent.putExtra(Keys.EMPLOYEELISTBEAN, bean);
         startActivity(intent);
     }
-    /**listView条目的点击事件*/
+
+    /**
+     * listView条目的点击事件
+     */
     @Override
     public void onBtnClick(View v) {
-        EmployeeOperate operateg = (EmployeeOperate)v.getTag();
+        EmployeeOperate operateg = (EmployeeOperate) v.getTag();
         int mPosition = operateg.position;
         String mOperate = operateg.operate;
-        if(TextUtils.equals(mOperate,"del")){
+        if (TextUtils.equals(mOperate, "del")) {
             // 弹窗提示用户是否删除用户
             dialogDel(mPosition);
-        }else if(TextUtils.equals(mOperate,"quit")){
+        } else if (TextUtils.equals(mOperate, "quit")) {
             // 弹窗提示用户是否退出按钮
             dialogQuit(mPosition);
         }
@@ -209,43 +239,110 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
     }
 
     private void dialogDel(int mPosition) {
-        ToastUtils.showToast(mActivity,"删除+"+mPosition);
+        ToastUtils.showToast(mActivity, "删除+" + mPosition);
     }
 
     private void dialogQuit(int mPosition) {
-        ToastUtils.showToast(mActivity,"退出+"+mPosition);
+        // 退出企业
+        new AlertDialog(mActivity).builder()
+                .setTitle("提示")
+                .setMsg("确认退出当前企业 ")
+                .setPositiveButton("确认", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        quitBusiness();
+                    }
+                })
+                .setNegativeButton("取消", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                })
+                .setCancelable(false).show();
+
+    }
+
+    /**
+     * 退出企业
+     */
+    private void quitBusiness() {
+        final Dialog showDialog = loadProgressDialog.show(mActivity, "正在退出...");
+        Map<String, String> params = new HashMap<>();
+        params.put("uid", uid);
+        params.put("business_id", businessId);
+        OkHttpUtils.post()
+                .url(Urls.Url_Quit_Business)
+                .params(params)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e) {
+                        showDialog.dismiss();
+                        LogUtils.e(TAG, ":quitBusiness", e);
+                        new AlertDialog(mActivity).builder()
+                                .setTitle("提示")
+                                .setMsg("网络有问题，请检查")
+                                .setCancelable(true).show();
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        showDialog.dismiss();
+                        LogUtils.eNormal(TAG + ":quitBusiness", response);
+                        AssignmentAdminBean bean = JsonUtil.json2Bean(response, AssignmentAdminBean.class);
+                        if (bean != null) {
+                            int code = bean.code;
+                            if (code == 0) {
+                                SpUtils.putParam(mActivity, Keys.BUSINESSID, null);
+                                SpUtils.putParam(mActivity, Keys.BUSINESSNAME, null);
+                                // 跳转到HomeActivity里面
+                                startActivity(new Intent(mActivity, HomeActivity.class));
+                                // 发送一条广播,关掉之前所有界面
+                                mActivity.sendBroadcast(new Intent(INTENT_FINISH));
+                            } else {
+                                ToastUtils.showToast(mActivity, "退出失败");
+                            }
+                        }
+                    }
+                });
     }
 
     /**
      * 设置头像的方法
      */
     private void setHeaderIcon(final CircleImageView ivIcon, String imgurl) {
-        OkHttpUtils
-                .get()//
-                .url(imgurl)//
-                .tag(this)//
-                .build()//
-                .connTimeOut(15000)
-                .readTimeOut(15000)
-                .writeTimeOut(15000)
-                .execute(new BitmapCallback() {
-                    @Override
-                    public void onError(Call call, Exception e) {
-                        LogUtils.e(TAG, ":setHeaderIcon:", e);
-                    }
-
-                    @Override
-                    public void onResponse(Bitmap bitmap) {
-                        ivIcon.setImageBitmap(bitmap);
-                    }
-                });
+        Glide
+                .with(mActivity)
+                .load(imgurl)
+                .centerCrop().crossFade().into(ivIcon);
+//        OkHttpUtils
+//                .get()//
+//                .url(imgurl)//
+//                .tag(this)//
+//                .build()//
+//                .connTimeOut(15000)
+//                .readTimeOut(15000)
+//                .writeTimeOut(15000)
+//                .execute(new BitmapCallback() {
+//                    @Override
+//                    public void onError(Call call, Exception e) {
+//                        LogUtils.e(TAG, ":setHeaderIcon:", e);
+//                    }
+//
+//                    @Override
+//                    public void onResponse(Bitmap bitmap) {
+//                        ivIcon.setImageBitmap(bitmap);
+//                    }
+//                });
     }
 
     @Override
     public void onClick(View v) {
-        uid =  SpUtils.getStringParam(mActivity, Keys.UID);
+        uid = SpUtils.getStringParam(mActivity, Keys.UID);
         switch (v.getId()) {
-            case R.id.ivTopBarRight_add:
+            case R.id.btn_employee_invate:
+                // 邀请同事
                 dialog();
                 break;
             case R.id.btn_employee:
@@ -255,7 +352,9 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
         }
     }
 
-
+    /**
+     * 邀请同事
+     */
     private void dialog() {
         final AlertDialog alertDialog = new AlertDialog(mActivity);
         alertDialog
@@ -308,7 +407,6 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
                 .build()//
                 .execute(new MyStringCallback2());
     }
-
 
     class MyStringCallback2 extends StringCallback {
 

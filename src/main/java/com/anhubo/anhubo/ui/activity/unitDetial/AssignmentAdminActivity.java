@@ -1,29 +1,40 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
+import android.app.Dialog;
 import android.content.Intent;
-import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.AssignmentAdminAdapter;
+import com.anhubo.anhubo.bean.AssignmentAdminBean;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.EmployeeListBean;
 import com.anhubo.anhubo.interfaces.InterClick;
+import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
+import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.view.AlertDialog;
+import com.anhubo.anhubo.view.FooterListview;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
+import okhttp3.Call;
 
 /**
  * Created by LUOLI on 2017/1/12.
@@ -35,17 +46,15 @@ public class AssignmentAdminActivity extends BaseActivity implements InterClick 
     @InjectView(R.id.tv_ass_admin_num)
     TextView tvAssAdminNum;
     @InjectView(R.id.lv_ass_admin)
-    ListView lvAssAdmin;
+    FooterListview lvAssAdmin;
+    @InjectView(R.id.btn_ass_admin_ok)
+    Button btnAssAdminOk;
     private String uid;
     private String businessId;
     private ArrayList<EmployeeListBean.Data.User_info> list;
     private AssignmentAdminAdapter adapter;
-    private Map<Integer, Boolean> booleanMap;
-    /* 用来记录存在问题的选项，0表示没问题，1表示有问题*/
-    private int isProblem = 0;
-    // 选择完成后的有问题的集合
-    private ArrayList<Integer> completeList;
-    private Boolean isClick = false;
+    private String newUid;
+    private String username;
 
     @Override
     protected void initConfig() {
@@ -69,21 +78,14 @@ public class AssignmentAdminActivity extends BaseActivity implements InterClick 
     protected void initEvents() {
         super.initEvents();
         list = new ArrayList<>();
-//        completeList = new ArrayList<>();
         adapter = new AssignmentAdminAdapter(mActivity, list, AssignmentAdminActivity.this);
         lvAssAdmin.setAdapter(adapter);
         Intent intent = getIntent();
         EmployeeListBean bean = (EmployeeListBean) intent.getSerializableExtra(Keys.EMPLOYEELISTBEAN);
         // 处理bean对象
         int count = dealBean(bean);
-        // 创建一个数组
-        int[] arr = new int[count];
-//        for (int i = 0; i < arr.length; i++) {
-//            completeList.add(arr[i]);
-//            LogUtils.eNormal(TAG + ":", arr[i]);
-//        }
         // 创建map
-        booleanMap = creatMap(count);
+        creatMap(count);
         //监听条目的点击事件
         lvAssAdmin.setOnItemClickListener(onItemClickListener);
     }
@@ -92,13 +94,14 @@ public class AssignmentAdminActivity extends BaseActivity implements InterClick 
     private AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            ImageView imageView = (ImageView) view.findViewById(R.id.iv_employee_choose);
-            // 获取当前position对应位置的点击记录
-            if (!isClick) {
-//                imageView.setImageResource(R.drawable.fuxuan_input01);
+            EmployeeListBean.Data.User_info info = list.get(position);
+            username = info.username;
+            // 获取新的uid
+            newUid = info.uid;
 
-            }
-            isClick = !isClick;
+            LogUtils.eNormal(TAG + ":新的uid", newUid);
+            adapter.setSelectedPosition(position);
+            adapter.notifyDataSetInvalidated();
         }
     };
 
@@ -144,12 +147,93 @@ public class AssignmentAdminActivity extends BaseActivity implements InterClick 
 
     @Override
     protected void onLoadDatas() {
+//        btnAssAdminOk.setOnClickListener(this);
+    }
+
+    @OnClick(R.id.btn_ass_admin_ok)
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_ass_admin_ok:
+                // 确认提交按钮
+                confirm();
+//                ToastUtils.showToast(mActivity, "uid+" + uid + "+newUId+" + newUid + "+bu+" + businessId);
+                break;
+        }
+    }
+
+    Handler handler = new Handler();
+
+    /**
+     * 确认提交按钮
+     */
+    private void confirm() {
+        if (TextUtils.isEmpty(newUid)) {
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("请先选择员工")
+                    .setCancelable(true).show();
+            return;
+        }
+        new AlertDialog(mActivity).builder()
+                .setTitle("提示")
+                .setMsg("确认将 " + username + " 设置为管理员吗？")
+                .setPositiveButton("确认", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        submit();
+                    }
+                })
+                .setNegativeButton("取消", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                })
+                .setCancelable(false).show();
 
     }
 
-    @Override
-    public void onClick(View v) {
+    private void submit() {
+        final Dialog showDialog = loadProgressDialog.show(mActivity, "正在提交...");
+        Map<String, String> params = new HashMap<>();
+        params.put("uid", uid);
+        params.put("business_id", businessId);
+        params.put("new_uid", newUid);
+        OkHttpUtils.post().url(Urls.Url_Assi_Admin)
+                .params(params)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e) {
+                        showDialog.dismiss();
+                        LogUtils.e(TAG, ":confirm", e);
+                        new AlertDialog(mActivity).builder()
+                                .setTitle("提示")
+                                .setMsg("网络有问题，请检查")
+                                .setCancelable(true).show();
+                    }
 
+                    @Override
+                    public void onResponse(String response) {
+                        showDialog.dismiss();
+                        LogUtils.eNormal(TAG + ":confirm", response);
+                        AssignmentAdminBean bean = JsonUtil.json2Bean(response, AssignmentAdminBean.class);
+                        if (bean != null) {
+                            int code = bean.code;
+                            if (code == 0) {
+                                ToastUtils.showToast(mActivity, "转让成功");
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        finish();
+                                    }
+                                }, 500);
+                            } else {
+                                ToastUtils.showToast(mActivity, "转让失败");
+                            }
+                        }
+                    }
+                });
     }
 
     @Override
@@ -162,4 +246,6 @@ public class AssignmentAdminActivity extends BaseActivity implements InterClick 
     public void onBtnClick(View v) {
 
     }
+
+
 }

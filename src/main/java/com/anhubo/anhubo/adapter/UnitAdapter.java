@@ -92,7 +92,15 @@ public class UnitAdapter extends BaseAdapter {
 
         // 上旬三色评分
         if (!TextUtils.isEmpty(score)) {
-            hold.threeScore.setText(score);
+            if (score.contains(".")) {
+                //　包含小数点,计算出小数点的索引
+                int i = score.indexOf(".", 0);
+                //截取
+                String s = score.substring(0,i);
+                hold.threeScore.setText(s);
+            } else {
+                hold.threeScore.setText(score);
+            }
         }
         // 最高互助额
         if (!TextUtils.isEmpty(planEnsureProportion)) {
