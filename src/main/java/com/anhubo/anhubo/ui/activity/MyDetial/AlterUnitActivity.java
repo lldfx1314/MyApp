@@ -14,6 +14,7 @@ import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.unitDetial.BuildingActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.BusinessActivity;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
@@ -33,6 +34,7 @@ import okhttp3.Call;
 public class AlterUnitActivity extends BaseActivity {
     private static final int REQUESTCODE1 = 1;
     private static final int REQUESTCODE2 = 2;
+    private static final String TAB = "AlterUnitActivity";
     @InjectView(R.id.tv_alter_unit)
     TextView tvMyUnit;
     @InjectView(R.id.ll_alter_unit)
@@ -48,6 +50,8 @@ public class AlterUnitActivity extends BaseActivity {
     private String building;
     private String unit;
     private Dialog showDialog;
+    private String buildPoi;
+    private String businessPoi;
 
     @Override
     protected int getContentViewId() {
@@ -86,7 +90,10 @@ public class AlterUnitActivity extends BaseActivity {
             switch (requestCode) {
                 case REQUESTCODE1:
                     if (resultCode == 1) {
+                        // 建筑
                         String stringExtra = data.getStringExtra(Keys.STR);
+                        buildPoi = data.getStringExtra(Keys.BUILD_POI);
+
                         if (!TextUtils.isEmpty(stringExtra)) {
                             tvMyBuilding.setText(stringExtra);
                         }
@@ -94,7 +101,9 @@ public class AlterUnitActivity extends BaseActivity {
                     break;
                 case REQUESTCODE2:
                     if (resultCode == 2) {
+                        // 单位
                         String stringExtra = data.getStringExtra(Keys.STR);
+                        businessPoi = data.getStringExtra(Keys.BUSINESS_POI);
                         if (!TextUtils.isEmpty(stringExtra)) {
                             tvMyUnit.setText(stringExtra);
                         }
@@ -129,7 +138,7 @@ public class AlterUnitActivity extends BaseActivity {
     private void submitAlter() {
         getText();
 
-        if (!TextUtils.isEmpty(building)) {
+        if (TextUtils.isEmpty(building)) {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("请选择建筑")
@@ -142,7 +151,20 @@ public class AlterUnitActivity extends BaseActivity {
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         params.put("building_name", building);
+        LogUtils.eNormal(TAB+":building",building);
         params.put("business_name", unit);
+        LogUtils.eNormal(TAB+":unit",unit);
+        if (TextUtils.isEmpty(buildPoi)) {
+            params.put("building_poi_id", "");
+        }else{
+            params.put("building_poi_id", buildPoi);
+        }
+        if (TextUtils.isEmpty(businessPoi)) {
+            params.put("business_poi_id", "");
+        }else{
+            params.put("business_poi_id", businessPoi);
+        }
+
         String url = Urls.Url_AlterUnit;
 
         OkHttpUtils.post()//

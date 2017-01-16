@@ -4,11 +4,11 @@
     android:layout_height="wrap_content">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp">
+        android:layout_height="65dp">
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_employee_icon"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:layout_centerVertical="true"
         android:src="@drawable/newicon" />
     <RelativeLayout
@@ -30,7 +30,7 @@
         <Button
             android:id="@+id/btn_employee"
             android:layout_width="60dp"
-            android:layout_height="30dp"
+            android:layout_height="20dp"
             android:layout_alignParentRight="true"
             android:visibility="gone"
             android:text=""
@@ -57,6 +57,6 @@
         android:layout_width="match_parent"
         android:visibility="gone"
         android:layout_height="0.5dp"
-        android:background="@color/actionsheet_gray"/>
+        android:background="@color/gray_line"/>
     </RelativeLayout>
 </RelativeLayout>

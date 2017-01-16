@@ -92,13 +92,17 @@ public class EmployeeListAdapter extends BaseAdapter implements View.OnClickList
             // 显示分割线
             hold.viewEmployee.setVisibility(View.VISIBLE);
         }
-        if (userType == 0 && status == 1) {
-            // 不是管理员，并且员工本人
-            hold.btnEmployee.setVisibility(View.VISIBLE);
-            hold.btnEmployee.setText("退出");
-            operate.operate = "quit";
+            if (userType == 0 && status == 1) {
+//                LogUtils.eNormal(TAG,"哈哈 退出");
+                // 是员工，并且是员工本人
+                hold.btnEmployee.setVisibility(View.VISIBLE);
+                hold.btnEmployee.setText("退出");
+                operate.operate = "quit";
+            }else{
+//                LogUtils.eNormal(TAG,"哈哈 不要啊");
+                hold.btnEmployee.setVisibility(View.GONE);
+            }
 
-        }
         // 是管理员，其他成员显示删除按钮
         if (isAdm) {
             // 删除暂缓

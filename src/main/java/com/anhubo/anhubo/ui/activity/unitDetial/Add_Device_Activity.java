@@ -28,7 +28,6 @@ import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
-import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -75,6 +74,8 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     private File newFile;
     private TextView tvAddDevice;
     private Dialog showDialog;
+    private String buildPoi;
+    private String businessPoi;
 
     @Override
     protected void initConfig() {
@@ -158,7 +159,7 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
 
         @Override
         public void onError(Call call, Exception e) {
-            LogUtils.e(TAG , ":getData_Device", e);
+            LogUtils.e(TAG, ":getData_Device", e);
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -175,9 +176,9 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
                 String typeName = bean.data.device_dev_type_name;
                 if (code == 0) {
                     if (!TextUtils.isEmpty(typeName)) {
-                        tvAddDevice.setText("您扫描的二维码绑定的设备是:"+"\n"+typeName);
+                        tvAddDevice.setText("您扫描的二维码绑定的设备是:" + "\n" + typeName);
 
-                    }else {
+                    } else {
                         tvAddDevice.setText("您扫描的二维码尚未添加到设备库");
                     }
                 }
@@ -212,6 +213,7 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
                 case REQUESTCODE1:
                     if (resultCode == 1) {
                         String stringExtra = intent.getStringExtra(Keys.STR);
+                        buildPoi = intent.getStringExtra(Keys.BUILD_POI);
                         if (!TextUtils.isEmpty(stringExtra)) {
                             device_Build.setText(stringExtra);
                         }
@@ -220,6 +222,7 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
                 case REQUESTCODE2:
                     if (resultCode == 2) {
                         String stringExtra = intent.getStringExtra(Keys.STR);
+                        businessPoi = intent.getStringExtra(Keys.BUSINESS_POI);
                         if (!TextUtils.isEmpty(stringExtra)) {
                             device_Unit.setText(stringExtra);
                         }
@@ -374,6 +377,17 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         String url = Urls.Url_Add;
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
+        if (TextUtils.isEmpty(buildPoi)) {
+            params.put("building_poi_id", "");
+        }else{
+            params.put("building_poi_id", buildPoi);
+        }
+        if (TextUtils.isEmpty(businessPoi)) {
+            params.put("business_poi_id", "");
+        }else{
+            params.put("business_poi_id", businessPoi);
+        }
+
         params.put("qrcode", cardnumber);
         params.put("building_name", build);// 所属建筑
         params.put("business_name", unit);//所属单位
@@ -392,10 +406,11 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     }
 
     private Handler handler = new Handler();
+
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            LogUtils.e(TAG , ":addComplete", e);
+            LogUtils.e(TAG, ":addComplete", e);
             showDialog.dismiss();
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
@@ -411,7 +426,7 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
                 Add_Device_Bean addDeviceBean = JsonUtil.json2Bean(response, Add_Device_Bean.class);
                 if (addDeviceBean != null) {
                     deviceId = addDeviceBean.data.device_id;
-                    if(!TextUtils.isEmpty(deviceId)){
+                    if (!TextUtils.isEmpty(deviceId)) {
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {

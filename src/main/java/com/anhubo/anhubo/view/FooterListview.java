@@ -37,6 +37,30 @@ public class FooterListview extends ListView {
         footer.setPadding(0, -footerMeasuredHeight, 0, 0);
         this.addFooterView(footer, null, true);
         this.setFooterDividersEnabled(false);
+        // 监听条目滑动事件
+        setOnScrollListener(new MyOnScrollListener());
+    }
+
+    class MyOnScrollListener implements OnScrollListener {
+
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
+            //　当状态变化停止或惯性停止时
+            if (scrollState == OnScrollListener.SCROLL_STATE_FLING || scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
+                // 判断当前展示的最后一个条目是否是Adapter中的最后一条
+                if(getCount()-1 == getLastVisiblePosition()){
+                    footer.setPadding(0, 0, 0, 0);
+
+                    // 让脚布局自动显示出来
+                    setSelection(getCount());
+                }
+            }
+        }
+
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+        }
     }
 
 }

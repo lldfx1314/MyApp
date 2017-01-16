@@ -34,6 +34,8 @@ import com.anhubo.anhubo.bean.MyAlterNameBean;
 import com.anhubo.anhubo.bean.MyFragmentBean;
 import com.anhubo.anhubo.bean.My_HeaderIconBean;
 import com.anhubo.anhubo.bean.PersonMsgBindBean;
+import com.anhubo.anhubo.entity.RxBus;
+import com.anhubo.anhubo.entity.event.Exbus_AlterName;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.impl.MyFragment;
 import com.anhubo.anhubo.utils.DatePackerUtil;
@@ -738,6 +740,8 @@ public class PersonMsgActivity extends BaseActivity {
                 if (code != 0) {
                     ToastUtils.showToast(mActivity, msg);
                 } else {
+                    // 通知我的界面请求数据更新界面
+                    RxBus.getDefault().post(new Exbus_AlterName());
                     LogUtils.eNormal(TAG+":uploadName:","姓名修改成功");
                 }
             }

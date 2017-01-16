@@ -110,17 +110,19 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
         lvBuilding.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String poi = listBuildingPoi.get(position);
                 TextView tv = (TextView) view.findViewById(R.id.tv_location);
                 String str = tv.getText().toString().trim();
                 // 返回增加界面
-                returnAddActivity(str);
+                returnAddActivity(str,poi);
             }
         });
     }
 
-    private void returnAddActivity(String str) {
+    private void returnAddActivity(String str,String poi) {
         Intent intent = new Intent();
         intent.putExtra(Keys.STR, str);
+        intent.putExtra(Keys.BUILD_POI, poi);
         setResult(1, intent);
         finish();
     }
@@ -166,9 +168,14 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
                     public void onClick(View v) {
                         String string = alertDialog.et_msg.getText().toString().trim();
                         if (!TextUtils.isEmpty(string)) {
+
                             // 返回增加界面
-                            returnAddActivity(string);
+                            returnAddActivity(string,"");
                         }
+
+
+
+
                     }
                 }).setNegativeButton("取消", new View.OnClickListener() {
             @Override

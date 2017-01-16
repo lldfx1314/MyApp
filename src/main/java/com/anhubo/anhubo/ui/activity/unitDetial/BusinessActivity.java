@@ -124,7 +124,7 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                     unitRegister(str, poi);
                 } else {
                     // 返回修改界面
-                    returnAddActivity(str);
+                    returnAddActivity(str,poi);
                 }
 
             }
@@ -160,13 +160,13 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                                 .setTitle("提示")
                                 .setMsg("网络有问题，请检查")
                                 .setCancelable(true).show();
-                        LogUtils.e(TAG + "+unitRegister", "单位注册", e);
+                        LogUtils.e(TAG , "单位注册", e);
                     }
 
                     @Override
                     public void onResponse(String response) {
                         showDialog1.dismiss();
-                        LogUtils.eNormal(TAG + "+unitRegister", "单位注册: " + response);
+                        LogUtils.eNormal(TAG + "+unitRegister", response);
                         Unit_RegisterBean bean = JsonUtil.json2Bean(response, Unit_RegisterBean.class);
                         if (bean != null) {
                             int code = bean.code;
@@ -186,9 +186,10 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                 });
     }
 
-    private void returnAddActivity(String str) {
+    private void returnAddActivity(String str,String poi) {
         Intent intent = new Intent();
         intent.putExtra(Keys.STR, str);
+        intent.putExtra(Keys.BUSINESS_POI, poi);
         setResult(2, intent);
         finish();
     }
@@ -242,7 +243,7 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                                 unitRegister(string, "");
                             } else {
                                 // 返回修改界面
-                                returnAddActivity(string);
+                                returnAddActivity(string,"");
                             }
                         }
                     }

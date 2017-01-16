@@ -80,6 +80,8 @@ public class AssignmentAdminAdapter extends BaseAdapter implements View.OnClickL
                     // 防止图片错位
                     setHeaderIcon(hold.ivIcon, picPath);
                 }
+            } else {
+                hold.ivIcon.setImageResource(R.drawable.newicon);
             }
             hold.tvName.setText(userInfo.username);
             // 显示选择小圈

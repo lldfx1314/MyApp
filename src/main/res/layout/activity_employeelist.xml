@@ -39,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_below="@+id/employee_adm"
-                android:background="@color/actionsheet_gray" />
+                android:background="@color/gray_line" />
         </RelativeLayout>
 
 

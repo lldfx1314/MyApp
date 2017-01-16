@@ -195,4 +195,8 @@ public interface Keys {
     String UNIT_ZHEZHAO = "unit_zhezhao";
     /**转让管理员*/
     String EMPLOYEELISTBEAN = "EmployeeListBean";
+    /**建筑界面传递信息*/
+    String BUILD_POI = "build_poi";
+    /**单位界面传递信息*/
+    String BUSINESS_POI = "business_poi";
 }

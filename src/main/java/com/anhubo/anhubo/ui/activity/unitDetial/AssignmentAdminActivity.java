@@ -2,8 +2,12 @@ package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Handler;
+import android.text.SpannableString;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -55,6 +59,7 @@ public class AssignmentAdminActivity extends BaseActivity implements InterClick 
     private AssignmentAdminAdapter adapter;
     private String newUid;
     private String username;
+    private SpannableString ss;
 
     @Override
     protected void initConfig() {
@@ -132,12 +137,38 @@ public class AssignmentAdminActivity extends BaseActivity implements InterClick 
 
             }
             // 没有管理员，显示员工人数
-            tvAssAdminNum.setText(userInfo.size() + "人");
+//            tvAssAdminNum.setText(userInfo.size() + "人");
+            setHanZiColor(userInfo.size() + "人");
+            tvAssAdminNum.setHorizontallyScrolling(true);
+            tvAssAdminNum.setText(ss);
             list.clear();
             list.addAll(userInfo);
             adapter.notifyDataSetChanged();
         }
         return list.size();
+    }
+
+    /**
+     * 设置人字颜色
+     */
+    private void setHanZiColor(String string) {
+
+        ss = new SpannableString(string);
+        MyURLSpan myURLSpan = new MyURLSpan(string);
+        ss.setSpan(myURLSpan, 0, string.length()-1, SpannableString.SPAN_EXCLUSIVE_INCLUSIVE);
+    }
+
+    class MyURLSpan extends URLSpan {
+
+        public MyURLSpan(String url) {
+            super(url);
+        }
+
+        @Override
+        public void updateDrawState(TextPaint ds) {
+            ds.setColor(Color.parseColor("#7393f4"));
+//            ds.setTextSize(DisplayUtil.sp2px(mActivity, 8));
+        }
     }
 
     @Override

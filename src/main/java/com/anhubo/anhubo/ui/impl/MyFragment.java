@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseFragment;
 import com.anhubo.anhubo.bean.MyFragmentBean;
+import com.anhubo.anhubo.entity.RxBus;
+import com.anhubo.anhubo.entity.event.Exbus_AlterName;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.Login_Register.Login_Message;
 import com.anhubo.anhubo.ui.activity.MyDetial.InvateActivity;
@@ -31,6 +33,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
+import rx.functions.Action1;
 
 /**
  * Created by Administrator on 2016/10/8.
@@ -93,31 +96,60 @@ public class MyFragment extends BaseFragment {
         llOrderManager.setOnClickListener(this);
         llSetting.setOnClickListener(this);
         tvLogOut.setOnClickListener(this);
+        // RxBus
+        rxBusOnClickListener();
+    }
+
+    private void rxBusOnClickListener() {
+        // rxSubscription是一个Subscription的全局变量，这段代码可以在onCreate/onStart等生命周期内
+        RxBus rxSubscription = RxBus.getDefault().toObserverable(Exbus_AlterName.class)
+                .subscribe(new Action1<Exbus_AlterName>() {
+                               @Override
+                               public void call(Exbus_AlterName alterName) {
+                                   getData();
+                               }
+                           },
+                        new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                // TODO: 处理异常
+                            }
+                        });
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        // 每次界面可见的时候请求网络获取数据
-        getDataInternet(isVisibleToUser);
-    }
-
-    private void getDataInternet(boolean isVisibleToUser) {
-        if (isVisibleToUser) {
-            /**我的界面第一次请求网络*/
-            getData();
+    public void onDestroy() {
+        super.onDestroy();
+        if(!rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        // 界面重新可见时加载数据
-        getData();
-    }
+    //    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        // 每次界面可见的时候请求网络获取数据
+//        getDataInternet(isVisibleToUser);
+//    }
+//
+//    private void getDataInternet(boolean isVisibleToUser) {
+//        if (isVisibleToUser) {
+//            /**我的界面第一次请求网络*/
+//            getData();
+//        }
+//    }
+//
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        // 界面重新可见时加载数据
+//        getData();
+//    }
 
     @Override
     public void initData() {
+        /**我的界面第一次请求网络*/
+        getData();
     }
 
     /**

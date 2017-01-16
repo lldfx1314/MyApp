@@ -2,7 +2,11 @@ package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.text.SpannableString;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -18,6 +22,7 @@ import com.anhubo.anhubo.bean.Unit_Invate_WorkMateBean;
 import com.anhubo.anhubo.interfaces.InterClick;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.HomeActivity;
+import com.anhubo.anhubo.utils.DisplayUtil;
 import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
@@ -29,6 +34,8 @@ import com.anhubo.anhubo.view.FooterListview;
 import com.bumptech.glide.Glide;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,6 +74,7 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
     private boolean isAdm;
     private boolean isHaveAdm;
     private EmployeeListBean bean;
+    private SpannableString ss;
 
     @Override
     protected int getContentViewId() {
@@ -167,7 +175,6 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
                     tvEmployee.setVisibility(View.VISIBLE);
                     rlEmployeeAdm.setVisibility(View.VISIBLE);
                     if (!TextUtils.isEmpty(picPath)) {
-
                         setHeaderIcon(ivIcon, picPath);
                     } else {
                         ivIcon.setImageResource(R.drawable.newicon);
@@ -176,16 +183,19 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
                     // 显示的员工人数-1
                     if (!TextUtils.isEmpty(userNum)) {
                         int m = Integer.parseInt(userNum) - 1;
-                        employeeNum.setText(m + "人");
+//                        employeeNum.setText(m + "人");
+                        setHanZiColor(m + "人");
+                        employeeNum.setHorizontallyScrolling(true);
+                        employeeNum.setText(ss);
                     }
 
                     if (status == 1) {
                         if (Integer.parseInt(userNum) > 1) {
-                        // 是管理员本人，并且人数大于1，显示转让按钮
+                            // 是管理员本人，并且人数大于1，显示转让按钮
                             isAdm = true;
                             btnEmployee.setVisibility(View.VISIBLE);
                             btnEmployee.setText("转让");
-                        }else{
+                        } else {
                             isAdm = false;
                             btnEmployee.setVisibility(View.GONE);
                         }
@@ -201,7 +211,10 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
             if (!isHaveAdm) {
                 // 没有管理员，显示员工人数
                 if (!TextUtils.isEmpty(userNum)) {
-                    employeeNum.setText(userNum + "人");
+                    /*employeeNum.setText(userNum + "人");*/
+                    setHanZiColor(userNum + "人");
+                    employeeNum.setHorizontallyScrolling(true);
+                    employeeNum.setText(ss);
                 }
             }
             list.addAll(userInfo);
@@ -210,7 +223,29 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
         }
     }
 
+    /**
+     * 设置人字颜色
+     */
+    private void setHanZiColor(String string) {
 
+        ss = new SpannableString(string);
+        MyURLSpan myURLSpan = new MyURLSpan(string);
+        ss.setSpan(myURLSpan, 0, string.length()-1, SpannableString.SPAN_EXCLUSIVE_INCLUSIVE);
+    }
+
+    class MyURLSpan extends URLSpan {
+
+
+        public MyURLSpan(String url) {
+            super(url);
+        }
+
+        @Override
+        public void updateDrawState(TextPaint ds) {
+            ds.setColor(Color.parseColor("#7393f4"));
+//            ds.setTextSize(DisplayUtil.sp2px(mActivity, 8));
+        }
+    }
     /**
      * 转让管理员
      */
@@ -242,7 +277,7 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
         ToastUtils.showToast(mActivity, "删除+" + mPosition);
     }
 
-    private void dialogQuit(int mPosition) {
+    private void dialogQuit(final int mPosition) {
         // 退出企业
         new AlertDialog(mActivity).builder()
                 .setTitle("提示")
@@ -250,7 +285,7 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
                 .setPositiveButton("确认", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        quitBusiness();
+                        quitBusiness(mPosition);
                     }
                 })
                 .setNegativeButton("取消", new View.OnClickListener() {
@@ -266,7 +301,9 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
     /**
      * 退出企业
      */
-    private void quitBusiness() {
+    private void quitBusiness(int mPosition) {
+//        EmployeeListBean.Data.User_info userInfo = list.get(mPosition);
+//        userInfo.uid
         final Dialog showDialog = loadProgressDialog.show(mActivity, "正在退出...");
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
