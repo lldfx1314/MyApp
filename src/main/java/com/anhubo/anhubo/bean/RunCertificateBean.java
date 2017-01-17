@@ -1,5 +1,7 @@
 package com.anhubo.anhubo.bean;
 
+import android.graphics.drawable.Icon;
+
 import java.util.List;
 
 /**
@@ -19,14 +21,17 @@ public class RunCertificateBean extends BaseEntity {
         public int plan_money;
         public String unit_id;
         public String unit_business_num;
-        public String u_status;
         public String business_num;
         public String plan_name;
         public String status;
         public int score0;
         public int score1;
         public int score2;
+        public List<Icon> unit_pics;// 头像
 
+        public class Icon {
+            public String pic;
+        }
 
 
     }

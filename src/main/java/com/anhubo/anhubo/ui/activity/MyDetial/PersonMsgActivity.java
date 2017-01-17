@@ -39,6 +39,7 @@ import com.anhubo.anhubo.entity.event.Exbus_AlterName;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.impl.MyFragment;
 import com.anhubo.anhubo.utils.DatePackerUtil;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.PopBirthHelper;
@@ -472,13 +473,15 @@ public class PersonMsgActivity extends BaseActivity {
         @Override
         public void onResponse(String response) {
             LogUtils.eNormal(TAG+":alterGender:",response);
-            MyAlterGenderBean bean = new Gson().fromJson(response, MyAlterGenderBean.class);
+            MyAlterGenderBean bean = JsonUtil.json2Bean(response, MyAlterGenderBean.class);
             if (bean != null) {
                 int code = bean.code;
                 String msg = bean.msg;
                 if (code != 0) {
                     ToastUtils.showToast(mActivity, msg);
                 } else {
+                    // 通知我的界面请求数据更新界面
+                    RxBus.getDefault().post(new Exbus_AlterName());
                     ToastUtils.showToast(mActivity,"性别修改成功");
                 }
             }
@@ -547,7 +550,7 @@ public class PersonMsgActivity extends BaseActivity {
         @Override
         public void onResponse(String response) {
             LogUtils.eNormal(TAG+":uploadAge:",response);
-            MyAlterAgeBean bean = new Gson().fromJson(response, MyAlterAgeBean.class);
+            MyAlterAgeBean bean = JsonUtil.json2Bean(response, MyAlterAgeBean.class);
             if (bean != null) {
                 int code = bean.code;
                 String msg = bean.msg;
@@ -555,6 +558,8 @@ public class PersonMsgActivity extends BaseActivity {
                     ToastUtils.showToast(mActivity, msg);
                 } else {
 
+                    // 通知我的界面请求数据更新界面
+                    RxBus.getDefault().post(new Exbus_AlterName());
                     ToastUtils.showToast(mActivity, "年龄修改成功");
                 }
             }
@@ -733,7 +738,7 @@ public class PersonMsgActivity extends BaseActivity {
         @Override
         public void onResponse(String response) {
             LogUtils.eNormal(TAG+":uploadName:",response);
-            MyAlterNameBean bean = new Gson().fromJson(response, MyAlterNameBean.class);
+            MyAlterNameBean bean = JsonUtil.json2Bean(response, MyAlterNameBean.class);
             if (bean != null) {
                 int code = bean.code;
                 String msg = bean.msg;
@@ -831,7 +836,7 @@ public class PersonMsgActivity extends BaseActivity {
         @Override
         public void onResponse(String response) {
             LogUtils.eNormal(TAG+":upLoadIcon:",response);
-            My_HeaderIconBean bean = new Gson().fromJson(response, My_HeaderIconBean.class);
+            My_HeaderIconBean bean = JsonUtil.json2Bean(response, My_HeaderIconBean.class);
             if (bean != null) {
                 int code = bean.code;
                 final String img1 = bean.data.img;
@@ -839,6 +844,8 @@ public class PersonMsgActivity extends BaseActivity {
                 if (code != 0) {
                     ToastUtils.showToast(mActivity, msg);
                 } else {
+                    // 通知我的界面请求数据更新界面
+                    RxBus.getDefault().post(new Exbus_AlterName());
                     ToastUtils.showToast(mActivity, "保存成功");
 
                 }

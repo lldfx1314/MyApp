@@ -4,18 +4,20 @@
     android:layout_height="match_parent"
     android:background="@color/bg_upload"
     android:orientation="vertical">
+
     <include layout="@layout/layout_top_bar"></include>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:id="@+id/run_ll_sum"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="gone"
             android:padding="5dp">
-            <!--企业-->
+            <!--会员-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,76 +37,93 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
                         android:layout_weight="1"
-                        android:padding="5dp"
-                        android:text="保证金余额"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/run_tv_interaction_m"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="30dp"
-                        android:padding="5dp"
-                        android:textColor="@color/black"
-                        android:textSize="12sp" />
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/run_tv_interaction_m"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:padding="5dp"
+                            android:text="5000"
+                            android:textColor="@color/blue"
+                            android:textSize="18sp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:text="保证金余额"
+                            android:textColor="@color/black"
+                            android:textSize="13sp" />
 
-                    <TextView
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
                         android:layout_weight="1"
-                        android:padding="5dp"
-                        android:text="最高互助额"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/run_tv_heigh_help_m"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="30dp"
-                        android:padding="5dp"
-                        android:textColor="@color/black"
-                        android:textSize="12sp" />
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/run_tv_heigh_help_m"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:padding="5dp"
+                            android:text="50万"
+                            android:textColor="@color/blue"
+                            android:textSize="18sp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:text="最高互助额"
+                            android:textColor="@color/black"
+                            android:textSize="13sp" />
+                    </LinearLayout>
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
                         android:layout_weight="1"
-                        android:padding="5dp"
-                        android:text="单次分摊额"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/run_tv_heigh_share_m"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="30dp"
-                        android:padding="5dp"
-                        android:textColor="@color/black"
-                        android:textSize="12sp" />
+                        <TextView
+                            android:id="@+id/run_tv_heigh_share_m"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:padding="5dp"
+                            android:text="300"
+                            android:textColor="@color/blue"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:text="单次分摊额"
+                            android:textColor="@color/black"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <TextView
@@ -117,40 +136,55 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="4dp"
+                    android:layout_height="25dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginBottom="3dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginTop="15dp"
                     android:orientation="horizontal">
 
-                    <!--<TextView
-                        android:id="@+id/bottom"
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/tv_shap_bottom" />-->
+                        android:layout_weight="1">
 
-                    <TextView
-                        android:id="@+id/run_tv_red"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/tv_shap_red1" />
-
-                    <TextView
-                        android:id="@+id/run_tv_yellow"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/tv_shap_yellow3" />
+                        <TextView
+                            android:id="@+id/run_tv_red"
+                            android:layout_width="25dp"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="18dp"
+                            android:background="@drawable/tv_shap_red3" />
+                    </RelativeLayout>
 
 
-                    <TextView
-                        android:id="@+id/run_tv_green"
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@drawable/tv_shap_green2" />
+                        android:gravity="center_horizontal">
+
+                        <TextView
+                            android:id="@+id/run_tv_yellow"
+                            android:layout_width="25dp"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/tv_shap_yellow3" />
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/run_tv_green"
+                            android:layout_width="25dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="18dp"
+                            android:background="@drawable/tv_shap_green3" />
+                    </RelativeLayout>
+
 
                 </LinearLayout>
 
@@ -161,18 +195,58 @@
                 android:layout_height="wrap_content"
                 android:background="@color/backgroud_white"
                 android:orientation="vertical"
-                android:layout_marginTop="10dp"
                 android:padding="15dp">
 
-                <TextView
-                    android:id="@+id/run_tv_unit"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:text="单元"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
 
+                    <TextView
+                        android:id="@+id/run_tv_unit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="单元"
+                        android:textColor="@color/black"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/run_tv_unit_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:text=" 安互保"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+                </LinearLayout>
+                <!--头像-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/run_recyclerview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/run_tv_unit_member"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="5dp"
+                        android:text="8/10"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+                <!--加入单元-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -182,76 +256,45 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_weight="1"
                         android:padding="5dp"
-                        android:text="所属单元"
+                        android:text="加入单元开始互助计划"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
-                    <TextView
+                    <!--<TextView
                         android:id="@+id/run_tv_unit_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="30dp"
                         android:padding="5dp"
                         android:textColor="@color/black"
-                        android:textSize="12sp" />
+                        android:textSize="12sp" />-->
+
                     <Button
 
                         android:id="@+id/run_btn_join_unit"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:visibility="gone"
                         android:background="@drawable/btn_shap_blue"
                         android:text="加入单元"
                         android:textColor="@color/bg_title"
-                        android:textSize="14sp"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:padding="5dp"
-                        android:text="单元会员数"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/run_tv_unit_member"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="15dp"
-                        android:visibility="gone"
-                        android:drawableRight="@drawable/arrow_right"
-                        android:drawablePadding="15dp"
-                        android:gravity="center_vertical"
-                        android:textColor="@color/black"
-                        android:textSize="12sp" />
+                        android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
             <!--计划-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:background="@color/backgroud_white"
                 android:orientation="vertical"
-                android:layout_marginTop="10dp"
                 android:padding="15dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -299,6 +342,7 @@
                         android:textSize="12sp" />
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -345,12 +389,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
-                        android:padding="5dp"
                         android:drawableRight="@drawable/arrow_right"
                         android:gravity="center_vertical"
+                        android:padding="5dp"
                         android:textColor="@color/black"
                         android:textSize="12sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -371,8 +416,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="30dp"
-                        android:padding="5dp"
                         android:gravity="center_vertical"
+                        android:padding="5dp"
                         android:textColor="@color/black"
                         android:textSize="12sp" />
                 </LinearLayout>

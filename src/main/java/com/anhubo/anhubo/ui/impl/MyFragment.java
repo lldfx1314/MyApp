@@ -23,7 +23,6 @@ import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.view.AlertDialog;
-import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -33,6 +32,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
+import rx.Subscription;
 import rx.functions.Action1;
 
 /**
@@ -60,6 +60,7 @@ public class MyFragment extends BaseFragment {
     public static String name_new;
     public static String gender_new;
     public static String age_new;
+    private Subscription rxSubscription;
 
     @Override
     public void initTitleBar() {
@@ -99,10 +100,10 @@ public class MyFragment extends BaseFragment {
         // RxBus
         rxBusOnClickListener();
     }
-
+    // 订阅修改信息的事件
     private void rxBusOnClickListener() {
         // rxSubscription是一个Subscription的全局变量，这段代码可以在onCreate/onStart等生命周期内
-        RxBus rxSubscription = RxBus.getDefault().toObserverable(Exbus_AlterName.class)
+        rxSubscription = RxBus.getDefault().toObservable(Exbus_AlterName.class)
                 .subscribe(new Action1<Exbus_AlterName>() {
                                @Override
                                public void call(Exbus_AlterName alterName) {
@@ -120,6 +121,7 @@ public class MyFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        // 解除订阅
         if(!rxSubscription.isUnsubscribed()) {
             rxSubscription.unsubscribe();
         }

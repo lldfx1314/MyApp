@@ -2,7 +2,10 @@ package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -10,20 +13,25 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
+import com.anhubo.anhubo.adapter.RunCertificateIconAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.RunCertificateBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.DiscoveryDetial.NoticeActivity;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.view.AlertDialog;
-import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import okhttp3.Call;
@@ -32,6 +40,7 @@ import okhttp3.Call;
  * Created by LUOLI on 2016/12/29.
  */
 public class RunCertificateActivity extends BaseActivity {
+    private static final String TAG = "RunCertificateActivity";
     @InjectView(R.id.run_ll_sum)
     LinearLayout runllSum;
     @InjectView(R.id.run_tv_company)
@@ -70,6 +79,9 @@ public class RunCertificateActivity extends BaseActivity {
     private String uid;
     private String unitId;
     private Dialog showDialog;
+    private RecyclerView recylerview;
+    private RunCertificateIconAdapter adapter;
+    private ArrayList<RunCertificateBean.Data.Icon> list;
 
 
     @Override
@@ -93,6 +105,12 @@ public class RunCertificateActivity extends BaseActivity {
     @Override
     protected void initViews() {
 
+        recylerview = (RecyclerView) findViewById(R.id.run_recyclerview);
+        list = new ArrayList<>();
+        adapter = new RunCertificateIconAdapter(this, list);
+        recylerview.setAdapter(adapter);//设置适配器
+        GridLayoutManager layoutManager = new GridLayoutManager(mActivity, 5);
+        recylerview.setLayoutManager(layoutManager);
     }
 
     @Override
@@ -123,13 +141,15 @@ public class RunCertificateActivity extends BaseActivity {
                 .build()
                 .execute(new MyStringCallback());
     }
+
     Handler handler = new Handler();
+
     class MyStringCallback extends StringCallback {
 
         @Override
         public void onError(Call call, Exception e) {
 
-            System.out.println("RunCertificateActivity+++===界面失败" + e.getMessage());
+            LogUtils.e(TAG, ":getData", e);
             showDialog.dismiss();
             AlertDialog builder = new AlertDialog(mActivity).builder();
             builder
@@ -143,7 +163,7 @@ public class RunCertificateActivity extends BaseActivity {
                                 public void run() {
                                     finish();
                                 }
-                            },500);
+                            }, 500);
                         }
                     })
                     .setCancelable(false).show();
@@ -151,7 +171,7 @@ public class RunCertificateActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-//            System.out.println("RunCertificateActivity+++" + response);
+            LogUtils.eNormal(TAG + ":getData", response);
             runllSum.setVisibility(View.VISIBLE);
             showDialog.dismiss();
             setPlanData(response);
@@ -159,12 +179,12 @@ public class RunCertificateActivity extends BaseActivity {
     }
 
     private void setPlanData(String response) {
-        RunCertificateBean bean = new Gson().fromJson(response, RunCertificateBean.class);
+        RunCertificateBean bean = JsonUtil.json2Bean(response, RunCertificateBean.class);
         if (bean != null) {
             int code = bean.code;
             String msg = bean.msg;
             RunCertificateBean.Data data = bean.data;
-            //　企业
+            //　会员
             String sumMoney = data.sum_money;// 交互金余额
             int newPlanEnsure = data.plan_ensure;// 最高互助额
             int newPlanMoney = data.plan_money;// 最高分摊额
@@ -182,42 +202,46 @@ public class RunCertificateActivity extends BaseActivity {
             String businessNum = data.business_num;// 参与企业数
             int payedNum = data.payed_num;// 运行情况
             int payNum = data.pay_num;// 可互助企业数
+            // 头像
+            List<RunCertificateBean.Data.Icon> icons = data.unit_pics;
+            list.clear();
+            list.addAll(icons);
+            adapter.notifyDataSetChanged();
 
-
-            // 企业
+            // 会员
             runTvInteractionM.setText(sumMoney);
             runTvHeighHelpM.setText(newPlanEnsure + "");
             runTvHeighShareM.setText(newPlanMoney + "");
             // 三色进度条
-            // 红
-            if(twoDaysAgo == 0){
-                runTvRed.setBackgroundResource(R.drawable.tv_shap_bottom1);
-            }else if(twoDaysAgo<=60){
-                runTvRed.setBackgroundResource(R.drawable.tv_shap_red1);
-            }else if(twoDaysAgo<=80){
-                runTvRed.setBackgroundResource(R.drawable.tv_shap_yellow1);
-            }else if(twoDaysAgo<=100){
-                runTvRed.setBackgroundResource(R.drawable.tv_shap_green1);
+            // 一
+            if (twoDaysAgo == 0) {
+                runTvRed.setBackgroundResource(R.drawable.tv_shap_bottom3);
+            } else if (twoDaysAgo <= 60) {
+                runTvRed.setBackgroundResource(R.drawable.tv_shap_red3);
+            } else if (twoDaysAgo <= 80) {
+                runTvRed.setBackgroundResource(R.drawable.tv_shap_yellow3);
+            } else if (twoDaysAgo <= 100) {
+                runTvRed.setBackgroundResource(R.drawable.tv_shap_green3);
             }
-            // 黄
-            if(last == 0){
+            // 二
+            if (last == 0) {
                 runTvYellow.setBackgroundResource(R.drawable.tv_shap_bottom3);
-            }else if(last<=60){
+            } else if (last <= 60) {
                 runTvYellow.setBackgroundResource(R.drawable.tv_shap_red3);
-            }else if(last<=80){
+            } else if (last <= 80) {
                 runTvYellow.setBackgroundResource(R.drawable.tv_shap_yellow3);
-            }else if(last<=100){
+            } else if (last <= 100) {
                 runTvYellow.setBackgroundResource(R.drawable.tv_shap_green3);
             }
-            // 绿
-            if(today == 0){
-                runTvGreen.setBackgroundResource(R.drawable.tv_shap_bottom2);
-            }else if(today<=60){
-                runTvGreen.setBackgroundResource(R.drawable.tv_shap_red2);
-            }else if(today<=80){
-                runTvGreen.setBackgroundResource(R.drawable.tv_shap_yellow2);
-            }else if(today<=100){
-                runTvGreen.setBackgroundResource(R.drawable.tv_shap_green2);
+            // 三
+            if (today == 0) {
+                runTvGreen.setBackgroundResource(R.drawable.tv_shap_bottom3);
+            } else if (today <= 60) {
+                runTvGreen.setBackgroundResource(R.drawable.tv_shap_red3);
+            } else if (today <= 80) {
+                runTvGreen.setBackgroundResource(R.drawable.tv_shap_yellow3);
+            } else if (today <= 100) {
+                runTvGreen.setBackgroundResource(R.drawable.tv_shap_green3);
             }
 
             // 单元
@@ -260,15 +284,15 @@ public class RunCertificateActivity extends BaseActivity {
                 // 加入单元,点击进入单元列表界面
                 Intent intent = new Intent();
                 intent.setClass(mActivity, CellListActivity.class);
-                intent.putExtra(Keys.PLANID,planId);
+                intent.putExtra(Keys.PLANID, planId);
                 startActivity(intent);
                 break;
             case R.id.run_tv_unit_member:
                 // 单元会员数,点击进入单元详情界面
                 Intent intent1 = new Intent();
                 intent1.setClass(mActivity, Cell_Detail_Activity.class);
-                intent1.putExtra(Keys.UNITID,unitId);
-                intent1.putExtra(Keys.PLANID,planId);
+                intent1.putExtra(Keys.UNITID, unitId);
+                intent1.putExtra(Keys.PLANID, planId);
                 startActivity(intent1);
                 break;
             case R.id.run_tv_plan_run_status:
