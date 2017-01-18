@@ -220,7 +220,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
-                android:text="最高分摊额"
+                android:text="单次分摊额"
                 android:textColor="@color/gray"
                 android:textSize="14sp" />
         </RelativeLayout>

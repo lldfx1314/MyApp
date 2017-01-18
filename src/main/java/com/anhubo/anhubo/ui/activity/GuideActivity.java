@@ -43,7 +43,6 @@ public class GuideActivity extends BaseActivity {
     private GuidePagerAdapter guidePagerAdapter;
     private ArrayList<Fragment> fragments;
     private String uid;
-    private String bulidingid;
     private String businessid;
     private String versionName;
 
@@ -93,7 +92,6 @@ public class GuideActivity extends BaseActivity {
     protected void initEvents() {
         super.initEvents();
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
-//        bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
         businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
         String[] split = Utils.getAppInfo(mActivity).split("#");
         versionName = split[1];
@@ -126,7 +124,6 @@ public class GuideActivity extends BaseActivity {
     public void onClick(View v) {
         //SpUtils.putParam(this, Keys.GUIDE_DONE, true);//保存是否完成引导页
         SpUtils.putParam(mActivity, Keys.VERSIONNAME,versionName);
-        //System.out.println("versionName+111+"+versionName);
         if(!TextUtils.isEmpty(uid)) {
             enterHome(uid);
 

@@ -15,7 +15,9 @@ import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.Check_UpDateBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.Login_Register.Login_Message;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
@@ -44,6 +46,7 @@ public class WelcomeActivity extends BaseActivity {
     private static final int NET_ERROR = 3;
     private static final int ENTER_MAIN = 4;
     private static final int SELECT_UPDATA_CLIENT = 5;
+    private static final String TAG = "WelcomeActivity";
     private String uid;
     private String oldversionName;
     private String versionName;
@@ -113,7 +116,7 @@ public class WelcomeActivity extends BaseActivity {
         @Override
         public void onError(Call call, Exception e) {
 
-            System.out.println("WelcomeActivity界面+++版本升级===没拿到数据" + e.getMessage());
+            LogUtils.e(TAG,":checkUpdate",e);
             // 网络出故障，直接进后面界面
             Toast.makeText(mActivity,"网络有问题，请检查",Toast.LENGTH_SHORT).show();
             msg.what = NET_ERROR;
@@ -122,8 +125,8 @@ public class WelcomeActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-            System.out.println("WelcomeActivity界面+++版本升级" + response);
-            Check_UpDateBean bean = new Gson().fromJson(response, Check_UpDateBean.class);
+            LogUtils.eNormal(TAG+":checkUpdate",response);
+            Check_UpDateBean bean = JsonUtil.json2Bean(response, Check_UpDateBean.class);
             if (bean != null) {
                 int code = bean.code;
                 newVersion = bean.data.new_version;

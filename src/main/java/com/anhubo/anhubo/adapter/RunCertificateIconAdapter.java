@@ -13,6 +13,7 @@ import com.anhubo.anhubo.adapter.viewholder.RunCertificateIcon_Holder;
 import com.anhubo.anhubo.bean.RunCertificateBean;
 import com.anhubo.anhubo.ui.activity.unitDetial.RunCertificateActivity;
 import com.anhubo.anhubo.utils.LogUtils;
+import com.bumptech.glide.Glide;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 
@@ -45,8 +46,8 @@ public class RunCertificateIconAdapter extends RecyclerView.Adapter<RunCertifica
     public void onBindViewHolder(RunCertificateIcon_Holder holder, int position) {
         RunCertificateBean.Data.Icon icon = mList.get(position);
         String url = icon.pic;
-        if(!TextUtils.isEmpty(url)){
-            setHeaderIcon(holder.imageView,url);
+        if (!TextUtils.isEmpty(url)) {
+            setHeaderIcon(holder.imageView, url);
         } else {
             holder.imageView.setImageResource(R.drawable.newicon);
         }
@@ -61,25 +62,32 @@ public class RunCertificateIconAdapter extends RecyclerView.Adapter<RunCertifica
      * 设置头像的方法
      */
     private void setHeaderIcon(final CircleImageView ivIcon, String imgurl) {
-        OkHttpUtils
-                .get()//
-                .url(imgurl)//
-                .tag(this)//
-                .build()//
-                .connTimeOut(15000)
-                .readTimeOut(15000)
-                .writeTimeOut(15000)
-                .execute(new BitmapCallback() {
-                    @Override
-                    public void onError(Call call, Exception e) {
-                        LogUtils.e(TAG, ":setHeaderIcon:", e);
-                    }
 
-                    @Override
-                    public void onResponse(Bitmap bitmap) {
-                        ivIcon.setImageBitmap(bitmap);
-                    }
-                });
+        Glide
+                .with(mContext)
+                .load(imgurl)
+                .centerCrop().crossFade().into(ivIcon);
+
+
+//        OkHttpUtils
+//                .get()//
+//                .url(imgurl)//
+//                .tag(this)//
+//                .build()//
+//                .connTimeOut(15000)
+//                .readTimeOut(15000)
+//                .writeTimeOut(15000)
+//                .execute(new BitmapCallback() {
+//                    @Override
+//                    public void onError(Call call, Exception e) {
+//                        LogUtils.e(TAG, ":setHeaderIcon:", e);
+//                    }
+//
+//                    @Override
+//                    public void onResponse(Bitmap bitmap) {
+//                        ivIcon.setImageBitmap(bitmap);
+//                    }
+//                });
     }
 
 }

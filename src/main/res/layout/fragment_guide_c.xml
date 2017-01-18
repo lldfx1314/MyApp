@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="80dp"
-        android:text="互保计划"
+        android:text="互助计划"
         android:textColor="#AA000000"
         android:textSize="24sp" />
 
@@ -21,7 +21,7 @@
         android:layout_below="@+id/tv_anhubao"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="21dp"
-        android:text="为互保组织及其会员单位服务"
+        android:text="为互助组织及其会员单位服务"
         android:textColor="#66000000"
         android:textSize="18sp" />
 

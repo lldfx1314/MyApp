@@ -104,14 +104,29 @@ public class UnitAdapter extends BaseAdapter {
         }
         // 最高互助额
         if (!TextUtils.isEmpty(planEnsureProportion)) {
+            // 比例
             hold.heighHelpProportion.setText(planEnsureProportion);
         }
+        // 现金
+        setShowDetial(planEnsure,hold.heighHelpMoney);
 
-        if (!TextUtils.isEmpty(planEnsure)) {
-            Double heighSharing = Double.parseDouble(planEnsure) / 10000;
+        // 单次分摊额
+        if (!TextUtils.isEmpty(planMoneyProportion)) {
+            // 比例
+            hold.prepayPproportion.setText(planMoneyProportion);
+        }
+        // 现金
+        setShowDetial(planMoney,hold.prepayShareMoney);
+
+        return convertView;
+    }
+
+    private void setShowDetial(String string,TextView textView) {
+        if (!TextUtils.isEmpty(string)) {
+            Double heighSharing = Double.parseDouble(string) / 10000;
 
             if (heighSharing < 1) {
-                hold.heighHelpMoney.setText(planEnsure.substring(0, 4));
+                textView.setText(string.substring(0, 4));
             } else if (heighSharing >= 1) {
                 String str = String.valueOf(heighSharing);
                 if (str.length() >= 3) {
@@ -130,36 +145,6 @@ public class UnitAdapter extends BaseAdapter {
                 hold.heighHelpMoney.setText(ss);
             }
         }
-        // 预付分摊额
-        if (!TextUtils.isEmpty(planMoneyProportion)) {
-            hold.prepayPproportion.setText(planMoneyProportion);
-        }
-        if (!TextUtils.isEmpty(planMoney)) {
-            Double prepayMoney = Double.parseDouble(planMoney) / 10000;
-
-            if (prepayMoney < 1) {
-
-                hold.prepayShareMoney.setText(planMoney.substring(0, 4));
-            } else if (prepayMoney >= 1) {
-
-                String str = String.valueOf(prepayMoney);
-                if (str.length() >= 3) {
-                    String substring = str.substring(0, 3);
-                    //　做判断，防止显示类似＂50.万＂这样的情况
-                    if (substring.endsWith(".")) {
-                        setWan(substring.substring(0, 2) + "万");
-                    } else {
-                        setWan(substring + "万");
-                    }
-                } else {
-                    setWan(str + "万");
-                }
-                hold.prepayShareMoney.setHorizontallyScrolling(true);
-                hold.prepayShareMoney.setText(ss);
-
-            }
-        }
-        return convertView;
     }
 
     /**
