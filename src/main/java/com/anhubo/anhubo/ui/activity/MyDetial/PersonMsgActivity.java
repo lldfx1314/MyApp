@@ -36,6 +36,7 @@ import com.anhubo.anhubo.bean.My_HeaderIconBean;
 import com.anhubo.anhubo.bean.PersonMsgBindBean;
 import com.anhubo.anhubo.entity.RxBus;
 import com.anhubo.anhubo.entity.event.Exbus_AlterName;
+import com.anhubo.anhubo.entity.event.Exbus_ShowIcon;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.impl.MyFragment;
 import com.anhubo.anhubo.utils.DatePackerUtil;
@@ -47,6 +48,10 @@ import com.anhubo.anhubo.utils.PopGenderHelper;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.ShowBottonDialog;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.google.gson.Gson;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
@@ -72,6 +77,8 @@ import java.util.Set;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import okhttp3.Call;
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * Created by LUOLI on 2016/10/28.
@@ -139,6 +146,7 @@ public class PersonMsgActivity extends BaseActivity {
     private String buildingName;
     private UMShareAPI mShareAPI;
     private Dialog showDialog;
+    private Subscription rxSubscription;
 
     @Override
     protected void initConfig() {
@@ -175,8 +183,9 @@ public class PersonMsgActivity extends BaseActivity {
 
     @Override
     protected void onLoadDatas() {
-
     }
+
+
 
     @Override
     protected void initEvents() {
@@ -200,9 +209,9 @@ public class PersonMsgActivity extends BaseActivity {
         // 给每个控件先设置初始内容
         setInitialData();
 
-        Bitmap mBitmap = MyFragment.mBitmap;
+        GlideDrawable mBitmap = MyFragment.mBitmap;
         if (mBitmap != null) {
-            ivHeaderIcon.setImageBitmap(mBitmap);
+            ivHeaderIcon.setImageDrawable(mBitmap);
         }
         /**获取我的界面传过来的姓名，显示*/
         String name_new = MyFragment.name_new;
@@ -1010,25 +1019,29 @@ public class PersonMsgActivity extends BaseActivity {
      * 设置头像的方法
      */
     private void setHeaderIcon(String imgurl) {
-        OkHttpUtils
-                .get()//
-                .url(imgurl)//
-                .tag(this)//
-                .build()//
-                .connTimeOut(10000)
-                .readTimeOut(10000)
-                .writeTimeOut(10000)
-                .execute(new BitmapCallback() {
-                    @Override
-                    public void onError(Call call, Exception e) {
-                        LogUtils.e(TAG,":setHeaderIcon:",e);
-                    }
-
-                    @Override
-                    public void onResponse(Bitmap bitmap) {
-                        ivHeaderIcon.setImageBitmap(bitmap);
-                    }
-                });
+        Glide
+                .with(mActivity)
+                .load(imgurl)
+                .centerCrop().crossFade().into(ivHeaderIcon);
+//        OkHttpUtils
+//                .get()//
+//                .url(imgurl)//
+//                .tag(this)//
+//                .build()//
+//                .connTimeOut(10000)
+//                .readTimeOut(10000)
+//                .writeTimeOut(10000)
+//                .execute(new BitmapCallback() {
+//                    @Override
+//                    public void onError(Call call, Exception e) {
+//                        LogUtils.e(TAG,":setHeaderIcon:",e);
+//                    }
+//
+//                    @Override
+//                    public void onResponse(Bitmap bitmap) {
+//                        ivHeaderIcon.setImageBitmap(bitmap);
+//                    }
+//                });
     }
 
 }

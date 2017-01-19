@@ -16,6 +16,11 @@ import com.anhubo.anhubo.bean.EmployeeListBean;
 import com.anhubo.anhubo.bean.EmployeeOperate;
 import com.anhubo.anhubo.interfaces.InterClick;
 import com.anhubo.anhubo.utils.LogUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 
@@ -72,11 +77,11 @@ public class AssignmentAdminAdapter extends BaseAdapter implements View.OnClickL
         // 显示头像、姓名、分割线
         if (userType == 0) {
             // 把除管理员之外的员工显示在列表上
-            hold.ivIcon.setTag(position);
-            int tag = (int) hold.ivIcon.getTag();
             String picPath = userInfo.pic_path;
+            hold.ivIcon.setTag(R.id.image_tag,picPath);
+            String tag = (String) hold.ivIcon.getTag(R.id.image_tag);
             if (!TextUtils.isEmpty(picPath)) {
-                if (tag == position) {
+                if (TextUtils.equals(tag , picPath)) {
                     // 防止图片错位
                     setHeaderIcon(hold.ivIcon, picPath);
                 }
@@ -143,24 +148,33 @@ public class AssignmentAdminAdapter extends BaseAdapter implements View.OnClickL
      * 设置头像的方法
      */
     private void setHeaderIcon(final CircleImageView ivIcon, String imgurl) {
-        OkHttpUtils
-                .get()//
-                .url(imgurl)//
-                .tag(this)//
-                .build()//
-                .connTimeOut(15000)
-                .readTimeOut(15000)
-                .writeTimeOut(15000)
-                .execute(new BitmapCallback() {
-                    @Override
-                    public void onError(Call call, Exception e) {
-                        LogUtils.e(TAG, ":setHeaderIcon:", e);
-                    }
 
-                    @Override
-                    public void onResponse(Bitmap bitmap) {
-                        ivIcon.setImageBitmap(bitmap);
-                    }
-                });
+        Glide.with(mContext)
+                .load(imgurl)
+                .centerCrop()
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(ivIcon);
+
+//        OkHttpUtils
+//                .get()//
+//                .url(imgurl)//
+//                .tag(this)//
+//                .build()//
+//                .connTimeOut(15000)
+//                .readTimeOut(15000)
+//                .writeTimeOut(15000)
+//                .execute(new BitmapCallback() {
+//                    @Override
+//                    public void onError(Call call, Exception e) {
+//                        LogUtils.e(TAG, ":setHeaderIcon:", e);
+//                    }
+//
+//                    @Override
+//                    public void onResponse(Bitmap bitmap) {
+//                        ivIcon.setImageBitmap(bitmap);
+//                    }
+//                });
     }
 }

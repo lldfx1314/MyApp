@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:visibility="gone"
             android:padding="5dp">
             <!--会员-->
             <LinearLayout
@@ -145,13 +146,13 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1">
 
-                        <TextView
-                            android:id="@+id/run_tv_red"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                        <ImageView
+                            android:id="@+id/run_iv_red"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="18dp"
-                            android:background="@drawable/tv_shap_red3" />
+                            android:background="@drawable/run_gray"/>
                     </RelativeLayout>
 
 
@@ -161,11 +162,11 @@
                         android:layout_weight="1"
                         android:gravity="center_horizontal">
 
-                        <TextView
-                            android:id="@+id/run_tv_yellow"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="@drawable/tv_shap_yellow3" />
+                        <ImageView
+                            android:id="@+id/run_iv_yellow"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:background="@drawable/run_gray"/>
                     </RelativeLayout>
 
 
@@ -174,12 +175,13 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1">
 
-                        <TextView
-                            android:id="@+id/run_tv_green"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                        <ImageView
+                            android:id="@+id/run_iv_green"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_marginBottom="2dp"
                             android:layout_marginLeft="18dp"
-                            android:background="@drawable/tv_shap_green3" />
+                            android:background="@drawable/run_gray"/>
                     </RelativeLayout>
 
 
@@ -196,7 +198,7 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp">
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -214,8 +216,8 @@
                     <TextView
                         android:id="@+id/run_tv_unit_name"
                         android:layout_width="wrap_content"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/run_tv_unit"
                         android:layout_marginLeft="12dp"
                         android:text=" 安互保"
                         android:textColor="@color/black"
@@ -224,6 +226,7 @@
                         android:id="@+id/run_tv_unit_details"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="5dp"
@@ -231,7 +234,7 @@
                         android:text="查看详情"
                         android:textColor="@color/black"
                         android:textSize="13sp" />
-                </LinearLayout>
+                </RelativeLayout>
                 <!--头像-->
                 <RelativeLayout
                     android:id="@+id/run_rl_unit_member"
@@ -265,6 +268,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:paddingBottom="10dp"
                     android:orientation="horizontal">
 
                     <TextView

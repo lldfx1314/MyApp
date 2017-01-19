@@ -643,9 +643,19 @@ public class NfcScanActivity extends BaseActivity {
      * 动态的设置进度条
      */
     private void setProgressBar() {
+
+
+        int maxNum = Integer.parseInt(devicesNum);
+        // 做一个处理，防止服务器返回当前进度大于总进度
+        if (deviceCheckedNum > maxNum) {
+            pronfcBar.setProgress(maxNum);
+            tvBignfcNumber.setText(devicesNum);
+        } else {
+            pronfcBar.setProgress(deviceCheckedNum);
+            tvBignfcNumber.setText(deviceCheckedNum + "");
+        }
+
         pronfcBar.setMax(Integer.parseInt(devicesNum));
-        pronfcBar.setProgress(deviceCheckedNum);
-        tvBignfcNumber.setText(deviceCheckedNum + "");
         tvSmallnfcNumber.setText(devicesNum + "");
     }
 

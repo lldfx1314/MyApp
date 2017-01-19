@@ -14,6 +14,7 @@ import com.anhubo.anhubo.bean.RunCertificateBean;
 import com.anhubo.anhubo.ui.activity.unitDetial.RunCertificateActivity;
 import com.anhubo.anhubo.utils.LogUtils;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 
@@ -66,8 +67,10 @@ public class RunCertificateIconAdapter extends RecyclerView.Adapter<RunCertifica
         Glide
                 .with(mContext)
                 .load(imgurl)
-                .centerCrop().crossFade().into(ivIcon);
-
+                .centerCrop().crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(ivIcon);
 
 //        OkHttpUtils
 //                .get()//

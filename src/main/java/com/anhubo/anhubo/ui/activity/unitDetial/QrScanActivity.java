@@ -170,6 +170,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         // 出厂时间的弹窗
         alterTime();
     }
+
     private void alterTime() {
         popBirthHelper = new PopBirthHelper(mActivity);
         popBirthHelper.setOnClickOkListener(new PopBirthHelper.OnClickOkListener() {
@@ -197,7 +198,10 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         // 获取进度条的信息
         getNum();
     }
-    /**获取进度条的信息*/
+
+    /**
+     * 获取进度条的信息
+     */
     private void getNum() {
         String url = Urls.Url_Get_Num;
         HashMap<String, String> params = new HashMap<String, String>();
@@ -234,11 +238,21 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
             }
         }
     }
-    /**动态的设置进度条*/
+
+    /**
+     * 动态的设置进度条
+     */
     private void setProgressBar() {
-        proBar.setProgress(deviceCheckedNum);
-        proBar.setMax(Integer.parseInt(devicesNum));
-        tvBigQrNumber.setText(deviceCheckedNum + "");
+        int maxNum = Integer.parseInt(devicesNum);
+        // 做一个处理，防止服务器返回当前进度大于总进度
+        if (deviceCheckedNum > maxNum) {
+            proBar.setProgress(maxNum);
+            tvBigQrNumber.setText(devicesNum);
+        } else {
+            proBar.setProgress(deviceCheckedNum);
+            tvBigQrNumber.setText(deviceCheckedNum + "");
+        }
+        proBar.setMax(maxNum);
         tvSmallQrNumber.setText(devicesNum);
     }
 
@@ -279,7 +293,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     public void onScanQRCodeSuccess(String result) {
         boolean isanhuboCard = result.startsWith("anhubo", 0);
         boolean isAHBCard = result.startsWith("AHB", 0);
-        if(isanhuboCard||isAHBCard){
+        if (isanhuboCard || isAHBCard) {
             cardNumber = result;
             Log.i(TAG, "result:" + cardNumber);
             // 调用震动的方法
@@ -287,7 +301,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
             mQRCodeView.stopSpot();
             // 拿到数据后做相应的操作
             processData(cardNumber);
-        }else{
+        } else {
             AlertDialog builder = new AlertDialog(mActivity).builder();
             builder
                     .setTitle("提示")
@@ -608,7 +622,6 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     }
 
 
-
     /**
      * 进入测试页
      */
@@ -807,7 +820,7 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                             listResult.add(s);
                         }
                     }
-                    intent.putExtra(Keys.REQUIRE_LIST,listResult);
+                    intent.putExtra(Keys.REQUIRE_LIST, listResult);
                     startActivity(intent);
                 } else {
                     // 无问题，提示检查完成

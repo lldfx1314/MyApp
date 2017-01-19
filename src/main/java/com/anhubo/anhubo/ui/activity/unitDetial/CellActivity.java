@@ -15,6 +15,9 @@ import android.widget.Button;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
+import com.anhubo.anhubo.entity.RxBus;
+import com.anhubo.anhubo.entity.event.Exbus_AlterName;
+import com.anhubo.anhubo.entity.event.Rxbus_JoinUnit;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
@@ -149,6 +152,8 @@ public class CellActivity extends BaseActivity {
         switch (v.getId()) {
             case R.id.ivTopBarLeft:
                 sendBroadcast(new Intent(CellListActivity.CELLLIST_FINISH));
+                // 通知动态凭证请求数据更新界面
+                RxBus.getDefault().post(new Rxbus_JoinUnit());
                 finish();
                 break;
             case R.id.btn_weixin:
@@ -224,6 +229,8 @@ public class CellActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         sendBroadcast(new Intent(CellListActivity.CELLLIST_FINISH));
+        // 通知动态凭证请求数据更新界面
+        RxBus.getDefault().post(new Rxbus_JoinUnit());
         finish();
     }
 

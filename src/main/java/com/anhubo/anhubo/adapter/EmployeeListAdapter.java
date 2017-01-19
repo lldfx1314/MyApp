@@ -14,6 +14,8 @@ import com.anhubo.anhubo.bean.EmployeeListBean;
 import com.anhubo.anhubo.bean.EmployeeOperate;
 import com.anhubo.anhubo.interfaces.InterClick;
 import com.anhubo.anhubo.utils.LogUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 
@@ -75,12 +77,12 @@ public class EmployeeListAdapter extends BaseAdapter implements View.OnClickList
         if (userType == 0) {
             // 把除管理员之外的员工显示在列表上
             String picPath = userInfo.pic_path;
-            hold.ivIcon.setTag(position);
-            int tag = (int) hold.ivIcon.getTag();
+            hold.ivIcon.setTag(R.id.image_tag, picPath);
+            String tag = (String) hold.ivIcon.getTag(R.id.image_tag);
 
             if (!TextUtils.isEmpty(picPath)) {
-                if (tag == position) {
-
+                if (TextUtils.equals(tag , picPath)) {
+                    // 防止图片错位
                     setHeaderIcon(hold.ivIcon, picPath);
                 }
             } else {
@@ -92,16 +94,16 @@ public class EmployeeListAdapter extends BaseAdapter implements View.OnClickList
             // 显示分割线
             hold.viewEmployee.setVisibility(View.VISIBLE);
         }
-            if (userType == 0 && status == 1) {
+        if (userType == 0 && status == 1) {
 //                LogUtils.eNormal(TAG,"哈哈 退出");
-                // 是员工，并且是员工本人
-                hold.btnEmployee.setVisibility(View.VISIBLE);
-                hold.btnEmployee.setText("退出");
-                operate.operate = "quit";
-            }else{
+            // 是员工，并且是员工本人
+            hold.btnEmployee.setVisibility(View.VISIBLE);
+            hold.btnEmployee.setText("退出");
+            operate.operate = "quit";
+        } else {
 //                LogUtils.eNormal(TAG,"哈哈 不要啊");
-                hold.btnEmployee.setVisibility(View.GONE);
-            }
+            hold.btnEmployee.setVisibility(View.GONE);
+        }
 
         // 是管理员，其他成员显示删除按钮
         if (isAdm) {
@@ -150,24 +152,33 @@ public class EmployeeListAdapter extends BaseAdapter implements View.OnClickList
      * 设置头像的方法
      */
     private void setHeaderIcon(final CircleImageView ivIcon, String imgurl) {
-        OkHttpUtils
-                .get()//
-                .url(imgurl)//
-                .tag(this)//
-                .build()//
-                .connTimeOut(15000)
-                .readTimeOut(15000)
-                .writeTimeOut(15000)
-                .execute(new BitmapCallback() {
-                    @Override
-                    public void onError(Call call, Exception e) {
-                        LogUtils.e(TAG, ":setHeaderIcon:", e);
-                    }
 
-                    @Override
-                    public void onResponse(Bitmap bitmap) {
-                        ivIcon.setImageBitmap(bitmap);
-                    }
-                });
+        Glide
+                .with(mContext)
+                .load(imgurl)
+                .centerCrop().crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(ivIcon);
+
+//        OkHttpUtils
+//                .get()//
+//                .url(imgurl)//
+//                .tag(this)//
+//                .build()//
+//                .connTimeOut(15000)
+//                .readTimeOut(15000)
+//                .writeTimeOut(15000)
+//                .execute(new BitmapCallback() {
+//                    @Override
+//                    public void onError(Call call, Exception e) {
+//                        LogUtils.e(TAG, ":setHeaderIcon:", e);
+//                    }
+//
+//                    @Override
+//                    public void onResponse(Bitmap bitmap) {
+//                        ivIcon.setImageBitmap(bitmap);
+//                    }
+//                });
     }
 }

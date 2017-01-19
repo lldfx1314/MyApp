@@ -12,6 +12,7 @@ import com.anhubo.anhubo.base.BaseFragment;
 import com.anhubo.anhubo.bean.MyFragmentBean;
 import com.anhubo.anhubo.entity.RxBus;
 import com.anhubo.anhubo.entity.event.Exbus_AlterName;
+import com.anhubo.anhubo.entity.event.Exbus_ShowIcon;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.Login_Register.Login_Message;
 import com.anhubo.anhubo.ui.activity.MyDetial.InvateActivity;
@@ -23,6 +24,11 @@ import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.view.AlertDialog;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -48,7 +54,7 @@ public class MyFragment extends BaseFragment {
     private LinearLayout llSetting;
     private TextView tvLogOut;
     private CircleImageView image;
-    public static Bitmap mBitmap;
+    public static GlideDrawable mBitmap;
     private String img;
     private String age;
     private String sex;
@@ -259,27 +265,43 @@ public class MyFragment extends BaseFragment {
     /**
      * 设置头像的方法
      */
-    private void setHeaderIcon(String imgurl) {
-        OkHttpUtils
-                .get()//
-                .url(imgurl)//
-                .tag(this)//
-                .build()//
-                .connTimeOut(15000)
-                .readTimeOut(15000)
-                .writeTimeOut(15000)
-                .execute(new BitmapCallback() {
-                    @Override
-                    public void onError(Call call, Exception e) {
-                        LogUtils.e(TAG, ":setHeaderIcon:", e);
-                    }
+    private void setHeaderIcon(final String imgurl) {
 
-                    @Override
-                    public void onResponse(Bitmap bitmap) {
-                        mBitmap = bitmap;
-                        image.setImageBitmap(bitmap);
-                    }
-                });
+        Glide.with(this)
+                .load(imgurl)
+                .centerCrop()
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(new GlideDrawableImageViewTarget(image) {
+            @Override
+            public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
+                super.onResourceReady(drawable, anim);
+                //在这里添加一些图片加载完成的操作
+                mBitmap = drawable;
+            }
+        });
+
+//        OkHttpUtils
+//                .get()//
+//                .url(imgurl)//
+//                .tag(this)//
+//                .build()//
+//                .connTimeOut(15000)
+//                .readTimeOut(15000)
+//                .writeTimeOut(15000)
+//                .execute(new BitmapCallback() {
+//                    @Override
+//                    public void onError(Call call, Exception e) {
+//                        LogUtils.e(TAG, ":setHeaderIcon:", e);
+//                    }
+//
+//                    @Override
+//                    public void onResponse(Bitmap bitmap) {
+//                        mBitmap = bitmap;
+//                        image.setImageBitmap(bitmap);
+//                    }
+//                });
     }
 
     /**
