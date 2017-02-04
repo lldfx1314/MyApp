@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.itheima88.googlemarket.view.StateLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <ProgressBar 
+        android:id="@+id/loadingView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+    
+    <LinearLayout 
+        android:id="@+id/failView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center">
+        
+        <ImageView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_error_page"/>
+        
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="加载失败，点击重试"
+            android:textSize="16sp"
+            android:layout_margin="6dp"
+            android:textColor="#666666"
+            android:background="@drawable/btn_normal"
+            android:padding="6dp"/>
+        
+    </LinearLayout>
+    
+    <ImageView
+        android:id="@+id/emptyView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_empty_page" />
+
+</com.itheima88.googlemarket.view.StateLayout>

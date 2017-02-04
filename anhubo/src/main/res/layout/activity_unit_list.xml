@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include
+        android:id="@+id/top_title"
+        layout="@layout/layout_top_bar"/>
+
+    <com.anhubo.anhubo.view.RefreshListview
+        android:id="@+id/unit_list_listview"
+        android:layout_below="@+id/top_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <Button
+        android:id="@+id/create_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/btn_create_unit"
+        android:text="创建单元"
+        android:textColor="@color/btn_blue"
+        android:textSize="16sp" />
+
+</RelativeLayout>

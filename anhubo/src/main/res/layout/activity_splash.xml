@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_splash"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <!--进入按钮-->
+    <ImageView
+        android:id="@+id/btn_guide_done"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/enter"
+        android:layout_marginBottom="40dp"
+        android:visibility="gone"
+        android:textSize="15sp" />
+
+    <RelativeLayout
+        android:id="@+id/rl_contain_dots"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="25dp">
+
+        <LinearLayout
+            android:id="@+id/ll_guide_point"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_guide_point_red"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/dot_gray_shape" />
+
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
