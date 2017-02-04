@@ -31,6 +31,8 @@ import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.ShowBottonDialog;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
@@ -545,26 +547,15 @@ public class Pending_FeedbackActivity extends BaseActivity {
      * 设置照片
      */
     private void setHeaderIcon(final ImageView iv, String imgurl) {
-        OkHttpUtils
-                .get()//
-                .url(imgurl)//
-                .tag(this)//
-                .build()//
-                .connTimeOut(10000)
-                .readTimeOut(10000)
-                .writeTimeOut(10000)
-                .execute(new BitmapCallback() {
-                    @Override
-                    public void onError(Call call, Exception e) {
 
-                        System.out.println("Pending_FeedbackActivity设置图片+++===" + e.getMessage());
-                    }
+        Glide
+                .with(mActivity)
+                .load(imgurl)
+                .centerCrop().crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(iv);
 
-                    @Override
-                    public void onResponse(Bitmap bitmap) {
-                        iv.setImageBitmap(bitmap);
-                    }
-                });
     }
 
 }

@@ -1023,25 +1023,6 @@ public class PersonMsgActivity extends BaseActivity {
                 .with(mActivity)
                 .load(imgurl)
                 .centerCrop().crossFade().into(ivHeaderIcon);
-//        OkHttpUtils
-//                .get()//
-//                .url(imgurl)//
-//                .tag(this)//
-//                .build()//
-//                .connTimeOut(10000)
-//                .readTimeOut(10000)
-//                .writeTimeOut(10000)
-//                .execute(new BitmapCallback() {
-//                    @Override
-//                    public void onError(Call call, Exception e) {
-//                        LogUtils.e(TAG,":setHeaderIcon:",e);
-//                    }
-//
-//                    @Override
-//                    public void onResponse(Bitmap bitmap) {
-//                        ivHeaderIcon.setImageBitmap(bitmap);
-//                    }
-//                });
     }
 
 }
