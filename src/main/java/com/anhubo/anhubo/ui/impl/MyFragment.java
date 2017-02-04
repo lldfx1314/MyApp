@@ -271,8 +271,8 @@ public class MyFragment extends BaseFragment {
                 .load(imgurl)
                 .centerCrop()
                 .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                .skipMemoryCache(true)
                 .into(new GlideDrawableImageViewTarget(image) {
             @Override
             public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
@@ -282,26 +282,6 @@ public class MyFragment extends BaseFragment {
             }
         });
 
-//        OkHttpUtils
-//                .get()//
-//                .url(imgurl)//
-//                .tag(this)//
-//                .build()//
-//                .connTimeOut(15000)
-//                .readTimeOut(15000)
-//                .writeTimeOut(15000)
-//                .execute(new BitmapCallback() {
-//                    @Override
-//                    public void onError(Call call, Exception e) {
-//                        LogUtils.e(TAG, ":setHeaderIcon:", e);
-//                    }
-//
-//                    @Override
-//                    public void onResponse(Bitmap bitmap) {
-//                        mBitmap = bitmap;
-//                        image.setImageBitmap(bitmap);
-//                    }
-//                });
     }
 
     /**

@@ -72,25 +72,6 @@ public class RunCertificateIconAdapter extends RecyclerView.Adapter<RunCertifica
                 .skipMemoryCache(true)
                 .into(ivIcon);
 
-//        OkHttpUtils
-//                .get()//
-//                .url(imgurl)//
-//                .tag(this)//
-//                .build()//
-//                .connTimeOut(15000)
-//                .readTimeOut(15000)
-//                .writeTimeOut(15000)
-//                .execute(new BitmapCallback() {
-//                    @Override
-//                    public void onError(Call call, Exception e) {
-//                        LogUtils.e(TAG, ":setHeaderIcon:", e);
-//                    }
-//
-//                    @Override
-//                    public void onResponse(Bitmap bitmap) {
-//                        ivIcon.setImageBitmap(bitmap);
-//                    }
-//                });
     }
 
 }

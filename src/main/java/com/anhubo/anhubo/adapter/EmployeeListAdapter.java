@@ -157,28 +157,9 @@ public class EmployeeListAdapter extends BaseAdapter implements View.OnClickList
                 .with(mContext)
                 .load(imgurl)
                 .centerCrop().crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                .skipMemoryCache(true)
                 .into(ivIcon);
 
-//        OkHttpUtils
-//                .get()//
-//                .url(imgurl)//
-//                .tag(this)//
-//                .build()//
-//                .connTimeOut(15000)
-//                .readTimeOut(15000)
-//                .writeTimeOut(15000)
-//                .execute(new BitmapCallback() {
-//                    @Override
-//                    public void onError(Call call, Exception e) {
-//                        LogUtils.e(TAG, ":setHeaderIcon:", e);
-//                    }
-//
-//                    @Override
-//                    public void onResponse(Bitmap bitmap) {
-//                        ivIcon.setImageBitmap(bitmap);
-//                    }
-//                });
     }
 }

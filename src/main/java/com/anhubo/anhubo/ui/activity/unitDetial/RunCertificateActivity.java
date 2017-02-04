@@ -98,6 +98,7 @@ public class RunCertificateActivity extends BaseActivity {
     private ArrayList<RunCertificateBean.Data.Icon> list;
     private int today;
     private Subscription rxSubscription;
+    private boolean isHaveData;
 
 
     @Override
@@ -198,6 +199,7 @@ public class RunCertificateActivity extends BaseActivity {
 
             LogUtils.e(TAG, ":getData", e);
             showDialog.dismiss();
+            isHaveData = false;
             AlertDialog builder = new AlertDialog(mActivity).builder();
             builder
                     .setTitle("提示")
@@ -219,6 +221,7 @@ public class RunCertificateActivity extends BaseActivity {
         @Override
         public void onResponse(String response) {
             LogUtils.eNormal(TAG + ":getData", response);
+            isHaveData = true;
             runllSum.setVisibility(View.VISIBLE);
             showDialog.dismiss();
             setPlanData(response);
@@ -337,19 +340,22 @@ public class RunCertificateActivity extends BaseActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        // 展示当前旬
-        if (today == 0) {
-            runivGreen.setBackgroundResource(R.drawable.run_gray);
-        } else if (today <= 60) {
-            runivGreen.setBackgroundResource(R.drawable.red_animlist);
-        } else if (today <= 80) {
-            runivGreen.setBackgroundResource(R.drawable.yellow_animlist);
-        } else if (today <= 100) {
-            runivGreen.setBackgroundResource(R.drawable.green_animlist);
+        if(isHaveData){
+            // 展示当前旬
+            if (today == 0) {
+                runivGreen.setBackgroundResource(R.drawable.run_gray);
+            } else if (today <= 60) {
+                runivGreen.setBackgroundResource(R.drawable.red_animlist);
+            } else if (today <= 80) {
+                runivGreen.setBackgroundResource(R.drawable.yellow_animlist);
+            } else if (today <= 100) {
+                runivGreen.setBackgroundResource(R.drawable.green_animlist);
+            }
+
+            AnimationDrawable animationDrawable = (AnimationDrawable) runivGreen.getBackground();
+            animationDrawable.start();
         }
 
-        AnimationDrawable animationDrawable = (AnimationDrawable) runivGreen.getBackground();
-        animationDrawable.start();
 
 
     }
