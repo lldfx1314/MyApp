@@ -13,12 +13,20 @@ import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.GuidePagerAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.ui.activity.Login_Register.Login_Message;
+<<<<<<< HEAD
+=======
+import com.anhubo.anhubo.ui.activity.Login_Register.RegisterActivity2;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.anhubo.anhubo.ui.fragment.GuideFragmentA;
 import com.anhubo.anhubo.ui.fragment.GuideFragmentB;
 import com.anhubo.anhubo.ui.fragment.GuideFragmentC;
 import com.anhubo.anhubo.utils.DisplayUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
+<<<<<<< HEAD
+=======
+import com.anhubo.anhubo.utils.ToastUtils;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.anhubo.anhubo.utils.Utils;
 
 import java.util.ArrayList;
@@ -43,6 +51,10 @@ public class GuideActivity extends BaseActivity {
     private GuidePagerAdapter guidePagerAdapter;
     private ArrayList<Fragment> fragments;
     private String uid;
+<<<<<<< HEAD
+=======
+    private String bulidingid;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     private String businessid;
     private String versionName;
 
@@ -92,6 +104,10 @@ public class GuideActivity extends BaseActivity {
     protected void initEvents() {
         super.initEvents();
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
+<<<<<<< HEAD
+=======
+        bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
         String[] split = Utils.getAppInfo(mActivity).split("#");
         versionName = split[1];
@@ -124,6 +140,7 @@ public class GuideActivity extends BaseActivity {
     public void onClick(View v) {
         //SpUtils.putParam(this, Keys.GUIDE_DONE, true);//保存是否完成引导页
         SpUtils.putParam(mActivity, Keys.VERSIONNAME,versionName);
+<<<<<<< HEAD
         if(!TextUtils.isEmpty(uid)) {
             enterHome(uid);
 
@@ -134,6 +151,17 @@ public class GuideActivity extends BaseActivity {
 //                // 跳到注册第二个界面
 //                enterRegister2();
 //            }
+=======
+        //System.out.println("versionName+111+"+versionName);
+        if(!TextUtils.isEmpty(uid)) {
+            if(!TextUtils.isEmpty(bulidingid)||!TextUtils.isEmpty(businessid)) {
+                //跳转到主页面
+                enterHome();
+            }else{
+                // 跳到注册第二个界面
+                enterRegister2();
+            }
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
         }else{
             // 无uid，跳到登录界面
@@ -174,22 +202,35 @@ public class GuideActivity extends BaseActivity {
 
         }
     };
+<<<<<<< HEAD
 //    private void enterRegister2() {
 //        Intent intent = new Intent(mActivity, RegisterActivity2.class);
 //        intent.putExtra(Keys.UID, uid);
 //        startActivity(intent);
 //    }
+=======
+    private void enterRegister2() {
+        Intent intent = new Intent(mActivity, RegisterActivity2.class);
+        intent.putExtra(Keys.UID, uid);
+        startActivity(intent);
+    }
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     private void enterLogin() {
         startActivity(new Intent(mActivity, Login_Message.class));
         finish();
     }
 
+<<<<<<< HEAD
     private void enterHome(String uid) {
         Intent intent = new Intent(mActivity, HomeActivity.class);
         //System.out.println("要传递的uid+++===+++" + uid);
         intent.putExtra(Keys.UID, String.valueOf(uid));
         startActivity(intent);
+=======
+    private void enterHome() {
+        startActivity(new Intent(mActivity, HomeActivity.class));
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         finish();
     }
 

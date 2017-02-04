@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+=======
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -7,7 +11,10 @@
     <!--统计图区域-->
 
     <RelativeLayout
+<<<<<<< HEAD
         android:id="@+id/rl_unit_sum"
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:background="@color/unit_top">
@@ -92,7 +99,12 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="15dp"
             android:enabled="true"
+<<<<<<< HEAD
             android:text="员工列表"
+=======
+            android:text="邀请同事"
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             android:textColor="@color/tv_gray"
             android:textSize="16sp"
             android:visibility="gone" />
@@ -114,12 +126,16 @@
     </RelativeLayout>
     <ListView
         android:id="@+id/lv_unit"
+<<<<<<< HEAD
         android:layout_below="@+id/rl_unit_sum"
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:listSelector="@android:color/transparent">
 
     </ListView>
+<<<<<<< HEAD
     <RelativeLayout
         android:id="@+id/rl_unit_zhezhao"
         android:visibility="gone"
@@ -135,3 +151,6 @@
             android:text="选择单位"/>
     </RelativeLayout>
 </RelativeLayout>
+=======
+</LinearLayout>
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce

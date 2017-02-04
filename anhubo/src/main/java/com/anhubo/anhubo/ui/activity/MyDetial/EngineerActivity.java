@@ -15,15 +15,23 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+<<<<<<< HEAD
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+=======
+import android.view.View;
+import android.view.WindowManager;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+<<<<<<< HEAD
 import android.widget.LinearLayout;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -34,6 +42,10 @@ import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.EngineerBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.DisplayUtil;
+<<<<<<< HEAD
+=======
+import com.anhubo.anhubo.utils.ImageTools;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
@@ -66,8 +78,11 @@ public class EngineerActivity extends BaseActivity {
     private static final int CAMERA = 1;
     @InjectView(R.id.et_engineer_name)
     EditText etEngineerName;
+<<<<<<< HEAD
     @InjectView(R.id.ll_engineer_grade)
     TextView llEngineerGrade;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     @InjectView(R.id.tv_engineer_grade)
     TextView tvEngineerGrade;
     @InjectView(R.id.et_engineer_phone)
@@ -89,7 +104,10 @@ public class EngineerActivity extends BaseActivity {
     private ArrayList<String> list;
     private PopupWindow popupWindow;
     private String str;
+<<<<<<< HEAD
     private Dialog showDialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @Override
     protected int getContentViewId() {
@@ -121,12 +139,15 @@ public class EngineerActivity extends BaseActivity {
             case R.id.tv_engineer_grade:
                 // 评级弹出
                 /********************************************/
+<<<<<<< HEAD
                 InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 boolean immActive = imm.isActive();
                 if (immActive) {
                     // 如果已经键盘弹出来，点击后让键盘隐藏
                     imm.hideSoftInputFromWindow(tvEngineerGrade.getWindowToken(), 0);
                 }
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 showPopupwindow();
                 break;
             case R.id.iv_engineer1:
@@ -179,6 +200,7 @@ public class EngineerActivity extends BaseActivity {
         }
     }
 
+<<<<<<< HEAD
     /**
      * 评级弹出
      */
@@ -186,6 +208,13 @@ public class EngineerActivity extends BaseActivity {
         list = new ArrayList<>();
         String[] arr = new String[]{"建（构）筑物消防员初级", "建（构）筑物消防员中级", "建（构）筑物消防员高级", "建（构）筑物消防员技师",
                 "建（构）筑物消防员高级技师", "注册消防工程师高级", "注册消防工程师一级", "注册消防工程师二级"};
+=======
+    /**评级弹出*/
+    private void showPopupwindow() {
+        list = new ArrayList<>();
+        String[] arr = new String[]{"建（构）筑物消防员初级","建（构）筑物消防员中级","建（构）筑物消防员高级","建（构）筑物消防员技师",
+                "建（构）筑物消防员高级技师","注册消防工程师高级","注册消防工程师一级","注册消防工程师二级"};
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         for (int i = 0; i < arr.length; i++) {
             list.add(arr[i]);
         }
@@ -196,10 +225,17 @@ public class EngineerActivity extends BaseActivity {
     }
 
     private void setAdapter(View view) {
+<<<<<<< HEAD
         EngineerAdapter adapter = new EngineerAdapter(mActivity, list);
         listView.setAdapter(adapter);
         // 创建一个PopuWidow对象
         popupWindow = new PopupWindow(view, DisplayUtil.dp2px(mActivity, 350), DisplayUtil.dp2px(mActivity, 200));
+=======
+        EngineerAdapter adapter = new EngineerAdapter(mActivity,list);
+        listView.setAdapter(adapter);
+        // 创建一个PopuWidow对象
+        popupWindow = new PopupWindow(view, DisplayUtil.dp2px(mActivity,270), DisplayUtil.dp2px(mActivity,130));
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         //控制键盘是否可以获得焦点
         popupWindow.setFocusable(true);
         // 设置允许在外点击消失
@@ -213,7 +249,11 @@ public class EngineerActivity extends BaseActivity {
         int xPos = windowManager.getDefaultDisplay().getWidth() / 2
                 - popupWindow.getWidth() / 2;
 
+<<<<<<< HEAD
         popupWindow.showAsDropDown(llEngineerGrade);
+=======
+        popupWindow.showAsDropDown(tvEngineerGrade);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -232,10 +272,15 @@ public class EngineerActivity extends BaseActivity {
             }
         });
     }
+<<<<<<< HEAD
 
     private File file1 = null;
     private File file2 = null;
 
+=======
+    private File file1 = null;
+    private File file2 = null;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     /**
      * 提交证书编号
      */
@@ -257,7 +302,11 @@ public class EngineerActivity extends BaseActivity {
                     .setCancelable(true).show();
             return;
         }
+<<<<<<< HEAD
         showDialog = loadProgressDialog.show(mActivity, "正在提交...");
+=======
+        progressBar.setVisibility(View.VISIBLE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         params.put("re_num", engineerPhone);
@@ -284,7 +333,10 @@ public class EngineerActivity extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
+<<<<<<< HEAD
             showDialog.dismiss();
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -298,7 +350,11 @@ public class EngineerActivity extends BaseActivity {
             //System.out.println(response);
             EngineerBean bean = new Gson().fromJson(response, EngineerBean.class);
             if (bean != null) {
+<<<<<<< HEAD
                 showDialog.dismiss();
+=======
+                progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 int code = bean.code;
                 final String msg = bean.msg;
                 if (code != 0) {
@@ -375,7 +431,11 @@ public class EngineerActivity extends BaseActivity {
                     ivEngineer1.setImageBitmap(photo);
                     // 给图片一赋值
                     // 把本文件压缩后缓存到本地文件里面
+<<<<<<< HEAD
                     savePicture(photo, "photo01");
+=======
+                    savePicture(photo,"photo01");
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                     File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
                     file1 = filePhoto02;
                 } else {
@@ -383,7 +443,11 @@ public class EngineerActivity extends BaseActivity {
                     ivEngineer2.setImageBitmap(photo);
 //                    给图片二赋值
                     // 把本文件压缩后缓存到本地文件里面
+<<<<<<< HEAD
                     savePicture(photo, "photo02");
+=======
+                    savePicture(photo,"photo02");
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                     File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
                     file2 = filePhoto02;
                 }
@@ -434,7 +498,11 @@ public class EngineerActivity extends BaseActivity {
             //显示图片一
             ivEngineer1.setImageBitmap(bitmap);
             // 把本文件压缩后缓存到本地文件里面
+<<<<<<< HEAD
             savePicture(bitmap, "photo01");
+=======
+            savePicture(bitmap,"photo01");
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
             // 给图片1赋值
             file1 = filePhoto01;
@@ -442,22 +510,37 @@ public class EngineerActivity extends BaseActivity {
             //显示图片二
             ivEngineer2.setImageBitmap(bitmap);
             // 把本文件压缩后缓存到本地文件里面
+<<<<<<< HEAD
             savePicture(bitmap, "photo02");
+=======
+            savePicture(bitmap,"photo02");
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
             // 给图片1赋值
             file2 = filePhoto01;
         }
     }
+<<<<<<< HEAD
 
     /**
      * 保存图片到本应用下
      **/
     private void savePicture(Bitmap bitmap, String fileName) {
+=======
+    /**
+     * 保存图片到本应用下
+     **/
+    private void savePicture(Bitmap bitmap,String fileName) {
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
         FileOutputStream fos = null;
         try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新写入内容会被覆盖
             //fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
+<<<<<<< HEAD
             OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() + "/" + fileName);
+=======
+            OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() +"/"+fileName);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);// 把图片写入指定文件夹中
 
         } catch (Exception e) {
@@ -473,7 +556,10 @@ public class EngineerActivity extends BaseActivity {
             }
         }
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     /**
      * 弹出对话框
      */

@@ -1,6 +1,9 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
+<<<<<<< HEAD
 import android.app.Dialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -32,10 +35,15 @@ import com.anhubo.anhubo.adapter.Business_Location_Adapter;
 import com.anhubo.anhubo.bean.LocationBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.Keys;
+<<<<<<< HEAD
 import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.LoadProgressDialog;
+=======
+import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.view.AlertDialog;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.anhubo.anhubo.view.RefreshListview;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -53,6 +61,7 @@ import okhttp3.Call;
  */
 public class BuildingActivity extends AppCompatActivity implements View.OnSystemUiVisibilityChangeListener {
 
+<<<<<<< HEAD
     private static final String TAG = "BuildingActivity";
     MapView mMapView = null;
     private RefreshListview lvBuilding;
@@ -60,6 +69,15 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
     private ImageView ivTopBarleftUnitMenu;
     private ImageView ivTopBarRightUnitMsg;
     private ImageView ivTopBarRight;
+=======
+    MapView mMapView = null;
+    private RefreshListview lvBuilding;
+    private RelativeLayout progressBar;
+    private ImageButton iv_basepager_left;
+    private ImageView ivTopBarleftUnitMenu;
+    private ImageView ivTopBarRightUnitMsg;
+    private TextView tvTopBarRight;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     private ImageView ivTopBarleftBuildPen;
     private TextView tvToptitle;
     private RelativeLayout llTop;
@@ -75,9 +93,12 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
     //声明mListener对象，定位监听器
     private LocationSource.OnLocationChangedListener mListener = null;
     private ArrayList<String> listBuilding;
+<<<<<<< HEAD
     private ArrayList<String> listBuildingPoi;
     private LoadProgressDialog loadProgressDialog;
     private Dialog showDialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,31 +126,51 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
         //获取地图控件引用
         mMapView = (MapView) findViewById(R.id.map_building);
         lvBuilding = (RefreshListview) findViewById(R.id.lv_building);
+<<<<<<< HEAD
+=======
+        progressBar = (RelativeLayout) findViewById(R.id.rl_progress);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         // 监听listview的滑动监听
         lvBuilding.setOnRefreshingListener(new MyOnRefreshingListener());
         lvBuilding.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+<<<<<<< HEAD
                 String poi = listBuildingPoi.get(position);
                 TextView tv = (TextView) view.findViewById(R.id.tv_location);
                 String str = tv.getText().toString().trim();
                 // 返回增加界面
                 returnAddActivity(str,poi);
+=======
+                TextView tv = (TextView) view.findViewById(R.id.tv_location);
+                String str = tv.getText().toString().trim();
+                // 返回增加界面
+                returnAddActivity(str);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             }
         });
     }
 
+<<<<<<< HEAD
     private void returnAddActivity(String str,String poi) {
         Intent intent = new Intent();
         intent.putExtra(Keys.STR, str);
         intent.putExtra(Keys.BUILD_POI, poi);
+=======
+    private void returnAddActivity(String str) {
+        Intent intent = new Intent();
+        intent.putExtra(Keys.STR, str);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         setResult(1, intent);
         finish();
     }
 
     private void initEvents() {
         listBuilding = new ArrayList<String>();
+<<<<<<< HEAD
         listBuildingPoi = new ArrayList<String>();
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     }
 
@@ -147,8 +188,14 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
     }
 
     private void addBuilding() {
+<<<<<<< HEAD
         ivTopBarRight.setVisibility(View.VISIBLE);
         ivTopBarRight.setOnClickListener(new View.OnClickListener() {
+=======
+        tvTopBarRight.setVisibility(View.VISIBLE);
+        tvTopBarRight.setText("添加");
+        tvTopBarRight.setOnClickListener(new View.OnClickListener() {
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             @Override
             public void onClick(View v) {
                 dialog();
@@ -168,6 +215,7 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
                     public void onClick(View v) {
                         String string = alertDialog.et_msg.getText().toString().trim();
                         if (!TextUtils.isEmpty(string)) {
+<<<<<<< HEAD
 
                             // 返回增加界面
                             returnAddActivity(string,"");
@@ -176,6 +224,11 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
 
 
 
+=======
+                            // 返回增加界面
+                            returnAddActivity(string);
+                        }
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                     }
                 }).setNegativeButton("取消", new View.OnClickListener() {
             @Override
@@ -275,9 +328,13 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
                         isFirstLoc = false;
                     }
                     // 拿到经纬度请求网络
+<<<<<<< HEAD
 
                     loadProgressDialog = LoadProgressDialog.newInstance();
                     showDialog = loadProgressDialog.show(BuildingActivity.this, "正在加载...");
+=======
+                    progressBar.setVisibility(View.VISIBLE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                     getData();
 
 
@@ -358,24 +415,47 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
                 .execute(new MyStringCallback());
     }
 
+<<<<<<< HEAD
+=======
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
+<<<<<<< HEAD
             showDialog.dismiss();
+=======
+            progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             new AlertDialog(BuildingActivity.this).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(true).show();
+<<<<<<< HEAD
             LogUtils.e(TAG,":getData:",e);
+=======
+            System.out.println("定位+" + e.getMessage());
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         }
 
         @Override
         public void onResponse(String response) {
+<<<<<<< HEAD
             LogUtils.eNormal(TAG+":getData:",response);
             LocationBean bean = new Gson().fromJson(response, LocationBean.class);
             if (bean != null) {
                 showDialog.dismiss();
+=======
+            //System.out.println("地图建筑界面+++===" + response);
+            LocationBean bean = new Gson().fromJson(response, LocationBean.class);
+            if (bean != null) {
+                progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 processData(bean);
                 isLoadMore = false;
                 // 恢复加载更多状态
@@ -392,6 +472,7 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
         int code = bean.code;
         String msg = bean.msg;
         page = bean.data.page;
+<<<<<<< HEAD
         List<LocationBean.Data.Building> building = bean.data.building;
         if (!building.isEmpty()) {
             for (int i = 0; i < building.size(); i++) {
@@ -400,6 +481,13 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
                 listBuilding.add(s);
                 String poiId = build.poi_id;
                 listBuildingPoi.add(poiId);
+=======
+        List<String> building = bean.data.building;
+        if (!building.isEmpty()) {
+            for (int i = 0; i < building.size(); i++) {
+                String s = building.get(i);
+                listBuilding.add(s);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             }
         }
         if (!isLoadMore) {
@@ -419,6 +507,11 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
 
             // 判断是否有更多数据，moreurl是否为空
             if (pager <= page) {
+<<<<<<< HEAD
+=======
+                System.out.println("pager+++==="+pager);
+                System.out.println("page+++==="+page);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 // 加载更多业务
                 isLoadMore = true;
                 getData();
@@ -467,7 +560,11 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
         iv_basepager_left = (ImageButton) findViewById(R.id.ivTopBarLeft);//左上角返回按钮
         ivTopBarleftUnitMenu = (ImageView) findViewById(R.id.ivTopBarleft_unit_menu);//左上角菜单按钮
         ivTopBarRightUnitMsg = (ImageView) findViewById(R.id.ivTopBarRight_unit_msg);//右上角信息按钮
+<<<<<<< HEAD
         ivTopBarRight = (ImageView) findViewById(R.id.ivTopBarRight_add);//右上角加号
+=======
+        tvTopBarRight = (TextView) findViewById(R.id.tvTopBarRight);//右上角列表
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         ivTopBarleftBuildPen = (ImageView) findViewById(R.id.ivTopBarleft_build_pen);//左上角铅笔按钮
         tvToptitle = (TextView) findViewById(R.id.tvAddress);//标题
         llTop = (RelativeLayout) findViewById(R.id.ll_Top); // 顶部标题栏
@@ -529,9 +626,12 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
 
     }
 
+<<<<<<< HEAD
     @Override
     public void onSystemUiVisibilityChange(int visibility) {
 
     }
 
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 }

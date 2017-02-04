@@ -5,17 +5,29 @@
     android:orientation="vertical"
     android:background="@color/bg_upload">
 
+<<<<<<< HEAD
     <com.anhubo.anhubo.view.MyScrollView
+=======
+    <ScrollView
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
+<<<<<<< HEAD
             android:layout_height="match_parent"
+=======
+            android:layout_height="wrap_content"
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             android:orientation="vertical">
             <!--公告-->
             <RelativeLayout
                 android:id="@+id/rl_notice"
+<<<<<<< HEAD
+=======
+                android:layout_marginTop="8dp"
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 android:clickable="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -158,5 +170,9 @@
 
 
         </LinearLayout>
+<<<<<<< HEAD
     </com.anhubo.anhubo.view.MyScrollView>
+=======
+    </ScrollView>
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 </LinearLayout>

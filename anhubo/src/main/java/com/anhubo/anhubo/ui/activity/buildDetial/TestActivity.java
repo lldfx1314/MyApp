@@ -1,6 +1,9 @@
 package com.anhubo.anhubo.ui.activity.buildDetial;
 
+<<<<<<< HEAD
 import android.app.Dialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
@@ -57,8 +60,11 @@ public class TestActivity extends BaseActivity {
     private HashMap<Integer, Integer> hm;               // 用于记录每组 子item的数量，以便于创建对应于组头的集合，方便记录被选中的状态
     private ArrayList<Integer> completeList;            // 根据hm创建的对应于组头的子item集合
     private HashMap<Integer, String> hmBindTestId;      //把组头和testId绑定
+<<<<<<< HEAD
     private Dialog showDialog1;
     private Dialog showDialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @Override
     protected void initConfig() {
@@ -149,7 +155,11 @@ public class TestActivity extends BaseActivity {
             requireIds.add(string);
         }
 
+<<<<<<< HEAD
         showDialog1 = loadProgressDialog.show(mActivity, "正在提交...");
+=======
+        progressBar.setVisibility(View.VISIBLE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         Map<String, String> params = new HashMap<>();
         if (!TextUtils.isEmpty(cardnumber)) {
             params.put("device_id", cardnumber);
@@ -178,7 +188,11 @@ public class TestActivity extends BaseActivity {
     class MyStringCallback1 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
+<<<<<<< HEAD
             showDialog1.dismiss();
+=======
+            progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -189,7 +203,11 @@ public class TestActivity extends BaseActivity {
         @Override
         public void onResponse(String response) {
             //System.out.println(response);
+<<<<<<< HEAD
             showDialog1.dismiss();
+=======
+            progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             TestSubmitBean bean = new Gson().fromJson(response, TestSubmitBean.class);
             if (bean != null) {
                 int code = bean.code;
@@ -290,7 +308,11 @@ public class TestActivity extends BaseActivity {
      * 获取测试项
      */
     private void getData() {
+<<<<<<< HEAD
         showDialog = loadProgressDialog.show(mActivity, "正在获取...");
+=======
+        progressBar.setVisibility(View.VISIBLE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         Map<String, String> params = new HashMap<>();
         if (!TextUtils.isEmpty(cardnumber)) {
             params.put("device_id", cardnumber);
@@ -312,7 +334,11 @@ public class TestActivity extends BaseActivity {
 
             System.out.println("TestActivity+++获取测试项===界面失败" + e.getMessage());
 
+<<<<<<< HEAD
             showDialog.dismiss();
+=======
+            progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -322,7 +348,11 @@ public class TestActivity extends BaseActivity {
         @Override
         public void onResponse(String response) {
             //System.out.println("获取测试项+++===" + response);
+<<<<<<< HEAD
             showDialog.dismiss();
+=======
+            progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             TestItemBean bean = new Gson().fromJson(response, TestItemBean.class);
             if (bean != null) {
                 int code = bean.code;

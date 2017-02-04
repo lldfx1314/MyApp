@@ -1,12 +1,18 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.app.Activity;
+<<<<<<< HEAD
 import android.app.Dialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
+<<<<<<< HEAD
 import android.os.Handler;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -22,12 +28,20 @@ import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.AddDevice_CheckName_Bean;
 import com.anhubo.anhubo.bean.Add_Device_Bean;
 import com.anhubo.anhubo.protocol.Urls;
+<<<<<<< HEAD
 import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
+=======
+import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.SpUtils;
+import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.view.AlertDialog;
+import com.google.gson.Gson;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -52,7 +66,10 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     private static final int REQUEST_CODE = 2;
     private static final int REQUESTCODE1 = 3;
     private static final int REQUESTCODE2 = 4;
+<<<<<<< HEAD
     private static final String TAG = "Add_Device_Activity";
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     private Button complete;
     private LinearLayout takePhoto;
     private EditText device_Name;
@@ -73,9 +90,12 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     private String businessname;
     private File newFile;
     private TextView tvAddDevice;
+<<<<<<< HEAD
     private Dialog showDialog;
     private String buildPoi;
     private String businessPoi;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @Override
     protected void initConfig() {
@@ -139,6 +159,10 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         super.initEvents();
         //　查询该设备号是否已经添加到设备里里面
         getData_Device();
+<<<<<<< HEAD
+=======
+        //tvAddDevice
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     }
 
     /**
@@ -159,26 +183,44 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
 
         @Override
         public void onError(Call call, Exception e) {
+<<<<<<< HEAD
             LogUtils.e(TAG, ":getData_Device", e);
+=======
+            System.out.println("Add_Device_Activity+++===界面失败" + e.getMessage());
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(true).show();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         }
 
         @Override
         public void onResponse(String response) {
+<<<<<<< HEAD
             LogUtils.eNormal(TAG + ":getData_Device", response);
             AddDevice_CheckName_Bean bean = JsonUtil.json2Bean(response, AddDevice_CheckName_Bean.class);
+=======
+            //System.out.println("Add_Device_Activity界面+++" + response);
+            AddDevice_CheckName_Bean bean = new Gson().fromJson(response, AddDevice_CheckName_Bean.class);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             if (bean != null) {
                 int code = bean.code;
                 String typeName = bean.data.device_dev_type_name;
                 if (code == 0) {
                     if (!TextUtils.isEmpty(typeName)) {
+<<<<<<< HEAD
                         tvAddDevice.setText("您扫描的二维码绑定的设备是:" + "\n" + typeName);
 
                     } else {
+=======
+                        tvAddDevice.setText("您扫描的二维码绑定的设备是:"+"\n"+typeName);
+
+                    }else {
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                         tvAddDevice.setText("您扫描的二维码尚未添加到设备库");
                     }
                 }
@@ -213,7 +255,10 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
                 case REQUESTCODE1:
                     if (resultCode == 1) {
                         String stringExtra = intent.getStringExtra(Keys.STR);
+<<<<<<< HEAD
                         buildPoi = intent.getStringExtra(Keys.BUILD_POI);
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                         if (!TextUtils.isEmpty(stringExtra)) {
                             device_Build.setText(stringExtra);
                         }
@@ -222,7 +267,10 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
                 case REQUESTCODE2:
                     if (resultCode == 2) {
                         String stringExtra = intent.getStringExtra(Keys.STR);
+<<<<<<< HEAD
                         businessPoi = intent.getStringExtra(Keys.BUSINESS_POI);
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                         if (!TextUtils.isEmpty(stringExtra)) {
                             device_Unit.setText(stringExtra);
                         }
@@ -342,6 +390,7 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     private void addComplete() {
         // 点击完成的时候获取输入框内的内容，调用接口，使用post方法把数据添加到后台
         getInputData();
+<<<<<<< HEAD
         if (TextUtils.isEmpty(build)) {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
@@ -349,6 +398,9 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
                     .setCancelable(true).show();
             return;
         }
+=======
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         if (TextUtils.isEmpty(devicePlace)) {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
@@ -373,6 +425,7 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
             return;
         }
 
+<<<<<<< HEAD
         showDialog = loadProgressDialog.show(mActivity, "正在提交...");
         String url = Urls.Url_Add;
         Map<String, String> params = new HashMap<>();
@@ -388,6 +441,12 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
             params.put("business_poi_id", businessPoi);
         }
 
+=======
+        progressBar.setVisibility(View.VISIBLE);
+        String url = Urls.Url_Add;
+        Map<String, String> params = new HashMap<>();
+        params.put("uid", uid);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         params.put("qrcode", cardnumber);
         params.put("building_name", build);// 所属建筑
         params.put("business_name", unit);//所属单位
@@ -405,13 +464,25 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
 
     }
 
+<<<<<<< HEAD
     private Handler handler = new Handler();
+=======
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
+<<<<<<< HEAD
             LogUtils.e(TAG, ":addComplete", e);
             showDialog.dismiss();
+=======
+            System.out.println("Add_Device_Activity+++===获取数据失败+++===" + e.getMessage());
+            progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -420,6 +491,7 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
 
         @Override
         public void onResponse(String response) {
+<<<<<<< HEAD
             LogUtils.eNormal(TAG + ":addComplete", response);
             showDialog.dismiss();
             if (!TextUtils.isEmpty(response)) {
@@ -435,6 +507,19 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
                             }
                         }, 500);
                     }
+=======
+            //System.out.println("添加界面+++==="+response);
+            if (!TextUtils.isEmpty(response)) {
+                Add_Device_Bean addDeviceBean = new Gson().fromJson(response, Add_Device_Bean.class);
+                if (addDeviceBean != null) {
+
+                    progressBar.setVisibility(View.GONE);
+                    deviceId = addDeviceBean.data.device_id;
+                    ToastUtils.showToast(mActivity, "添加成功");
+                    finish();
+                } else {
+                    System.out.println("Add_Device_Activity+++===没获取bean对象");
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 }
             }
 
@@ -452,9 +537,12 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         devicePlace = device_Place.getText().toString().trim();//设备位置
         deviceName = device_Name.getText().toString().trim();//设备名称
     }
+<<<<<<< HEAD
 
     @Override
     public void onSystemUiVisibilityChange(int visibility) {
 
     }
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 }

@@ -10,7 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
+<<<<<<< HEAD
 import com.anhubo.anhubo.interfaces.InterClick;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
 import java.util.ArrayList;
 
@@ -97,7 +100,13 @@ public class DeviceListAdapter extends BaseAdapter implements View.OnClickListen
         }
     }
     /**条目内部的button点击事件*/
+<<<<<<< HEAD
 //    public interface InterClick {
 //        void onBtnClick(View v);
 //    }
+=======
+    public interface InterClick {
+        void onBtnClick(View v);
+    }
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 }

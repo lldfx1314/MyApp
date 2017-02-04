@@ -1,6 +1,9 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
+<<<<<<< HEAD
 import android.app.Dialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.view.View;
 
 import com.anhubo.anhubo.R;
@@ -42,13 +45,20 @@ public class UnitMenuActivity extends BaseActivity {
     private UnitMenuAdapter menuAdapter;
     private String versionName;
     private ArrayList<Object> datas;
+<<<<<<< HEAD
     private Dialog dialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @Override
     protected void initConfig() {
         super.initConfig();
         // 获取business_id
+<<<<<<< HEAD
         businessId = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
+=======
+        businessId = SpUtils.getStringParam(mActivity, Keys.BUSINESSID).trim();
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         // 定义一个数，记录页数
         pager = 0;
     }
@@ -99,7 +109,10 @@ public class UnitMenuActivity extends BaseActivity {
     @Override
     protected void onLoadDatas() {
         /**获取网络数据*/
+<<<<<<< HEAD
         dialog = loadProgressDialog.show(mActivity, "正在加载...");
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         getData();
     }
 
@@ -108,8 +121,15 @@ public class UnitMenuActivity extends BaseActivity {
      * 获取网络数据
      */
     private void getData() {
+<<<<<<< HEAD
         String[] split = Utils.getAppInfo(mActivity).split("#");
         versionName = split[1];
+=======
+
+        String[] split = Utils.getAppInfo(mActivity).split("#");
+        versionName = split[1];
+        progressBar.setVisibility(View.VISIBLE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         String url = Urls.Url_studyRecord;
         HashMap<String, String> params = new HashMap<>();
         params.put("business_id", businessId);
@@ -129,7 +149,11 @@ public class UnitMenuActivity extends BaseActivity {
         @Override
         public void onError(Call call, Exception e) {
             System.out.println("UnitMenuActivity+++===没拿到数据" + e.getMessage());
+<<<<<<< HEAD
             dialog.dismiss();
+=======
+            progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -139,9 +163,16 @@ public class UnitMenuActivity extends BaseActivity {
         @Override
         public void onResponse(String response) {
 //            System.out.println("执行记录++" + response);
+<<<<<<< HEAD
             dialog.dismiss();
             StudyBean bean = new Gson().fromJson(response, StudyBean.class);
             if (bean != null) {
+=======
+
+            StudyBean bean = new Gson().fromJson(response, StudyBean.class);
+            if (bean != null) {
+                progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 processData(bean);
                 isLoadMore = false;
                 // 恢复加载更多状态

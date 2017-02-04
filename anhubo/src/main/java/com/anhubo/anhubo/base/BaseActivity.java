@@ -26,7 +26,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
+<<<<<<< HEAD
 import com.anhubo.anhubo.view.LoadProgressDialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
@@ -46,10 +49,15 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected RelativeLayout llTop;
     protected TextView tvToptitle;
     protected TextView tvTopBarRight;
+<<<<<<< HEAD
     protected ProgressBar topPb;
     protected LoadProgressDialog loadProgressDialog;
     protected ImageView ivTopBarRightUnitShare;
     protected ImageView ivTopBarRight;
+=======
+    protected RelativeLayout progressBar;
+    protected ProgressBar topPb;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -106,7 +114,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
 
     private void initProgressBar() {
+<<<<<<< HEAD
         loadProgressDialog = LoadProgressDialog.newInstance();
+=======
+        progressBar = (RelativeLayout) findViewById(R.id.rl_progress);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     }
 
@@ -172,9 +184,13 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         iv_basepager_left = (ImageButton) findViewById(R.id.ivTopBarLeft);//左上角返回按钮
         ivTopBarleftUnitMenu = (ImageView) findViewById(R.id.ivTopBarleft_unit_menu);//左上角菜单按钮
         ivTopBarRightUnitMsg = (ImageView) findViewById(R.id.ivTopBarRight_unit_msg);//右上角信息按钮
+<<<<<<< HEAD
         ivTopBarRightUnitShare = (ImageView) findViewById(R.id.ivTopBarRight_unit_share);//右上角分享按钮
         tvTopBarRight = (TextView) findViewById(R.id.tvTopBarRight);//右上角列表
         ivTopBarRight = (ImageView) findViewById(R.id.ivTopBarRight_add);//右上角加号
+=======
+        tvTopBarRight = (TextView) findViewById(R.id.tvTopBarRight);//右上角列表
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         ivTopBarleftBuildPen = (ImageView) findViewById(R.id.ivTopBarleft_build_pen);//左上角铅笔按钮
         tvToptitle = (TextView) findViewById(R.id.tvAddress);//标题
         llTop = (RelativeLayout) findViewById(R.id.ll_Top); // 顶部标题栏

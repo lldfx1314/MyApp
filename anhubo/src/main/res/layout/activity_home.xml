@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+=======
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -10,6 +15,7 @@
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+<<<<<<< HEAD
         android:layout_weight="1" />
 
     <View
@@ -25,11 +31,27 @@
         android:orientation="horizontal"
         android:paddingBottom="2dp"
         android:paddingTop="2dp">
+=======
+        android:layout_weight="1"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/rl_gray"/>
+    <RadioGroup
+        android:id="@+id/rg_home_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:background="@android:color/transparent">
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
         <RadioButton
             android:id="@+id/rb_bottom_unit"
             style="@style/bottom_style"
             android:drawableTop="@drawable/bottom_unit_selector"
+<<<<<<< HEAD
             android:text="单位" />
 
         <RadioButton
@@ -39,17 +61,34 @@
             android:text="建筑"
             android:visibility="gone" />
 
+=======
+            android:text="单位"/>
+        <RadioButton
+            android:id="@+id/rb_bottom_build"
+            style="@style/bottom_style"
+            android:visibility="gone"
+            android:drawableTop="@drawable/bottom_build_selector"
+            android:text="建筑"/>
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         <RadioButton
             android:id="@+id/rb_bottom_find"
             style="@style/bottom_style"
             android:drawableTop="@drawable/bottom_find_selector"
+<<<<<<< HEAD
             android:text="发现" />
 
+=======
+            android:text="发现"/>
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         <RadioButton
             android:id="@+id/rb_bottom_my"
             style="@style/bottom_style"
             android:drawableTop="@drawable/bottom_my_selector"
+<<<<<<< HEAD
             android:text="我的" />
+=======
+            android:text="我的"/>
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     </RadioGroup>
 
 </LinearLayout>

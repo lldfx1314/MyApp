@@ -1,6 +1,9 @@
 package com.anhubo.anhubo.ui.activity.Login_Register;
 
+<<<<<<< HEAD
 import android.app.Dialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.content.Intent;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -15,9 +18,13 @@ import com.anhubo.anhubo.bean.Login_Bean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.HomeActivity;
 import com.anhubo.anhubo.utils.InputWatcher;
+<<<<<<< HEAD
 import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
+=======
+import com.anhubo.anhubo.utils.Keys;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
@@ -37,7 +44,10 @@ import okhttp3.Call;
  */
 public class Login_Pwd extends BaseActivity {
 
+<<<<<<< HEAD
     private static final String TAG = "Login_Pwd";
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     @InjectView(R.id.et_pwdLogin_phone)
     EditText etPwdLoginPhone;
     @InjectView(R.id.btn_pwdLogin_phone)
@@ -55,14 +65,23 @@ public class Login_Pwd extends BaseActivity {
     private String phoneNumber;
     private boolean pwdIsVisible;
     private String pwd;
+<<<<<<< HEAD
     private Dialog showDialog;
     private int pwdCount = 0;
     private String phone;
+=======
+    private AlertDialog builder;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @Override
     protected void initConfig() {
         super.initConfig();
+<<<<<<< HEAD
         phone = getIntent().getStringExtra(Keys.PHONE);
+=======
+        // 在这儿先获取到uid
+        phoneNumber = getIntent().getStringExtra(Keys.PHONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
 
     }
@@ -81,10 +100,17 @@ public class Login_Pwd extends BaseActivity {
     @Override
     protected void initEvents() {
         super.initEvents();
+<<<<<<< HEAD
 
         // 设置手机号输入框的默认显示内容
         if (etPwdLoginPhone != null&&!TextUtils.isEmpty(phone)) {
             etPwdLoginPhone.setText(phone);
+=======
+        builder = new AlertDialog(mActivity).builder();
+        // 设置手机号输入框的默认显示内容
+        if (etPwdLoginPhone != null) {
+            etPwdLoginPhone.setText(phoneNumber);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         }
         //设置当号码输入框有内容时显示小圆叉
         etPwdLoginPhone.addTextChangedListener(new InputWatcher(btnPwdLoginPhone, etPwdLoginPhone));
@@ -147,7 +173,11 @@ public class Login_Pwd extends BaseActivity {
     }
 
     private void showdialog(String string) {
+<<<<<<< HEAD
         new AlertDialog(mActivity).builder()
+=======
+        builder
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 .setTitle("提示")
                 .setMsg(string)
                 .setCancelable(true).show();
@@ -156,7 +186,10 @@ public class Login_Pwd extends BaseActivity {
     /**进入更改密码界面 */
     private void enterAlterPwd() {
         Intent intent = new Intent(mActivity, FindPwdActivity.class);
+<<<<<<< HEAD
         intent.putExtra(Keys.PHONE,phoneNumber);
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         startActivity(intent);
     }
 
@@ -165,6 +198,12 @@ public class Login_Pwd extends BaseActivity {
      */
     private void getInputData() {
 
+<<<<<<< HEAD
+=======
+
+        // 在这儿获取到传过来的手机号
+        phoneNumber = getIntent().getStringExtra(Keys.PHONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         //获取输入的手机号
         phoneNumber = etPwdLoginPhone.getText().toString().trim();
         //第二次密码
@@ -172,7 +211,11 @@ public class Login_Pwd extends BaseActivity {
     }
 
     private void pwdLogin() {
+<<<<<<< HEAD
         showDialog = loadProgressDialog.show(mActivity, "正在登录...");
+=======
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         // 创建网络请求登录
         String url = Urls.Url_LoginPwd;
         HashMap<String, String> params = new HashMap<>();
@@ -188,17 +231,30 @@ public class Login_Pwd extends BaseActivity {
 
     }
 
+<<<<<<< HEAD
 
+=======
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
+<<<<<<< HEAD
             showDialog.dismiss();
             LogUtils.e(TAG,":pwdLogin:",e);
+=======
+
+            System.out.println("Login_Pwd+++===没拿到数据" + e.getMessage());
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         }
 
         @Override
         public void onResponse(String response) {
+<<<<<<< HEAD
             showDialog.dismiss();
             LogUtils.eNormal(TAG+":pwdLogin:",response);
             Login_Bean bean = JsonUtil.json2Bean(response, Login_Bean.class);
@@ -241,11 +297,56 @@ public class Login_Pwd extends BaseActivity {
                         SpUtils.putParam(mActivity,Keys.BUSINESSNAME,businessName);
                         //跳转到主页面
                         enterHome(uid);
+=======
+            Login_Bean bean = new Gson().fromJson(response, Login_Bean.class);
+            if (bean != null) {
+                // 获取到数据
+                String code = bean.code;
+                String msg = bean.msg;
+                Login_Bean.Data data = bean.data;
+                String uid = data.uid;
+                String buildingName = data.building_name;
+                String buildingId = data.building_id;
+                String businessName = data.business_name;
+                String businessId = data.business_id;
+
+                // 根据code值判断跳转到那个界面
+                switch (code) {
+                    case "101"://网络错误
+                        showdialog(msg);
+                        break;
+                    case "104"://该手机号码没注册，携带输入的手机号跳转到密码注册界面
+                        goToPwdRegisterActivity();
+                        break;
+                    case "105":// 跳转到注册的第二步
+                        // 获取到uid后携带uid跳转到RegisterActivity2界面
+                        goTo_Activity(uid);
+                        break;
+                    case "106":// 跳转到注册的第二步
+                        goTo_Activity(uid);
+                        break;
+                    case "107"://密码错误
+                        showdialog(msg);
+                        break;
+                    case "108"://手机号码未注册
+                        goToPwdRegisterActivity();
+                        break;
+                    case "0":// 登录成功，携带返回的参数跳转到单位界面，同时存一下把uid等参数保存到本地
+                        // 保存参数
+                        SpUtils.putParam(mActivity,Keys.UID,uid);
+                        SpUtils.putParam(mActivity,Keys.BUSINESSID,businessId);
+                        SpUtils.putParam(mActivity,Keys.BULIDINGID,buildingId);
+                        SpUtils.putParam(mActivity,Keys.BUILDINGNAME,buildingName);
+                        SpUtils.putParam(mActivity,Keys.BUSINESSNAME,businessName);
+                        //跳转到主页面
+                        enterHome();
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                         break;
                 }
             }
         }
     }
+<<<<<<< HEAD
     /**密码错误超过3次，弹窗*/
     private void showPwdErrorDialog() {
        new AlertDialog(mActivity).builder()
@@ -278,10 +379,26 @@ public class Login_Pwd extends BaseActivity {
 //                showdialog("网络错误，请重试");
 //            }
 //        }
+=======
+
+        /**
+         * 携带参数跳转到注册的第二个界面
+         */
+        private void goTo_Activity(String uid) {
+            if (uid != null) {
+                Intent intent = new Intent(Login_Pwd.this, RegisterActivity2.class);
+                intent.putExtra(Keys.UID, uid);
+                startActivity(intent);
+            } else {
+                showdialog("网络错误，请重试");
+            }
+        }
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
         /**
          * 携带输入的手机号跳转到密码注册界面
          */
+<<<<<<< HEAD
         private void goToRegisterActivity() {
             if (phoneNumber != null) {
                 new AlertDialog(mActivity).builder()
@@ -306,6 +423,13 @@ public class Login_Pwd extends BaseActivity {
 
 
 
+=======
+        private void goToPwdRegisterActivity() {
+            if (phoneNumber != null) {
+                Intent intent = new Intent(Login_Pwd.this, PwdRegisterActivity.class);
+                intent.putExtra(Keys.PHONE, phoneNumber);
+                startActivity(intent);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             } else {
                 showdialog("网络错误，请重试");
             }
@@ -314,11 +438,16 @@ public class Login_Pwd extends BaseActivity {
 
 
 
+<<<<<<< HEAD
     private void enterHome(String uid) {
         Intent intent = new Intent(mActivity, HomeActivity.class);
         startActivity(intent);
         // 把uid保存起来
         SpUtils.putParam(mActivity, Keys.UID, uid);
+=======
+    private void enterHome() {
+        startActivity(new Intent(Login_Pwd.this, HomeActivity.class));
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         // 发送一条广播，登录完成后关闭登录的所有界面
         mActivity.sendBroadcast(new Intent(INTENT_FINISH));
     }
@@ -338,9 +467,12 @@ public class Login_Pwd extends BaseActivity {
         }
         pwdIsVisible = !pwdIsVisible;
     }
+<<<<<<< HEAD
 
     @Override
     public void onSystemUiVisibilityChange(int visibility) {
 
     }
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 }

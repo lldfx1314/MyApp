@@ -2,5 +2,8 @@
 <resources>
     <item name="back" type="id">back</item>
     <item type="id" name="tag_first"></item>
+<<<<<<< HEAD
     <item name="image_tag" type="id"/>
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 </resources>

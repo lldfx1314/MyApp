@@ -109,10 +109,16 @@
     <!--RadioBotton的样式-->
     <style name="bottom_style">
         <item name="android:layout_width">0dp</item>
+<<<<<<< HEAD
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_weight">1</item>
         <item name="android:paddingTop">5dp</item>
+=======
+        <item name="android:layout_height">46dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_weight">1</item>
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         去掉默认的旋转按钮
         <item name="android:button">@null</item>
         <item name="android:drawablePadding">2dp</item>
@@ -131,7 +137,11 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/btn_uploadshap</item>
+<<<<<<< HEAD
         <item name="android:textSize">14sp</item>
+=======
+        <item name="android:textSize">16sp</item>
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         <item name="android:layout_marginRight">5sp</item>
         <item name="android:layout_marginLeft">5sp</item>
         <item name="android:textColor">@color/blue</item>
@@ -171,6 +181,7 @@
         <item name="android:indeterminateDrawable">@android:drawable/progress_indeterminate_horizontal</item>
     </style>
 
+<<<<<<< HEAD
     <!-- 自定义loading dialog -->
     <style name="loading_dialog" parent="android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
@@ -181,5 +192,7 @@
     </style>
 
 
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 </resources>
 

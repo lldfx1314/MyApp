@@ -38,7 +38,11 @@
                     android:layout_marginTop="8dp"
                     android:text="点击图标开始拍照"
                     android:textColor="@color/upload_photo"
+<<<<<<< HEAD
                     android:textSize="14sp" />
+=======
+                    android:textSize="16sp" />
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
             </LinearLayout>
 
@@ -53,4 +57,11 @@
             style="@style/btn_msg_perfect"
             android:text="提交" />
     </LinearLayout>
+<<<<<<< HEAD
+=======
+
+    <include layout="@layout/loading" />
+
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 </RelativeLayout>

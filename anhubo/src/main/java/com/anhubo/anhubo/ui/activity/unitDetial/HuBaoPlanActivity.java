@@ -2,7 +2,10 @@ package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.content.Intent;
 import android.view.View;
+<<<<<<< HEAD
 import android.webkit.WebChromeClient;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -32,7 +35,11 @@ public class HuBaoPlanActivity extends BaseActivity {
     protected void initViews() {
         // 设置状态栏显示的提示内容
         setTopBarDesc("计划详情");
+<<<<<<< HEAD
         topPb.setVisibility(View.VISIBLE);
+=======
+        progressBar.setVisibility(View.VISIBLE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         iv_basepager_left.setOnClickListener(this);
     }
 
@@ -45,15 +52,26 @@ public class HuBaoPlanActivity extends BaseActivity {
         newUrl = url + "?mass_id=" + massId+"&plan_id="+planId;
         WebSettings settings = wvHubaoplan.getSettings();
         settings.setJavaScriptEnabled(true);
+<<<<<<< HEAD
         wvHubaoplan.setWebChromeClient(new WebChromeViewClient());
         wvHubaoplan.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) { //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
+=======
+
+        wvHubaoplan.setWebViewClient(new WebViewClient() {
+            public boolean shouldOverrideUrlLoading(WebView view, String url) { //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
+                progressBar.setVisibility(View.VISIBLE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 view.loadUrl(url);
                 return true;
             }
             @Override
             public void onPageFinished(WebView view, String url) {
                 // 当页面加载完成后调用,在此隐藏进度条
+<<<<<<< HEAD
+=======
+                progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 super.onPageFinished(view, url);
             }
 
@@ -61,6 +79,7 @@ public class HuBaoPlanActivity extends BaseActivity {
         wvHubaoplan.loadUrl(newUrl);
     }
 
+<<<<<<< HEAD
     private class WebChromeViewClient extends WebChromeClient {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
@@ -73,6 +92,8 @@ public class HuBaoPlanActivity extends BaseActivity {
 
     }
 
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     @Override
     public void onBackPressed() {
         if (wvHubaoplan.canGoBack()){

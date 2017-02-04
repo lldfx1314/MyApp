@@ -9,7 +9,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+<<<<<<< HEAD
         android:layout_height="150dp"
+=======
+        android:layout_height="200dp"
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         android:gravity="center">
 
         <ImageView
@@ -114,7 +118,11 @@
     <Button
         android:id="@+id/btn_alterPwd"
         android:layout_marginTop="15dp"
+<<<<<<< HEAD
         android:layout_width="match_parent"
+=======
+        android:layout_width="wrap_content"
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         android:layout_height="40dp"
         android:background="@drawable/btn_reg_login"
         android:textColor="@color/btn_blue"

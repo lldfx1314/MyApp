@@ -1,5 +1,6 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
+<<<<<<< HEAD
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,6 +13,27 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+=======
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.view.OnApplyWindowInsetsListener;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.view.WindowInsetsCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,6 +50,7 @@ import com.amap.api.maps2d.UiSettings;
 import com.amap.api.maps2d.model.LatLng;
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.Business_Location_Adapter;
+<<<<<<< HEAD
 import com.anhubo.anhubo.bean.LocationBean;
 import com.anhubo.anhubo.bean.Unit_RegisterBean;
 import com.anhubo.anhubo.protocol.Urls;
@@ -38,6 +61,14 @@ import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.LoadProgressDialog;
+=======
+import com.anhubo.anhubo.adapter.UnitMenuAdapter;
+import com.anhubo.anhubo.bean.LocationBean;
+import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.view.AlertDialog;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.anhubo.anhubo.view.RefreshListview;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -55,12 +86,25 @@ import okhttp3.Call;
  */
 public class BusinessActivity extends AppCompatActivity implements View.OnSystemUiVisibilityChangeListener {
 
+<<<<<<< HEAD
     private static final String TAG = "BusinessActivity";
     MapView mMapView = null;
     private RefreshListview lvBusiness;
     private ImageView ivTopBarRight;
     private TextView tvToptitle;
     private RelativeLayout llTop;
+=======
+    MapView mMapView = null;
+    private RefreshListview lvBusiness;
+    private ImageButton iv_basepager_left;
+    private ImageView ivTopBarleftUnitMenu;
+    private ImageView ivTopBarRightUnitMsg;
+    private TextView tvTopBarRight;
+    private ImageView ivTopBarleftBuildPen;
+    private TextView tvToptitle;
+    private RelativeLayout llTop;
+    private RelativeLayout progressBar;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     private AMapLocationClient mlocationClient;
     private double latitude;
     private double longitude;
@@ -73,6 +117,7 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
     private UiSettings settings;
     //声明mListener对象，定位监听器
     private LocationSource.OnLocationChangedListener mListener = null;
+<<<<<<< HEAD
     private ArrayList<String> listBusiness;
     private ArrayList<String> listBusinessPoi;
     private LoadProgressDialog loadProgressDialog;
@@ -80,6 +125,9 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
     private Dialog showDialog1;
     private String businessName;
     private String zhezhao;
+=======
+    private ArrayList<String> listBuilding;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,14 +155,19 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
         //获取地图控件引用
         mMapView = (MapView) findViewById(R.id.map_business);
         lvBusiness = (RefreshListview) findViewById(R.id.lv_business);
+<<<<<<< HEAD
 
         zhezhao = getIntent().getStringExtra(Keys.UNIT_ZHEZHAO);
 
+=======
+        progressBar = (RelativeLayout) findViewById(R.id.rl_progress);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         // 监听listview的滑动监听
         lvBusiness.setOnRefreshingListener(new MyOnRefreshingListener());
         lvBusiness.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+<<<<<<< HEAD
                 String poi = listBusinessPoi.get(position);
                 TextView tv = (TextView) view.findViewById(R.id.tv_location);
                 String str = tv.getText().toString().trim();
@@ -127,10 +180,17 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                     returnAddActivity(str,poi);
                 }
 
+=======
+                TextView tv = (TextView) view.findViewById(R.id.tv_location);
+                String str = tv.getText().toString().trim();
+                // 返回增加界面
+                returnAddActivity(str);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             }
         });
     }
 
+<<<<<<< HEAD
     /**
      * 单位注册
      */
@@ -190,13 +250,22 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
         Intent intent = new Intent();
         intent.putExtra(Keys.STR, str);
         intent.putExtra(Keys.BUSINESS_POI, poi);
+=======
+    private void returnAddActivity(String str) {
+        Intent intent = new Intent();
+        intent.putExtra(Keys.STR, str);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         setResult(2, intent);
         finish();
     }
 
     private void initEvents() {
+<<<<<<< HEAD
         listBusiness = new ArrayList<String>();
         listBusinessPoi = new ArrayList<String>();
+=======
+        listBuilding = new ArrayList<String>();
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
 
     }
@@ -216,8 +285,14 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
 
 
     private void addBusiness() {
+<<<<<<< HEAD
         ivTopBarRight.setVisibility(View.VISIBLE);
         ivTopBarRight.setOnClickListener(new View.OnClickListener() {
+=======
+        tvTopBarRight.setVisibility(View.VISIBLE);
+        tvTopBarRight.setText("添加");
+        tvTopBarRight.setOnClickListener(new View.OnClickListener() {
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             @Override
             public void onClick(View v) {
                 dialog();
@@ -237,6 +312,7 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                     public void onClick(View v) {
                         String string = alertDialog.et_msg.getText().toString().trim();
                         if (!TextUtils.isEmpty(string)) {
+<<<<<<< HEAD
                             // 判断是从哪个界面点进来的，便于做相应操作
                             if (!TextUtils.isEmpty(zhezhao)) {
                                 // 从遮罩点击进来的，直接注册单位
@@ -245,6 +321,10 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                                 // 返回修改界面
                                 returnAddActivity(string,"");
                             }
+=======
+                            // 返回增加界面
+                            returnAddActivity(string);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                         }
                     }
                 }).setNegativeButton("取消", new View.OnClickListener() {
@@ -344,9 +424,13 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                         isFirstLoc = false;
                     }
                     // 拿到经纬度请求网络
+<<<<<<< HEAD
 
                     loadProgressDialog = LoadProgressDialog.newInstance();
                     showDialog = loadProgressDialog.show(BusinessActivity.this, "正在加载...");
+=======
+                    progressBar.setVisibility(View.VISIBLE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                     getData();
 
 
@@ -417,6 +501,10 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
      */
     private void getData() {
         String location = String.valueOf(latitude) + "," + String.valueOf(longitude);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         String url = Urls.Location;
         Map<String, String> params = new HashMap<>();
         params.put("location", location);
@@ -429,23 +517,46 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                 .execute(new MyStringCallback());
     }
 
+<<<<<<< HEAD
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
             showDialog.dismiss();
+=======
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
+    class MyStringCallback extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+            progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             new AlertDialog(BusinessActivity.this).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(true).show();
+<<<<<<< HEAD
             LogUtils.e(TAG,":getData定位:",e);
+=======
+            System.out.println("定位+" + e.getMessage());
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         }
 
         @Override
         public void onResponse(String response) {
+<<<<<<< HEAD
             LogUtils.eNormal(TAG+":getData定位:",response);
             LocationBean bean = new Gson().fromJson(response, LocationBean.class);
             if (bean != null) {
                 showDialog.dismiss();
+=======
+            //System.out.println("地图单位界面+++==="+response);
+            LocationBean bean = new Gson().fromJson(response, LocationBean.class);
+            if (bean != null) {
+                progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 processData(bean);
                 isLoadMore = false;
                 // 恢复加载更多状态
@@ -482,6 +593,7 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
         int code = bean.code;
         String msg = bean.msg;
         page = bean.data.page;
+<<<<<<< HEAD
         List<LocationBean.Data.Business> business = bean.data.business;
 
         if (!business.isEmpty()) {
@@ -491,17 +603,33 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                 listBusiness.add(s);
                 String poiId = busines.poi_id;
                 listBusinessPoi.add(poiId);
+=======
+        List<String> business = bean.data.business;
+
+        if (!business.isEmpty()) {
+            for (int i = 0; i < business.size(); i++) {
+                String s = business.get(i);
+                listBuilding.add(s);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             }
         }
         if (!isLoadMore) {
             // 给listView设置适配器
+<<<<<<< HEAD
             adapter = new Business_Location_Adapter(this, listBusiness);
+=======
+            adapter = new Business_Location_Adapter(this, listBuilding);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             lvBusiness.setAdapter(adapter);
         } else {
             adapter.notifyDataSetChanged();
         }
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     /**
      * 设置标题栏
      */
@@ -536,7 +664,15 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
      */
     private void initTitleView() {
         // 找到顶部控件
+<<<<<<< HEAD
         ivTopBarRight = (ImageView) findViewById(R.id.ivTopBarRight_add);//右上角加号
+=======
+        iv_basepager_left = (ImageButton) findViewById(R.id.ivTopBarLeft);//左上角返回按钮
+        ivTopBarleftUnitMenu = (ImageView) findViewById(R.id.ivTopBarleft_unit_menu);//左上角菜单按钮
+        ivTopBarRightUnitMsg = (ImageView) findViewById(R.id.ivTopBarRight_unit_msg);//右上角信息按钮
+        tvTopBarRight = (TextView) findViewById(R.id.tvTopBarRight);//右上角列表
+        ivTopBarleftBuildPen = (ImageView) findViewById(R.id.ivTopBarleft_build_pen);//左上角铅笔按钮
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         tvToptitle = (TextView) findViewById(R.id.tvAddress);//标题
         llTop = (RelativeLayout) findViewById(R.id.ll_Top); // 顶部标题栏
 
@@ -596,9 +732,45 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
 
     }
 
+<<<<<<< HEAD
     @Override
     public void onSystemUiVisibilityChange(int visibility) {
 
     }
 
+=======
+    /**
+     * 设置浸入式状态栏
+     */
+    private void setBar() {
+        Window window = getWindow();
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        boolean hideStatusBarBackground = false;
+        if (hideStatusBarBackground) {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                window.setStatusBarColor(Color.TRANSPARENT);
+            }
+            //隐藏状态栏的阴影window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        } else {
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+        }
+
+        ViewGroup mContentView = (ViewGroup) window.findViewById(Window.ID_ANDROID_CONTENT);
+        View mChildView = mContentView.getChildAt(0);
+        if (mChildView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(mChildView, new OnApplyWindowInsetsListener() {
+                @Override
+                public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                    return insets;
+                }
+            });
+            ViewCompat.setFitsSystemWindows(mChildView, false);
+            ViewCompat.requestApplyInsets(mChildView);
+
+        }
+    }
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 }

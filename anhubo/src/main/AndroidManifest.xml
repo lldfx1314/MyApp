@@ -191,6 +191,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.unitDetial.HuBaoPlanActivity"
             android:screenOrientation="portrait" />
+<<<<<<< HEAD
         <activity android:name=".ui.activity.unitDetial.RunCertificateActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.unitDetial.Cell_Detail_Activity"
@@ -203,6 +204,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.unitDetial.AssignmentAdminActivity"
             android:screenOrientation="portrait" />
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
         <!--建筑界面-->
         <activity
@@ -347,13 +350,26 @@
         <meta-data android:name="JPUSH_APPKEY" android:value="4c79125d89e7344f623afb9a"/>
 
         <!--友盟-->
+<<<<<<< HEAD
         <meta-data android:name="UMENG_APPKEY" android:value="5819590dcae7e74aff00035c"></meta-data>
         <meta-data android:value="anhubo" android:name="UMENG_CHANNEL"/>
+=======
+        <!--友盟-->
+        <meta-data android:name="UMENG_APPKEY" android:value="5819590dcae7e74aff00035c"></meta-data>
+        <meta-data android:value="ying_yong_bao" android:name="UMENG_CHANNEL"/>
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         <!--高德服务-->
         <service android:name="com.amap.api.location.APSService"></service>
         <!--高德meta-data-->
         <meta-data android:name="com.amap.api.v2.apikey" android:value="a302f9a3355d276c96844f55c2b6ffd5"/>
 
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     </application>
 
 </manifest>

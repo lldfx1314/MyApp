@@ -33,6 +33,7 @@
                     android:layout_weight="1"
                     android:text="上传营业执照"
                     android:textColor="@color/text_biack"
+<<<<<<< HEAD
                     android:textSize="14sp" />
 
                 <ImageView
@@ -42,6 +43,17 @@
                     android:layout_marginRight="10dp"
                     android:visibility="gone"
                     android:background="@drawable/small_choice"/>
+=======
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/iv_msg_per01"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/small_choice"
+                    android:visibility="gone" />
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -78,12 +90,21 @@
                     android:layout_weight="1"
                     android:text="上传法人身份证"
                     android:textColor="@color/text_biack"
+<<<<<<< HEAD
                     android:textSize="14sp" />
 
                 <ImageView
                     android:id="@+id/iv_msg_per02"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+=======
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/iv_msg_per02"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                     android:layout_marginRight="10dp"
                     android:background="@drawable/small_choice"
                     android:visibility="gone" />
@@ -123,12 +144,21 @@
                     android:layout_weight="1"
                     android:text="上传消防审批同意开业通知"
                     android:textColor="@color/text_biack"
+<<<<<<< HEAD
                     android:textSize="14sp" />
 
                 <ImageView
                     android:id="@+id/iv_msg_per03"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+=======
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/iv_msg_per03"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                     android:layout_marginRight="10dp"
                     android:background="@drawable/small_choice"
                     android:visibility="gone" />
@@ -168,12 +198,21 @@
                     android:layout_weight="1"
                     android:text="上传租房合同"
                     android:textColor="@color/text_biack"
+<<<<<<< HEAD
                     android:textSize="14sp" />
 
                 <ImageView
                     android:id="@+id/iv_msg_per04"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+=======
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/iv_msg_per04"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                     android:layout_marginRight="10dp"
                     android:background="@drawable/small_choice"
                     android:visibility="gone" />
@@ -213,7 +252,11 @@
                     android:layout_weight="1"
                     android:text="上传员工人数"
                     android:textColor="@color/text_biack"
+<<<<<<< HEAD
                     android:textSize="14sp" />
+=======
+                    android:textSize="16sp" />
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
                 <TextView
                     android:id="@+id/tv_msg_per05"
@@ -221,7 +264,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="12dp"
                     android:text="0"
+<<<<<<< HEAD
                     android:textSize="14sp" />
+=======
+                    android:textSize="16sp" />
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -258,7 +305,11 @@
                     android:layout_weight="1"
                     android:text="场所使用性质"
                     android:textColor="@color/text_biack"
+<<<<<<< HEAD
                     android:textSize="14sp" />
+=======
+                    android:textSize="16sp" />
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
                 <TextView
                     android:id="@+id/tv_msg_per06"
@@ -266,8 +317,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="12dp"
                     android:text="其他功能"
+<<<<<<< HEAD
                     android:visibility="gone"
                     android:textSize="14sp" />
+=======
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -284,4 +340,11 @@
                 android:background="@color/view_gray" />
         </LinearLayout>
     </LinearLayout>
+<<<<<<< HEAD
+=======
+
+    <include layout="@layout/loading" />
+
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 </RelativeLayout>

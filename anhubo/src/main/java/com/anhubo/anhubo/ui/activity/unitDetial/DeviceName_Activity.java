@@ -1,6 +1,9 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
+<<<<<<< HEAD
 import android.app.Dialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -39,7 +42,10 @@ public class DeviceName_Activity extends BaseActivity {
     private DeviceNameAdapterSecond adapterSecond;
     private String typeName;
     private String[][] data;
+<<<<<<< HEAD
     private Dialog showDialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
 
     @Override
@@ -84,7 +90,11 @@ public class DeviceName_Activity extends BaseActivity {
 
 
     private void getData() {
+<<<<<<< HEAD
         showDialog = loadProgressDialog.show(mActivity, "正在加载...");
+=======
+        progressBar.setVisibility(View.VISIBLE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         String url = Urls.Url_GetDevName;
 
         OkHttpUtils.post()//
@@ -101,7 +111,11 @@ public class DeviceName_Activity extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
+<<<<<<< HEAD
             showDialog.dismiss();
+=======
+            progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -113,7 +127,11 @@ public class DeviceName_Activity extends BaseActivity {
         public void onResponse(String response) {
             DeviceNameBean bean = new Gson().fromJson(response, DeviceNameBean.class);
             if (bean != null) {
+<<<<<<< HEAD
                 showDialog.dismiss();
+=======
+                progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 showData(bean);
                 // 设置第一个适配器
                 setAdapterOne();

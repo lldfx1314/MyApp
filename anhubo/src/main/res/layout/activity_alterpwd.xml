@@ -135,5 +135,9 @@
         android:textColor="@color/blue"
         android:textSize="14sp" />
     </LinearLayout>
+<<<<<<< HEAD
+=======
+    <include layout="@layout/loading"/>
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
 </RelativeLayout>

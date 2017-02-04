@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_upload">
 
+<<<<<<< HEAD
     <include
         android:id="@+id/top_title"
         layout="@layout/layout_top_bar"></include>
@@ -26,10 +27,65 @@
             android:text=""
             android:textColor="@color/black"
             android:textSize="14sp" />
+=======
+    <include android:id="@+id/top_title"
+        layout="@layout/layout_top_bar"></include>
+    <LinearLayout
+        android:layout_below="@+id/top_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/bg_upload">
+
+
+    <TextView
+        android:id="@+id/tv_add_device"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="26dp"
+        android:lineSpacingExtra="5dp"
+        android:text=""
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@color/backgroud_white"
+        android:orientation="vertical"
+        >
+        <!-- 所属建筑 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                style="@style/textStyle"
+                android:text="所属建筑"
+                />
+
+            <EditText
+                android:id="@+id/et_add_build"
+                style="@style/editTextStyle"
+                android:enabled="true"
+                android:focusable="false"
+                android:drawableRight="@drawable/arrow_right"
+                android:textColor="@color/text_gray"
+                />
+        </LinearLayout>
+        <!-- 所属单位 -->
+        <View style="@style/viewStyle"/>
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:layout_marginTop="20dp"
             android:background="@color/backgroud_white"
             android:orientation="vertical">
@@ -194,4 +250,146 @@
             android:text="提交"
             android:textColor="@color/blue" />
     </LinearLayout>
+=======
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                style="@style/textStyle"
+                android:text="所属单位"
+
+                />
+
+            <EditText
+                android:id="@+id/et_add_unit"
+                style="@style/editTextStyle"
+                android:enabled="true"
+                android:focusable="false"
+                android:drawableRight="@drawable/arrow_right"
+                android:textColor="@color/text_gray"/>
+        </LinearLayout>
+
+        <!-- 所属区域 -->
+        <View style="@style/viewStyle"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                style="@style/textStyle"
+                android:text="所属区域"
+                />
+
+            <EditText
+                android:id="@+id/et_add_area"
+                style="@style/editTextStyle"
+                android:hint="设备所在区域(可为空)"/>
+        </LinearLayout>
+
+        <!-- 设备位置 -->
+        <View style="@style/viewStyle"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                style="@style/textStyle"
+                android:text="设备位置"
+                />
+
+            <EditText
+                android:id="@+id/et_add_name"
+                style="@style/editTextStyle"
+                android:hint="设备所在位置"
+                />
+        </LinearLayout>
+
+        <!-- 设备名称 -->
+        <View style="@style/viewStyle"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                style="@style/textStyle"
+                android:text="设备名称"/>
+
+
+            <EditText
+                android:id="@+id/et_add_type"
+                style="@style/editTextStyle"
+                android:drawableRight="@drawable/arrow_right"
+                android:enabled="true"
+                android:focusable="false"
+                android:hint="选择设备名称"
+                android:textColorHint="@color/gray"/>
+        </LinearLayout>
+        <!-- 拍照上传 -->
+        <View style="@style/viewStyle"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                style="@style/textStyle"
+                android:text="拍照上传"/>
+
+            <LinearLayout
+                android:id="@+id/ll_add_photo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv"
+                    android:layout_width="30dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/bg_iv"
+                    android:src="@drawable/photo"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="（设备与NFC拍一起）"
+                    android:textColor="@color/gray"
+                    android:textSize="14sp"/>
+                <!-- <EditText
+                     style="@style/editTextStyle"
+                     android:enabled="true"
+                     android:focusable="false"
+                     android:hint="（设备与NFC拍一起）"/>-->
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/add_complete_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/bg_button"
+        android:gravity="center"
+        android:text="提交"
+        android:textColor="@color/blue"
+        />
+    </LinearLayout>
+    <include layout="@layout/loading"/>
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 </RelativeLayout>

@@ -1,6 +1,9 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
+<<<<<<< HEAD
 import android.app.Dialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.view.View;
 
 import com.anhubo.anhubo.R;
@@ -42,7 +45,10 @@ public class UnitMsgCenterActivity extends BaseActivity {
     private View footer;
     private int page;
     private UnitMsgCenterAdapter msgAdapter;
+<<<<<<< HEAD
     private Dialog showDialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @Override
     protected void initConfig() {
@@ -103,7 +109,11 @@ public class UnitMsgCenterActivity extends BaseActivity {
     @Override
     protected void onLoadDatas() {
         // 刚进来先获取网络数据
+<<<<<<< HEAD
         showDialog = loadProgressDialog.show(mActivity, "正在加载...");
+=======
+        progressBar.setVisibility(View.VISIBLE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         getData();
     }
 
@@ -129,7 +139,11 @@ public class UnitMsgCenterActivity extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
+<<<<<<< HEAD
             showDialog.dismiss();
+=======
+            progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -141,7 +155,11 @@ public class UnitMsgCenterActivity extends BaseActivity {
         public void onResponse(String response) {
             UnitMsgCenterBean bean = new Gson().fromJson(response, UnitMsgCenterBean.class);
             if (bean != null) {
+<<<<<<< HEAD
                 showDialog.dismiss();
+=======
+                progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 processData(bean);
                 isLoadMore = false;
                 // 恢复加载更多状态

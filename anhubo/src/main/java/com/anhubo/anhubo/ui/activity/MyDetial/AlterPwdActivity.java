@@ -1,6 +1,9 @@
 package com.anhubo.anhubo.ui.activity.MyDetial;
 
+<<<<<<< HEAD
 import android.app.Dialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
@@ -44,7 +47,10 @@ public class AlterPwdActivity extends BaseActivity {
     private String newPwd1;
     private String newPwd2;
     private AlertDialog builder;
+<<<<<<< HEAD
     private Dialog showDialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @Override
     protected void initConfig() {
@@ -147,7 +153,11 @@ public class AlterPwdActivity extends BaseActivity {
      */
     private void alterPwd(String oldPwd, String newPwd2) {
         // 走网络，提交性别
+<<<<<<< HEAD
         showDialog = loadProgressDialog.show(mActivity, "正在提交...");
+=======
+        progressBar.setVisibility(View.VISIBLE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         String url = Urls.Url_My_AlterPwd;
         HashMap<String, String> params = new HashMap<>();
         params.put("uid", uid);
@@ -170,7 +180,10 @@ public class AlterPwdActivity extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
+<<<<<<< HEAD
             showDialog.dismiss();
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
 
             System.out.println("AlterPwdActivity+++界面修改密码===" + e.getMessage());
@@ -181,7 +194,11 @@ public class AlterPwdActivity extends BaseActivity {
             //System.out.println(response);
             MyAlterPwdBean bean = new Gson().fromJson(response, MyAlterPwdBean.class);
             if (bean != null) {
+<<<<<<< HEAD
                 showDialog.dismiss();
+=======
+                progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 int code = bean.code;
                 String msg = bean.msg;
                 if (code != 0) {

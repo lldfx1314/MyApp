@@ -45,6 +45,9 @@
     <color name="actionsheet_red">#FD4A2E</color>
     <color name="actionsheet_gray">#8F8F8F</color>
     <color name="guide_bg">#FAFAFA</color>
+<<<<<<< HEAD
     <color name="dialog_bg">#aaffffff</color>
     <color name="gray_line">#c7c7c7</color>
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 </resources>

@@ -25,9 +25,13 @@ import com.anhubo.anhubo.bean.MsgPerfectLowerBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.ImageFactory;
 import com.anhubo.anhubo.utils.ImageTools;
+<<<<<<< HEAD
 import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
+=======
+import com.anhubo.anhubo.utils.Keys;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
@@ -59,7 +63,10 @@ public class UploadingActivity2 extends BaseActivity {
 
     private static final int CAMERA = 0;
     private static final int PICTURE = 1;
+<<<<<<< HEAD
     private static final String TAG = "UploadingActivity2";
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     @InjectView(R.id.ll_card01)
     LinearLayout llCard01;
     @InjectView(R.id.iv_showCardFront02)
@@ -74,7 +81,10 @@ public class UploadingActivity2 extends BaseActivity {
     private Button btnTakephoto;
     private Button btnPhoto;
     private boolean isClick = false;//判断是正面还是反面
+<<<<<<< HEAD
     private Dialog showDialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @Override
     protected int getContentViewId() {
@@ -147,10 +157,17 @@ public class UploadingActivity2 extends BaseActivity {
                     .setCancelable(true).show();
             return;
         }
+<<<<<<< HEAD
         showDialog = loadProgressDialog.show(mActivity, "正在上传...");
         String url = Urls.Url_UpLoading02;
         Map<String, String> params = new HashMap<>();
         params.put("business_id", businessid);
+=======
+        progressBar.setVisibility(View.VISIBLE);
+        Map<String, String> params = new HashMap<>();
+        params.put("business_id", businessid);
+        String url = Urls.Url_UpLoading02;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
         OkHttpUtils.post()//
                 .addFile("file1", "file01.png", file1)//
@@ -165,24 +182,44 @@ public class UploadingActivity2 extends BaseActivity {
 
     private Handler handler = new Handler();
 
+<<<<<<< HEAD
 
+=======
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
+<<<<<<< HEAD
             showDialog.dismiss();
+=======
+            progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(false).show();
+<<<<<<< HEAD
             LogUtils.e(TAG , ":upLoading:", e);
+=======
+
+            System.out.println("UploadingActivity2+++===界面失败" + e.getMessage());
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         }
 
         @Override
         public void onResponse(String response) {
+<<<<<<< HEAD
             showDialog.dismiss();
             LogUtils.eNormal(TAG + ":upLoading:", response);
             MsgPerfectLowerBean lowerBean = JsonUtil.json2Bean(response, MsgPerfectLowerBean.class);
+=======
+            MsgPerfectLowerBean lowerBean = new Gson().fromJson(response, MsgPerfectLowerBean.class);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             int code = lowerBean.code;
             final String msg = lowerBean.msg;
             if (code != 0) {
@@ -191,14 +228,22 @@ public class UploadingActivity2 extends BaseActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+<<<<<<< HEAD
 
+=======
+                        progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                         ToastUtils.showToast(mActivity, "上传成功");
                         Intent intent = new Intent();
                         intent.putExtra(Keys.ISCLICK2, true);
                         setResult(2, intent);
                         finish();
                     }
+<<<<<<< HEAD
                 }, 500);
+=======
+                }, 2000);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             }
         }
     }
@@ -395,9 +440,12 @@ public class UploadingActivity2 extends BaseActivity {
 
     }
 
+<<<<<<< HEAD
     @Override
     public void onSystemUiVisibilityChange(int visibility) {
 
     }
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
 }

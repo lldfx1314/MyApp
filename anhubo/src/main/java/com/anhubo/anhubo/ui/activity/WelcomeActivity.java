@@ -15,9 +15,14 @@ import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.Check_UpDateBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.Login_Register.Login_Message;
+<<<<<<< HEAD
 import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
+=======
+import com.anhubo.anhubo.ui.activity.Login_Register.RegisterActivity2;
+import com.anhubo.anhubo.utils.Keys;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
@@ -46,8 +51,14 @@ public class WelcomeActivity extends BaseActivity {
     private static final int NET_ERROR = 3;
     private static final int ENTER_MAIN = 4;
     private static final int SELECT_UPDATA_CLIENT = 5;
+<<<<<<< HEAD
     private static final String TAG = "WelcomeActivity";
     private String uid;
+=======
+    private String uid;
+    private String bulidingid;
+    private String businessid;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     private String oldversionName;
     private String versionName;
     private String url;
@@ -67,6 +78,11 @@ public class WelcomeActivity extends BaseActivity {
     @Override
     protected void initEvents() {
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
+<<<<<<< HEAD
+=======
+        bulidingid = SpUtils.getStringParam(mActivity, Keys.BULIDINGID);
+        businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         oldversionName = SpUtils.getStringParam(mActivity, Keys.VERSIONNAME);
         String[] split = Utils.getAppInfo(mActivity).split("#");
         versionName = split[1];
@@ -116,7 +132,11 @@ public class WelcomeActivity extends BaseActivity {
         @Override
         public void onError(Call call, Exception e) {
 
+<<<<<<< HEAD
             LogUtils.e(TAG,":checkUpdate",e);
+=======
+            System.out.println("WelcomeActivity界面+++版本升级===没拿到数据" + e.getMessage());
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             // 网络出故障，直接进后面界面
             Toast.makeText(mActivity,"网络有问题，请检查",Toast.LENGTH_SHORT).show();
             msg.what = NET_ERROR;
@@ -125,8 +145,13 @@ public class WelcomeActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
+<<<<<<< HEAD
             LogUtils.eNormal(TAG+":checkUpdate",response);
             Check_UpDateBean bean = JsonUtil.json2Bean(response, Check_UpDateBean.class);
+=======
+            System.out.println("WelcomeActivity界面+++版本升级" + response);
+            Check_UpDateBean bean = new Gson().fromJson(response, Check_UpDateBean.class);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             if (bean != null) {
                 int code = bean.code;
                 newVersion = bean.data.new_version;
@@ -349,6 +374,7 @@ public class WelcomeActivity extends BaseActivity {
             enterGuide();
         } else {
             if (!TextUtils.isEmpty(uid)) {
+<<<<<<< HEAD
                 enterHome();
 //                if (!TextUtils.isEmpty(bulidingid) || !TextUtils.isEmpty(businessid)) {
 //                    //跳转到主页面
@@ -357,6 +383,15 @@ public class WelcomeActivity extends BaseActivity {
 //                    // 跳到注册第二个界面
 //                    enterRegister2();
 //                }
+=======
+                if (!TextUtils.isEmpty(bulidingid) || !TextUtils.isEmpty(businessid)) {
+                    //跳转到主页面
+                    enterHome();
+                } else {
+                    // 跳到注册第二个界面
+                    enterRegister2();
+                }
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
             } else {
                 // 无uid，跳到登录界面
@@ -371,11 +406,19 @@ public class WelcomeActivity extends BaseActivity {
         finish();
     }
 
+<<<<<<< HEAD
 //    private void enterRegister2() {
 //        Intent intent = new Intent(WelcomeActivity.this, RegisterActivity2.class);
 //        intent.putExtra(Keys.UID, uid);
 //        startActivity(intent);
 //    }
+=======
+    private void enterRegister2() {
+        Intent intent = new Intent(WelcomeActivity.this, RegisterActivity2.class);
+        intent.putExtra(Keys.UID, uid);
+        startActivity(intent);
+    }
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     private void enterLogin() {
         startActivity(new Intent(WelcomeActivity.this, Login_Message.class));
@@ -383,8 +426,12 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void enterHome() {
+<<<<<<< HEAD
         Intent intent = new Intent(mActivity, HomeActivity.class);
         startActivity(intent);
+=======
+        startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         finish();
     }
 

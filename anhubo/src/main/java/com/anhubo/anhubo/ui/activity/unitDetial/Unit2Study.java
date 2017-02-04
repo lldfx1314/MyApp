@@ -77,6 +77,15 @@ public class Unit2Study extends BaseActivity {
 
     }
 
+<<<<<<< HEAD
+=======
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     class MyJavaScriptInterface {
         public MyJavaScriptInterface() {
         }
@@ -96,8 +105,12 @@ public class Unit2Study extends BaseActivity {
     public void onClick(View v) {
 
     }
+<<<<<<< HEAD
     @Override
     public void onSystemUiVisibilityChange(int visibility) {
 
     }
+=======
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 }

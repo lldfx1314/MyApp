@@ -8,6 +8,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+<<<<<<< HEAD
+=======
+        <include layout="@layout/loading"/>
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         <ImageButton
             android:id="@+id/iv_bg"
             android:layout_width="200dp"

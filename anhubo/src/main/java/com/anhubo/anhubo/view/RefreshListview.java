@@ -37,8 +37,13 @@ public class RefreshListview extends ListView {
         footer.measure(0, 0);
         footerMeasuredHeight = footer.getMeasuredHeight();
         footer.setPadding(0, -footerMeasuredHeight, 0, 0);
+<<<<<<< HEAD
         this.addFooterView(footer,null, true);
         this.setFooterDividersEnabled(false);
+=======
+        this.addFooterView(footer);
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         // 监听Listview的条目滚动事件
         this.setOnScrollListener(new MyOnScrollListener());
     }

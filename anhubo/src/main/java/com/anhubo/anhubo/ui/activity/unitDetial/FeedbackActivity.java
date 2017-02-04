@@ -2,10 +2,15 @@ package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.app.Activity;
 import android.app.Dialog;
+<<<<<<< HEAD
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+=======
+import android.content.Context;
+import android.content.Intent;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -61,7 +66,10 @@ import okhttp3.Call;
 public class FeedbackActivity extends BaseActivity {
     private static final int PICTURE = 1;
     private static final int CAMERA = 2;
+<<<<<<< HEAD
     public static final String FEEDBACK_FINISH = "feedback_finish";
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     @InjectView(R.id.et_feedback)
     EditText etFeedback;
     @InjectView(R.id.iv_feedback1)
@@ -91,7 +99,10 @@ public class FeedbackActivity extends BaseActivity {
     public static int userAddScore;
     private ArrayList<String> listResult;
     private FlowLayout flowLayout;
+<<<<<<< HEAD
     private Dialog showDialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @Override
     protected void initConfig() {
@@ -127,6 +138,7 @@ public class FeedbackActivity extends BaseActivity {
                 flowLayout.addView(textView);
             }
         }
+<<<<<<< HEAD
         // 初始化结束的广播监听
         initFinishReceiver();
     }
@@ -153,16 +165,23 @@ public class FeedbackActivity extends BaseActivity {
 
 
 
+=======
+    }
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     @Override
     protected void onLoadDatas() {
 
     }
 
+<<<<<<< HEAD
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(finishReceiver);
     }
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @OnClick({R.id.iv_feedback1, R.id.rl_feedback, R.id.iv_feedback2, R.id.iv_feedback3, R.id.tv_submit_feedback})
     public void onClick(View view) {
@@ -234,7 +253,11 @@ public class FeedbackActivity extends BaseActivity {
             return;
         }
 
+<<<<<<< HEAD
         showDialog = loadProgressDialog.show(mActivity, "正在提交...");
+=======
+        progressBar.setVisibility(View.VISIBLE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         String url = Urls.Url_FeedBack;
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
@@ -268,7 +291,11 @@ public class FeedbackActivity extends BaseActivity {
 
         @Override
         public void onError(Call call, Exception e) {
+<<<<<<< HEAD
             showDialog.dismiss();
+=======
+            progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -281,7 +308,11 @@ public class FeedbackActivity extends BaseActivity {
             //System.out.println("反馈界面FeedbackActivity+++===" + response);
             FeedBackBean bean = new Gson().fromJson(response, FeedBackBean.class);
             if (bean != null) {
+<<<<<<< HEAD
                 showDialog.dismiss();
+=======
+                progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 int code = bean.code;
                 String msg = bean.msg;
                 userAddScore = bean.data.user_add_score;

@@ -20,7 +20,11 @@
         android:enabled="true"
         android:paddingBottom="10dp"
         android:textSize="16sp"
+<<<<<<< HEAD
         android:textColor="@color/text_gray"
+=======
+        android:textColor="@color/blue"
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         android:background="@null"
         />
         <View
@@ -35,7 +39,11 @@
             android:enabled="true"
             android:paddingTop="10dp"
             android:textSize="16sp"
+<<<<<<< HEAD
             android:textColor="@color/text_gray"
+=======
+            android:textColor="@color/blue"
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             android:background="@null"
             />
 

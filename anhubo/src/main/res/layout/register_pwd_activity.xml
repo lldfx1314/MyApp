@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<<<<<<< HEAD
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/reg_login_bg"
@@ -9,11 +10,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="150dp"
+=======
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/reg_login_bg"
+              android:orientation="vertical"
+              android:padding="25dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         android:gravity="center">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:background="@drawable/anhuboicon" />
     </LinearLayout>
     <!-- 输入密码 -->
@@ -61,10 +74,59 @@
         <Button
             android:id="@+id/btn_pwdReg2"
             style="@style/btn_eye" />
+=======
+            android:layout_marginTop="10dp"
+            android:background="@drawable/anhuboicon"/>
+    </LinearLayout>
+    <!-- 输入密码 -->
+    <RelativeLayout
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <EditText
+            android:id="@+id/et_pwdReg1"
+            style="@style/reg_login_edit_style"
+            android:hint="请输入密码"
+            android:inputType="textPassword"
+            android:background="@drawable/edit_text"
+            />
+        <Button
+            android:id="@+id/btn_pwdRegX1"
+            style="@style/btn_etPhoneNumber"
+            android:layout_marginRight="50dp"
+            />
+        <Button
+            android:id="@+id/btn_pwdReg1"
+            style="@style/btn_eye"/>
+    </RelativeLayout>
+    <!--请再次输入密码-->
+    <RelativeLayout
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <EditText
+            android:id="@+id/et_pwdReg2"
+            style="@style/reg_login_edit_style"
+            android:hint="请再次输入密码"
+            android:inputType="textPassword"
+            android:background="@drawable/edit_text"
+            />
+        <Button
+            android:id="@+id/btn_pwdRegX2"
+            style="@style/btn_etPhoneNumber"
+            android:layout_marginRight="50dp"
+            />
+        <Button
+            android:id="@+id/btn_pwdReg2"
+            style="@style/btn_eye"/>
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     </RelativeLayout>
     <!--登录-->
     <Button
         android:id="@+id/btn_pwdRegister"
+<<<<<<< HEAD
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="15dp"
@@ -72,5 +134,14 @@
         android:text="登录"
         android:textColor="@color/btn_blue"
         android:textSize="16sp" />
+=======
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/btn_reg_login"
+        android:text="下一步"
+        android:textColor="@color/btn_blue"
+        android:textSize="16sp"/>
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
 </LinearLayout>

@@ -43,6 +43,10 @@
             app:qrcv_toolbarHeight="20dp"
             app:qrcv_topOffset="80dp" />
 
+<<<<<<< HEAD
+=======
+        <include layout="@layout/loading"/>
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
         <ProgressBar
             android:id="@+id/proBar"

@@ -31,7 +31,10 @@ import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.ShowBottonDialog;
+<<<<<<< HEAD
 import com.bumptech.glide.Glide;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.PostFormBuilder;
@@ -95,8 +98,11 @@ public class Pending_FeedbackActivity extends BaseActivity {
     private File file2;
     private File file3;
     private String uid;
+<<<<<<< HEAD
     private Dialog showDialog;
     private Dialog showDialog1;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @Override
     protected void initConfig() {
@@ -119,7 +125,11 @@ public class Pending_FeedbackActivity extends BaseActivity {
         super.initEvents();
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
         // 这里是完成的点击事件
+<<<<<<< HEAD
         showDialog = loadProgressDialog.show(mActivity, "正在加载...");
+=======
+        progressBar.setVisibility(View.VISIBLE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         String url = Urls.Url_Check_Pending_FeedBack;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("is_id", isId);
@@ -191,7 +201,11 @@ public class Pending_FeedbackActivity extends BaseActivity {
             dialog();
             return;
         }
+<<<<<<< HEAD
         showDialog1 = loadProgressDialog.show(mActivity, "正在提交...");
+=======
+        progressBar.setVisibility(View.VISIBLE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         params.put("is_id", isId);
@@ -225,7 +239,11 @@ public class Pending_FeedbackActivity extends BaseActivity {
 
         @Override
         public void onError(Call call, Exception e) {
+<<<<<<< HEAD
             showDialog1.dismiss();
+=======
+            progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -235,7 +253,11 @@ public class Pending_FeedbackActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
+<<<<<<< HEAD
             showDialog1.dismiss();
+=======
+            progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
             //System.out.println("待反馈界面Pending_FeedbackActivity+++===" + response);
 
@@ -274,7 +296,11 @@ public class Pending_FeedbackActivity extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
+<<<<<<< HEAD
             showDialog.dismiss();
+=======
+            progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -287,7 +313,11 @@ public class Pending_FeedbackActivity extends BaseActivity {
             //System.out.println("Pending_FeedbackActivity" + response);
             Pending_FeedbackBean bean = new Gson().fromJson(response, Pending_FeedbackBean.class);
             if (bean != null) {
+<<<<<<< HEAD
                 showDialog.dismiss();
+=======
+                progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 String msg = bean.msg;
                 int code = bean.code;
                 String isContent = bean.data.is_content;
@@ -546,12 +576,35 @@ public class Pending_FeedbackActivity extends BaseActivity {
      * 设置照片
      */
     private void setHeaderIcon(final ImageView iv, String imgurl) {
+<<<<<<< HEAD
 
         Glide
                 .with(mActivity)
                 .load(imgurl)
                 .centerCrop().crossFade().into(iv);
 
+=======
+        OkHttpUtils
+                .get()//
+                .url(imgurl)//
+                .tag(this)//
+                .build()//
+                .connTimeOut(10000)
+                .readTimeOut(10000)
+                .writeTimeOut(10000)
+                .execute(new BitmapCallback() {
+                    @Override
+                    public void onError(Call call, Exception e) {
+
+                        System.out.println("Pending_FeedbackActivity设置图片+++===" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        iv.setImageBitmap(bitmap);
+                    }
+                });
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     }
 
 }

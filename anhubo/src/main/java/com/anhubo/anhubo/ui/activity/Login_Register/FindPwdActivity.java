@@ -1,6 +1,9 @@
 package com.anhubo.anhubo.ui.activity.Login_Register;
 
+<<<<<<< HEAD
 import android.app.Dialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.os.Handler;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -17,9 +20,12 @@ import com.anhubo.anhubo.bean.Security_Bean;
 import com.anhubo.anhubo.bean.Security_Token_Bean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.InputWatcher;
+<<<<<<< HEAD
 import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
@@ -36,7 +42,10 @@ import okhttp3.Call;
  * Created by LUOLI on 2016/12/22.
  */
 public class FindPwdActivity extends BaseActivity {
+<<<<<<< HEAD
     private static final String TAG = "FindPwdActivity";
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     @InjectView(R.id.et_alterPwd_phoneNumber)
     EditText etAlterPwdPhoneNumber;
     @InjectView(R.id.btn_alterPwd_phoneNumber)
@@ -65,6 +74,7 @@ public class FindPwdActivity extends BaseActivity {
     private String pwd1;
     private String pwd2;
     private String token;
+<<<<<<< HEAD
     private Dialog showDialog;
     private String phone;
 
@@ -73,6 +83,9 @@ public class FindPwdActivity extends BaseActivity {
         super.initConfig();
         phone = getIntent().getStringExtra(Keys.PHONE);
     }
+=======
+    private AlertDialog builder;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @Override
     protected int getContentViewId() {
@@ -81,6 +94,7 @@ public class FindPwdActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
+<<<<<<< HEAD
 
         // 设置手机号输入框的默认显示内容
         if (etAlterPwdPhoneNumber != null&&!TextUtils.isEmpty(phone)) {
@@ -88,6 +102,9 @@ public class FindPwdActivity extends BaseActivity {
         }
 
 
+=======
+        builder = new AlertDialog(mActivity).builder();
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         //设置当号码输入框有内容时显示小圆叉
         etAlterPwdPhoneNumber.addTextChangedListener(new InputWatcher(btnAlterPwdPhoneNumber, etAlterPwdPhoneNumber));
         etAlterPwd1.addTextChangedListener(new InputWatcher(btnAlterPwdX1, etAlterPwd1));
@@ -183,11 +200,15 @@ public class FindPwdActivity extends BaseActivity {
             return;
         }
 
+<<<<<<< HEAD
         findPwd();
     }
 
     private void findPwd() {
         showDialog = loadProgressDialog.show(mActivity, "正在找回密码...");
+=======
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         String url = Urls.Url_Login_AlterPwd;
         HashMap<String, String> params = new HashMap<>();
         params.put("phone", phoneNumber);
@@ -202,7 +223,11 @@ public class FindPwdActivity extends BaseActivity {
     }
 
     private void showdialog(String string) {
+<<<<<<< HEAD
         new AlertDialog(mActivity).builder()
+=======
+        builder
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 .setTitle("提示")
                 .setMsg(string)
                 .setCancelable(true).show();
@@ -214,12 +239,17 @@ public class FindPwdActivity extends BaseActivity {
 
         @Override
         public void onError(Call call, Exception e) {
+<<<<<<< HEAD
             showDialog.dismiss();
             LogUtils.e(TAG,":findPwd:",e);
+=======
+            System.out.println("UnitMenuActivity+++上传更改密码===没拿到数据" + e.getMessage());
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         }
 
         @Override
         public void onResponse(String response) {
+<<<<<<< HEAD
             LogUtils.eNormal(TAG+":findPwd:",response);
             Login_AlterPwdBean bean = JsonUtil.json2Bean(response, Login_AlterPwdBean.class);
             if (bean != null) {
@@ -227,6 +257,14 @@ public class FindPwdActivity extends BaseActivity {
                 int code = bean.code;
                 if (code == 0) {
                     new AlertDialog(mActivity).builder()
+=======
+            System.out.println("FindPwdActivity界面修改密码+" + response);
+            Login_AlterPwdBean bean = new Gson().fromJson(response, Login_AlterPwdBean.class);
+            if (bean != null) {
+                int code = bean.code;
+                if (code == 0) {
+                   builder
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                             .setTitle("提示")
                             .setMsg("找回密码成功，前去登录")
                             .setPositiveButton("", new View.OnClickListener() {
@@ -242,7 +280,11 @@ public class FindPwdActivity extends BaseActivity {
                             })
                             .setCancelable(false).show();
                 }else if(code == 1){
+<<<<<<< HEAD
                     new AlertDialog(mActivity).builder()
+=======
+                    builder
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                             .setTitle("提示")
                             .setMsg("验证码错误")
                             .setCancelable(true).show();

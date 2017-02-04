@@ -1,6 +1,9 @@
 package com.anhubo.anhubo.ui.activity.Login_Register;
 
+<<<<<<< HEAD
 import android.app.Dialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.SpannableString;
@@ -23,12 +26,17 @@ import com.anhubo.anhubo.bean.Register1_Bean;
 import com.anhubo.anhubo.bean.Security_Bean;
 import com.anhubo.anhubo.bean.Security_Token_Bean;
 import com.anhubo.anhubo.protocol.Urls;
+<<<<<<< HEAD
 import com.anhubo.anhubo.ui.activity.HomeActivity;
 import com.anhubo.anhubo.utils.InputWatcher;
 import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
+=======
+import com.anhubo.anhubo.utils.InputWatcher;
+import com.anhubo.anhubo.utils.Keys;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
@@ -46,21 +54,35 @@ import okhttp3.Call;
  */
 public class RegisterActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
 
+<<<<<<< HEAD
     private static final String TAG = "RegisterActivity";
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     private Button btnRegister1;
     private TextView tvRegSecurity;
     private String token;
     private EditText etRegphoneNumber;
     private String phoneNumber;
     private EditText etRegPwd;
+<<<<<<< HEAD
+=======
+    private EditText etRegInviteCode;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     private CheckBox cbRegAnhubo;
     private EditText etRegSecurity;
     private String securityCode;
     private String pwd;
+<<<<<<< HEAD
     private Button btnRegphoneNumber;
     private boolean pwdIsVisible = false;//记录密码是否显示
     private Button btnRegPwdIsVisible;
     private Button btnRegPwd2IsVisible;
+=======
+    private String inviteCode;
+    private Button btnRegphoneNumber;
+    private boolean pwdIsVisible = false;//记录密码是否显示
+    private Button btnRegPwdIsVisible;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     private TextView tvDeal;
     private Button btnRegPwdX;
     private String unionid;
@@ -68,16 +90,21 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private String weixinName;
     private String weixinforzhuce;
     private String loginforzhuce;
+<<<<<<< HEAD
     private String PwdRegister;
     private Dialog showDialog;
     private EditText etRegPwd2;
     private Button btnRegPwdX2;
     private String pwd2;
+=======
+    private AlertDialog builder;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
 
     @Override
     protected void initConfig() {
         super.initConfig();
+<<<<<<< HEAD
         Intent intent = getIntent();
         loginforzhuce = intent.getStringExtra(Keys.LOGINFORZHUCE);
         weixinforzhuce = intent.getStringExtra(Keys.WEIXINFORZHUCE);
@@ -86,6 +113,15 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         unionid = intent.getStringExtra(Keys.UNIONID);
         imageUrl = intent.getStringExtra(Keys.PROFILE_IMAGE_URL);
         weixinName = intent.getStringExtra(Keys.SCREEN_NAME);
+=======
+
+        loginforzhuce = getIntent().getStringExtra(Keys.LOGINFORZHUCE);
+        weixinforzhuce = getIntent().getStringExtra(Keys.WEIXINFORZHUCE);
+
+        unionid = getIntent().getStringExtra(Keys.UNIONID);
+        imageUrl = getIntent().getStringExtra(Keys.PROFILE_IMAGE_URL);
+        weixinName = getIntent().getStringExtra(Keys.SCREEN_NAME);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     }
 
     @Override
@@ -95,7 +131,11 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
     @Override
     protected void initViews() {
+<<<<<<< HEAD
 
+=======
+        builder = new AlertDialog(mActivity).builder();
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         /*找控件*/
         // 下一步
         btnRegister1 = (Button) findViewById(R.id.btn_register1);
@@ -108,11 +148,16 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         // 输入密码
         etRegPwd = (EditText) findViewById(R.id.et_reg_pwd);
         // 输入邀请码
+<<<<<<< HEAD
         etRegPwd2 = (EditText) findViewById(R.id.et_reg_pwd2);
+=======
+        etRegInviteCode = (EditText) findViewById(R.id.et_reg_inviteCode);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         // 协议的CheckBox
         cbRegAnhubo = (CheckBox) findViewById(R.id.cb_reg_anhubo);
         // 电话号码的小圆叉
         btnRegphoneNumber = (Button) findViewById(R.id.btn_reg_phoneNumber);
+<<<<<<< HEAD
         // 密码1可见
         btnRegPwdIsVisible = (Button) findViewById(R.id.btn_reg_pwdIsVisible);
         // 密码1小圆叉
@@ -129,6 +174,14 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             etRegphoneNumber.setText(phone);
         }
 
+=======
+        // 密码可见btn_reg_pwdIsVisible
+        btnRegPwdIsVisible = (Button) findViewById(R.id.btn_reg_pwdIsVisible);
+        // 密码小圆叉
+        btnRegPwdX = (Button) findViewById(R.id.btn_reg_pwdx);
+
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         // 协议
         tvDeal = (TextView) findViewById(R.id.tv_deal);
         // 获取协议里面的内容
@@ -180,6 +233,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         cbRegAnhubo.setOnCheckedChangeListener(this);
         // 右边小圆叉
         btnRegphoneNumber.setOnClickListener(this);
+<<<<<<< HEAD
         // 密码1小圆叉
         btnRegPwdX.setOnClickListener(this);
         // 密码2小圆叉
@@ -191,6 +245,14 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
         btnRegPwdIsVisible.setOnClickListener(this);
         btnRegPwd2IsVisible.setOnClickListener(this);
+=======
+        // 密码小圆叉
+        btnRegPwdX.setOnClickListener(this);
+        // 监听号码输入框状态，控制机右边小圆叉
+        etRegphoneNumber.addTextChangedListener(new InputWatcher(btnRegphoneNumber, etRegphoneNumber));
+        etRegPwd.addTextChangedListener(new InputWatcher(btnRegPwdX, etRegPwd));
+        btnRegPwdIsVisible.setOnClickListener(this);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     }
 
     /**
@@ -217,8 +279,13 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         getInputData();
         switch (v.getId()) {
 
+<<<<<<< HEAD
             case R.id.btn_register1: // 注册提交
                 submit();
+=======
+            case R.id.btn_register1: // 注册的下一步
+                enterRegisterActivity2();
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 break;
             case R.id.tv_reg_security: // 获取验证码
                 // 定义一个方法获取验证码
@@ -228,6 +295,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             case R.id.btn_reg_phoneNumber: // 号码的小圆叉
                 etRegphoneNumber.setText("");
                 break;
+<<<<<<< HEAD
             case R.id.btn_reg_pwdx: // 密码1的小圆叉
                 etRegPwd.setText("");
                 break;
@@ -242,6 +310,15 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 //  改变密码2的可见状态
                 changePwdVisible(etRegPwd2);
                 break;
+=======
+            case R.id.btn_reg_pwdx: // 密码的小圆叉
+                etRegPwd.setText("");
+                break;
+            case R.id.btn_reg_pwdIsVisible: // 使密码可见
+                //  改变密码的可见状态
+                changePwdVisible(etRegPwd);
+                break;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             default:
                 break;
         }
@@ -270,17 +347,28 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         phoneNumber = etRegphoneNumber.getText().toString().trim();
         //验证码
         securityCode = etRegSecurity.getText().toString().trim();
+<<<<<<< HEAD
         //密码1
         pwd = etRegPwd.getText().toString().trim();
         //密码2
         pwd2 = etRegPwd2.getText().toString().trim();
+=======
+        //密码
+        pwd = etRegPwd.getText().toString().trim();
+        //邀请码
+        inviteCode = etRegInviteCode.getText().toString().trim();
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     }
 
     /**
      * 进入注册的第二个页面
      */
+<<<<<<< HEAD
     private void submit() {
+=======
+    private void enterRegisterActivity2() {
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         if (TextUtils.isEmpty(phoneNumber)) {
 
             showdialog("请输入手机号码");
@@ -315,6 +403,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             showdialog("请输入8-16位数字和字母的组合");
             return;
         }
+<<<<<<< HEAD
 
         if (TextUtils.isEmpty(pwd2)) {
             showdialog("请再次输入密码");
@@ -325,14 +414,21 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             return;
         }
 
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         if (!cbRegAnhubo.isChecked()) {
             ToastUtils.showToast(mActivity, "请先阅读协议");
             return;
         }
 
+<<<<<<< HEAD
         showDialog = loadProgressDialog.show(mActivity, "正在处理...");
 
         if (!TextUtils.isEmpty(loginforzhuce)||!TextUtils.isEmpty(PwdRegister)) {
+=======
+
+        if (!TextUtils.isEmpty(loginforzhuce)) {
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             // 再次请求网络，获取uid
             //System.out.println("=======正常注册=======");
             getUId();
@@ -340,6 +436,11 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             //System.out.println("=======微信注册=======");
             getUId_weixin();
         }
+<<<<<<< HEAD
+=======
+        /*Intent intent = new Intent(RegisterActivity.this, RegisterActivity2.class);
+        startActivity(intent);*/
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     }
 
     /**
@@ -351,9 +452,21 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         // 封装请求参数
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("telphone", phoneNumber);
+<<<<<<< HEAD
         params.put("verify_code", securityCode);
         params.put("password", pwd);
 
+=======
+
+        params.put("verify_code", securityCode);
+
+        params.put("password", pwd);
+
+        if (!TextUtils.isEmpty(inviteCode)) {
+            params.put("users_qrcode", inviteCode);
+        }
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         params.put("third_type", 2 + "");//第三方类型，2代表微信
         params.put("pic_url", imageUrl);// 头像
         params.put("unique_id", unionid);// 微信uid
@@ -372,12 +485,17 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     class MyStringCallback3 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
+<<<<<<< HEAD
             showDialog.dismiss();
             LogUtils.e(TAG,":getUId_weixin:",e);
+=======
+            System.out.println("RegisterActivity+++===微信没拿到数据" + e.getMessage());
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         }
 
         @Override
         public void onResponse(String response) {
+<<<<<<< HEAD
             showDialog.dismiss();
             LogUtils.eNormal(TAG+":getUId_weixin:",response);
             Register1_Bean register1Bean = JsonUtil.json2Bean(response, Register1_Bean.class);
@@ -389,6 +507,18 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                     case "0":// 注册成功
                         // 进入首页
                         enterHomeActivity(uid);
+=======
+            //System.out.println("1111111122222222"+response);
+            Register1_Bean register1Bean = new Gson().fromJson(response, Register1_Bean.class);
+            if (register1Bean != null) {
+                String code = register1Bean.code;
+                String msg = register1Bean.msg;
+                int uid = register1Bean.data.uid;
+                switch (code) {
+                    case "0":// 注册成功
+                        // 进入注册的第二个界面
+                        enterRegisterActivity2(uid);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                         break;
                     case "102":// 验证码错误
                         showdialog(msg);
@@ -406,7 +536,11 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     }
     /**弹窗提示*/
     private void showdialog(String string) {
+<<<<<<< HEAD
         new AlertDialog(mActivity).builder()
+=======
+        builder
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 .setTitle("提示")
                 .setMsg(string)
                 .setCancelable(true).show();
@@ -424,11 +558,19 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         params.put("telphone", phoneNumber);
         params.put("verify_code", securityCode);
         params.put("password", pwd);
+<<<<<<< HEAD
+=======
+        if (!TextUtils.isEmpty(inviteCode)) {
+
+            params.put("users_qrcode", inviteCode);
+        }
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
         OkHttpUtils.post()//
                 .url(url)//
                 .params(params)//
                 .build()//
+<<<<<<< HEAD
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e) {
@@ -475,10 +617,54 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                             .setCancelable(false).show();
                     break;
 
+=======
+                .execute(new MyStringCallback());
+    }
+
+    /**
+     * 请求结果的监听器
+     */
+    class MyStringCallback extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+
+            System.out.println("RegisterActivity+++===没拿到数据" + e.getMessage());
+        }
+
+        @Override
+        public void onResponse(String response) {
+            Register1_Bean register1Bean = new Gson().fromJson(response, Register1_Bean.class);
+            if (register1Bean != null) {
+                String code = register1Bean.code;
+                //System.out.println(code);
+                String msg = register1Bean.msg;
+                //System.out.println(msg);
+                int uid = register1Bean.data.uid;
+                //System.out.println("uid+++===" + uid);
+                switch (code) {
+                    case "0":// 注册成功
+                        // 进入注册的第二个界面
+                        enterRegisterActivity2(uid);
+                        break;
+                    case "102":// 验证码错误
+                        showdialog(msg);
+                        break;
+                    case "103":// 邀请码错误
+                        showdialog(msg);
+                        break;
+                    case "108":// 该手机号码已注册
+                        showdialog(msg);
+                        break;
+
+                }
+            } else {
+                System.out.println("RegisterActivity界面+++===没获取到bean");
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             }
         }
     }
 
+<<<<<<< HEAD
     /**
      * 进入首页界面
      */
@@ -491,6 +677,19 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             SpUtils.putParam(mActivity, Keys.UID, uid);
             // 发送一条广播，登录完成后关闭登录的所有界面
             mActivity.sendBroadcast(new Intent(INTENT_FINISH));
+=======
+
+    /**
+     * 进入注册的第二个界面
+     */
+    private void enterRegisterActivity2(int uid) {
+        // 获取到uid后携带uid跳转到RegisterActivity2界面
+        if (uid != 0) {
+            Intent intent = new Intent(RegisterActivity.this, RegisterActivity2.class);
+            //System.out.println("要传递的uid+++===+++" + uid);
+            intent.putExtra(Keys.UID, String.valueOf(uid));
+            startActivity(intent);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         } else {
             showdialog("网络错误，请重试");
         }

@@ -8,11 +8,15 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+<<<<<<< HEAD
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+=======
+import android.widget.RadioGroup;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.HomeAdapter;
@@ -21,15 +25,22 @@ import com.anhubo.anhubo.bean.Alter_MateUnitBean;
 import com.anhubo.anhubo.bean.ExtrasBean;
 import com.anhubo.anhubo.bean.UploadRegistration_Id_Bean;
 import com.anhubo.anhubo.protocol.Urls;
+<<<<<<< HEAD
 import com.anhubo.anhubo.ui.activity.unitDetial.BusinessActivity;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.anhubo.anhubo.ui.impl.BuildFragment;
 import com.anhubo.anhubo.ui.impl.FindFragment;
 import com.anhubo.anhubo.ui.impl.MyFragment;
 import com.anhubo.anhubo.ui.impl.UnitFragment;
 import com.anhubo.anhubo.utils.JPushManager;
+<<<<<<< HEAD
 import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
+=======
+import com.anhubo.anhubo.utils.Keys;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
@@ -53,8 +64,11 @@ import okhttp3.Call;
 
 public class HomeActivity extends BaseActivity {
 
+<<<<<<< HEAD
     private static final int UNIT_REGISTER = 0;
     private static final String TAG = "HomeActivity";
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     @InjectView(R.id.viewpager)
     NoScrollViewPager viewpager;
 
@@ -63,7 +77,10 @@ public class HomeActivity extends BaseActivity {
     private ArrayList<Fragment> list;
     private long exitTime = 0;
     public static boolean isForeground = false;
+<<<<<<< HEAD
     private View view;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @Override
     protected void initConfig() {
@@ -100,6 +117,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void initEvents() {
 
+<<<<<<< HEAD
         String businessId = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
         if (TextUtils.isEmpty(businessId)) {
             view = View.inflate(mActivity, R.layout.home_zhezhao, null);
@@ -118,6 +136,9 @@ public class HomeActivity extends BaseActivity {
                                 }
                             });
         }
+=======
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         // 初始化集合
         list = new ArrayList();
         list.add(new UnitFragment());
@@ -135,6 +156,7 @@ public class HomeActivity extends BaseActivity {
     }
 
 
+<<<<<<< HEAD
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -161,6 +183,9 @@ public class HomeActivity extends BaseActivity {
         void UIChange();
         void changeUnit(String string,String str);
     }
+=======
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     @Override
     protected void onLoadDatas() {
 
@@ -266,12 +291,19 @@ public class HomeActivity extends BaseActivity {
                 String tableId = bean.table_id;
                 if (tableId != null) {
                     if (!TextUtils.isEmpty(messge) && !TextUtils.isEmpty(tableId)) {
+<<<<<<< HEAD
                         // 弹窗提示修改单位
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                         dialog(messge, tableId);
                     }
                 }
 
+<<<<<<< HEAD
             } else if (MESSAGE_REGISTRATION_ID.equals(intent.getAction())) {
+=======
+            }else if(MESSAGE_REGISTRATION_ID.equals(intent.getAction())){
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 String registration_id = intent.getStringExtra(REGISTRATION_ID);
                 System.out.println("registration_id***MyReceiver*****++" + registration_id);
                 String uid = SpUtils.getStringParam(mActivity, Keys.UID);
@@ -291,7 +323,10 @@ public class HomeActivity extends BaseActivity {
             }
         }
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     /**
      * 上传Registration_Id
      */
@@ -299,22 +334,40 @@ public class HomeActivity extends BaseActivity {
 
         @Override
         public void onError(Call call, Exception e) {
+<<<<<<< HEAD
             LogUtils.e(TAG,":Registration_Id上传",e);
+=======
+
+            System.out.println("WelcomeActivity界面+++上传Registration_Id===没拿到数据" + e.getMessage());
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         }
 
         @Override
         public void onResponse(String response) {
+<<<<<<< HEAD
             LogUtils.eNormal(TAG+":Registration_Id上传",response);
             UploadRegistration_Id_Bean bean = JsonUtil.json2Bean(response, UploadRegistration_Id_Bean.class);
             int code = bean.code;
             String msg = bean.msg;
             if (code == 0) {
                 LogUtils.eNormal(TAG+":","Registration_Id上传成功");
+=======
+            //System.out.println("上传Registration_Id+" + response);
+            UploadRegistration_Id_Bean bean = new Gson().fromJson(response, UploadRegistration_Id_Bean.class);
+            int code = bean.code;
+            String msg = bean.msg;
+            if (code == 0) {
+                //System.out.println("上传Registration_Id+++msg上传成功+++" + msg);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             }
         }
 
     }
+<<<<<<< HEAD
     // 弹窗提示修改单位
+=======
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     private void dialog(String messge, final String tableId) {
         new AlertDialog(mActivity).builder()
                 .setTitle("通知")
@@ -358,19 +411,29 @@ public class HomeActivity extends BaseActivity {
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(true).show();
+<<<<<<< HEAD
             LogUtils.e(TAG,":alterUnit",e);
+=======
+            System.out.println("HomeActivity，界面同事修改单位+" + e.getMessage());
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         }
 
         @Override
         public void onResponse(String response) {
+<<<<<<< HEAD
             LogUtils.eNormal(TAG+":alterUnit",response);
             Alter_MateUnitBean bean = JsonUtil.json2Bean(response, Alter_MateUnitBean.class);
+=======
+            //System.out.println("同事修改单位+" + response);
+            Alter_MateUnitBean bean = new Gson().fromJson(response, Alter_MateUnitBean.class);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             if (bean != null) {
                 int code = bean.code;
                 String msg = bean.msg;
                 Alter_MateUnitBean.Data data = bean.data;
                 String businessId = data.business_id;
                 String businessName = data.business_name;
+<<<<<<< HEAD
                 if(code == 0){
                     SpUtils.putParam(mActivity, Keys.BUSINESSID, businessId);
                     SpUtils.putParam(mActivity, Keys.BUSINESSNAME, businessName);
@@ -378,6 +441,14 @@ public class HomeActivity extends BaseActivity {
                         updateFragmentUIFromActivity.changeUnit(businessName,businessId);
                     }
                 }
+=======
+                String buildingId = data.building_id;
+                String buildingName = data.building_name;
+                SpUtils.putParam(mActivity, Keys.BUSINESSID, businessId);
+                SpUtils.putParam(mActivity, Keys.BUSINESSNAME, businessName);
+                SpUtils.putParam(mActivity, Keys.BULIDINGID, buildingId);
+                SpUtils.putParam(mActivity, Keys.BUILDINGNAME, buildingName);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             }
         }
     }

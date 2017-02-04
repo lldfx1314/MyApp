@@ -1,6 +1,9 @@
 package com.anhubo.anhubo.ui.activity.Login_Register;
 
+<<<<<<< HEAD
 import android.app.Dialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.content.Intent;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -13,12 +16,17 @@ import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.Register1_Bean;
 import com.anhubo.anhubo.protocol.Urls;
+<<<<<<< HEAD
 import com.anhubo.anhubo.ui.activity.HomeActivity;
 import com.anhubo.anhubo.utils.InputWatcher;
 import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
+=======
+import com.anhubo.anhubo.utils.InputWatcher;
+import com.anhubo.anhubo.utils.Keys;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
@@ -37,7 +45,10 @@ import okhttp3.Call;
  */
 public class PwdRegisterActivity extends BaseActivity {
 
+<<<<<<< HEAD
     private static final String TAG = "PwdRegisterActivity";
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     @InjectView(R.id.et_pwdReg1)
     EditText etPwdRegFirst;
     @InjectView(R.id.btn_pwdReg1)
@@ -56,7 +67,11 @@ public class PwdRegisterActivity extends BaseActivity {
     private String firstPwd;
     private String secondPwd;
     private boolean pwdIsVisible = false;
+<<<<<<< HEAD
     private Dialog showDialog;
+=======
+    private AlertDialog builder;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @Override
     protected void initConfig() {
@@ -77,6 +92,10 @@ public class PwdRegisterActivity extends BaseActivity {
     @Override
     protected void initEvents() {
         super.initEvents();
+<<<<<<< HEAD
+=======
+        builder = new AlertDialog(mActivity).builder();
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         etPwdRegFirst.addTextChangedListener(new InputWatcher(btnPwdRegX1, etPwdRegFirst));
         etPwdRegSecond.addTextChangedListener(new InputWatcher(btnPwdRegX2, etPwdRegSecond));
     }
@@ -111,6 +130,7 @@ public class PwdRegisterActivity extends BaseActivity {
                     showdialog("请输入密码");
                     return;
                 }
+<<<<<<< HEAD
 
                 if (!TextUtils.isEmpty(secondPwd)) {
                     if (!TextUtils.equals(firstPwd, secondPwd)) {
@@ -123,6 +143,16 @@ public class PwdRegisterActivity extends BaseActivity {
                     return;
                 }
 
+=======
+                if (TextUtils.isEmpty(secondPwd)) {
+                    showdialog("请再次输入密码");
+                    return;
+                }
+                if (!TextUtils.equals(firstPwd, secondPwd)) {
+                    showdialog("两次密码输入不一致");
+                    return;
+                }
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 //　拿着号码和密码，调用接口
                 enterRegister();
                 break;
@@ -130,7 +160,11 @@ public class PwdRegisterActivity extends BaseActivity {
     }
 
     private void showdialog(String string) {
+<<<<<<< HEAD
         new AlertDialog(mActivity).builder()
+=======
+        builder
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 .setTitle("提示")
                 .setMsg(string)
                 .setCancelable(true).show();
@@ -156,7 +190,10 @@ public class PwdRegisterActivity extends BaseActivity {
      * 拿着号码和密码，调用接口
      */
     private void enterRegister() {
+<<<<<<< HEAD
         showDialog = loadProgressDialog.show(mActivity, "正在处理...");
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         String url = Urls.Url_PwdRegister;
         // 封装请求参数
         HashMap<String, String> params = new HashMap<String, String>();
@@ -178,12 +215,18 @@ public class PwdRegisterActivity extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
+<<<<<<< HEAD
             showDialog.dismiss();
             LogUtils.e(TAG,":enterRegister:",e);
+=======
+
+            System.out.println("PwdRegisterActivity+++===没拿到数据" + e.getMessage());
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         }
 
         @Override
         public void onResponse(String response) {
+<<<<<<< HEAD
             LogUtils.eNormal(TAG+":enterRegister:",response);
             showDialog.dismiss();
             Register1_Bean bean = JsonUtil.json2Bean(response, Register1_Bean.class);
@@ -195,10 +238,23 @@ public class PwdRegisterActivity extends BaseActivity {
                     // 进入主界面
                     enterHome(uid);
 
+=======
+            Register1_Bean bean = new Gson().fromJson(response, Register1_Bean.class);
+            if (bean != null) {
+                int uid = bean.data.uid;
+                //System.out.println("拿到uid了"+uid);
+                // 获取到uid后携带uid跳转到RegisterActivity2界面
+                if (uid != 0) {
+                    Intent intent = new Intent(PwdRegisterActivity.this, RegisterActivity2.class);
+                    //System.out.println("要传递的uid+++===+++" + uid);
+                    intent.putExtra(Keys.UID, String.valueOf(uid));
+                    startActivity(intent);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 } else {
                     showdialog("网络错误，请重试");
                 }
 
+<<<<<<< HEAD
             }
         }
     }
@@ -210,6 +266,14 @@ public class PwdRegisterActivity extends BaseActivity {
         // 发送一条广播，登录完成后关闭登录的所有界面
         mActivity.sendBroadcast(new Intent(INTENT_FINISH));
     }
+=======
+            } else {
+                System.out.println("PwdRegisterActivity没拿到uid");
+            }
+        }
+    }
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     /**
      * 获取输入的内容

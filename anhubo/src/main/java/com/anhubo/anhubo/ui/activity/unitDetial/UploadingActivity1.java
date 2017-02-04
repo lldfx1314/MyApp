@@ -2,9 +2,18 @@ package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.app.Activity;
 import android.app.Dialog;
+<<<<<<< HEAD
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+=======
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,9 +30,14 @@ import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.MsgPerfectLicenseBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.ImageFactory;
+<<<<<<< HEAD
 import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
+=======
+import com.anhubo.anhubo.utils.ImageTools;
+import com.anhubo.anhubo.utils.Keys;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
@@ -37,7 +51,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+<<<<<<< HEAD
 import java.util.Calendar;
+=======
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -53,7 +73,10 @@ public class UploadingActivity1 extends BaseActivity {
 
     private static final int CAMERA = 0;
     private static final int PICTURE = 1;
+<<<<<<< HEAD
     private static final String TAG = "UploadingActivity1";
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     @InjectView(R.id.ll_takePhoto01)
     LinearLayout llTakePhoto01;
     @InjectView(R.id.btn_unloading01)
@@ -64,7 +87,10 @@ public class UploadingActivity1 extends BaseActivity {
     private Button btnTakephoto;
     private Button btnPhoto;
     private Dialog dialog;
+<<<<<<< HEAD
     private Dialog showDialog;
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
 
     @Override
@@ -111,7 +137,10 @@ public class UploadingActivity1 extends BaseActivity {
      * 拿到拍到的照片去上传
      */
     private File newFile = null;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     private void upLoading() {
         // 获取
         String businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
@@ -125,7 +154,12 @@ public class UploadingActivity1 extends BaseActivity {
             return;
         }
 
+<<<<<<< HEAD
         showDialog = loadProgressDialog.show(mActivity, "正在上传...");
+=======
+
+        progressBar.setVisibility(View.VISIBLE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         String url = Urls.Url_UpLoading01;
         Map<String, String> params = new HashMap<>();
         params.put("business_id", businessid);
@@ -142,11 +176,24 @@ public class UploadingActivity1 extends BaseActivity {
 
     private Handler handler = new Handler();
 
+<<<<<<< HEAD
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
             LogUtils.e(TAG, ":upLoading:", e);
             showDialog.dismiss();
+=======
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
+    class MyStringCallback extends StringCallback {
+        @Override
+        public void onError(Call call, Exception e) {
+            System.out.println("UploadingActivity1+++===界面失败" + e.getMessage());
+            progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -156,10 +203,17 @@ public class UploadingActivity1 extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
+<<<<<<< HEAD
             showDialog.dismiss();
             LogUtils.eNormal(TAG + ":upLoading:", response);
             MsgPerfectLicenseBean licenseBean = JsonUtil.json2Bean(response, MsgPerfectLicenseBean.class);
             if (licenseBean != null) {
+=======
+
+            MsgPerfectLicenseBean licenseBean = new Gson().fromJson(response, MsgPerfectLicenseBean.class);
+            if (licenseBean != null) {
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 int code = licenseBean.code;
                 final String msg = licenseBean.msg;
                 if (code != 0) {
@@ -168,13 +222,21 @@ public class UploadingActivity1 extends BaseActivity {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+<<<<<<< HEAD
+=======
+                            progressBar.setVisibility(View.GONE);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                             ToastUtils.showToast(mActivity, "上传成功");
                             Intent intent = new Intent();
                             intent.putExtra(Keys.ISCLICK1, true);
                             setResult(1, intent);
                             finish();
                         }
+<<<<<<< HEAD
                     }, 500);
+=======
+                    }, 2000);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 }
             }
 
@@ -223,7 +285,11 @@ public class UploadingActivity1 extends BaseActivity {
         c.moveToFirst();
         int columnIndex = c.getColumnIndex(filePathColumns[0]);
         String imagePath = c.getString(columnIndex);
+<<<<<<< HEAD
         Bitmap photo = ImageFactory.ratio(imagePath, 120f, 240f);
+=======
+        Bitmap photo = ImageFactory.ratio(imagePath,120f,240f);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
         try {
             if (photo != null) {
@@ -232,21 +298,36 @@ public class UploadingActivity1 extends BaseActivity {
                 //显示图片
                 ivShowPhoto01.setImageBitmap(photo);
                 // 把本文件压缩后缓存到本地文件里面
+<<<<<<< HEAD
                 savePicture(photo, "photo02");
+=======
+                savePicture(photo,"photo02");
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
                 newFile = filePhoto02;
 
 
             }
+<<<<<<< HEAD
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+=======
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
             c.close();
         }
     }
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     private void showPhoto01(Intent data) {
         String sdState = Environment.getExternalStorageState();
         if (!sdState.equals(Environment.MEDIA_MOUNTED)) {
@@ -279,6 +360,7 @@ public class UploadingActivity1 extends BaseActivity {
         //显示图片
         ivShowPhoto01.setImageBitmap(bitmap);
         // 把本文件压缩后缓存到本地文件里面
+<<<<<<< HEAD
         savePicture(bitmap, "photo01");
         File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
         newFile = filePhoto01;
@@ -288,11 +370,25 @@ public class UploadingActivity1 extends BaseActivity {
      * 保存图片到本应用下
      **/
     private void savePicture(Bitmap bitmap, String fileName) {
+=======
+        savePicture(bitmap,"photo01");
+        File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
+        newFile = filePhoto01;
+    }
+    /**
+     * 保存图片到本应用下
+     **/
+    private void savePicture(Bitmap bitmap,String fileName) {
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
         FileOutputStream fos = null;
         try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新写入内容会被覆盖
             //fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
+<<<<<<< HEAD
             OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() + "/" + fileName);
+=======
+            OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() +"/"+fileName);
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);// 把图片写入指定文件夹中
 
         } catch (Exception e) {
@@ -308,7 +404,10 @@ public class UploadingActivity1 extends BaseActivity {
             }
         }
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     /**
      * 弹出对话框
      */
@@ -328,8 +427,11 @@ public class UploadingActivity1 extends BaseActivity {
         btnPhoto.setOnClickListener(this);
     }
 
+<<<<<<< HEAD
     @Override
     public void onSystemUiVisibilityChange(int visibility) {
 
     }
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 }

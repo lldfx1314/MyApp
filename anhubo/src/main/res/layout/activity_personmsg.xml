@@ -8,7 +8,11 @@
         android:id="@+id/top_title"
         layout="@layout/layout_top_bar"></include>
 
+<<<<<<< HEAD
     <com.anhubo.anhubo.view.MyScrollView
+=======
+    <ScrollView
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         android:layout_below="@+id/top_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -388,5 +392,10 @@
 
 
         </LinearLayout>
+<<<<<<< HEAD
     </com.anhubo.anhubo.view.MyScrollView>
+=======
+    </ScrollView>
+    <include layout="@layout/loading"></include>
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 </RelativeLayout>

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <android.support.v7.widget.CardView xmlns:cardview="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -25,3 +26,20 @@
     </LinearLayout>
 
 </android.support.v7.widget.CardView>
+=======
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEEEEE"
+    android:orientation="vertical">
+
+    <ListView
+        android:id="@+id/lv_engineer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:cacheColorHint="#00000000"
+        android:scrollbars="none"
+        android:overScrollMode="never"/>
+</LinearLayout>
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce

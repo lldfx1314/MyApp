@@ -90,6 +90,7 @@
             android:text="列表"
             />
 
+<<<<<<< HEAD
         <ImageView
             android:id="@+id/ivTopBarRight_add"
             android:layout_width="40dp"
@@ -110,6 +111,8 @@
             android:paddingRight="15dp"
             android:src="@drawable/three_dot"/>
 
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     </RelativeLayout>
     <!--顶部加载的进度条-->
     <ProgressBar

@@ -18,7 +18,10 @@
         android:layout_height="62dp"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
+<<<<<<< HEAD
         android:textSize="13sp"
+=======
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         android:background="#F7F7F7" />
     <View
         android:id="@+id/view"
@@ -40,4 +43,10 @@
         android:paddingRight="15dp"
         android:background="#F7F7F7"/>
     </RelativeLayout>
+<<<<<<< HEAD
+=======
+
+    <include layout="@layout/loading"/>
+
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 </RelativeLayout>

@@ -27,7 +27,11 @@
                 android:layout_height="80dp"
                 android:layout_marginTop="35dp"
                 android:layout_gravity="center_horizontal"
+<<<<<<< HEAD
                 android:background="@drawable/newicon"
+=======
+                android:src="@drawable/newicon"
+>>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 app:civ_border_color="@color/blue"
                 app:civ_border_width="3dp" />
 
