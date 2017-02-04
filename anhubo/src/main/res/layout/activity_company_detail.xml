@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/top_title"
+        layout="@layout/layout_top_bar"/>
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_below="@+id/top_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/company_detail_unit_ranking"
+            android:layout_width="0dp"
+            android:layout_weight="1.5"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black1"
+            android:textSize="14sp"
+            android:text="单元名次"/>
+        <TextView
+            android:id="@+id/company_detail_three_score"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black1"
+            android:textSize="14sp"
+            android:text="三色分数"/>
+
+    </LinearLayout>
+    <ListView
+        android:id="@+id/company_detail_listview"
+        android:layout_below="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+    <Button
+        android:id="@+id/exit_unit"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/btn_create_unit"
+        android:text="退出单元"
+        android:visibility="gone"
+        android:textColor="@color/btn_blue"
+        android:textSize="16sp" />
+
+
+</RelativeLayout>

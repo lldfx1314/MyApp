@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="back" type="id">back</item>
+    <item type="id" name="tag_first"></item>
+    <item name="image_tag" type="id"/>
+</resources>

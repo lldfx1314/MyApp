@@ -1,0 +1,185 @@
+<resources>
+
+<!-- Base application theme. -->
+<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!-- Customize your theme here. -->
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+</style>
+<style name="textStyle" parent="AppTheme">
+
+    <item name="@android:layout_width">100dp</item>
+    <item name="@android:layout_height">wrap_content</item>
+    <item name="@android:textColor">@color/black</item>
+    <item name="@android:textSize">14sp</item>
+    <item name="android:layout_marginLeft">15sp</item>
+</style>
+<!-- EditText的style -->
+<style name="editTextStyle" parent="AppTheme">
+    <item name="@android:layout_width">match_parent</item>
+    <item name="@android:layout_height">wrap_content</item>
+    <item name="@android:layout_weight">1</item>
+    <item name="@android:textSize">14sp</item>
+    <item name="@android:textColorHint">@color/black1</item>
+    <item name="@android:background">@null</item>
+    <item name="@android:singleLine">true</item>
+</style>
+
+
+<!-- 分割线的style -->
+<style name="viewStyle" parent="AppTheme">
+    <item name="android:layout_width" >match_parent</item>
+    <item name="android:layout_height" >1dp</item>
+    <item name="android:layout_marginLeft" >25dp</item>
+    <item name="android:background" >#c7c7c7</item>
+</style>
+<!-- Activity的对话框style -->
+<style name="progress_dialog_theme" parent="Theme.AppCompat.Light.Dialog">
+    <item name="android:windowFrame">@null</item>
+    <item name="android:windowNoTitle">true</item>
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
+    <item name="android:windowBackground">@android:color/transparent</item>
+    <item name="android:windowIsFloating">true</item>
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="android:windowIsTranslucent">true</item>
+</style>
+
+<!-- ToolBar的Style -->
+<style name="toolbarStyle" parent="AppTheme">
+    <item name="android:layout_width" >match_parent</item>
+    <item name="android:background" >@color/toolBarColour</item>
+    <item name="android:layout_height" >60dp</item>
+</style>
+<!-- Title的style -->
+<style name="TitleStyle">
+
+    <item name="android:drawableLeft">@drawable/left</item>
+    <item name="android:paddingLeft">15dp</item>
+    <item name="android:gravity">center</item>
+    <item name="android:background">#5E84FF</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">48dp</item>
+    <item name="android:textColor">@android:color/white</item>
+    <item name="android:textSize">20sp</item>
+</style>
+<!-- TobBar分割线 -->
+<style name="TobBar_line">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">0.5dp</item>
+    <item name="android:background">#cccccc</item>
+</style>
+<!-- 登录的输入框样式 -->
+<style name="reg_login_edit_style" >
+
+    <item name="android:gravity">center_vertical</item>
+    <item name="android:textColorHint">@color/text_gray</item>
+    <item name="android:textColor">@color/text_gray</item>
+    <item name="android:textSize">14sp</item>
+    <item name="android:background">@null</item>
+    <item name="android:singleLine">true</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">40dp</item>
+    <item name="android:paddingLeft">5dp</item>
+</style>
+<!-- 这是号码输入框的小圆叉 -->
+<style name="btn_etPhoneNumber">
+
+    <item name="android:layout_alignParentRight">true</item>
+    <item name="android:layout_centerVertical">true</item>
+    <item name="android:layout_marginRight">15dp</item>
+    <item name="android:layout_width">20dp</item>
+    <item name="android:layout_height">20dp</item>
+    <item name="android:visibility">gone</item>
+    <item name="android:background">@drawable/register_clear</item>
+</style>
+
+<!-- 这是密码可见的Button样式 -->
+<style name="btn_eye">
+
+    <item name="android:layout_alignParentRight">true</item>
+    <item name="android:layout_centerVertical">true</item>
+    <item name="android:layout_marginRight">15dp</item>
+    <item name="android:layout_width">25dp</item>
+    <item name="android:layout_height">15dp</item>
+    <item name="android:background">@drawable/eye</item>
+
+</style>
+    <!--RadioBotton的样式-->
+    <style name="bottom_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:paddingTop">5dp</item>
+        去掉默认的旋转按钮
+        <item name="android:button">@null</item>
+        <item name="android:drawablePadding">2dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@drawable/bottom_text_selector</item>
+        把背景改为透明色为了在低版本中正常显示
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+
+    <!-- 这是完善信息的提交按钮样式 -->
+    <style name="btn_msg_perfect">
+
+        <item name="android:layout_marginTop">25dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/btn_uploadshap</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_marginRight">5sp</item>
+        <item name="android:layout_marginLeft">5sp</item>
+        <item name="android:textColor">@color/blue</item>
+    </style>
+
+    <!-- 自定义仿IOS的AlertDialog的样式 -->
+    <style name="AlertDialogStyle" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <!--底部对话框-->
+    <style name="transparentFrameWindowStyle" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@drawable/bottom_dialog_choose_bg</item>
+    </style>
+    <!--底部对话框进入的动画-->
+    <style name="main_menu_animstyle">
+        <item name="android:windowEnterAnimation">@anim/dialog_in_anim</item>
+        <item name="android:windowExitAnimation">@anim/dialog_out_anim</item>
+    </style>
+
+    <!--顶部部对话框进入的动画-->
+    <style name="animstyle">
+        <item name="android:windowEnterAnimation">@anim/topdialog_in_anim</item>
+        <item name="android:windowExitAnimation">@anim/topdialog_out_anim</item>
+    </style>
+    <!--互助计划的进度条-->
+    <style name="ProgressBar" parent="@android:style/Widget.ProgressBar.Horizontal">
+
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/progress_plan_horizontal</item>
+        <item name="android:indeterminateDrawable">@android:drawable/progress_indeterminate_horizontal</item>
+    </style>
+
+    <!-- 自定义loading dialog -->
+    <style name="loading_dialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/dialog_bg</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+
+</resources>
+

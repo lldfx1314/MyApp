@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_upload">
+
+    <include
+        android:id="@+id/top_title"
+        layout="@layout/layout_top_bar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top_title"
+        android:background="@color/backgroud_white"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="5dp"
+                android:text="员工"
+                android:textColor="@color/black"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_ass_admin_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"
+                android:textColor="@color/black"
+                android:textSize="13sp" />
+        </RelativeLayout>
+
+        <com.anhubo.anhubo.view.FooterListview
+            android:id="@+id/lv_ass_admin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null" />
+        <!--android:listSelector="@android:color/transparent"-->
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_ass_admin_ok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/btn_confirm"
+        android:text="确定"
+        android:textColor="@color/btn_blue"
+        android:textSize="16sp" />
+
+</RelativeLayout>

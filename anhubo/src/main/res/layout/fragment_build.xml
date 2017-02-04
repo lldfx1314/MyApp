@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg_upload">
+    <!--统计图区域-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="@color/unit_top">
+        <!--折线统计图-->
+        <RelativeLayout
+            android:id="@+id/rl_build_01"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/backgroud_white"
+                    android:textSize="18sp"
+                    android:text="建筑安全指数"/>
+
+                <TextView
+                    android:id="@+id/tv_build_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/backgroud_white"
+                    android:layout_marginTop="5dp"
+                    android:textSize="38sp"
+                    android:text="0"
+                    />
+                <TextView
+                    android:id="@+id/tv_build_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray"
+                    android:layout_marginTop="5dp"
+                    android:textSize="16sp"
+
+                    android:text="评估时间 00-00"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <!--蜘蛛网统计图-->
+        <RelativeLayout
+            android:id="@+id/rl_build_02"
+            android:layout_width="350dp"
+            android:layout_height="230dp"
+            android:paddingBottom="20dp"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone">
+
+            <com.anhubo.anhubo.view.MyPolygonView
+                android:id="@+id/polygon_build"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_build_frag_02_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="16dp"
+            android:enabled="true"
+            android:text="完善基础信息>>"
+            android:textColor="@color/tv_gray"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_build_frag_02_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="16dp"
+            android:enabled="true"
+            android:text="测试>>"
+            android:textColor="@color/tv_gray"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/lv_build"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="2dp"
+        android:divider="@color/backgroud_white"/>
+
+</LinearLayout>
