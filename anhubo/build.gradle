@@ -8,13 +8,8 @@ android {
         applicationId "com.anhubo.anhubo"
         minSdkVersion 15
         targetSdkVersion 22
-<<<<<<< HEAD
         versionCode 2
         versionName "1.2.0"
-=======
-        versionCode 1
-        versionName "1.1.0"
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     }
     buildTypes {
         release {
@@ -25,11 +20,7 @@ android {
             proguardFiles 'proguard-rules.pro'
             //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-<<<<<<< HEAD
         debug {
-=======
-        debug{
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             // 是否进行混淆
             minifyEnabled false
             signingConfig signingConfigs.debug
@@ -47,11 +38,7 @@ android {
     }
 
 }
-<<<<<<< HEAD
 repositories {
-=======
-repositories{
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     mavenCentral()
 }
 dependencies {
@@ -70,7 +57,6 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     /**友盟统计*/
     compile 'com.umeng.analytics:analytics:latest.integration'
-<<<<<<< HEAD
     compile 'com.android.support:cardview-v7:24.0.0'
     /**Glide*/
     compile 'com.github.bumptech.glide:glide:3.7.0'
@@ -78,8 +64,4 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'com.android.support:recyclerview-v7:24.0.0'
     compile 'com.zhy:base-rvadapter:3.0.3'
-=======
-    /**Glide*/
-//    compile 'com.github.bumptech.glide:glide:3.7.0'
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 }
