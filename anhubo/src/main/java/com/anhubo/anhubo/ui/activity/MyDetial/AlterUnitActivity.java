@@ -13,6 +13,7 @@ import com.anhubo.anhubo.bean.Alter_UnitBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.unitDetial.BuildingActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.BusinessActivity;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
@@ -34,7 +35,7 @@ import okhttp3.Call;
 public class AlterUnitActivity extends BaseActivity {
     private static final int REQUESTCODE1 = 1;
     private static final int REQUESTCODE2 = 2;
-    private static final String TAB = "AlterUnitActivity";
+    private static final String TAG = "AlterUnitActivity";
     @InjectView(R.id.tv_alter_unit)
     TextView tvMyUnit;
     @InjectView(R.id.ll_alter_unit)
@@ -151,9 +152,7 @@ public class AlterUnitActivity extends BaseActivity {
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         params.put("building_name", building);
-        LogUtils.eNormal(TAB+":building",building);
         params.put("business_name", unit);
-        LogUtils.eNormal(TAB+":unit",unit);
         if (TextUtils.isEmpty(buildPoi)) {
             params.put("building_poi_id", "");
         }else{
@@ -188,7 +187,7 @@ public class AlterUnitActivity extends BaseActivity {
         @Override
         public void onError(Call call, Exception e) {
             showDialog.dismiss();
-            System.out.println("AlterUnitActivity+++===界面失败" + e.getMessage());
+            LogUtils.e(TAG,":submitAlter",e);
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -197,9 +196,9 @@ public class AlterUnitActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("AlterUnitActivity界面+++"+response);
+            LogUtils.eNormal(TAG+":submitAlter",response);
             showDialog.dismiss();
-            final Alter_UnitBean bean = new Gson().fromJson(response, Alter_UnitBean.class);
+            final Alter_UnitBean bean = JsonUtil.json2Bean(response, Alter_UnitBean.class);
             if (bean != null) {
                 int code = bean.code;
                 String msg = bean.msg;

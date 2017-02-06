@@ -331,6 +331,7 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
                             if (code == 0) {
                                 SpUtils.putParam(mActivity, Keys.BUSINESSID, null);
                                 SpUtils.putParam(mActivity, Keys.BUSINESSNAME, null);
+                                SpUtils.putParam(mActivity, Keys.BUILDINGNAME, null);
                                 // 跳转到HomeActivity里面
                                 startActivity(new Intent(mActivity, HomeActivity.class));
                                 // 发送一条广播,关掉之前所有界面

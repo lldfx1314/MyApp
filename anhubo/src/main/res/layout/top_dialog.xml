@@ -17,12 +17,18 @@
             android:id="@+id/lv_MsgPerfect_01"
             android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:dividerHeight="0dp"
+            android:divider="@null"
+            android:background="@color/bg_gray"/>
         <ListView
             android:id="@+id/lv_MsgPerfect_02"
             android:layout_width="match_parent"
             android:layout_weight="1"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:dividerHeight="0dp"
+            android:divider="@null"
+            android:background="@color/textcolor"/>
 
     </LinearLayout>
 

@@ -430,6 +430,7 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
+                                SpUtils.putParam(mActivity,Keys.BUILDINGNAME,build);
                                 ToastUtils.showToast(mActivity, "添加成功");
                                 finish();
                             }

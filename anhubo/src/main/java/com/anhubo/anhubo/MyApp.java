@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 
-import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -29,7 +28,7 @@ public class MyApp extends Application {
 
 
         // 异常处理，不需要处理时注释掉这两句即可！
-        //CrashHandler crashHandler = CrashHandler.getInstance();
+        CrashHandler crashHandler = CrashHandler.getInstance();
         // 注册crashHandler
         //crashHandler.init(getApplicationContext());
 
@@ -47,7 +46,6 @@ public class MyApp extends Application {
         //使用https，但是默认信任全部证书
         OkHttpUtils.getInstance().setCertificates();
     }
-
 
 
     public static MyApp get(){

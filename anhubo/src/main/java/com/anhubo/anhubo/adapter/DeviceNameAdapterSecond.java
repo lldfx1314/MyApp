@@ -52,7 +52,7 @@ public class DeviceNameAdapterSecond extends BaseAdapter {
         hold.txt.setText(mArr[position]);
         hold.txt.setTextColor(0xFF666666);
         if (position == mPosition) {
-            hold.txt.setTextColor(0xFFFF8C00);
+//            hold.txt.setTextColor(0xFFFF8C00);
         }
         return convertView;
     }

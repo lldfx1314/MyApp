@@ -333,8 +333,6 @@ public class MsgPerfectActivity extends BaseActivity {
             case R.id.ll_msg_per06:
                 // 顶部弹出对话框
                 showDialog();
-
-
                 break;
         }
     }

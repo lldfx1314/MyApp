@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="55dp"
+    android:layout_height="48dp"
     android:orientation="horizontal" >
 
     <LinearLayout
         android:id="@+id/mainitem_layout"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="48dp"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
@@ -15,10 +15,18 @@
             android:id="@+id/mainitem_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
             android:text="单位常用设备"
-            android:textColor="#232323"
-            android:textSize="14sp" />
+            android:textColor="#88000000"
+            android:textSize="15sp" />
+        <View
+            android:id="@+id/mainitem_view"
+            android:layout_width="5dp"
+            android:layout_height="2.5dp"
+            android:visibility="gone"
+            android:background="@drawable/view_shap"/>
+
     </LinearLayout>
 
 </LinearLayout>

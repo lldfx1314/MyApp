@@ -301,6 +301,7 @@ public class UnitFragment extends BaseFragment{
                 businessId = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
                 tv_basepager_title.setText(businessName);
                 getData(businessId);
+                getPlanData();
             }
 
             @Override
@@ -310,6 +311,7 @@ public class UnitFragment extends BaseFragment{
                 tv_basepager_title.setText(string);
                 // 重新刷一遍界面
                 getData(str);
+                getPlanData();
             }
         });
     }
