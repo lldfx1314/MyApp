@@ -28,7 +28,8 @@
 
 
     <color name="text_biack">#1C1C1C</color>
-    <color name="view_gray">#F0EFF1</color>
+    <!--分割线的颜色-->
+    <color name="view_gray">#d7d7d7</color>
     <color name="bg_upload">#F4F4F4</color>
     <color name="upload_photo">#CACACA</color>
     <color name="btn_gray">#999999</color>
@@ -48,4 +49,6 @@
     <color name="dialog_bg">#aaffffff</color>
     <color name="gray_line">#c7c7c7</color>
     <color name="bg_gray">#f7f7f7</color>
+    <color name="hanzi8_black">#99000000</color>
+    <color name="hanzi4_black">#66000000</color>
 </resources>

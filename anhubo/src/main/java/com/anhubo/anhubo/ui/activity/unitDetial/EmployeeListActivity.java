@@ -19,6 +19,9 @@ import com.anhubo.anhubo.bean.AssignmentAdminBean;
 import com.anhubo.anhubo.bean.EmployeeListBean;
 import com.anhubo.anhubo.bean.EmployeeOperate;
 import com.anhubo.anhubo.bean.Unit_Invate_WorkMateBean;
+import com.anhubo.anhubo.entity.RxBus;
+import com.anhubo.anhubo.entity.event.Exbus_AlterName;
+import com.anhubo.anhubo.entity.event.Exbus_EmployeeList;
 import com.anhubo.anhubo.interfaces.InterClick;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.HomeActivity;
@@ -45,6 +48,8 @@ import java.util.Map;
 import butterknife.InjectView;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * Created by LUOLI on 2017/1/11.
@@ -53,6 +58,8 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
     private static final String TAG = "EmployeeListActivity";
     @InjectView(R.id.rl_employee_adm)
     RelativeLayout rlEmployeeAdm;
+    @InjectView(R.id.tv_employee_adm)
+    TextView tvEmployeeAdm;
     @InjectView(R.id.lv_employ)
     FooterListview lvEmploy;
     @InjectView(R.id.tv_employee)
@@ -75,6 +82,7 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
     private boolean isHaveAdm;
     private EmployeeListBean bean;
     private SpannableString ss;
+    private Subscription rxSubscription;
 
     @Override
     protected int getContentViewId() {
@@ -103,24 +111,44 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
         businessId = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
         list = new ArrayList<>();
+        // 请求数据
+        getData();
     }
 
     @Override
     protected void onLoadDatas() {
         btnEmployee.setOnClickListener(this);
         btnEmployeeInvate.setOnClickListener(this);
+        // RxBus
+        rxBusOnClickListener();
+    }
+    // 订阅修改信息的事件
+    private void rxBusOnClickListener() {
+        // rxSubscription是一个Subscription的全局变量，这段代码可以在onCreate/onStart等生命周期内
+        rxSubscription = RxBus.getDefault().toObservable(Exbus_EmployeeList.class)
+                .subscribe(new Action1<Exbus_EmployeeList>() {
+                               @Override
+                               public void call(Exbus_EmployeeList employeeList) {
+                                   getData();
+                               }
+                           },
+                        new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                // TODO: 处理异常
+                            }
+                        });
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        // 界面重新可见时让管理员布局隐藏
-        rlEmployeeAdm.setVisibility(View.GONE);
-        tvEmployee.setVisibility(View.GONE);
-        list.clear();
-        // 请求数据
-        getData();
+    public void onDestroy() {
+        super.onDestroy();
+        // 解除订阅
+        if(!rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
+        }
     }
+
 
     /**
      * 请求数据
@@ -139,12 +167,17 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
                     public void onError(Call call, Exception e) {
                         showDialog.dismiss();
                         LogUtils.e(TAG, ":getData", e);
+                        new AlertDialog(mActivity).builder()
+                                .setTitle("提示")
+                                .setMsg("网络有问题，请检查")
+                                .setCancelable(true).show();
                     }
 
                     @Override
                     public void onResponse(String response) {
                         showDialog.dismiss();
                         LogUtils.eNormal(TAG + ":getData", response);
+                        tvEmployee.setVisibility(View.VISIBLE);// 显示员工标记
                         // 处理数据
                         dealData(response);
                     }
@@ -172,7 +205,8 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
                 if (userType == 1) {
                     // 有管理员,显示管理员信息
                     isHaveAdm = true;
-                    tvEmployee.setVisibility(View.VISIBLE);
+                    // 显示管理员布局
+                    tvEmployeeAdm.setVisibility(View.VISIBLE);
                     rlEmployeeAdm.setVisibility(View.VISIBLE);
                     if (!TextUtils.isEmpty(picPath)) {
                         setHeaderIcon(ivIcon, picPath);
@@ -183,7 +217,6 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
                     // 显示的员工人数-1
                     if (!TextUtils.isEmpty(userNum)) {
                         int m = Integer.parseInt(userNum) - 1;
-//                        employeeNum.setText(m + "人");
                         setHanZiColor(m + "人");
                         employeeNum.setHorizontallyScrolling(true);
                         employeeNum.setText(ss);
@@ -211,12 +244,12 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
             if (!isHaveAdm) {
                 // 没有管理员，显示员工人数
                 if (!TextUtils.isEmpty(userNum)) {
-                    /*employeeNum.setText(userNum + "人");*/
                     setHanZiColor(userNum + "人");
                     employeeNum.setHorizontallyScrolling(true);
                     employeeNum.setText(ss);
                 }
             }
+            list.clear();
             list.addAll(userInfo);
             adapter = new EmployeeListAdapter(mActivity, list, EmployeeListActivity.this, isAdm);
             lvEmploy.setAdapter(adapter);
@@ -224,7 +257,7 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
     }
 
     /**
-     * 设置人字颜色
+     * 设置人字数字的颜色
      */
     private void setHanZiColor(String string) {
 
@@ -256,7 +289,8 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
     }
 
     /**
-     * listView条目的点击事件
+     * 这个方法是实现InterClick接口
+     * listView条目里按钮的点击事件
      */
     @Override
     public void onBtnClick(View v) {
@@ -351,7 +385,7 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
         Glide
                 .with(mActivity)
                 .load(imgurl)
-                .centerCrop().crossFade().into(ivIcon);
+                .centerCrop().crossFade(800).into(ivIcon);
     }
 
     @Override

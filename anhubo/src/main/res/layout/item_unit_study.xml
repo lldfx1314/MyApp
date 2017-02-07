@@ -17,7 +17,7 @@
         <View
             android:layout_width="7dp"
             android:layout_height="7dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="23dp"
             android:background="@drawable/dot_blue_shape" />
     </RelativeLayout>
 
@@ -38,7 +38,7 @@
                android:layout_height="wrap_content"
                android:padding="10dp"
                android:text="学习记录"
-               android:textColor="#232323"
+               android:textColor="@color/hanzi8_black"
                android:textSize="14sp" />
 
            <ImageView
@@ -63,6 +63,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="10dp"
             android:textSize="13sp"
+            android:textColor="@color/hanzi4_black"
             android:text="设备名称"/>
 
     </RelativeLayout>

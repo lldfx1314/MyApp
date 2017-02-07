@@ -152,7 +152,7 @@ public class AssignmentAdminAdapter extends BaseAdapter implements View.OnClickL
         Glide.with(mContext)
                 .load(imgurl)
                 .centerCrop()
-                .crossFade()
+                .crossFade(800)
 //                .diskCacheStrategy(DiskCacheStrategy.NONE)
 //                .skipMemoryCache(true)
                 .into(ivIcon);

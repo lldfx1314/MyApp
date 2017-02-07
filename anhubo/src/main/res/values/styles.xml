@@ -152,6 +152,10 @@
     <style name="transparentFrameWindowStyle" parent="android:style/Theme.Dialog">
         <item name="android:windowBackground">@drawable/bottom_dialog_choose_bg</item>
     </style>
+    <!--底部对话框-->
+    <style name="bottom_dialog_perfect_mag_Style" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@drawable/bottom_dialog_perfect_mag</item>
+    </style>
     <!--底部对话框进入的动画-->
     <style name="main_menu_animstyle">
         <item name="android:windowEnterAnimation">@anim/dialog_in_anim</item>

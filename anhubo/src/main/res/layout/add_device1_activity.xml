@@ -48,11 +48,17 @@
             android:textSize="13sp" />
 
     </LinearLayout>
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/llayout"
+        android:background="@color/view_gray"/>
     <!-- 下面的ListView -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/llayout"
+        android:layout_below="@+id/view"
         android:orientation="horizontal">
 
         <ListView

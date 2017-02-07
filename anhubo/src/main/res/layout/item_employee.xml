@@ -31,6 +31,7 @@
             android:id="@+id/btn_employee"
             android:layout_width="60dp"
             android:layout_height="20dp"
+            android:layout_marginRight="5dp"
             android:layout_alignParentRight="true"
             android:visibility="gone"
             android:text=""

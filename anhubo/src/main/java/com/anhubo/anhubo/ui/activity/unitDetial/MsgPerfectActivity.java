@@ -342,8 +342,7 @@ public class MsgPerfectActivity extends BaseActivity {
      */
     private void showDialog() {
         View view = View.inflate(mActivity, R.layout.top_dialog, null);
-        View btnTopDialog = view.findViewById(R.id.btn_top_dialog);
-        ShowDialogTop dialogTop = new ShowDialogTop(mActivity, view, btnTopDialog);
+        ShowDialogTop dialogTop = new ShowDialogTop(mActivity, view);
         dialog = dialogTop.show();
 
         mainlist = (ListView) view.findViewById(R.id.lv_MsgPerfect_01);

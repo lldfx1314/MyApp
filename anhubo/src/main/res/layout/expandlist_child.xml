@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="45dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:background="@color/backgroud_white">
 
         <TextView
@@ -14,10 +14,12 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:singleLine="true"
-            android:padding="15dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
             android:text="检查项目"
-            android:textColor="#000000"
-            android:textSize="12sp"
+            android:textColor="@color/hanzi4_black"
+            android:textSize="13sp"
             android:gravity="center_vertical"/>
         <ImageView
             android:id="@+id/iv_child"
@@ -28,4 +30,11 @@
             android:layout_marginRight="15dp"
             android:background="@drawable/fuxuan_input02"/>
     </RelativeLayout>
+    <View
+        android:layout_below="@+id/tv_group_name"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_height="0.5dp"
+        android:background="@color/view_gray" />
 </LinearLayout>

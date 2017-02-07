@@ -54,7 +54,7 @@ public class DeviceNameAdapterOne extends BaseAdapter {
             hold = (ViewHolder) convertView.getTag();
         }
         hold.txt.setText(mList1.get(position));
-        hold.txt.setTextColor(Color.parseColor("#88000000"));
+        hold.txt.setTextColor(Color.parseColor("#99000000"));
         hold.viewItem.setVisibility(View.GONE);
         hold.txt.setTag(mList1.get(position));
         if (mPosition == position) {

@@ -18,7 +18,7 @@
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:text="单位常用设备"
-            android:textColor="#88000000"
+            android:textColor="@color/hanzi8_black"
             android:textSize="15sp" />
         <View
             android:id="@+id/mainitem_view"

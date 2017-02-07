@@ -7,18 +7,27 @@
     <RelativeLayout
         android:id="@+id/rl_group_name"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/bg_upload">
+        android:layout_height="wrap_content"
+        android:background="@color/bg_gray">
 
         <TextView
             android:id="@+id/tv_group_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:layout_centerVertical="true"
             android:text="检查"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textColor="@color/hanzi8_black"
+            android:textSize="15sp" />
+        <View
+            android:layout_below="@+id/tv_group_name"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/view_gray" />
 
     </RelativeLayout>
 </LinearLayout>

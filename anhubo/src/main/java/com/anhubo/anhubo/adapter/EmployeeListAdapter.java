@@ -156,7 +156,7 @@ public class EmployeeListAdapter extends BaseAdapter implements View.OnClickList
         Glide
                 .with(mContext)
                 .load(imgurl)
-                .centerCrop().crossFade()
+                .centerCrop().crossFade(800)
 //                .diskCacheStrategy(DiskCacheStrategy.NONE)
 //                .skipMemoryCache(true)
                 .into(ivIcon);

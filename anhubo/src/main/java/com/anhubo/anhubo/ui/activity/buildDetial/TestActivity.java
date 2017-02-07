@@ -86,10 +86,10 @@ public class TestActivity extends BaseActivity {
         hmTestId = new HashMap<>();
         hmBindTestId = new HashMap<>();
         hmItem = new HashMap<>();
+        adapter = new TestAdapter(mActivity, listRequireTag, listChild);
+        elListview.setAdapter(adapter);
         // 获取测试项
         getData();
-
-
     }
 
 
@@ -115,7 +115,6 @@ public class TestActivity extends BaseActivity {
             case R.id.rl_all_test:
                 // 当点击全部按钮的时候让其他全部都呈现未选中状态
                 ivAllTest.setBackgroundResource(R.drawable.fuxuan_input01);
-
 
                 for (int i = 0; i < hmItem.keySet().size(); i++) {
 
@@ -386,8 +385,9 @@ public class TestActivity extends BaseActivity {
                         }
                     }
                     /********************************************************************/
-                    adapter = new TestAdapter(mActivity, listRequireTag, listChild);
-                    elListview.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+//                    adapter = new TestAdapter(mActivity, listRequireTag, listChild);
+//                    elListview.setAdapter(adapter);
                 }
             }
         }
