@@ -5,20 +5,21 @@
 
     <include
         android:id="@+id/top_title"
-        layout="@layout/layout_top_bar"></include>
+        layout="@layout/layout_top_bar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/top_title"
+        android:background="@color/bg_gray"
         android:orientation="vertical">
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="335dp"
         android:layout_height="150dp"
-        android:layout_marginTop="20dp"
-        android:background="@color/bg_upload"
-        >
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg_upload">
         <LinearLayout
             android:id="@+id/ll_card01"
             android:layout_width="wrap_content"
@@ -30,15 +31,15 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/take_photo"/>
+                android:background="@drawable/photo"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="身份证正面照片"
-                android:textColor="@color/upload_photo"
-                android:textSize="14sp"
+                android:textColor="@color/hanzi4_black"
+                android:textSize="13sp"
                 />
 
         </LinearLayout>
@@ -50,11 +51,11 @@
     </RelativeLayout>
     <!--背面照片-->
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="335dp"
         android:layout_height="150dp"
-        android:layout_marginTop="20dp"
-        android:background="@color/bg_upload"
-        >
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg_upload">
 
 
 
@@ -69,15 +70,15 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/take_photo"/>
+                android:background="@drawable/photo"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="身份证背面照片"
-                android:textColor="@color/upload_photo"
-                android:textSize="14sp"
+                android:textColor="@color/hanzi4_black"
+                android:textSize="13sp"
                 />
 
 
@@ -91,7 +92,9 @@
 
     <Button
         android:id="@+id/btn_unloading02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         style="@style/btn_msg_perfect"
-        android:text="提交"/>
+        android:text="提交" />
     </LinearLayout>
 </RelativeLayout>

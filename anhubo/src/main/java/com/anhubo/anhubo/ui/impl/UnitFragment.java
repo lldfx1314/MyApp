@@ -1,10 +1,8 @@
 package com.anhubo.anhubo.ui.impl;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,7 +21,6 @@ import com.anhubo.anhubo.bean.MyPolygonBean;
 import com.anhubo.anhubo.bean.SesameItemModel;
 import com.anhubo.anhubo.bean.SesameModel;
 import com.anhubo.anhubo.bean.UnitBean;
-import com.anhubo.anhubo.bean.Unit_Invate_WorkMateBean;
 import com.anhubo.anhubo.bean.Unit_PlanBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.HomeActivity;
@@ -32,18 +29,16 @@ import com.anhubo.anhubo.ui.activity.unitDetial.MsgPerfectActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.QrScanActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.RunCertificateActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.Unit2Study;
-import com.anhubo.anhubo.ui.activity.unitDetial.UnitMenuActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.UnitMsgCenterActivity;
+import com.anhubo.anhubo.ui.activity.unitDetial.Unit_StudyRecordActivity;
 import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
-import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.MyPolygonView;
 import com.anhubo.anhubo.view.SesameCreditPanel;
-import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -53,7 +48,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import okhttp3.Call;
 
@@ -678,7 +672,7 @@ public class UnitFragment extends BaseFragment{
         switch (v.getId()) {
 
             case R.id.ivTopBarleft_unit_menu:// 执行记录
-                startActivity(new Intent(mActivity, UnitMenuActivity.class));
+                startActivity(new Intent(mActivity,Unit_StudyRecordActivity.class));
                 break;
 
             case R.id.ivTopBarRight_unit_msg://消息中心

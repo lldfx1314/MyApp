@@ -544,12 +544,13 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     class MyStringCallback1 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            System.out.println("UnitMenuActivity+++token===没拿到数据" + e.getMessage());
+            LogUtils.e(TAG,":getToken",e);
         }
 
         @Override
         public void onResponse(String response) {
-            Security_Token_Bean bean = new Gson().fromJson(response, Security_Token_Bean.class);
+            LogUtils.eNormal(TAG+":getToken",response);
+            Security_Token_Bean bean = JsonUtil.json2Bean(response, Security_Token_Bean.class);
             if (bean != null) {
                 // 拿到checkCompleteBean，获取token
                 token = bean.data.token;
@@ -589,13 +590,13 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     class MyStringCallback2 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-
-            System.out.println("RegisterActivity+++获取验证码===没拿到数据" + e.getMessage());
+            LogUtils.e(TAG,":getSecurity",e);
         }
 
         @Override
         public void onResponse(String response) {
-            Security_Bean bean = new Gson().fromJson(response, Security_Bean.class);
+            LogUtils.eNormal(TAG+":getSecurity",response);
+            Security_Bean bean = JsonUtil.json2Bean(response, Security_Bean.class);
 
         }
     }

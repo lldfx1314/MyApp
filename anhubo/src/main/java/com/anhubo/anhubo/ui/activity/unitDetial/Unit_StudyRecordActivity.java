@@ -8,20 +8,20 @@ import com.anhubo.anhubo.adapter.UnitMenuAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.StudyBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.RefreshListview;
-import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.InjectView;
 import okhttp3.Call;
@@ -29,8 +29,9 @@ import okhttp3.Call;
 /**
  * Created by Administrator on 2016/10/11.
  */
-public class UnitMenuActivity extends BaseActivity {
+public class Unit_StudyRecordActivity extends BaseActivity {
 
+    private static final String TAG = "Unit_StudyRecordActivity";
     @InjectView(R.id.lv_study)
     RefreshListview lvStudy;
     private String businessId;
@@ -71,6 +72,7 @@ public class UnitMenuActivity extends BaseActivity {
         lvStudy.setOnRefreshingListener(new MyOnRefreshingListener());
     }
 
+    private int count = 0;
 
     class MyOnRefreshingListener implements RefreshListview.OnRefreshingListener {
 
@@ -84,9 +86,12 @@ public class UnitMenuActivity extends BaseActivity {
                 isLoadMore = true;
                 getData();
             } else {
+
                 // 恢复Listview的加载更多状态
                 lvStudy.loadMoreFinished();
-                ToastUtils.showToast(mActivity, "没有更多数据了");
+                if (count++ == 0) {
+                    ToastUtils.showToast(mActivity, "没有更多数据了");
+                }
             }
         }
     }
@@ -128,19 +133,27 @@ public class UnitMenuActivity extends BaseActivity {
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            System.out.println("UnitMenuActivity+++===没拿到数据" + e.getMessage());
             dialog.dismiss();
+            LogUtils.e(TAG,":getData",e);
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
+                    .setPositiveButton("确定", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(isLoadMore){
+                                lvStudy.loadMoreFinished();
+                            }
+                        }
+                    })
                     .setCancelable(false).show();
         }
 
         @Override
         public void onResponse(String response) {
-//            System.out.println("执行记录++" + response);
+            LogUtils.eNormal(TAG+":getData",response);
             dialog.dismiss();
-            StudyBean bean = new Gson().fromJson(response, StudyBean.class);
+            StudyBean bean = JsonUtil.json2Bean(response, StudyBean.class);
             if (bean != null) {
                 processData(bean);
                 isLoadMore = false;
@@ -150,8 +163,6 @@ public class UnitMenuActivity extends BaseActivity {
                 isLoadMore = false;
                 // 恢复加载更多状态
                 lvStudy.loadMoreFinished();
-                // 没拿到bean对象
-                System.out.println("UnitMenuActivity+++===没拿到bean对象");
             }
         }
     }

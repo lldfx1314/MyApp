@@ -39,7 +39,6 @@ import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.LoadProgressDialog;
 import com.anhubo.anhubo.view.RefreshListview;
-import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -80,6 +79,7 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
     private Dialog showDialog1;
     private String businessName;
     private String zhezhao;
+    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +124,7 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                     unitRegister(str, poi);
                 } else {
                     // 返回修改界面
-                    returnAddActivity(str,poi);
+                    returnAddActivity(str, poi);
                 }
 
             }
@@ -160,7 +160,7 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                                 .setTitle("提示")
                                 .setMsg("网络有问题，请检查")
                                 .setCancelable(true).show();
-                        LogUtils.e(TAG , "单位注册", e);
+                        LogUtils.e(TAG, "单位注册", e);
                     }
 
                     @Override
@@ -186,7 +186,7 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                 });
     }
 
-    private void returnAddActivity(String str,String poi) {
+    private void returnAddActivity(String str, String poi) {
         Intent intent = new Intent();
         intent.putExtra(Keys.STR, str);
         intent.putExtra(Keys.BUSINESS_POI, poi);
@@ -243,7 +243,7 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                                 unitRegister(string, "");
                             } else {
                                 // 返回修改界面
-                                returnAddActivity(string,"");
+                                returnAddActivity(string, "");
                             }
                         }
                     }
@@ -271,8 +271,8 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
 
             //aMap.getCameraPosition(); 方法可以获取地图的旋转角度
 
-            //管理缩放控件
-            settings.setZoomControlsEnabled(true);
+            //管理缩放控件 不显示
+            settings.setZoomControlsEnabled(false);
             //设置logo位置，左下，底部居中，右下
             settings.setLogoPosition(AMapOptions.LOGO_POSITION_BOTTOM_LEFT);
             //设置显示地图的默认比例尺
@@ -351,6 +351,7 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
 
 
                 } else if (amapLocation.getErrorCode() == 12) {
+                    // 没有定位权限
                     dialogLocation();
                 } else {
                     //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
@@ -436,14 +437,22 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
             new AlertDialog(BusinessActivity.this).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
-                    .setCancelable(true).show();
-            LogUtils.e(TAG,":getData定位:",e);
+                    .setPositiveButton("确定", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(isLoadMore){
+                                lvBusiness.loadMoreFinished();
+                            }
+                        }
+                    })
+                    .setCancelable(false).show();
+            LogUtils.e(TAG, ":getData定位:", e);
         }
 
         @Override
         public void onResponse(String response) {
-            LogUtils.eNormal(TAG+":getData定位:",response);
-            LocationBean bean = new Gson().fromJson(response, LocationBean.class);
+            LogUtils.eNormal(TAG + ":getData定位:", response);
+            LocationBean bean = JsonUtil.json2Bean(response, LocationBean.class);
             if (bean != null) {
                 showDialog.dismiss();
                 processData(bean);
@@ -473,7 +482,9 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
             } else {
                 // 恢复Listview的加载更多状态
                 lvBusiness.loadMoreFinished();
-                ToastUtils.showToast(BusinessActivity.this, "没有更多数据了");
+                if (count++ == 0) {
+                    ToastUtils.showToast(BusinessActivity.this, "没有更多数据了");
+                }
             }
         }
     }

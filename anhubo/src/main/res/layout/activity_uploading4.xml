@@ -9,16 +9,18 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/top_title"
+        android:background="@color/bg_gray"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingTop="15dp"
             android:paddingLeft="15dp"
-            android:paddingTop="15dp">
+            android:paddingRight="15dp">
 
             <LinearLayout
                 android:id="@+id/ll_msgPerRenting01"
@@ -32,23 +34,21 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="开始日期"
-                    android:textColor="@color/text_biack"
+                    android:textColor="@color/hanzi8_black"
                     android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tv_startTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
                     android:text="显示日期"
-                    android:textColor="@color/text_biack"
+                    android:textColor="@color/hanzi8_black"
                     android:textSize="16sp"
                     android:visibility="gone" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
                     android:background="@drawable/arrow_right" />
 
             </LinearLayout>
@@ -56,7 +56,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:background="@color/view_gray" />
         </LinearLayout>
 
@@ -64,8 +64,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingTop="15dp"
             android:paddingLeft="15dp"
-            android:paddingTop="15dp">
+            android:paddingRight="15dp">
 
             <LinearLayout
                 android:id="@+id/ll_msgPerRenting02"
@@ -79,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="租房时长"
-                    android:textColor="@color/text_biack"
+                    android:textColor="@color/hanzi8_black"
                     android:textSize="14sp" />
 
                 <TextView
@@ -88,14 +89,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="显示日期"
-                    android:textColor="@color/text_biack"
+                    android:textColor="@color/hanzi8_black"
                     android:textSize="14sp"
                     android:visibility="gone" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
                     android:background="@drawable/arrow_right" />
 
             </LinearLayout>
@@ -103,16 +103,17 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:background="@color/view_gray" />
         </LinearLayout>
 
         <!--点击图标开始拍照-->
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="335dp"
             android:layout_height="150dp"
-            android:layout_marginTop="30dp"
-            android:background="@color/bg_upload">
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bg_upload">
 
             <LinearLayout
                 android:id="@+id/ll_takePhoto04"
@@ -125,15 +126,15 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/take_photo" />
+                    android:background="@drawable/photo" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="点击图标开始拍照"
-                    android:textColor="@color/upload_photo"
-                    android:textSize="14sp" />
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
 
             </LinearLayout>
 
@@ -145,6 +146,8 @@
 
         <Button
             android:id="@+id/btn_unloading04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             style="@style/btn_msg_perfect"
             android:text="提交" />
 

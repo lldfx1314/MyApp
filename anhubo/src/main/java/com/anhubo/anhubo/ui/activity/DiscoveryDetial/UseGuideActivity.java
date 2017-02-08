@@ -80,10 +80,6 @@ public class UseGuideActivity extends BaseActivity {
 
     }
 
-    @Override
-    protected void onLoadDatas() {
-
-    }
 
     @Override
     public void onClick(View v) {
@@ -100,6 +96,11 @@ public class UseGuideActivity extends BaseActivity {
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void onLoadDatas() {
+
     }
 
     @Override

@@ -19,8 +19,8 @@
         android:text="拍照"
         android:enabled="true"
         android:paddingBottom="10dp"
-        android:textSize="16sp"
-        android:textColor="@color/text_gray"
+        android:textSize="15sp"
+        android:textColor="@color/hanzi8_black"
         android:background="@null"
         />
         <View
@@ -34,8 +34,8 @@
             android:text="从手机相册选取"
             android:enabled="true"
             android:paddingTop="10dp"
-            android:textSize="16sp"
-            android:textColor="@color/text_gray"
+            android:textSize="15sp"
+            android:textColor="@color/hanzi8_black"
             android:background="@null"
             />
 

@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="20dp"
             android:text="单位常用设备"
             android:textColor="@color/hanzi8_black"
             android:textSize="15sp" />

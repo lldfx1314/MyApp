@@ -153,7 +153,7 @@
             android:name=".ui.activity.unitDetial.Unit2Study"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.unitDetial.UnitMenuActivity"
+            android:name=".ui.activity.unitDetial.Unit_StudyRecordActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.unitDetial.MsgPerfectActivity"

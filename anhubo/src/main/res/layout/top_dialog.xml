@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="13dp"
         android:paddingTop="13dp"
-        android:paddingLeft="16dp"
+        android:paddingLeft="20dp"
         android:background="@color/bg_gray"
         android:text="场所使用性质"
         android:textSize="13dp"

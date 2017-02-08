@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:padding="16dp"
     android:background="@color/bg_upload"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
+        android:paddingTop="20dp"
         android:paddingBottom="10dp"
         android:orientation="horizontal">
         <Button
             android:id="@+id/btn_weixin"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:drawableTop="@drawable/weixin"
             android:drawablePadding="10dp"
             android:text="微信好友"
@@ -25,8 +25,9 @@
 
         <Button
             android:id="@+id/btn_weixin_circle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_marginLeft="20dp"
             android:drawableTop="@drawable/weixin_circle"
             android:drawablePadding="10dp"
@@ -40,18 +41,16 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
-        android:background="@color/text_gray"/>
+        android:layout_marginTop="10dp"
+        android:background="@color/view_gray"/>
     <Button
         android:id="@+id/btn_share_Dialog_cancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
         android:text="取消"
         android:enabled="true"
-        android:paddingTop="15dp"
-        android:paddingBottom="10dp"
         android:textSize="16sp"
-        android:textColor="@color/blue"
+        android:textColor="@color/hanzi4_blue"
         android:background="@null"/>
 
 </LinearLayout>

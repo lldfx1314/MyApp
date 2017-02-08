@@ -8,12 +8,13 @@ import com.anhubo.anhubo.adapter.UnitMsgCenterAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.UnitMsgCenterBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.RefreshListview;
-import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -30,6 +31,7 @@ import okhttp3.Call;
 public class UnitMsgCenterActivity extends BaseActivity {
 
 
+    private static final String TAG = "UnitMsgCenterActivity";
     @InjectView(R.id.lv_unit_msgCenter)
     RefreshListview lvUnitMsgCenter;
     private String uid;
@@ -72,6 +74,7 @@ public class UnitMsgCenterActivity extends BaseActivity {
     }
 
     private boolean isLoadMore;//记录是否加载更多
+    private int count = 0;
 
     @Override
     public void onSystemUiVisibilityChange(int visibility) {
@@ -94,7 +97,9 @@ public class UnitMsgCenterActivity extends BaseActivity {
             }else{
                 // 恢复Listview的加载更多状态
                 lvUnitMsgCenter.loadMoreFinished();
-                ToastUtils.showToast(mActivity,"没有更多数据了");
+                if (count++ == 0) {
+                    ToastUtils.showToast(mActivity, "没有更多数据了");
+                }
             }
         }
     }
@@ -130,16 +135,25 @@ public class UnitMsgCenterActivity extends BaseActivity {
         @Override
         public void onError(Call call, Exception e) {
             showDialog.dismiss();
+            LogUtils.e(TAG,":getData",e);
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
+                    .setPositiveButton("确定", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(isLoadMore){
+                                lvUnitMsgCenter.loadMoreFinished();
+                            }
+                        }
+                    })
                     .setCancelable(false).show();
-            System.out.println("UnitMsgCenterActivity+++===没拿到数据" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
-            UnitMsgCenterBean bean = new Gson().fromJson(response, UnitMsgCenterBean.class);
+            LogUtils.eNormal(TAG+":getData",response);
+            UnitMsgCenterBean bean = JsonUtil.json2Bean(response, UnitMsgCenterBean.class);
             if (bean != null) {
                 showDialog.dismiss();
                 processData(bean);

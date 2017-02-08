@@ -32,6 +32,7 @@ public class NoticeActivity extends BaseActivity {
         // 设置状态栏显示的提示内容
         setTopBarDesc("公告");
         topPb.setVisibility(View.VISIBLE);
+        iv_basepager_left.setOnClickListener(this);
 
     }
 
@@ -41,7 +42,6 @@ public class NoticeActivity extends BaseActivity {
         url = Urls.Url_FindNotice;
         // 获取uid拼接参数
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
-        //System.out.println("uid是==========" + uid);
         String newUrl = url + "?uid=" + uid;
         WebSettings settings = wvNotice.getSettings();
         settings.setJavaScriptEnabled(true);
@@ -72,12 +72,38 @@ public class NoticeActivity extends BaseActivity {
     }
 
     @Override
-    protected void onLoadDatas() {
+    public void onBackPressed() {
+        if (wvNotice.canGoBack()){
+            if(wvNotice.getUrl().equals(url)){
+                super.onBackPressed();
+            }else{
+                wvNotice.goBack();
+            }
+        }else{
+            super.onBackPressed();
+        }
 
     }
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.ivTopBarLeft:
+                if (wvNotice.canGoBack()){
+                    if(wvNotice.getUrl().equals(url)){
+                        super.onBackPressed();
+                    }else{
+                        wvNotice.goBack();
+                    }
+                }else{
+                    finish();
+                }
+                break;
+        }
+    }
+
+    @Override
+    protected void onLoadDatas() {
 
     }
 

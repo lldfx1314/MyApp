@@ -31,13 +31,13 @@ import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.Business_Location_Adapter;
 import com.anhubo.anhubo.bean.LocationBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.LoadProgressDialog;
 import com.anhubo.anhubo.view.RefreshListview;
-import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -78,6 +78,7 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
     private ArrayList<String> listBuildingPoi;
     private LoadProgressDialog loadProgressDialog;
     private Dialog showDialog;
+    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,8 +204,8 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
             //aMap.getCameraPosition(); 方法可以获取地图的旋转角度
 
 
-            //管理缩放控件
-            settings.setZoomControlsEnabled(true);
+            //管理缩放控件  不显示
+            settings.setZoomControlsEnabled(false);
             //设置logo位置，左下，底部居中，右下
             settings.setLogoPosition(AMapOptions.LOGO_POSITION_BOTTOM_LEFT);
             //设置显示地图的默认比例尺
@@ -282,6 +283,7 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
 
 
                 }else if(amapLocation.getErrorCode() == 12){
+                    // 没有定位权限
                     dialogLocation();
                 } else {
                     //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
@@ -366,14 +368,22 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
             new AlertDialog(BuildingActivity.this).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
-                    .setCancelable(true).show();
+                    .setPositiveButton("确定", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(isLoadMore){
+                                lvBuilding.loadMoreFinished();
+                            }
+                        }
+                    })
+                    .setCancelable(false).show();
             LogUtils.e(TAG,":getData:",e);
         }
 
         @Override
         public void onResponse(String response) {
             LogUtils.eNormal(TAG+":getData:",response);
-            LocationBean bean = new Gson().fromJson(response, LocationBean.class);
+            LocationBean bean = JsonUtil.json2Bean(response, LocationBean.class);
             if (bean != null) {
                 showDialog.dismiss();
                 processData(bean);
@@ -425,7 +435,9 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
             } else {
                 // 恢复Listview的加载更多状态
                 lvBuilding.loadMoreFinished();
-                ToastUtils.showToast(BuildingActivity.this, "没有更多数据了");
+                if (count++ == 0) {
+                    ToastUtils.showToast(BuildingActivity.this, "没有更多数据了");
+                }
             }
         }
     }

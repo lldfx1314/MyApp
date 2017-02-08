@@ -6,7 +6,7 @@
 
     <include
         android:id="@+id/top_title"
-        layout="@layout/layout_top_bar"></include>
+        layout="@layout/layout_top_bar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,32 +20,36 @@
             android:id="@+id/tv_add_device"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="26dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
             android:lineSpacingExtra="5dp"
-            android:text=""
-            android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:text="那个万欧瑞特你好快拉人"
+            android:textColor="@color/hanzi8_black"
+            android:textSize="15sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:background="@color/backgroud_white"
             android:orientation="vertical">
             <!-- 所属建筑 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
                     style="@style/textStyle"
                     android:text="所属建筑" />
 
                 <EditText
                     android:id="@+id/et_add_build"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     style="@style/editTextStyle"
                     android:drawableRight="@drawable/arrow_right"
                     android:enabled="true"
@@ -54,15 +58,21 @@
                     android:textColor="@color/text_gray" />
             </LinearLayout>
             <!-- 所属单位 -->
-            <View style="@style/viewStyle" />
+            <View
+
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                style="@style/viewStyle" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
                     style="@style/textStyle"
                     android:text="所属单位"
 
@@ -70,6 +80,8 @@
 
                 <EditText
                     android:id="@+id/et_add_unit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     style="@style/editTextStyle"
                     android:drawableRight="@drawable/arrow_right"
                     android:enabled="true"
@@ -83,17 +95,21 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
                     style="@style/textStyle"
                     android:text="所属区域" />
 
                 <EditText
                     android:id="@+id/et_add_area"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     style="@style/editTextStyle"
-                    android:hint="设备所在区域(可为空)" />
+                    android:hint="区域(选填)" />
             </LinearLayout>
 
             <!-- 设备位置 -->
@@ -102,17 +118,21 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
                     style="@style/textStyle"
                     android:text="设备位置" />
 
                 <EditText
                     android:id="@+id/et_add_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     style="@style/editTextStyle"
-                    android:hint="设备所在位置" />
+                    android:hint="命名设备位置" />
             </LinearLayout>
 
             <!-- 设备名称 -->
@@ -121,16 +141,20 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
                     style="@style/textStyle"
                     android:text="设备名称" />
 
 
                 <EditText
                     android:id="@+id/et_add_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     style="@style/editTextStyle"
                     android:drawableRight="@drawable/arrow_right"
                     android:enabled="true"
@@ -144,12 +168,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
                     style="@style/textStyle"
+                    android:layout_width="100dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
                     android:text="拍照上传" />
 
                 <LinearLayout
@@ -162,21 +188,22 @@
                         android:id="@+id/iv"
                         android:layout_width="30dp"
                         android:layout_height="25dp"
-                        android:background="@drawable/bg_iv"
                         android:src="@drawable/photo" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
                         android:text="（设备与NFC拍一起）"
-                        android:textColor="@color/gray"
+                        android:textColor="@color/hanzi4_black"
                         android:textSize="14sp" />
-                    <!-- <EditText
-                         style="@style/editTextStyle"
-                         android:enabled="true"
-                         android:focusable="false"
-                         android:hint="（设备与NFC拍一起）"/>-->
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/arrow_right"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -184,14 +211,14 @@
 
         <Button
             android:id="@+id/add_complete_btn"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/bg_button"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/btn_confirm"
             android:gravity="center"
             android:text="提交"
-            android:textColor="@color/blue" />
+            android:textColor="@color/backgroud_white" />
     </LinearLayout>
 </RelativeLayout>

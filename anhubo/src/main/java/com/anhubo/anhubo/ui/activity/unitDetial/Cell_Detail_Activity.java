@@ -36,8 +36,6 @@ import okhttp3.Call;
 public class Cell_Detail_Activity extends BaseActivity {
     @InjectView(R.id.company_detail_listview)
     ListView listview;
-    @InjectView(R.id.exit_unit)
-    Button exitUnit;
     private String unitId;
     private String uid;
     private int pager = 0;
@@ -130,7 +128,6 @@ public class Cell_Detail_Activity extends BaseActivity {
         listview.setAdapter(adapter);
     }
 
-    @OnClick(R.id.exit_unit)
     @Override
     public void onClick(View v) {
         ShareAction shareAction = new ShareAction(mActivity);
