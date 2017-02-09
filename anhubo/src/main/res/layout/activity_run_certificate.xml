@@ -5,7 +5,7 @@
     android:background="@color/bg_upload"
     android:orientation="vertical">
 
-    <include layout="@layout/layout_top_bar"></include>
+    <include layout="@layout/layout_top_bar"/>
 
     <com.anhubo.anhubo.view.MyScrollView
         android:layout_width="match_parent"

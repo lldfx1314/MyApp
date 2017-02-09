@@ -78,7 +78,6 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
     private ArrayList<String> listBuildingPoi;
     private LoadProgressDialog loadProgressDialog;
     private Dialog showDialog;
-    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -433,11 +432,7 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
                 isLoadMore = true;
                 getData();
             } else {
-                // 恢复Listview的加载更多状态
-                lvBuilding.loadMoreFinished();
-                if (count++ == 0) {
-                    ToastUtils.showToast(BuildingActivity.this, "没有更多数据了");
-                }
+                lvBuilding.setLoadMoretv("没有更多内容了");
             }
         }
     }

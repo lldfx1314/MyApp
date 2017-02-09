@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -44,8 +45,8 @@ public class AlterUnitActivity extends BaseActivity {
     TextView tvMyBuilding;
     @InjectView(R.id.ll_alter_building)
     LinearLayout llAlterBuilding;
-    @InjectView(R.id.tv_alter_building_unit)
-    TextView tvAlterBuildingUnit;
+    @InjectView(R.id.btn_alter_building_unit)
+    Button btnAlterBuildingUnit;
     private String businessName;
     private String buildingName;
     private String building;
@@ -81,7 +82,7 @@ public class AlterUnitActivity extends BaseActivity {
 
     @Override
     protected void onLoadDatas() {
-        tvAlterBuildingUnit.setOnClickListener(this);
+        btnAlterBuildingUnit.setOnClickListener(this);
     }
 
     @Override
@@ -114,7 +115,7 @@ public class AlterUnitActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.ll_alter_unit, R.id.ll_alter_building, R.id.tv_alter_building_unit})
+    @OnClick({R.id.ll_alter_unit, R.id.ll_alter_building, R.id.btn_alter_building_unit})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_alter_building:
@@ -127,7 +128,7 @@ public class AlterUnitActivity extends BaseActivity {
                 Intent intent2 = new Intent(mActivity, BusinessActivity.class);
                 startActivityForResult(intent2, REQUESTCODE2);
                 break;
-            case R.id.tv_alter_building_unit:
+            case R.id.btn_alter_building_unit:
                 submitAlter();
                 break;
         }

@@ -74,7 +74,6 @@ public class UnitMsgCenterActivity extends BaseActivity {
     }
 
     private boolean isLoadMore;//记录是否加载更多
-    private int count = 0;
 
     @Override
     public void onSystemUiVisibilityChange(int visibility) {
@@ -95,11 +94,7 @@ public class UnitMsgCenterActivity extends BaseActivity {
                 isLoadMore = true;
                 getData();
             }else{
-                // 恢复Listview的加载更多状态
-                lvUnitMsgCenter.loadMoreFinished();
-                if (count++ == 0) {
-                    ToastUtils.showToast(mActivity, "没有更多数据了");
-                }
+                lvUnitMsgCenter.setLoadMoretv("没有更多内容了");
             }
         }
     }

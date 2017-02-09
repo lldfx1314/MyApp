@@ -35,7 +35,6 @@ public abstract class BaseFragment extends Fragment  implements View.OnClickList
     protected RelativeLayout llTop;
     protected FrameLayout fl_basepager_content;
     protected TextView tvTopBarRight;
-    protected LoadProgressDialog loadProgressDialog;
 
     @Nullable
     @Override
@@ -66,7 +65,6 @@ public abstract class BaseFragment extends Fragment  implements View.OnClickList
     }
 
     private void initProgressBar() {
-        loadProgressDialog = LoadProgressDialog.newInstance();
     }
 
     /**加载Title布局*/

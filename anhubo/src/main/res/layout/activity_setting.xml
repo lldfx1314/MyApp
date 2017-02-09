@@ -10,10 +10,10 @@
         android:background="@color/backgroud_white"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="5dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingTop="10dp">
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -21,8 +21,8 @@
             android:layout_weight="1"
             android:drawablePadding="15dp"
             android:text="关于"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textColor="@color/hanzi8_black"
+            android:textSize="15sp" />
 
         <ImageView
             android:layout_width="10dp"
@@ -36,5 +36,5 @@
         android:layout_height="0.5dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:background="@color/gray" />
+        android:background="@color/view_gray" />
 </LinearLayout>

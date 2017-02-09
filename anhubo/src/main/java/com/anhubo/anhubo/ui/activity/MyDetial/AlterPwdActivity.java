@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -37,8 +38,8 @@ public class AlterPwdActivity extends BaseActivity {
     EditText etAlterNewPwd1;
     @InjectView(R.id.et_alter_newPwd2)
     EditText etAlterNewPwd2;
-    @InjectView(R.id.tv_sure_alter)
-    TextView tvSureAlter;
+    @InjectView(R.id.btn_sure_alter)
+    Button btnSureAlter;
     private String uid;
     private String oldPwd;
     private String newPwd1;
@@ -73,13 +74,13 @@ public class AlterPwdActivity extends BaseActivity {
 
     }
 
-    @OnClick(R.id.tv_sure_alter)
+    @OnClick(R.id.btn_sure_alter)
     public void onClick(View v) {
         /**获取输入的内容*/
         getInputData();
         builder = new AlertDialog(mActivity).builder();
         switch (v.getId()) {
-            case R.id.tv_sure_alter:
+            case R.id.btn_sure_alter:
                 // 对密码做判断
                 if (!TextUtils.isEmpty(oldPwd)) {
                     boolean isoldPwd = Utils.isRightPwd(oldPwd);

@@ -204,6 +204,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.unitDetial.AssignmentAdminActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.unitDetial.PlaceUsePropertyActivity"
+            android:screenOrientation="portrait" />
 
         <!--建筑界面-->
         <activity

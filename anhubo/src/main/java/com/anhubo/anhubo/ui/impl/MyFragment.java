@@ -1,9 +1,9 @@
 package com.anhubo.anhubo.ui.impl;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -12,7 +12,6 @@ import com.anhubo.anhubo.base.BaseFragment;
 import com.anhubo.anhubo.bean.MyFragmentBean;
 import com.anhubo.anhubo.entity.RxBus;
 import com.anhubo.anhubo.entity.event.Exbus_AlterName;
-import com.anhubo.anhubo.entity.event.Exbus_ShowIcon;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.Login_Register.Login_Message;
 import com.anhubo.anhubo.ui.activity.MyDetial.InvateActivity;
@@ -25,12 +24,10 @@ import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.HashMap;
@@ -52,7 +49,7 @@ public class MyFragment extends BaseFragment {
     private LinearLayout llInvate;
     private LinearLayout llOrderManager;
     private LinearLayout llSetting;
-    private TextView tvLogOut;
+    private Button btnLogOut;
     private CircleImageView image;
     public static GlideDrawable mBitmap;
     private String img;
@@ -92,7 +89,7 @@ public class MyFragment extends BaseFragment {
         llInvate = findView(R.id.ll_invate);
         llOrderManager = findView(R.id.ll_orderManager);
         llSetting = findView(R.id.ll_setting);
-        tvLogOut = findView(R.id.tv_logOut);
+        btnLogOut = findView(R.id.btn_logOut);
     }
 
     @Override
@@ -102,7 +99,7 @@ public class MyFragment extends BaseFragment {
         llInvate.setOnClickListener(this);
         llOrderManager.setOnClickListener(this);
         llSetting.setOnClickListener(this);
-        tvLogOut.setOnClickListener(this);
+        btnLogOut.setOnClickListener(this);
         // RxBus
         rxBusOnClickListener();
     }
@@ -217,7 +214,7 @@ public class MyFragment extends BaseFragment {
                 //设置
                 enterSetting();
                 break;
-            case R.id.tv_logOut:
+            case R.id.btn_logOut:
                 new AlertDialog(mActivity).builder()
                         .setTitle("提示")
                         .setMsg("您确定要退出登录吗？")

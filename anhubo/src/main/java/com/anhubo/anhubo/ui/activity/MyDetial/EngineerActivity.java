@@ -76,8 +76,8 @@ public class EngineerActivity extends BaseActivity {
     ImageView ivEngineer1;
     @InjectView(R.id.iv_engineer2)
     ImageView ivEngineer2;
-    @InjectView(R.id.tv_submit_engineer)
-    TextView tvSubmitEngineer;
+    @InjectView(R.id.btn_submit_engineer)
+    Button btnSubmitEngineer;
     private String engineerName;
     private String engineerPhone;
     private String engineerGrade;
@@ -113,7 +113,7 @@ public class EngineerActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.tv_engineer_grade, R.id.iv_engineer1, R.id.iv_engineer2, R.id.tv_submit_engineer})
+    @OnClick({R.id.tv_engineer_grade, R.id.iv_engineer1, R.id.iv_engineer2, R.id.btn_submit_engineer})
     public void onClick(View view) {
         /**获取输入的内容*/
         getInputData();
@@ -139,7 +139,7 @@ public class EngineerActivity extends BaseActivity {
                 isClick = false;
                 showDialog();
                 break;
-            case R.id.tv_submit_engineer:
+            case R.id.btn_submit_engineer:
                 // 姓名
                 if (TextUtils.isEmpty(engineerName)) {
                     new AlertDialog(mActivity).builder()

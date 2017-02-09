@@ -9,9 +9,9 @@
         layout="@layout/layout_top_bar"></include>
 
     <com.anhubo.anhubo.view.MyScrollView
-        android:layout_below="@+id/top_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top_title">
 
 
         <LinearLayout
@@ -38,8 +38,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="头像"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textColor="@color/hanzi8_black"
+                    android:textSize="15sp" />
 
                 <ImageView
                     android:id="@+id/iv_headerIcon"
@@ -70,17 +70,18 @@
 
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
+                android:paddingBottom="12dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingTop="10dp">
+                android:paddingTop="12dp">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="用户名"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textColor="@color/hanzi8_black"
+                    android:textSize="15sp" />
 
                 <EditText
                     android:id="@+id/et_my_username"
@@ -88,12 +89,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:background="@null"
-                    android:paddingLeft="10dp"
-                    android:singleLine="true"
                     android:enabled="true"
                     android:imeOptions="actionDone|actionSend"
-                    android:textColor="@color/gray"
-                    android:textSize="14sp" />
+                    android:paddingLeft="10dp"
+                    android:singleLine="true"
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -107,7 +108,7 @@
                 android:layout_height="0.3dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:background="@color/gray" />
+                android:background="@color/view_gray" />
 
             <!--年龄-->
             <LinearLayout
@@ -117,18 +118,18 @@
                 android:background="@color/backgroud_white"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
+                android:paddingBottom="12dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingTop="10dp">
+                android:paddingTop="12dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="年龄"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textColor="@color/hanzi8_black"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tv_my_age"
@@ -136,8 +137,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="保密"
-                    android:textColor="@color/gray"
-                    android:textSize="14sp" />
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -151,7 +152,7 @@
                 android:layout_height="0.3dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:background="@color/gray" />
+                android:background="@color/view_gray" />
             <!--性别-->
             <LinearLayout
                 android:id="@+id/ll_psGender"
@@ -160,18 +161,18 @@
                 android:background="@color/backgroud_white"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
+                android:paddingBottom="12dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingTop="10dp">
+                android:paddingTop="12dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="性别"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textColor="@color/hanzi8_black"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tv_my_gender"
@@ -179,8 +180,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="保密"
-                    android:textColor="@color/gray"
-                    android:textSize="14sp" />
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -194,7 +195,7 @@
                 android:layout_height="0.3dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:background="@color/gray" />
+                android:background="@color/view_gray" />
             <!--手机-->
             <LinearLayout
                 android:id="@+id/ll_psPhone"
@@ -203,18 +204,18 @@
                 android:background="@color/backgroud_white"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
+                android:paddingBottom="12dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingTop="10dp">
+                android:paddingTop="12dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="手机"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textColor="@color/hanzi8_black"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tv_my_phone"
@@ -222,14 +223,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text=""
-                    android:textColor="@color/gray"
-                    android:textSize="14sp" />
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:background="@drawable/arrow_right" />
+                    android:background="@drawable/arrow_right"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -238,7 +239,7 @@
                 android:layout_height="0.3dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:background="@color/gray" />
+                android:background="@color/view_gray" />
             <!--密码-->
             <LinearLayout
                 android:id="@+id/ll_pspwd"
@@ -247,18 +248,18 @@
                 android:background="@color/backgroud_white"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
+                android:paddingBottom="12dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingTop="10dp">
+                android:paddingTop="12dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="密码"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textColor="@color/hanzi8_black"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tv_my_pwd"
@@ -266,8 +267,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="修改"
-                    android:textColor="@color/gray"
-                    android:textSize="14sp" />
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -286,18 +287,18 @@
                 android:background="@color/backgroud_white"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
+                android:paddingBottom="12dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingTop="10dp">
+                android:paddingTop="12dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="实名认证"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textColor="@color/hanzi8_black"
+                    android:textSize="15sp" />
 
 
                 <ImageView
@@ -312,7 +313,7 @@
                 android:layout_height="0.3dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:background="@color/gray" />
+                android:background="@color/view_gray" />
             <!--所属单位-->
             <LinearLayout
                 android:id="@+id/ll_psUnit"
@@ -321,26 +322,26 @@
                 android:background="@color/backgroud_white"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
+                android:paddingBottom="12dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingTop="10dp">
+                android:paddingTop="12dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="所属单位"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textColor="@color/hanzi8_black"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tv_my_unit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:textColor="@color/gray"
-                    android:textSize="14sp" />
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -357,27 +358,26 @@
                 android:background="@color/backgroud_white"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
+                android:paddingBottom="12dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingTop="10dp">
+                android:paddingTop="12dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="微信"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textColor="@color/hanzi8_black"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tv_my_wechat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:textColor="@color/gray"
-                    android:text="未绑定"
-                    android:textSize="14sp" />
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -385,7 +385,6 @@
                     android:background="@drawable/arrow_right" />
 
             </LinearLayout>
-
 
         </LinearLayout>
     </com.anhubo.anhubo.view.MyScrollView>

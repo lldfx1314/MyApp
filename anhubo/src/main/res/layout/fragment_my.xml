@@ -88,10 +88,10 @@
         android:background="@color/backgroud_white"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="10dp"
+        android:paddingBottom="12dp"
+        android:paddingTop="12dp"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="10dp">
+        android:paddingRight="16dp">
         <ImageView
             android:layout_width="16dp"
             android:layout_height="16dp"
@@ -118,7 +118,7 @@
         android:layout_height="0.3dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:background="@color/gray" />
+        android:background="@color/view_gray" />
     <LinearLayout
         android:id="@+id/ll_orderManager"
         android:layout_width="match_parent"
@@ -126,10 +126,10 @@
         android:background="@color/backgroud_white"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="10dp"
+        android:paddingBottom="12dp"
+        android:paddingTop="12dp"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="10dp">
+        android:paddingRight="16dp">
         <ImageView
             android:layout_width="14dp"
             android:layout_height="16dp"
@@ -156,7 +156,7 @@
         android:layout_height="0.3dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:background="@color/gray" />
+        android:background="@color/view_gray" />
     <LinearLayout
         android:id="@+id/ll_setting"
         android:layout_width="match_parent"
@@ -164,10 +164,10 @@
         android:background="@color/backgroud_white"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="10dp"
+        android:paddingBottom="12dp"
+        android:paddingTop="12dp"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="10dp">
+        android:paddingRight="16dp">
         <ImageView
             android:layout_width="16dp"
             android:layout_height="16dp"
@@ -189,18 +189,13 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_logOut"
+    <Button
+        android:id="@+id/btn_logOut"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:background="@color/backgroud_white"
         android:gravity="center"
         android:enabled="true"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
         android:text="退出登录"
-        android:textColor="@color/dot_red"
-        android:textSize="16sp" />
+        style="@style/btn_confirm"/>
 
 </LinearLayout>

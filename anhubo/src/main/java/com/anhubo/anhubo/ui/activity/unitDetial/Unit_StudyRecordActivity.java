@@ -72,7 +72,6 @@ public class Unit_StudyRecordActivity extends BaseActivity {
         lvStudy.setOnRefreshingListener(new MyOnRefreshingListener());
     }
 
-    private int count = 0;
 
     class MyOnRefreshingListener implements RefreshListview.OnRefreshingListener {
 
@@ -86,12 +85,7 @@ public class Unit_StudyRecordActivity extends BaseActivity {
                 isLoadMore = true;
                 getData();
             } else {
-
-                // 恢复Listview的加载更多状态
-                lvStudy.loadMoreFinished();
-                if (count++ == 0) {
-                    ToastUtils.showToast(mActivity, "没有更多数据了");
-                }
+                lvStudy.setLoadMoretv("没有更多内容了");
             }
         }
     }

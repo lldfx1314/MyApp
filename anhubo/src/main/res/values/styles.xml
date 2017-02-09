@@ -18,7 +18,7 @@
 <!-- EditText的style -->
 <style name="editTextStyle" parent="AppTheme">
     <item name="@android:layout_weight">1</item>
-    <item name="android:layout_marginRight">20sp</item>
+    <item name="android:layout_marginRight">20dp</item>
     <item name="@android:textSize">13sp</item>
     <item name="@android:textColorHint">@color/hanzi4_black</item>
     <item name="@android:textColor">@color/hanzi4_black</item>
@@ -32,6 +32,7 @@
     <item name="android:layout_width" >match_parent</item>
     <item name="android:layout_height" >1dp</item>
     <item name="android:layout_marginLeft" >25dp</item>
+    <item name="android:layout_marginRight" >25dp</item>
     <item name="android:background" >@color/view_gray</item>
 </style>
 <!-- Activity的对话框style -->
@@ -106,6 +107,7 @@
     <item name="android:background">@drawable/eye</item>
 
 </style>
+
     <!--RadioBotton的样式-->
     <style name="bottom_style">
         <item name="android:layout_width">0dp</item>
@@ -124,10 +126,10 @@
     </style>
 
 
-    <!-- 这是完善信息的提交按钮样式 -->
-    <style name="btn_msg_perfect">
+    <!-- 这是提交按钮样式 -->
+    <style name="btn_confirm">
 
-        <item name="android:layout_marginTop">30dp</item>
+        <item name="android:layout_marginTop">10dp</item>
         <item name="android:background">@drawable/btn_confirm</item>
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:textSize">18sp</item>

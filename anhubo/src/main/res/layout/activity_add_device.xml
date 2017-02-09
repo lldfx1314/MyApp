@@ -24,7 +24,6 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:lineSpacingExtra="5dp"
-            android:text="那个万欧瑞特你好快拉人"
             android:textColor="@color/hanzi8_black"
             android:textSize="15sp" />
 
@@ -197,12 +196,12 @@
                         android:layout_gravity="center_vertical"
                         android:text="（设备与NFC拍一起）"
                         android:textColor="@color/hanzi4_black"
-                        android:textSize="14sp" />
+                        android:textSize="13sp" />
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginRight="21dp"
                         android:background="@drawable/arrow_right"/>
 
                 </LinearLayout>
@@ -213,12 +212,7 @@
             android:id="@+id/add_complete_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/btn_confirm"
-            android:gravity="center"
-            android:text="提交"
-            android:textColor="@color/backgroud_white" />
+            style="@style/btn_confirm"
+            android:text="提交" />
     </LinearLayout>
 </RelativeLayout>

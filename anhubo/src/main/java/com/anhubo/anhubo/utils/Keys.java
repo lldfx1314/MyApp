@@ -199,4 +199,6 @@ public interface Keys {
     String BUILD_POI = "build_poi";
     /**单位界面传递信息*/
     String BUSINESS_POI = "business_poi";
+    /**场所使用性质*/
+    String PLACEUSE = "placeuse";
 }

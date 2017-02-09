@@ -19,32 +19,31 @@
         android:background="@color/backgroud_white"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="10dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="10dp">
+        android:paddingRight="16dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:text="姓名"
-            android:textColor="@color/text_gray1"
-            android:textSize="14sp" />
+            android:textColor="@color/hanzi4_black"
+            android:textSize="13sp" />
 
         <EditText
             android:id="@+id/et_idcard_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="15dp"
             android:layout_weight="1"
             android:background="@null"
             android:hint="请输入您的姓名"
-            android:paddingBottom="8dp"
-            android:paddingLeft="15dp"
             android:paddingTop="8dp"
-            android:textColor="@color/gray"
-            android:textColorHint="@color/gray"
-            android:textSize="13sp" />
+            android:paddingBottom="8dp"
+            android:textColor="@color/hanzi8_black"
+            android:textColorHint="@color/hanzi4_black"
+            android:textSize="15sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -54,17 +53,17 @@
         android:background="@color/backgroud_white"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="10dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="10dp">
+        android:paddingRight="16dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:text="身份证认证"
-            android:textColor="@color/text_gray1"
-            android:textSize="14sp" />
+            android:textColor="@color/hanzi4_black"
+            android:textSize="13sp" />
 
         <EditText
             android:id="@+id/et_idcard_phone"
@@ -73,12 +72,12 @@
             android:layout_weight="1"
             android:background="@null"
             android:hint="请输入真实信息"
-            android:paddingBottom="8dp"
-            android:paddingLeft="15dp"
+            android:layout_marginLeft="15dp"
             android:paddingTop="8dp"
-            android:textColor="@color/gray"
-            android:textColorHint="@color/gray"
-            android:textSize="13sp" />
+            android:paddingBottom="8dp"
+            android:textColor="@color/hanzi8_black"
+            android:textColorHint="@color/hanzi4_black"
+            android:textSize="15sp" />
     </LinearLayout>
 
 
@@ -94,28 +93,28 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingBottom="10dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
             android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="10dp">
+            android:paddingRight="16dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="75dp"
                 android:layout_height="wrap_content"
                 android:text="证件照片"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textColor="@color/hanzi4_black"
+                android:textSize="13sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
-                android:paddingBottom="8dp"
-                android:paddingLeft="15dp"
+                android:layout_marginLeft="15dp"
                 android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:text="请上传身份证正反面的清晰照片"
-                android:textColor="@color/gray"
+                android:textColor="@color/hanzi8_black"
                 android:textSize="13sp" />
         </LinearLayout>
 
@@ -144,19 +143,14 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_submit_idcard"
+    <Button
+        android:id="@+id/btn_submit_idcard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:background="@color/backgroud_white"
         android:enabled="true"
         android:gravity="center"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
         android:text="提交"
-        android:textColor="@color/blue"
-        android:textSize="14sp" />
+        style="@style/btn_confirm"/>
 
     </LinearLayout>
 

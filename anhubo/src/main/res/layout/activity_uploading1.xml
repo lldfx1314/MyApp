@@ -57,7 +57,7 @@
             android:id="@+id/btn_unloading01"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/btn_msg_perfect"
+            style="@style/btn_confirm"
             android:text="提交" />
     </LinearLayout>
 </RelativeLayout>

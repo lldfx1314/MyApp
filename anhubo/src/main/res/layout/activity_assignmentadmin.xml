@@ -28,7 +28,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="5dp"
                 android:text="员工"
-                android:textColor="@color/black"
+                android:textColor="@color/hanzi4_black"
                 android:textSize="13sp" />
 
             <TextView
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="5dp"
-                android:textColor="@color/black"
+                android:textColor="@color/hanzi4_black"
                 android:textSize="13sp" />
         </RelativeLayout>
 
@@ -54,7 +54,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:background="@drawable/btn_confirm"

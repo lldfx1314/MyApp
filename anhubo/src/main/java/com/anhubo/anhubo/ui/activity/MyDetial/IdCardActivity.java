@@ -64,8 +64,8 @@ public class IdCardActivity extends BaseActivity {
     ImageView ivCard1;
     @InjectView(R.id.iv_card2)
     ImageView ivCard2;
-    @InjectView(R.id.tv_submit_idcard)
-    TextView tvSubmitIdcard;
+    @InjectView(R.id.btn_submit_idcard)
+    Button btnSubmitIdcard;
     private String name;
     private String idcardPhone;
     private boolean isClick = false;//判断是正面还是反面
@@ -95,7 +95,7 @@ public class IdCardActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.iv_card1, R.id.iv_card2, R.id.tv_submit_idcard})
+    @OnClick({R.id.iv_card1, R.id.iv_card2, R.id.btn_submit_idcard})
     public void onClick(View view) {
         /**获取输入的内容*/
         getInputData();
@@ -111,7 +111,7 @@ public class IdCardActivity extends BaseActivity {
                 isClick = false;
                 showDialog();
                 break;
-            case R.id.tv_submit_idcard:
+            case R.id.btn_submit_idcard:
                 // 对输入的信息做判断
                 if (TextUtils.isEmpty(name)) {
                     new AlertDialog(mActivity).builder()

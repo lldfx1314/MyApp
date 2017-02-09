@@ -79,7 +79,6 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
     private Dialog showDialog1;
     private String businessName;
     private String zhezhao;
-    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -480,11 +479,7 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                 isLoadMore = true;
                 getData();
             } else {
-                // 恢复Listview的加载更多状态
-                lvBusiness.loadMoreFinished();
-                if (count++ == 0) {
-                    ToastUtils.showToast(BusinessActivity.this, "没有更多数据了");
-                }
+                lvBusiness.setLoadMoretv("没有更多内容了");
             }
         }
     }
