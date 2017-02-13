@@ -49,7 +49,6 @@ public class WelcomeActivity extends BaseActivity {
     private static final String TAG = "WelcomeActivity";
     private String uid;
     private String oldversionName;
-    private String versionName;
     private String url;
     private String newVersion;
     private String cancel_update_versionName;
@@ -68,8 +67,6 @@ public class WelcomeActivity extends BaseActivity {
     protected void initEvents() {
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
         oldversionName = SpUtils.getStringParam(mActivity, Keys.VERSIONNAME);
-        String[] split = Utils.getAppInfo(mActivity).split("#");
-        versionName = split[1];
         
 //        取出上次取消更新后保存的版本号
         cancel_update_versionName = SpUtils.getStringParam(mActivity, Keys.CANCEL_UPDATE_VERSION, null);

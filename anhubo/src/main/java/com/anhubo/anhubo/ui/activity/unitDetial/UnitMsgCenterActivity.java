@@ -1,7 +1,9 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.app.Dialog;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.UnitMsgCenterAdapter;
@@ -12,7 +14,6 @@ import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
-import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.RefreshListview;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -159,8 +160,6 @@ public class UnitMsgCenterActivity extends BaseActivity {
                 isLoadMore = false;
                 // 恢复加载更多状态
                 lvUnitMsgCenter.loadMoreFinished();
-                // 没拿到bean对象
-                System.out.println("UnitMsgCenterActivity+++===没拿到bean对象");
             }
         }
     }
@@ -196,7 +195,6 @@ public class UnitMsgCenterActivity extends BaseActivity {
             msgAdapter.notifyDataSetChanged();
         }
 
-        // 拿到解析的数据
     }
 
 }

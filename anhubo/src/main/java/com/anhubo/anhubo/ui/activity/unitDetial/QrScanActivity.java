@@ -107,7 +107,6 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
     private String businessid;
     private View viewFeed;
     private View viewTime;
-    private String versionName;
     private ScanBean scanBean;
     private ArrayList<String> listResult;
     private boolean isZero;
@@ -386,8 +385,6 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
      * 这是检查的网络请求获取数据的方法，使用Post
      */
     private void getData() {
-        String[] split = Utils.getAppInfo(mActivity).split("#");
-        versionName = split[1];
         showDialog = loadProgressDialog.show(mActivity, "正在加载...");
         String url = Urls.Url_Check;
         HashMap<String, String> params = new HashMap<String, String>();
@@ -404,24 +401,22 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
         @Override
         public void onError(Call call, Exception e) {
             showDialog.dismiss();
+            LogUtils.e(TAG,":getData",e);
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(true).show();
-            System.out.println("QrScanActivity+++===没拿到数据" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("查询"+response);
-            scanBean = new Gson().fromJson(response, ScanBean.class);
+            showDialog.dismiss();
+            LogUtils.eNormal(TAG+":getData",response);
+            scanBean = JsonUtil.json2Bean(response, ScanBean.class);
             if (scanBean != null) {
-                showDialog.dismiss();
                 // 获取到数据置为true
                 isGetDeviceInfo = true;
                 parseMessage(scanBean);
-            } else {
-                System.out.println("QrScanActivity+++===没获取bean对象");
             }
         }
     }
@@ -444,8 +439,6 @@ public class QrScanActivity extends BaseActivity implements QRCodeView.Delegate 
                 intent.putExtra(Keys.CARDNUMBER, cardNumber);
                 startActivity(intent);
 
-            } else {
-                System.out.println("NFC_ScanActivity界面+++===deviceId和cardNumber不一样，这种情况应该不会发生");
             }
 
         } else if (isExist == 1) {

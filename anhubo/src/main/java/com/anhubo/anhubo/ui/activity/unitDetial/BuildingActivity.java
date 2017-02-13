@@ -35,6 +35,7 @@ import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.LoadProgressDialog;
 import com.anhubo.anhubo.view.RefreshListview;
@@ -276,7 +277,7 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
                     }
                     // 拿到经纬度请求网络
 
-                    loadProgressDialog = LoadProgressDialog.newInstance();
+                    loadProgressDialog = LoadProgressDialog.newInstance(BuildingActivity.this);
                     showDialog = loadProgressDialog.show(BuildingActivity.this, "正在加载...");
                     getData();
 
@@ -346,10 +347,12 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
 
     private void getData() {
         String location = String.valueOf(latitude) + "," + String.valueOf(longitude);
-
+        String[] split = Utils.getAppInfo(this).split("#");
+        String versionName = split[1];
         String url = Urls.Location;
         Map<String, String> params = new HashMap<>();
         params.put("location", location);
+        params.put("version", versionName);
         params.put("page", pager + "");
         pager++;
         OkHttpUtils.post()//
@@ -364,6 +367,7 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
         @Override
         public void onError(Call call, Exception e) {
             showDialog.dismiss();
+            LogUtils.e(TAG,":getData:",e);
             new AlertDialog(BuildingActivity.this).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -376,7 +380,6 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
                         }
                     })
                     .setCancelable(false).show();
-            LogUtils.e(TAG,":getData:",e);
         }
 
         @Override

@@ -42,8 +42,6 @@ public class RefreshListview extends ListView {
         this.setOnScrollListener(new MyOnScrollListener());
     }
 
-
-
     // 对外暴露接口
     public interface OnRefreshingListener {
         // 加载更多业务方法

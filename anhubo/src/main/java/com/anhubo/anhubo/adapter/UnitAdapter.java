@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.bean.Unit_PlanBean;
 import com.anhubo.anhubo.utils.DisplayUtil;
+import com.anhubo.anhubo.utils.LogUtils;
+import com.anhubo.anhubo.utils.ToastUtils;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -23,6 +25,7 @@ import java.util.List;
  * Created by LUOLI on 2016/10/24.
  */
 public class UnitAdapter extends BaseAdapter {
+    private static final String TAG = "UnitAdapter";
     private Context mContext;
     private List<Unit_PlanBean.Data.Certs> certs;
     ViewHolder hold;
@@ -96,7 +99,7 @@ public class UnitAdapter extends BaseAdapter {
                 //　包含小数点,计算出小数点的索引
                 int i = score.indexOf(".", 0);
                 //截取
-                String s = score.substring(0,i);
+                String s = score.substring(0, i);
                 hold.threeScore.setText(s);
             } else {
                 hold.threeScore.setText(score);
@@ -108,21 +111,21 @@ public class UnitAdapter extends BaseAdapter {
             hold.heighHelpProportion.setText(planEnsureProportion);
         }
         // 现金
-        setShowDetial(planEnsure,hold.heighHelpMoney);
-
+        setShowDetial(planEnsure, hold.heighHelpMoney);
         // 单次分摊额
         if (!TextUtils.isEmpty(planMoneyProportion)) {
             // 比例
             hold.prepayPproportion.setText(planMoneyProportion);
         }
         // 现金
-        setShowDetial(planMoney,hold.prepayShareMoney);
+        setShowDetial(planMoney, hold.prepayShareMoney);
 
         return convertView;
     }
 
-    private void setShowDetial(String string,TextView textView) {
+    private void setShowDetial(String string, TextView textView) {
         if (!TextUtils.isEmpty(string)) {
+
             Double heighSharing = Double.parseDouble(string) / 10000;
 
             if (heighSharing < 1) {
@@ -134,15 +137,15 @@ public class UnitAdapter extends BaseAdapter {
                     //　做判断，防止显示类似＂50.万＂这样的情况
                     if (substring.endsWith(".")) {
                         setWan(substring.substring(0, 2) + "万");
-                    } else {
-                        setWan(substring + "万");
+                    } else if (substring.endsWith(".0")) {
+                        setWan(substring.substring(0, 1) + "万");
                     }
                 } else {
                     setWan(str + "万");
 
                 }
-                hold.heighHelpMoney.setHorizontallyScrolling(true);
-                hold.heighHelpMoney.setText(ss);
+                textView.setHorizontallyScrolling(true);
+                textView.setText(ss);
             }
         }
     }

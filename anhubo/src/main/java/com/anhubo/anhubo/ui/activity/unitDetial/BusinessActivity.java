@@ -36,6 +36,7 @@ import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.LoadProgressDialog;
 import com.anhubo.anhubo.view.RefreshListview;
@@ -154,12 +155,12 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                     @Override
                     public void onError(Call call, Exception e) {
                         showDialog1.dismiss();
+                        LogUtils.e(TAG, "单位注册", e);
 
                         new AlertDialog(BusinessActivity.this).builder()
                                 .setTitle("提示")
                                 .setMsg("网络有问题，请检查")
                                 .setCancelable(true).show();
-                        LogUtils.e(TAG, "单位注册", e);
                     }
 
                     @Override
@@ -344,7 +345,7 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
                     }
                     // 拿到经纬度请求网络
 
-                    loadProgressDialog = LoadProgressDialog.newInstance();
+                    loadProgressDialog = LoadProgressDialog.newInstance(BusinessActivity.this);
                     showDialog = loadProgressDialog.show(BusinessActivity.this, "正在加载...");
                     getData();
 
@@ -416,10 +417,13 @@ public class BusinessActivity extends AppCompatActivity implements View.OnSystem
      * 拿到经纬度请求网络
      */
     private void getData() {
+        String[] split = Utils.getAppInfo(this).split("#");
+        String versionName = split[1];
         String location = String.valueOf(latitude) + "," + String.valueOf(longitude);
         String url = Urls.Location;
         Map<String, String> params = new HashMap<>();
         params.put("location", location);
+        params.put("version", versionName);
         params.put("page", pager + "");
         pager++;
         OkHttpUtils.post()//

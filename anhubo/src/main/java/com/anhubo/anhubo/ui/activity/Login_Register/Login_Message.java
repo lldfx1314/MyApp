@@ -311,7 +311,8 @@ public class Login_Message extends BaseActivity {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("telphone", phoneNumber);
         params.put("verify_code", securityCode);
-
+        params.put("version", versionName);
+        LogUtils.eNormal(TAG,":短信登录:"+versionName);
         OkHttpUtils.post()//
                 .url(url)//
                 .params(params)//

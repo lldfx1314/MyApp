@@ -99,8 +99,6 @@ public class UnitFragment extends BaseFragment{
     private boolean isShowDot_drill = false;
     private static int dialog_i = 0;
 
-    private List<Build_Help_Plan_Bean.Data.Plans> plans;
-    private BuildAdapter adapter1;
     private AlertDialog builder;
 
     /**
@@ -304,6 +302,7 @@ public class UnitFragment extends BaseFragment{
 //                LogUtils.eNormal(TAG,":界面修改单位+"+string);
                 tv_basepager_title.setText(string);
                 // 重新刷一遍界面
+                isLoading = true;
                 getData(str);
                 getPlanData();
             }

@@ -33,7 +33,7 @@
                     android:layout_weight="1"
                     android:text="上传营业执照"
                     android:textColor="@color/hanzi8_black"
-                    android:textSize="14sp" />
+                    android:textSize="15sp" />
 
                 <ImageView
                     android:id="@+id/iv_msg_per01"
@@ -76,7 +76,7 @@
                     android:layout_weight="1"
                     android:text="上传法人身份证"
                     android:textColor="@color/hanzi8_black"
-                    android:textSize="14sp" />
+                    android:textSize="15sp" />
 
                 <ImageView
                     android:id="@+id/iv_msg_per02"
@@ -119,7 +119,7 @@
                     android:layout_weight="1"
                     android:text="上传消防审批同意开业通知"
                     android:textColor="@color/hanzi8_black"
-                    android:textSize="14sp" />
+                    android:textSize="15sp" />
 
                 <ImageView
                     android:id="@+id/iv_msg_per03"
@@ -162,7 +162,7 @@
                     android:layout_weight="1"
                     android:text="上传租房合同"
                     android:textColor="@color/hanzi8_black"
-                    android:textSize="14sp" />
+                    android:textSize="15sp" />
 
                 <ImageView
                     android:id="@+id/iv_msg_per04"
@@ -205,7 +205,7 @@
                     android:layout_weight="1"
                     android:text="上传员工人数"
                     android:textColor="@color/hanzi8_black"
-                    android:textSize="14sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tv_msg_per05"
@@ -213,7 +213,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="12dp"
                     android:text="0"
-                    android:textSize="14sp" />
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -248,7 +249,7 @@
                     android:layout_weight="1"
                     android:text="场所使用性质"
                     android:textColor="@color/hanzi8_black"
-                    android:textSize="14sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tv_msg_per06"
@@ -257,7 +258,8 @@
                     android:layout_marginRight="12dp"
                     android:text="其他功能"
                     android:visibility="gone"
-                    android:textSize="14sp" />
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"

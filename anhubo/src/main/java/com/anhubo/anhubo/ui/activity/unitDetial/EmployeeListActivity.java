@@ -68,7 +68,6 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
     TextView employeeNum;
     @InjectView(R.id.btn_employee_invate)
     Button btnEmployeeInvate;
-    private String versionName;
     private Dialog showDialog;
     private String businessId;
     private ArrayList<EmployeeListBean.Data.User_info> list;
@@ -366,6 +365,8 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
                                 SpUtils.putParam(mActivity, Keys.BUSINESSID, null);
                                 SpUtils.putParam(mActivity, Keys.BUSINESSNAME, null);
                                 SpUtils.putParam(mActivity, Keys.BUILDINGNAME, null);
+                                /**是否修改过单位，都置于false*/
+                                SpUtils.putParam(mActivity, Keys.ISALTERUNIT, false);
                                 // 跳转到HomeActivity里面
                                 startActivity(new Intent(mActivity, HomeActivity.class));
                                 // 发送一条广播,关掉之前所有界面
@@ -442,9 +443,6 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
      */
     private void invateWorkMate(String phone) {
         showDialog = loadProgressDialog.show(mActivity, "正在请求...");
-
-        String[] split = Utils.getAppInfo(mActivity).split("#");
-        versionName = split[1];
 
         String url = Urls.Url_Unit_InvateWorkMate;
         Map<String, String> params = new HashMap<>();

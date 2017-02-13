@@ -35,15 +35,16 @@
                     android:layout_weight="1"
                     android:text="开始日期"
                     android:textColor="@color/hanzi8_black"
-                    android:textSize="14sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tv_startTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="显示日期"
-                    android:textColor="@color/hanzi8_black"
-                    android:textSize="16sp"
+                    android:textColor="@color/hanzi4_black"
+                    android:textColorHint="@color/hanzi4_black"
+                    android:textSize="13sp"
                     android:visibility="gone" />
 
                 <ImageView
@@ -81,7 +82,7 @@
                     android:layout_weight="1"
                     android:text="租房时长"
                     android:textColor="@color/hanzi8_black"
-                    android:textSize="14sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tv_Time"
@@ -89,8 +90,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="显示日期"
-                    android:textColor="@color/hanzi8_black"
-                    android:textSize="14sp"
+                    android:textColorHint="@color/hanzi4_black"
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp"
                     android:visibility="gone" />
 
                 <ImageView
@@ -149,7 +151,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/btn_confirm"
-            android:text="提交" />
+            android:text="提 交" />
 
 
     </LinearLayout>

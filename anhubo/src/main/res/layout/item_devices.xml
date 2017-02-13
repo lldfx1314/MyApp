@@ -13,7 +13,8 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="哈哈哈"
-            android:textSize="13sp" />
+            android:textColor="@color/hanzi8_black"
+            android:textSize="15sp" />
 
         <ImageView
             android:id="@+id/iv_devices_judege"

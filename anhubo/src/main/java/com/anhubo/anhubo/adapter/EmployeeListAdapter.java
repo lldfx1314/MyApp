@@ -157,6 +157,7 @@ public class EmployeeListAdapter extends BaseAdapter implements View.OnClickList
                 .with(mContext)
                 .load(imgurl)
                 .centerCrop().crossFade(800)
+                .error(R.drawable.newicon)
 //                .diskCacheStrategy(DiskCacheStrategy.NONE)
 //                .skipMemoryCache(true)
                 .into(ivIcon);

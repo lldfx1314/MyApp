@@ -34,7 +34,9 @@ import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.EngineerBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.DisplayUtil;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
@@ -64,6 +66,7 @@ import okhttp3.Call;
 public class EngineerActivity extends BaseActivity {
     private static final int PICTURE = 0;
     private static final int CAMERA = 1;
+    private static final String TAG = "EngineerActivity";
     @InjectView(R.id.et_engineer_name)
     EditText etEngineerName;
     @InjectView(R.id.ll_engineer_grade)
@@ -285,18 +288,17 @@ public class EngineerActivity extends BaseActivity {
         @Override
         public void onError(Call call, Exception e) {
             showDialog.dismiss();
+            LogUtils.e(TAG,":submit",e);
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(true).show();
-
-            System.out.println("IdCardActivity+++===界面失败" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
-            //System.out.println(response);
-            EngineerBean bean = new Gson().fromJson(response, EngineerBean.class);
+            LogUtils.eNormal(TAG+":submit",response);
+            EngineerBean bean = JsonUtil.json2Bean(response, EngineerBean.class);
             if (bean != null) {
                 showDialog.dismiss();
                 int code = bean.code;
@@ -311,7 +313,7 @@ public class EngineerActivity extends BaseActivity {
 
                             finish();
                         }
-                    }, 2000);
+                    }, 500);
                 }
             }
 

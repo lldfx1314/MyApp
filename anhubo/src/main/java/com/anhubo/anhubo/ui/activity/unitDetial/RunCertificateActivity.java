@@ -160,7 +160,7 @@ public class RunCertificateActivity extends BaseActivity {
     public void onDestroy() {
         super.onDestroy();
         // 解除订阅
-        if(!rxSubscription.isUnsubscribed()) {
+        if (!rxSubscription.isUnsubscribed()) {
             rxSubscription.unsubscribe();
         }
     }
@@ -183,6 +183,8 @@ public class RunCertificateActivity extends BaseActivity {
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         params.put("plan_id", planId);
+        params.put("version", versionName);
+        LogUtils.eNormal(TAG,":动态凭证:"+versionName);
         OkHttpUtils.post()
                 .url(url)
                 .params(params)
@@ -340,7 +342,7 @@ public class RunCertificateActivity extends BaseActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if(isHaveData){
+        if (isHaveData) {
             // 展示当前旬
             if (today == 0) {
                 runivGreen.setBackgroundResource(R.drawable.run_gray);
@@ -355,7 +357,6 @@ public class RunCertificateActivity extends BaseActivity {
             AnimationDrawable animationDrawable = (AnimationDrawable) runivGreen.getBackground();
             animationDrawable.start();
         }
-
 
 
     }
@@ -376,9 +377,10 @@ public class RunCertificateActivity extends BaseActivity {
                     //　做判断，防止显示类似＂50.万＂这样的情况
                     if (substring.endsWith(".")) {
                         textView.setText(string.substring(0, 2) + "万");
-                    } else {
-                        textView.setText(substring + "万");
+                    } else if (substring.endsWith(".0")) {
+                        textView.setText(substring.substring(0, 1) + "万");
                     }
+
                 } else {
                     textView.setText(str + "万");
 

@@ -53,7 +53,7 @@ public class UnitMsgCenterAdapter extends BaseAdapter {
             hold = (ViewHolder) convertView.getTag();
         }
 
-        hold.textTile.setText(mListTItle.get(position)+"title");
+        hold.textTile.setText(mListTItle.get(position));
         hold.textTime.setText(mListTime.get(position));
         hold.textMsg.setText(mListMsg.get(position));
         return convertView;

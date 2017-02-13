@@ -41,7 +41,6 @@ public class Unit_StudyRecordActivity extends BaseActivity {
     private int page;
     private boolean isLoadMore = false;
     private UnitMenuAdapter menuAdapter;
-    private String versionName;
     private ArrayList<Object> datas;
     private Dialog dialog;
 
@@ -107,8 +106,6 @@ public class Unit_StudyRecordActivity extends BaseActivity {
      * 获取网络数据
      */
     private void getData() {
-        String[] split = Utils.getAppInfo(mActivity).split("#");
-        versionName = split[1];
         String url = Urls.Url_studyRecord;
         HashMap<String, String> params = new HashMap<>();
         params.put("business_id", businessId);

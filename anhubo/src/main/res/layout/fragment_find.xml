@@ -32,8 +32,8 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/notice_icon" />
 
                     <TextView
@@ -50,7 +50,7 @@
             <!--使用指导-->
             <RelativeLayout
                 android:id="@+id/rl_useGuide"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="7dp"
                 android:clickable="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -67,8 +67,8 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/useguide_icon" />
 
                     <TextView
@@ -85,7 +85,7 @@
             <!--反馈-->
             <RelativeLayout
                 android:id="@+id/rl_feedback"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="7dp"
                 android:clickable="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -102,8 +102,8 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/feedback_icon" />
 
                     <TextView
@@ -121,8 +121,9 @@
             <!--测试-->
             <RelativeLayout
                 android:id="@+id/rl_test"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="7dp"
                 android:clickable="true"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -138,8 +139,8 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/test_icon" />
 
                     <TextView

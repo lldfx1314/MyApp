@@ -109,10 +109,10 @@ public class FlowLayout extends ViewGroup {
 				int childTop = (rowIndex == 0) ? getPaddingTop() : tempBottom + verticalSpacing;
 				
 				// 如果是最后一列，则把View的right安排在容器的最右边
-				int childRight = (columnIndex == oneLine.size() - 1)
-						         ? getMeasuredWidth() - getPaddingRight()
-						         : childLeft + childMeasuredWidth + averageUsableWidth;
-						         
+//				int childRight = (columnIndex == oneLine.size() - 1)
+//						         ? getMeasuredWidth() - getPaddingRight()
+//						         : childLeft + childMeasuredWidth + averageUsableWidth;
+				int childRight = childLeft + childMeasuredWidth + averageUsableWidth;
 				int childBottom = childTop + childMeasuredHeight;
 				child.layout(childLeft, childTop, childRight, childBottom);
 				

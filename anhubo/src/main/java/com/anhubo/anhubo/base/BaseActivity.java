@@ -26,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
+import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.LoadProgressDialog;
 import com.umeng.analytics.MobclickAgent;
 
@@ -50,6 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected LoadProgressDialog loadProgressDialog;
     protected ImageView ivTopBarRightUnitShare;
     protected ImageView ivTopBarRight;
+    protected String versionName;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -61,11 +63,19 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
 
         mActivity = this;
+        getVersionName();
         initConfig();
         if (getContentViewId() != 0) {
             setContentView(getContentViewId());
         }
     }
+
+    private void getVersionName(){
+
+        String[] split = Utils.getAppInfo(this).split("#");
+        versionName = split[1];
+    }
+
     /**设置浸入式状态栏*/
     private void setStatusBarTransparent(){
 
@@ -95,7 +105,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         // 加载标题栏的布局
         initTitleView();// 找到标题栏布局
         initTitleBar();//设置标题栏的具体事件
-        initProgressBar();//初始化加载进度条
+        initProgressBar(mActivity);//初始化加载进度条
         initViews();
         initEvents();
         onLoadDatas();
@@ -105,8 +115,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
 
-    private void initProgressBar() {
-        loadProgressDialog = LoadProgressDialog.newInstance();
+    private void initProgressBar(Context context) {
+        loadProgressDialog = LoadProgressDialog.newInstance(context);
 
     }
 

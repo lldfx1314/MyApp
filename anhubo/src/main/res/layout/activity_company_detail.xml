@@ -20,7 +20,7 @@
             android:layout_weight="1.5"
             android:layout_height="wrap_content"
             android:textColor="@color/hanzi4_black"
-            android:textSize="14sp"
+            android:textSize="13sp"
             android:text="单元名次"/>
         <TextView
             android:id="@+id/company_detail_three_score"
@@ -28,7 +28,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:textColor="@color/hanzi4_black"
-            android:textSize="14sp"
+            android:textSize="13sp"
             android:text="三色分数"/>
 
     </LinearLayout>

@@ -15,7 +15,6 @@
             android:id="@+id/run_ll_sum"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
             android:orientation="vertical"
             android:padding="5dp">
             <!--会员-->
@@ -242,7 +241,7 @@
                 <RelativeLayout
                     android:id="@+id/run_rl_unit_member"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="114dp"
                     android:layout_marginTop="15dp"
                     android:paddingBottom="10dp">
 

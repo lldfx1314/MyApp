@@ -149,7 +149,7 @@
         android:layout_height="wrap_content"
         android:enabled="true"
         android:gravity="center"
-        android:text="提交"
+        android:text="提 交"
         style="@style/btn_confirm"/>
 
     </LinearLayout>

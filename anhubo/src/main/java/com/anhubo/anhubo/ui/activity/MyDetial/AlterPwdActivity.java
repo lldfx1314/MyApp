@@ -12,7 +12,9 @@ import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.MyAlterPwdBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
@@ -32,6 +34,7 @@ import okhttp3.Call;
  */
 public class AlterPwdActivity extends BaseActivity {
 
+    private static final String TAG = "AlterUnitActivity";
     @InjectView(R.id.et_alter_oldPwd)
     EditText etAlterOldPwd;
     @InjectView(R.id.et_alter_newPwd1)
@@ -172,15 +175,15 @@ public class AlterPwdActivity extends BaseActivity {
         @Override
         public void onError(Call call, Exception e) {
             showDialog.dismiss();
+            LogUtils.e(TAG,":alterPwd",e);
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
 
-            System.out.println("AlterPwdActivity+++界面修改密码===" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
-            //System.out.println(response);
-            MyAlterPwdBean bean = new Gson().fromJson(response, MyAlterPwdBean.class);
+            LogUtils.eNormal(TAG+":alterPwd",response);
+            MyAlterPwdBean bean = JsonUtil.json2Bean(response, MyAlterPwdBean.class);
             if (bean != null) {
                 showDialog.dismiss();
                 int code = bean.code;
@@ -196,7 +199,7 @@ public class AlterPwdActivity extends BaseActivity {
                         public void run() {
                             finish();
                         }
-                    }, 2000);
+                    }, 500);
                 }
             }
         }

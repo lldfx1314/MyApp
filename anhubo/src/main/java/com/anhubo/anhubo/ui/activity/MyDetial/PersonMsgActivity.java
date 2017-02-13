@@ -399,6 +399,8 @@ public class PersonMsgActivity extends BaseActivity {
                     if (TextUtils.isEmpty(img)) {
                         // 代表用户没设置过自己的头像，因此显示自己的微信头像// 我的界面头像重新刷一遍
                         setHeaderIcon(profileImageUrl);
+                        // 通知我的界面请求数据更新界面
+                        RxBus.getDefault().post(new Exbus_AlterName());
                     }
                     // 显示微信名
                     tvMyWechat.setText(screenName);
@@ -786,7 +788,6 @@ public class PersonMsgActivity extends BaseActivity {
                             SpUtils.putParam(mActivity, Keys.ISALTERUNIT, true);
                             SpUtils.putParam(mActivity, Keys.NEWBUSINESSNAME, newBusinessName);
                             tvMyUnit.setText(newBusinessName);
-
                         }
                     }
 

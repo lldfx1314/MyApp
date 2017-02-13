@@ -12,6 +12,7 @@
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         android:text="数据正在加载..."
-        android:textSize="20sp" />
+        android:textColor="@color/hanzi8_black"
+        android:textSize="15sp" />
 </LinearLayout>
 

@@ -153,6 +153,7 @@ public class AssignmentAdminAdapter extends BaseAdapter implements View.OnClickL
                 .load(imgurl)
                 .centerCrop()
                 .crossFade(800)
+                .error(R.drawable.newicon)
 //                .diskCacheStrategy(DiskCacheStrategy.NONE)
 //                .skipMemoryCache(true)
                 .into(ivIcon);

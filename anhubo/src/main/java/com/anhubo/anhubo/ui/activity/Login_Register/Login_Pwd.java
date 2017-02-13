@@ -178,6 +178,8 @@ public class Login_Pwd extends BaseActivity {
         HashMap<String, String> params = new HashMap<>();
         params.put("telphone", phoneNumber);
         params.put("password", pwd);
+        params.put("version", versionName);
+        LogUtils.eNormal(TAG,":密码登录:"+versionName);
 
         OkHttpUtils.post()//
                 .url(url)//

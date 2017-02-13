@@ -18,6 +18,7 @@ import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
+import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -154,6 +155,7 @@ public class AlterUnitActivity extends BaseActivity {
         params.put("uid", uid);
         params.put("building_name", building);
         params.put("business_name", unit);
+        params.put("version", versionName);
         if (TextUtils.isEmpty(buildPoi)) {
             params.put("building_poi_id", "");
         }else{
@@ -179,10 +181,6 @@ public class AlterUnitActivity extends BaseActivity {
         unit = tvMyUnit.getText().toString().trim();
     }
 
-    @Override
-    public void onSystemUiVisibilityChange(int visibility) {
-
-    }
 
     class MyStringCallback extends StringCallback {
         @Override
@@ -235,4 +233,10 @@ public class AlterUnitActivity extends BaseActivity {
 
         }
     }
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
 }

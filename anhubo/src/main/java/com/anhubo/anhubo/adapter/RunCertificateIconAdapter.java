@@ -69,6 +69,7 @@ public class RunCertificateIconAdapter extends RecyclerView.Adapter<RunCertifica
                 .load(imgurl)
                 .centerCrop().crossFade(1000)// 淡入淡出的时间为1S
 //                .placeholder(R.drawable.newicon)
+                .error(R.drawable.newicon)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(ivIcon);

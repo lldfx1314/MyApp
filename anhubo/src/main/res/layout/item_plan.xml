@@ -17,8 +17,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:text="计划名称"
-            android:textColor="@color/gray"
-            android:textSize="14sp" />
+            android:textColor="@color/hanzi4_black"
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/tv_planStatus"
@@ -26,8 +26,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:text="筹备期"
-            android:textColor="@color/gray"
-            android:textSize="14sp" />
+            android:textColor="@color/hanzi4_black"
+            android:textSize="13sp" />
 
     </RelativeLayout>
 
@@ -78,8 +78,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:text="上次三色评分"
-                android:textColor="@color/gray"
-                android:textSize="14sp" />
+                android:textColor="@color/hanzi4_black"
+                android:textSize="13sp" />
         </RelativeLayout>
 
         <!--最高分摊额-->
@@ -93,7 +93,8 @@
                 android:layout_width="78dp"
                 android:layout_height="78dp"
                 android:background="@drawable/heigh_help_money"
-                android:padding="5dp">
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -144,8 +145,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:text="最高互助额"
-                android:textColor="@color/gray"
-                android:textSize="14sp" />
+                android:textColor="@color/hanzi4_black"
+                android:textSize="13sp" />
         </RelativeLayout>
         <!--预付保障金-->
         <RelativeLayout
@@ -158,7 +159,8 @@
                 android:layout_width="78dp"
                 android:layout_height="78dp"
                 android:background="@drawable/heigh_share_money"
-                android:padding="5dp">
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -186,7 +188,7 @@
                     android:layout_marginRight="2dp"
                     android:layout_marginTop="25dp"
                     android:text="%"
-                    android:textColor="@color/black1"
+                    android:textColor="@color/hanzi4_black"
                     android:textSize="12sp" />
 
                 <TextView
@@ -209,8 +211,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:text="单次分摊额"
-                android:textColor="@color/gray"
-                android:textSize="14sp" />
+                android:textColor="@color/hanzi4_black"
+                android:textSize="13sp" />
         </RelativeLayout>
 
     </RelativeLayout>

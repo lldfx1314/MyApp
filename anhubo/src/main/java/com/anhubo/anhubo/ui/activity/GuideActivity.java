@@ -44,7 +44,6 @@ public class GuideActivity extends BaseActivity {
     private ArrayList<Fragment> fragments;
     private String uid;
     private String businessid;
-    private String versionName;
 
 
     @Override
@@ -93,8 +92,7 @@ public class GuideActivity extends BaseActivity {
         super.initEvents();
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
         businessid = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
-        String[] split = Utils.getAppInfo(mActivity).split("#");
-        versionName = split[1];
+
 
 
         for (int i = 0; i < fragments.size(); i++) {

@@ -106,7 +106,6 @@ public class NfcScanActivity extends BaseActivity {
     private Map<Integer, Boolean> map = new HashMap<>();
     private View viewFeed;
     private View viewTime;
-    private String versionName;
     private ArrayList<String> listResult;
     private Dialog showDialog;
     private Dialog showDialog1;
@@ -201,12 +200,12 @@ public class NfcScanActivity extends BaseActivity {
     class MyStringCallback2 extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {
-            LogUtils.e(TAG,":进度条getNum",e);
+            LogUtils.e(TAG, ":进度条getNum", e);
         }
 
         @Override
         public void onResponse(String response) {
-            LogUtils.eNormal(TAG+":进度条getNum",response);
+            LogUtils.eNormal(TAG + ":进度条getNum", response);
             CheckComplete_Bean bean = JsonUtil.json2Bean(response, CheckComplete_Bean.class);
             if (bean != null) {
 
@@ -321,8 +320,6 @@ public class NfcScanActivity extends BaseActivity {
      * 这是检查的网络请求获取数据的方法，使用Post
      */
     private void getData() {
-        String[] split = Utils.getAppInfo(mActivity).split("#");
-        versionName = split[1];
         showDialog = loadProgressDialog.show(mActivity, "请稍后...");
         String url = Urls.Url_Check;
         HashMap<String, String> params = new HashMap<String, String>();
@@ -337,11 +334,6 @@ public class NfcScanActivity extends BaseActivity {
 
     }
 
-    @Override
-    public void onSystemUiVisibilityChange(int visibility) {
-
-    }
-
 
     /**
      * 检查的网络请求获取数据的方法
@@ -350,18 +342,18 @@ public class NfcScanActivity extends BaseActivity {
         @Override
         public void onError(Call call, Exception e) {
             showDialog.dismiss();
+            LogUtils.e(TAG, ":getData", e);
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(true).show();
-            System.out.println("NfcScanActivity+++===没拿到数据" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
             showDialog.dismiss();
-            //System.out.println("nfc++"+response);
-            ScanBean bean = new Gson().fromJson(response, ScanBean.class);
+            LogUtils.eNormal(TAG + ":getData", response);
+            ScanBean bean = JsonUtil.json2Bean(response, ScanBean.class);
             if (bean != null) {
                 // 获取到数据置为true
                 isGetDeviceInfo = true;
@@ -890,5 +882,10 @@ public class NfcScanActivity extends BaseActivity {
             public void onClick(View v) {
             }
         }).show();
+    }
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
     }
 }

@@ -17,8 +17,8 @@
             android:layout_marginTop="10dp"
             android:gravity="center_horizontal"
             android:text="提升安全级别"
-            android:textColor="@color/gray"
-            android:textSize="14sp" />
+            android:textColor="@color/hanzi8_black"
+            android:textSize="15sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,8 +46,8 @@
                         android:background="@null"
                         android:drawableTop="@drawable/unit_study"
                         android:text="学习"
-                        android:textColor="@color/gray"
-                        android:textSize="14sp" />
+                        android:textColor="@color/hanzi4_black"
+                        android:textSize="13sp" />
 
                     <View
                         android:id="@+id/dot_study"
@@ -86,8 +86,8 @@
                         android:background="@null"
                         android:drawableTop="@drawable/unit_check"
                         android:text="检查"
-                        android:textColor="@color/gray"
-                        android:textSize="14sp" />
+                        android:textColor="@color/hanzi4_black"
+                        android:textSize="13sp" />
 
                     <View
                         android:id="@+id/dot_check"
@@ -129,8 +129,8 @@
                         android:background="@null"
                         android:drawableTop="@drawable/unit_drill"
                         android:text="疏散"
-                        android:textColor="@color/gray"
-                        android:textSize="14sp" />
+                        android:textColor="@color/hanzi4_black"
+                        android:textSize="13sp" />
 
                     <View
                         android:id="@+id/dot_drill"
@@ -155,8 +155,8 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
         android:text="您暂时还没有加入任何互保计划"
-        android:textColor="@color/gray"
-        android:textSize="14sp"
+        android:textColor="@color/hanzi8_black"
+        android:textSize="15sp"
         android:visibility="gone" />
 
     <TextView
@@ -167,7 +167,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:text="动态保障凭证"
-        android:textColor="@color/gray"
-        android:textSize="14sp"
+        android:textColor="@color/hanzi8_black"
+        android:textSize="15sp"
         android:visibility="gone" />
 </RelativeLayout>

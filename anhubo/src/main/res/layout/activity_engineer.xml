@@ -190,7 +190,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="true"
-            android:text="提交"
+            android:text="提 交"
             style="@style/btn_confirm"/>
     </LinearLayout>
 

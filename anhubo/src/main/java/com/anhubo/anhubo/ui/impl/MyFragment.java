@@ -303,7 +303,6 @@ public class MyFragment extends BaseFragment {
         SpUtils.putParam(mActivity, Keys.BULIDINGID, null);
         SpUtils.putParam(mActivity, Keys.BUILDINGNAME, null);
         SpUtils.putParam(mActivity, Keys.BUSINESSNAME, null);
-
         /**清除微信头像*/
         SpUtils.putParam(mActivity, Keys.HEADERICON_WEIXIN, null);
 

@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.interfaces.UiInterface;
-import com.anhubo.anhubo.view.LoadProgressDialog;
 
 
 /**

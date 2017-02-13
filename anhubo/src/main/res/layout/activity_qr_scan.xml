@@ -48,7 +48,7 @@
             android:id="@+id/proBar"
             style="@style/ProgressBar"
             android:layout_width="245dp"
-            android:layout_height="5dp"
+            android:layout_height="2dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="350dp" />
 
@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textColor="#0078ff"
-                android:textSize="30sp"
+                android:textSize="25sp"
                 />
             <ImageView
                 android:id="@+id/line"
@@ -108,6 +108,7 @@
             android:layout_marginLeft="45dp"
             android:background="@drawable/btn_qr_shap"
             android:text="NFC扫描"
+            android:textSize="15sp"
             android:textColor="@color/textcolor" />
 
         <Button
@@ -120,6 +121,7 @@
             android:layout_marginRight="45dp"
             android:background="@drawable/btn_qr_shap"
             android:text="完成检查"
+            android:textSize="15sp"
             android:textColor="@color/textcolor" />
     </RelativeLayout>
 

@@ -396,6 +396,8 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         }
         params.put("name", devicePlace);// 设备位置
         params.put("type", deviceName);// 设备名称
+        params.put("version", versionName);
+        LogUtils.eNormal(TAG,":新增:"+versionName);
         OkHttpUtils.post()//
                 .addFile("file", "file01.png", newFile)//
                 .url(url)//
