@@ -269,6 +269,7 @@
         <!--欢迎界面-->
         <activity
             android:name=".ui.activity.WelcomeActivity"
+            android:theme="@style/AppWelcome"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

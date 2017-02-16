@@ -20,8 +20,7 @@
             android:id="@+id/iv_devices_judege"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:background="@drawable/fuxuan_input02" />
+            android:background="@drawable/fuxuan_input01" />
 
         <Button
             android:id="@+id/btn_devices_del"
@@ -30,6 +29,7 @@
             android:layout_marginLeft="15dp"
             android:focusable="false"
             android:clickable="true"
+            android:layout_marginRight="5dp"
             android:background="@drawable/btn_shap_red"
             android:text="删除"
             android:textColor="#FD4646"

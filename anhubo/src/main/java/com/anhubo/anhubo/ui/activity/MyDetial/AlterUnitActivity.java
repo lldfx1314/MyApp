@@ -181,7 +181,6 @@ public class AlterUnitActivity extends BaseActivity {
         unit = tvMyUnit.getText().toString().trim();
     }
 
-
     class MyStringCallback extends StringCallback {
         @Override
         public void onError(Call call, Exception e) {

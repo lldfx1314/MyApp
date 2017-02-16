@@ -24,6 +24,8 @@ import com.anhubo.anhubo.adapter.DeviceDetailsAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.CheckComplete_Bean;
 import com.anhubo.anhubo.bean.ScanBean;
+import com.anhubo.anhubo.entity.RxBus;
+import com.anhubo.anhubo.entity.event.Exbus_RefreshProgressbar;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.buildDetial.TestActivity;
 import com.anhubo.anhubo.utils.JsonUtil;
@@ -49,6 +51,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import okhttp3.Call;
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * Created by Administrator on 2016/9/14.
@@ -109,6 +113,7 @@ public class NfcScanActivity extends BaseActivity {
     private ArrayList<String> listResult;
     private Dialog showDialog;
     private Dialog showDialog1;
+    private Subscription rxSubscription;
 
     @Override
     protected void initConfig() {
@@ -221,6 +226,40 @@ public class NfcScanActivity extends BaseActivity {
     }
 
     @Override
+    protected void onLoadDatas() {
+
+        // RxBus
+        rxBusOnClickListener();
+    }
+    // 订阅修改信息的事件
+    private void rxBusOnClickListener() {
+        // rxSubscription是一个Subscription的全局变量，这段代码可以在onCreate/onStart等生命周期内
+        rxSubscription = RxBus.getDefault().toObservable(Exbus_RefreshProgressbar.class)
+                .subscribe(new Action1<Exbus_RefreshProgressbar>() {
+                               @Override
+                               public void call(Exbus_RefreshProgressbar progressbar) {
+                                   getNum();
+                               }
+                           },
+                        new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                // TODO: 处理异常
+                            }
+                        });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // 解除订阅
+        if(!rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
+        }
+    }
+
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (intent != null) {
@@ -236,12 +275,6 @@ public class NfcScanActivity extends BaseActivity {
                     break;
             }
         }
-    }
-
-
-    @Override
-    protected void onLoadDatas() {
-
     }
 
 

@@ -1,13 +1,21 @@
 package com.anhubo.anhubo.ui.activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.anhubo.anhubo.R;
@@ -39,7 +47,7 @@ import okhttp3.Call;
 /**
  * Created by Administrator on 2016/10/9.
  */
-public class WelcomeActivity extends BaseActivity {
+public class WelcomeActivity extends AppCompatActivity implements View.OnSystemUiVisibilityChangeListener {
 
     private static final int DOWN_ERROR = 1;
     private static final int UPDATA_CLIENT = 2;
@@ -52,22 +60,57 @@ public class WelcomeActivity extends BaseActivity {
     private String url;
     private String newVersion;
     private String cancel_update_versionName;
+    private String versionName;
+    private Activity mActivity;
 
     @Override
-    protected int getContentViewId() {
-        return R.layout.activity_welcome;
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        /**设置浸入式状态栏*/
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+        requestWindowFeature(Window.FEATURE_ACTION_MODE_OVERLAY);
+        setStatusBarTransparent();
+        super.onCreate(savedInstanceState);
+//        isFirstOpen();
+        if (isFirstOpen()) {
+            return;
+        }
+        setContentView(R.layout.activity_welcome);
+        mActivity = this;
+        initEvents();
     }
 
-    @Override
-    protected void initViews() {
+    /**
+     * 用于解决如果从应用市场打开后，点击Home键回到桌面点击icon再次打开一遍启动页面
+     */
+    private boolean isFirstOpen() {
+        if (!isTaskRoot()) {
+            Intent intent = getIntent();
+            String action = intent.getAction();
+            if (intent.hasCategory(Intent.CATEGORY_LAUNCHER) && action.equals(Intent.ACTION_MAIN)) {
 
+                finish();
+                return true;
+            }
+        }
+        return false;
     }
 
-    @Override
-    protected void initEvents() {
+
+    /**
+     * 获取版本号
+     */
+    private void getVersionName() {
+
+        String[] split = Utils.getAppInfo(this).split("#");
+        versionName = split[1];
+    }
+
+    private void initEvents() {
+        getVersionName();
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
         oldversionName = SpUtils.getStringParam(mActivity, Keys.VERSIONNAME);
-        
+
 //        取出上次取消更新后保存的版本号
         cancel_update_versionName = SpUtils.getStringParam(mActivity, Keys.CANCEL_UPDATE_VERSION, null);
 
@@ -78,11 +121,6 @@ public class WelcomeActivity extends BaseActivity {
                 checkUpdate();
             }
         }, 2000);
-
-    }
-
-    @Override
-    protected void onLoadDatas() {
 
     }
 
@@ -108,21 +146,22 @@ public class WelcomeActivity extends BaseActivity {
      */
     private Message msg = Message.obtain();
 
+
     class MyStringCallback extends StringCallback {
 
         @Override
         public void onError(Call call, Exception e) {
 
-            LogUtils.e(TAG,":checkUpdate",e);
+            LogUtils.e(TAG, ":checkUpdate", e);
             // 网络出故障，直接进后面界面
-            Toast.makeText(mActivity,"网络有问题，请检查",Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivity, "网络有问题，请检查", Toast.LENGTH_SHORT).show();
             msg.what = NET_ERROR;
             handler.sendMessage(msg);
         }
 
         @Override
         public void onResponse(String response) {
-            LogUtils.eNormal(TAG+":checkUpdate",response);
+            LogUtils.eNormal(TAG + ":checkUpdate", response);
             Check_UpDateBean bean = JsonUtil.json2Bean(response, Check_UpDateBean.class);
             if (bean != null) {
                 int code = bean.code;
@@ -132,11 +171,11 @@ public class WelcomeActivity extends BaseActivity {
                 if (code == 0) {
                     if (!TextUtils.isEmpty(newVersion)) {
 
-                        if(!TextUtils.isEmpty(cancel_update_versionName)&&TextUtils.equals(newVersion,cancel_update_versionName)){
+                        if (!TextUtils.isEmpty(cancel_update_versionName) && TextUtils.equals(newVersion, cancel_update_versionName)) {
                             // 保存的上次更新不为空且两次更新版本号相同，则代表用户上次取消了更新，本次就不提示，直接进入下一步
                             msg.what = ENTER_MAIN;
                             handler.sendMessage(msg);
-                        }else {
+                        } else {
                             // 有更新，根据type判断是必须更新还是非必须更新
                             if (TextUtils.equals(type, 0 + "")) {
                                 // 0,强制更新
@@ -193,7 +232,7 @@ public class WelcomeActivity extends BaseActivity {
     /**
      * Dialog对话框提示用户更新 强制
      */
-    protected void dialog_force() {
+    private void dialog_force() {
 
         new AlertDialog(mActivity).builder()
                 .setTitle("提示")
@@ -214,7 +253,7 @@ public class WelcomeActivity extends BaseActivity {
     /**
      * Dialog对话框提示用户更新 选择
      */
-    protected void dialog_select() {
+    private void dialog_select() {
 
         new AlertDialog(mActivity).builder()
                 .setTitle("提示")
@@ -232,7 +271,7 @@ public class WelcomeActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         // 取消更新后，下次进来后如果还是相同版本应该不提醒用户了
-                        SpUtils.putParam(mActivity,Keys.CANCEL_UPDATE_VERSION,newVersion);
+                        SpUtils.putParam(mActivity, Keys.CANCEL_UPDATE_VERSION, newVersion);
                         enterMain();
                     }
                 })
@@ -244,9 +283,9 @@ public class WelcomeActivity extends BaseActivity {
     /**
      * 从服务器中下载APK
      */
-    protected void downLoadApk() {
+    private void downLoadApk() {
         final ProgressDialog pd;    //进度条对话框
-        pd = new  ProgressDialog(this);
+        pd = new ProgressDialog(this);
         pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         pd.setMessage("正在下载更新");
         pd.setCancelable(false);
@@ -262,15 +301,15 @@ public class WelcomeActivity extends BaseActivity {
                     } else {
                         msg1.what = DOWN_ERROR;
                         handler.sendMessage(msg1);
-                        Toast.makeText(mActivity,"下载失败...",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mActivity, "下载失败...", Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     msg1.what = DOWN_ERROR;
                     handler.sendMessage(msg1);
                     e.printStackTrace();
-                    Toast.makeText(mActivity,"下载失败...",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivity, "下载失败...", Toast.LENGTH_SHORT).show();
                     System.out.println("下载失败..." + e.getMessage());
-                }finally {
+                } finally {
                     pd.dismiss();
                 }
             }
@@ -278,7 +317,7 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     //安装apk
-    protected void installApk(File file) {
+    private void installApk(File file) {
         Intent intent = new Intent();
         //执行动作
         intent.setAction(Intent.ACTION_VIEW);
@@ -294,7 +333,7 @@ public class WelcomeActivity extends BaseActivity {
         }, 2000);
     }
 
-    public File getFileFromServer(String path, ProgressDialog pd) {
+    private File getFileFromServer(String path, ProgressDialog pd) {
         //如果相等的话表示当前的sdcard挂载在手机上并且是可用的
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             File file = null;
@@ -305,7 +344,7 @@ public class WelcomeActivity extends BaseActivity {
                 conn.setRequestProperty("Accept-Encoding", "identity");
                 conn.connect();
                 int contentLength = conn.getContentLength();
-                pd.setMax(contentLength/1024/1024);
+                pd.setMax(contentLength / 1024 / 1024);
 //                System.out.println("最大值+" + contentLength/1024/1024);
                 InputStream is = conn.getInputStream();
                 file = new File(Environment.getExternalStorageDirectory(), "/anhubao.apk");
@@ -322,7 +361,7 @@ public class WelcomeActivity extends BaseActivity {
                     fos.write(buffer, 0, len);
                     total += len;
 //                    System.out.println("进度+" + total/1024/1024);
-                    pd.setProgress(total/1024/1024);
+                    pd.setProgress(total / 1024 / 1024);
                 }
                 fos.close();
                 bis.close();
@@ -386,7 +425,32 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     @Override
-    public void onClick(View v) {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 设置浸入式状态栏
+     */
+    private void setStatusBarTransparent() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //托盘重叠显示在Activity上
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            decorView.setSystemUiVisibility(uiOptions);
+            decorView.setOnSystemUiVisibilityChangeListener(this);
+            // 设置托盘透明
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+            //Log.d("CP_Common","VERSION.SDK_INT =" + VERSION.SDK_INT);
+        } else {
+            //Log.d("CP_Common", "SDK 小于19不设置状态栏透明效果");
+        }
 
     }
 

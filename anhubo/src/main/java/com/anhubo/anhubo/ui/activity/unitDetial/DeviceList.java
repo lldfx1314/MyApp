@@ -11,6 +11,9 @@ import com.anhubo.anhubo.adapter.DeviceListAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.DeleteDeviceBean;
 import com.anhubo.anhubo.bean.DeviceListBean;
+import com.anhubo.anhubo.entity.RxBus;
+import com.anhubo.anhubo.entity.event.Exbus_AlterName;
+import com.anhubo.anhubo.entity.event.Exbus_RefreshProgressbar;
 import com.anhubo.anhubo.interfaces.InterClick;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.JsonUtil;
@@ -45,6 +48,7 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
     private int mPosition;
     private int newDevices;
     private Dialog showDialog;
+    private Dialog showDialog1;
 
     @Override
     protected void initConfig() {
@@ -197,7 +201,7 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
      */
     private void deleteDevice(int position) {
 
-
+        showDialog1 = loadProgressDialog.show(mActivity, "正在删除...");
         String url = Urls.Delete_Device;
         Map<String, String> params = new HashMap<>();
         params.put("device_id", deviceIds.get(position));
@@ -216,6 +220,7 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
         @Override
         public void onError(Call call, Exception e) {
             LogUtils.e(TAG,":deleteDevice",e);
+            showDialog1.dismiss();
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -225,20 +230,23 @@ public class DeviceList extends BaseActivity implements AdapterView.OnItemClickL
         @Override
         public void onResponse(String response) {
             LogUtils.eNormal(TAG+":deleteDevice",response);
-            DeleteDeviceBean bean = new Gson().fromJson(response, DeleteDeviceBean.class);
+            showDialog1.dismiss();
+            DeleteDeviceBean bean = JsonUtil.json2Bean(response, DeleteDeviceBean.class);
 
             if (bean != null) {
                 int code = bean.code;
                 if (code == 0) {
+                    // 删除成功
                     newDevices = newDevices - 1;
                     tvDevice.setText("拥有设备总数: " + newDevices);
                     // 删除集合里面对应的数据
-
                     deviceIds.remove(mPosition);
                     deviceNames.remove(mPosition);
                     deviceJudges.remove(mPosition);
                     // 刷新适配器
                     adapter.notifyDataSetChanged();
+                    // 通知扫码界面请求数据更新界面
+                    RxBus.getDefault().post(new Exbus_RefreshProgressbar());
                 }
             }
         }

@@ -67,7 +67,7 @@ public class FlowLayout extends ViewGroup {
 
 	/**
 	 * 获取一行当中可用的宽
-	 * @param containerMeasureWidth
+	 * @param
 	 * @param oneLine
 	 * @return
 	 */
@@ -112,7 +112,7 @@ public class FlowLayout extends ViewGroup {
 //				int childRight = (columnIndex == oneLine.size() - 1)
 //						         ? getMeasuredWidth() - getPaddingRight()
 //						         : childLeft + childMeasuredWidth + averageUsableWidth;
-				int childRight = childLeft + childMeasuredWidth + averageUsableWidth;
+				int childRight = childLeft + childMeasuredWidth; /*+ averageUsableWidth;*/
 				int childBottom = childTop + childMeasuredHeight;
 				child.layout(childLeft, childTop, childRight, childBottom);
 				
