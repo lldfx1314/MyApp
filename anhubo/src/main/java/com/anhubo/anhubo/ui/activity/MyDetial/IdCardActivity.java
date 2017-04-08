@@ -1,31 +1,46 @@
 package com.anhubo.anhubo.ui.activity.MyDetial;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentUris;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.IdCardBean;
 import com.anhubo.anhubo.bean.MsgPerfectLowerBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.utils.ImageFactory;
 import com.anhubo.anhubo.utils.ImageTools;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
@@ -40,7 +55,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -48,7 +65,8 @@ import java.util.Map;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import okhttp3.Call;
+
+import com.squareup.okhttp.Request;
 
 /**
  * Created by LUOLI on 2016/11/1.
@@ -56,6 +74,8 @@ import okhttp3.Call;
 public class IdCardActivity extends BaseActivity {
     private static final int CAMERA = 0;
     private static final int PICTURE = 1;
+    private static final String TAG = "IdCardActivity";
+    private static final int CROP_PHOTO = 2;
     @InjectView(R.id.et_idcard_name)
     EditText etIdcardName;
     @InjectView(R.id.et_idcard_phone)
@@ -64,18 +84,16 @@ public class IdCardActivity extends BaseActivity {
     ImageView ivCard1;
     @InjectView(R.id.iv_card2)
     ImageView ivCard2;
-    @InjectView(R.id.tv_submit_idcard)
-    TextView tvSubmitIdcard;
+    @InjectView(R.id.btn_submit_idcard)
+    Button btnSubmitIdcard;
     private String name;
     private String idcardPhone;
     private boolean isClick = false;//判断是正面还是反面
     private Dialog dialog;
     private Button btnTakephoto;
     private Button btnPhoto;
-<<<<<<< HEAD
     private Dialog showDialog;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+    private Uri imageUri;
 
     @Override
     protected int getContentViewId() {
@@ -98,7 +116,7 @@ public class IdCardActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.iv_card1, R.id.iv_card2, R.id.tv_submit_idcard})
+    @OnClick({R.id.iv_card1, R.id.iv_card2, R.id.btn_submit_idcard})
     public void onClick(View view) {
         /**获取输入的内容*/
         getInputData();
@@ -114,7 +132,7 @@ public class IdCardActivity extends BaseActivity {
                 isClick = false;
                 showDialog();
                 break;
-            case R.id.tv_submit_idcard:
+            case R.id.btn_submit_idcard:
                 // 对输入的信息做判断
                 if (TextUtils.isEmpty(name)) {
                     new AlertDialog(mActivity).builder()
@@ -146,7 +164,7 @@ public class IdCardActivity extends BaseActivity {
                 break;
             case R.id.btn_popDialog_takephoto:
                 // 拍照
-                takePhoto();
+                camera();
                 break;
             case R.id.btn_popDialog_photo:
                 // 相册
@@ -179,11 +197,7 @@ public class IdCardActivity extends BaseActivity {
                     .setCancelable(true).show();
             return;
         }
-<<<<<<< HEAD
         showDialog = loadProgressDialog.show(mActivity, "正在提交...");
-=======
-        progressBar.setVisibility(View.VISIBLE);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         String url = Urls.Url_IdCard;
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
@@ -208,29 +222,21 @@ public class IdCardActivity extends BaseActivity {
 
     class MyStringCallback extends StringCallback {
         @Override
-        public void onError(Call call, Exception e) {
-<<<<<<< HEAD
+        public void onError(Request request, Exception e) {
             showDialog.dismiss();
-=======
-            progressBar.setVisibility(View.GONE);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+            LogUtils.e(TAG, ":submit", e);
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(true).show();
-            System.out.println("IdCardActivity+++===界面失败" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
-            //System.out.println(response);
-            IdCardBean bean = new Gson().fromJson(response, IdCardBean.class);
+            LogUtils.eNormal(TAG + ":submit", response);
+            IdCardBean bean = JsonUtil.json2Bean(response, IdCardBean.class);
             if (bean != null) {
-<<<<<<< HEAD
                 showDialog.dismiss();
-=======
-                progressBar.setVisibility(View.GONE);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 int code = bean.code;
                 final String msg = bean.msg;
                 if (code != 0) {
@@ -243,169 +249,260 @@ public class IdCardActivity extends BaseActivity {
 
                             finish();
                         }
-                    }, 2000);
+                    }, 500);
                 }
             }
 
         }
     }
 
+
     /**
-     * 从相册获取
+     * 打开相机
      */
-    private void getPhoto() {
-
-        Intent intent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, PICTURE);
-
+    private void camera() {
+        takePhoto();
         dialog.dismiss();
     }
 
     /**
-     * 拍照
+     * 获取相册照片
      */
-    private void takePhoto() {
-        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(camera, CAMERA);
+    private void openAlbum() {
+        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+        intent.setType("image/*");
+        startActivityForResult(intent, PICTURE); // 打开相册
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openAlbum();
+                } else {
+                    Toast.makeText(this, "You denied the permission", Toast.LENGTH_SHORT).show();
+//                    ToastUtils.showToast(mActivity, "You denied the permission");
+                }
+                break;
+            default:
+        }
+
+    }
+
+
+    /**
+     * 打开相册
+     */
+    private void getPhoto() {
+        if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(mActivity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        } else {
+            openAlbum();
+        }
         dialog.dismiss();
+    }
+
+    private void takePhoto() {
+        //图片名称 时间命名
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date date = new Date(System.currentTimeMillis());
+        String filename = format.format(date);
+        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+        File outputImage = new File(path, filename + ".jpg");
+        try {
+            if (outputImage.exists()) {
+                outputImage.delete();
+            }
+            outputImage.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //将File对象转换为Uri并启动照相程序
+        if (Build.VERSION.SDK_INT < 24) {
+
+            imageUri = Uri.fromFile(outputImage);
+        } else {
+            imageUri = FileProvider.getUriForFile(mActivity, "com.luoli.cameraalbumtest.fileprovider", outputImage);
+        }
+        Intent tTntent = new Intent("android.media.action.IMAGE_CAPTURE"); //照相
+        tTntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri); //指定图片输出地址
+        startActivityForResult(tTntent, CAMERA); //启动照相
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && null != data) {
-            switch (requestCode) {
-                case CAMERA:
-                    showPhoto01(data);
-                    break;
-                case PICTURE:
-                    showPhoto02(data);
-                    break;
-            }
-        }
 
-    }
-
-    /**
-     * 显示相册照片
-     */
-    private void showPhoto02(Intent data) {
-
-        Uri selectedImage = data.getData();
-        String[] filePathColumns = {MediaStore.Images.Media.DATA};
-        Cursor c = getContentResolver().query(selectedImage, filePathColumns, null, null, null);
-        c.moveToFirst();
-        int columnIndex = c.getColumnIndex(filePathColumns[0]);
-        String imagePath = c.getString(columnIndex);
-        Bitmap photo = BitmapFactory.decodeFile(imagePath);
-        try {
-
-            if (photo != null) {
-                if (isClick) {
-                    //显示正面图片
-                    ivCard1.setImageBitmap(photo);
-
-                    // 把本文件压缩后缓存到本地文件里面
-                    savePicture(photo,"photo01");
-                    File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
-                    // 给正面图片赋值
-                    file1 = filePhoto02;
-                } else {
-                    //显示反面图片
-                    ivCard2.setImageBitmap(photo);
-                    // 给背面图片赋值
-                    // 把本文件压缩后缓存到本地文件里面
-                    savePicture(photo,"photo02");
-                    File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
-                    file2 = filePhoto02;
-                }
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-
-            c.close();
-        }
-
-    }
-
-
-
-    /**
-     * 显示照相机照片
-     */
-    private void showPhoto01(Intent data) {
-        String sdState = Environment.getExternalStorageState();
-        if (!sdState.equals(Environment.MEDIA_MOUNTED)) {
-            ToastUtils.showLongToast(mActivity, "sd card unmount");
+        if (resultCode != RESULT_OK)
             return;
+        switch (requestCode) {
+            case CAMERA:
+                try {
+                    //　启动相机裁剪
+                    startCameraCrop();
+
+                    break;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case CROP_PHOTO://相机裁剪成功
+                try {
+                    //图片解析成Bitmap对象
+                    Bitmap bitmap = BitmapFactory.decodeStream(
+                            getContentResolver().openInputStream(imageUri));
+                    if (bitmap != null) {
+                        Bitmap photo = ImageFactory.ratio(bitmap, 1080, 720);
+                        if (isClick) {
+                            //显示图片
+                            ivCard1.setImageBitmap(photo);
+                            File filePhoto01 = savePicture(photo, "photo01");
+                            file1 = filePhoto01;
+                        } else {
+                            //显示图片
+                            ivCard2.setImageBitmap(photo);
+                            File filePhoto02 = savePicture(photo, "photo02");
+                            file2 = filePhoto02;
+                        }
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case PICTURE:// 相册
+                // 判断手机系统版本号
+                Bitmap bitmap = null;
+                if (Build.VERSION.SDK_INT >= 19) {
+                    // 4.4及以上系统使用这个方法处理图片
+                    bitmap = handleImageOnKitKat(data);
+                } else {
+                    // 4.4以下系统使用这个方法处理图片
+                    bitmap = handleImageBeforeKitKat(data);
+                }
+                if (bitmap != null) {
+                    Bitmap photo = ImageFactory.ratio(bitmap, 1080, 720);
+                    if (isClick) {
+                        //显示图片
+                        ivCard1.setImageBitmap(photo);
+                        File filePhoto01 = savePicture(photo, "photo01");
+                        file1 = filePhoto01;
+                    } else {
+                        //显示图片
+                        ivCard2.setImageBitmap(photo);
+                        File filePhoto02 = savePicture(photo, "photo02");
+                        file2 = filePhoto02;
+                    }
+
+                }
+                break;
         }
-        new DateFormat();
-        String name = DateFormat.format("yyyyMMdd_hhmmss", Calendar.getInstance(Locale.CHINA)) + ".jpg";
-        Bundle bundle = data.getExtras();
-        //获取相机返回的数据，并转换为图片格式
-        Bitmap bitmap = (Bitmap) bundle.get("data");
-        FileOutputStream fout = null;
-        File file = new File("/sdcard/photo_anhubo/");
-        file.mkdirs();
-        String filename = file.getPath() + name;
-        try {
-            fout = new FileOutputStream(filename);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fout);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fout.flush();
-                fout.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        if (isClick) {
-            //显示正面图片
-            ivCard1.setImageBitmap(bitmap);
-            // 给正面图片赋值
-            // 把本文件压缩后缓存到本地文件里面
-            savePicture(bitmap,"photo01");
-            File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
-            file1 = filePhoto01;
-        } else {
-            //显示反面图片
-            ivCard2.setImageBitmap(bitmap);
-            // 给背面图片赋值
-            // 把本文件压缩后缓存到本地文件里面
-            savePicture(bitmap,"photo02");
-            File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
-            file2 = filePhoto01;
-        }
+
     }
+
     /**
-     * 保存图片到本应用下
+     * 相机裁剪
+     */
+    private void startCameraCrop() {
+        // 启动剪裁功能
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(imageUri, "image/*");
+        intent.putExtra("scale", true);
+        //设置宽高比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        //设置裁剪图片宽高
+        intent.putExtra("outputX", 1080);
+        intent.putExtra("outputY", 720);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        //广播刷新相册
+        Intent intentBc = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        intentBc.setData(imageUri);
+        this.sendBroadcast(intentBc);
+        startActivityForResult(intent, CROP_PHOTO); //设置裁剪参数显示图片至ImageView
+    }
+
+    @TargetApi(19)
+    private Bitmap handleImageOnKitKat(Intent data) {
+        String imagePath = null;
+        Uri uri = data.getData();
+        Log.d("TAG", "handleImageOnKitKat: uri is " + uri);
+        if (DocumentsContract.isDocumentUri(this, uri)) {
+            // 如果是document类型的Uri，则通过document id处理
+            String docId = DocumentsContract.getDocumentId(uri);
+            if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
+                String id = docId.split(":")[1]; // 解析出数字格式的id
+                String selection = MediaStore.Images.Media._ID + "=" + id;
+                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+            } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                imagePath = getImagePath(contentUri, null);
+            }
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            // 如果是content类型的Uri，则使用普通方式处理
+            imagePath = getImagePath(uri, null);
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            // 如果是file类型的Uri，直接获取图片路径即可
+            imagePath = uri.getPath();
+        }
+        Bitmap bitmap = displayImage(imagePath);// 根据图片路径显示图片
+        return bitmap;
+    }
+
+    private Bitmap handleImageBeforeKitKat(Intent data) {
+        Uri uri = data.getData();
+        String imagePath = getImagePath(uri, null);
+        Bitmap bitmap = displayImage(imagePath);
+        return bitmap;
+    }
+
+    private String getImagePath(Uri uri, String selection) {
+        String path = null;
+        // 通过Uri和selection来获取真实的图片路径
+        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+
+    private Bitmap displayImage(String imagePath) {
+        Bitmap bitmap = null;
+        if (imagePath != null) {
+            bitmap = BitmapFactory.decodeFile(imagePath);
+//            ivPhoto.setImageBitmap(bitmap);
+        } else {
+            Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT).show();
+//            ToastUtils.showToast(mActivity, "failed to get image");
+        }
+        return bitmap;
+    }
+
+
+    /**
+     * 为了减小体积 把图片压缩保存到手机上（清晰度改动不大，基本不受影响）
      **/
-    private void savePicture(Bitmap bitmap,String fileName) {
-
-        FileOutputStream fos = null;
-        try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新写入内容会被覆盖
-            //fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
-            OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() +"/"+fileName);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);// 把图片写入指定文件夹中
-
+    private File savePicture(Bitmap bitmap, String fileName) {
+        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+        File outputImage = new File(path, fileName + ".jpg");
+        try {
+            if (outputImage.exists()) {
+                outputImage.delete();
+            }
+            outputImage.createNewFile();
+            OutputStream stream = new FileOutputStream(outputImage);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);// 把图片写入指定文件夹中
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (null != fos) {
-                    fos.close();
-                    fos = null;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
+        return outputImage;
     }
+
     /**
      * 弹出对话框
      */

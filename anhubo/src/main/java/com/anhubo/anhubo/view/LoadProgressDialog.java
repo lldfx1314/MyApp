@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,23 +16,29 @@ import com.anhubo.anhubo.R;
 /**
  * Created by Administrator on 2017/1/1.
  */
-public class LoadProgressDialog {
+public class LoadProgressDialog extends FrameLayout{
 
     private static Dialog loadingDialog;
     private static LoadProgressDialog loadProgressDialog;
+    private Context context;
 
-    public static LoadProgressDialog newInstance() {
+    public LoadProgressDialog(Context context) {
+        super(context);
+        this.context = context;
+    }
+
+    public static LoadProgressDialog newInstance(Context context) {
 
         if (loadProgressDialog == null) {
 
-            loadProgressDialog = new LoadProgressDialog();
+            loadProgressDialog = new LoadProgressDialog(context);
         }
         return loadProgressDialog;
     }
 
-    public LoadProgressDialog() {
-
-    }
+//    public LoadProgressDialog() {
+//
+//    }
 
     public Dialog show(Context context, String msg) {
         LayoutInflater inflater = LayoutInflater.from(context);

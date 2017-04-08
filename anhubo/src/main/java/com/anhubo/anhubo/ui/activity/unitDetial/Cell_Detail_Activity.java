@@ -28,7 +28,7 @@ import java.util.Map;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
-import okhttp3.Call;
+import com.squareup.okhttp.Request;
 
 /**
  * Created by LUOLI on 2016/12/29.
@@ -36,8 +36,6 @@ import okhttp3.Call;
 public class Cell_Detail_Activity extends BaseActivity {
     @InjectView(R.id.company_detail_listview)
     ListView listview;
-    @InjectView(R.id.exit_unit)
-    Button exitUnit;
     private String unitId;
     private String uid;
     private int pager = 0;
@@ -102,7 +100,7 @@ public class Cell_Detail_Activity extends BaseActivity {
     class MyStringCallback extends StringCallback {
 
         @Override
-        public void onError(Call call, Exception e) {
+        public void onError(Request request, Exception e) {
 
             System.out.println("CellListActivity界面+获取数据失败+" + e.getMessage());
             showDialog.dismiss();
@@ -130,7 +128,6 @@ public class Cell_Detail_Activity extends BaseActivity {
         listview.setAdapter(adapter);
     }
 
-    @OnClick(R.id.exit_unit)
     @Override
     public void onClick(View v) {
         ShareAction shareAction = new ShareAction(mActivity);

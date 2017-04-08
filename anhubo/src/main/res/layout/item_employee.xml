@@ -24,13 +24,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:textColor="@color/black"
-            android:textSize="13sp"/>
+            android:text=""
+            android:textColor="@color/hanzi8_black"
+            android:textSize="15sp"/>
         <!--删除或者退出按钮-->
         <Button
             android:id="@+id/btn_employee"
             android:layout_width="60dp"
             android:layout_height="20dp"
+            android:layout_marginRight="5dp"
             android:layout_alignParentRight="true"
             android:visibility="gone"
             android:text=""
@@ -57,6 +59,6 @@
         android:layout_width="match_parent"
         android:visibility="gone"
         android:layout_height="0.5dp"
-        android:background="@color/gray_line"/>
+        android:background="@color/view_gray"/>
     </RelativeLayout>
 </RelativeLayout>

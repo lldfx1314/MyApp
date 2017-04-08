@@ -19,6 +19,9 @@ import com.anhubo.anhubo.adapter.AssignmentAdminAdapter;
 import com.anhubo.anhubo.bean.AssignmentAdminBean;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.EmployeeListBean;
+import com.anhubo.anhubo.entity.RxBus;
+import com.anhubo.anhubo.entity.event.Exbus_AlterName;
+import com.anhubo.anhubo.entity.event.Exbus_EmployeeList;
 import com.anhubo.anhubo.interfaces.InterClick;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.utils.JsonUtil;
@@ -38,7 +41,7 @@ import java.util.Map;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
-import okhttp3.Call;
+import com.squareup.okhttp.Request;
 
 /**
  * Created by LUOLI on 2017/1/12.
@@ -235,7 +238,7 @@ public class AssignmentAdminActivity extends BaseActivity implements InterClick 
                 .build()
                 .execute(new StringCallback() {
                     @Override
-                    public void onError(Call call, Exception e) {
+                    public void onError(Request request, Exception e) {
                         showDialog.dismiss();
                         LogUtils.e(TAG, ":confirm", e);
                         new AlertDialog(mActivity).builder()
@@ -256,6 +259,8 @@ public class AssignmentAdminActivity extends BaseActivity implements InterClick 
                                 handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
+                                        // 通知员工列表界面请求数据更新界面
+                                        RxBus.getDefault().post(new Exbus_EmployeeList());
                                         finish();
                                     }
                                 }, 500);

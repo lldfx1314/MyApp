@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_help_sum_money"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
+        <TextView
+            android:id="@+id/tv_help_sum_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="互助金总额是:"
+            android:textColor="@color/hanzi8_black"
+            android:textSize="15sp" />
+        <TextView
+            android:id="@+id/tv_help_sum_money"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/tv_help_sum_hint"
+            android:text=""
+            android:textColor="@color/hanzi4_blue"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_help_sum_money_photo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_help_sum_hint"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:text="拍照上传对照单"
+            android:textColor="@color/hanzi8_black"
+            android:textSize="15sp" />
+
+        <RelativeLayout
+            android:id="@+id/rl_take_photo"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_below="@+id/tv_help_sum_money_photo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/bg_upload">
+
+
+            <LinearLayout
+                android:id="@+id/ll_help_sunmoney_takePhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/photo" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="点击图标开始拍照"
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_help_sunmoney_photo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
+
+        </RelativeLayout>
+        <!--对账单历史记录-->
+        <TextView
+            android:id="@+id/tv_help_sum_money_bank_statement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_take_photo"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:text="对账单历史记录"
+            android:textColor="@color/hanzi8_black"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+</LinearLayout>

@@ -10,10 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
-<<<<<<< HEAD
 import com.anhubo.anhubo.interfaces.InterClick;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
 import java.util.ArrayList;
 
@@ -60,10 +57,14 @@ public class DeviceListAdapter extends BaseAdapter implements View.OnClickListen
         } else {
             hold = (ViewHolder) convertView.getTag();
         }
+        hold.ivJudge.setTag(position);
+        int mPosition = (int) hold.ivJudge.getTag();
         String judge = deviceJudges.get(position);
-        if (TextUtils.equals(1 + "", judge)) {
+        if (TextUtils.equals(1 + "", judge)&&mPosition == position) {
             hold.ivJudge.setVisibility(View.VISIBLE);
-            hold.ivJudge.setBackgroundResource(R.drawable.fuxuan_input01);
+//            hold.ivJudge.setBackgroundResource(R.drawable.fuxuan_input01);
+        }else{
+            hold.ivJudge.setVisibility(View.GONE);
         }
 
         String name = deviceNames.get(position);
@@ -100,13 +101,7 @@ public class DeviceListAdapter extends BaseAdapter implements View.OnClickListen
         }
     }
     /**条目内部的button点击事件*/
-<<<<<<< HEAD
 //    public interface InterClick {
 //        void onBtnClick(View v);
 //    }
-=======
-    public interface InterClick {
-        void onBtnClick(View v);
-    }
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 }

@@ -91,6 +91,16 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <!--相机的文件提供者-->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.luoli.cameraalbumtest.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <activity
             android:name=".ui.activity.HomeActivity"
@@ -124,9 +134,6 @@
             android:name=".ui.activity.Login_Register.RegisterActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.Login_Register.RegisterActivity2"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.activity.Login_Register.PwdRegisterActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -152,7 +159,7 @@
             android:name=".ui.activity.unitDetial.Unit2Study"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.unitDetial.UnitMenuActivity"
+            android:name=".ui.activity.unitDetial.Unit_StudyRecordActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.unitDetial.MsgPerfectActivity"
@@ -191,7 +198,6 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.unitDetial.HuBaoPlanActivity"
             android:screenOrientation="portrait" />
-<<<<<<< HEAD
         <activity android:name=".ui.activity.unitDetial.RunCertificateActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.unitDetial.Cell_Detail_Activity"
@@ -204,8 +210,16 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.unitDetial.AssignmentAdminActivity"
             android:screenOrientation="portrait" />
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+        <activity android:name=".ui.activity.unitDetial.PlaceUsePropertyActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.unitDetial.EvacuateActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.unitDetial.AreaBindingActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.unitDetial.BindQrcodeActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.unitDetial.EvacuateQrcodeActivity"
+            android:screenOrientation="portrait" />
 
         <!--建筑界面-->
         <activity
@@ -220,6 +234,25 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.DiscoveryDetial.UseGuideActivity"
             android:screenOrientation="portrait" />
+        <!--计划管理-->
+        <activity android:name=".ui.activity.DiscoveryDetial.PlanManageActivity"
+            android:screenOrientation="portrait" />
+        <!--计划成员情况-->
+        <activity android:name=".ui.activity.DiscoveryDetial.PlanMemberActivity"
+            android:screenOrientation="portrait" />
+        <!--其他计划情况-->
+        <activity android:name=".ui.activity.DiscoveryDetial.JoinOtherPlanActivity"
+            android:screenOrientation="portrait" />
+        <!--单元列表-->
+        <activity android:name=".ui.activity.DiscoveryDetial.PlanUnitListActivity"
+            android:screenOrientation="portrait" />
+        <!--互助金总额-->
+        <activity android:name=".ui.activity.DiscoveryDetial.PlanHelpSumMoneyActivity"
+            android:screenOrientation="portrait" />
+        <!--互助金总额 大图查看-->
+        <activity android:name=".ui.activity.DiscoveryDetial.BigImageViewActivity"
+            android:screenOrientation="portrait" />
+
         <!--我的界面-->
         <activity
             android:name=".ui.activity.MyDetial.InvateActivity"
@@ -269,6 +302,7 @@
         <!--欢迎界面-->
         <activity
             android:name=".ui.activity.WelcomeActivity"
+            android:theme="@style/AppWelcome"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -350,26 +384,13 @@
         <meta-data android:name="JPUSH_APPKEY" android:value="4c79125d89e7344f623afb9a"/>
 
         <!--友盟-->
-<<<<<<< HEAD
         <meta-data android:name="UMENG_APPKEY" android:value="5819590dcae7e74aff00035c"></meta-data>
         <meta-data android:value="anhubo" android:name="UMENG_CHANNEL"/>
-=======
-        <!--友盟-->
-        <meta-data android:name="UMENG_APPKEY" android:value="5819590dcae7e74aff00035c"></meta-data>
-        <meta-data android:value="ying_yong_bao" android:name="UMENG_CHANNEL"/>
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         <!--高德服务-->
         <service android:name="com.amap.api.location.APSService"></service>
         <!--高德meta-data-->
         <meta-data android:name="com.amap.api.v2.apikey" android:value="a302f9a3355d276c96844f55c2b6ffd5"/>
 
-<<<<<<< HEAD
-=======
-
-
-
-
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     </application>
 
 </manifest>

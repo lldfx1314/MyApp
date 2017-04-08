@@ -1,6 +1,8 @@
 package com.anhubo.anhubo.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -52,9 +54,17 @@ public class MsgPerfectAdapterOne extends BaseAdapter {
             hold = (ViewHolder) convertView.getTag();
         }
         hold.txt.setText(mList1.get(position));
-        hold.layout.setBackgroundColor(0xFFEBEBEB);
+        hold.txt.setTextColor(Color.parseColor("#99000000"));
+        hold.viewItem.setVisibility(View.GONE);
+        hold.txt.setTag(mList1.get(position));
         if (mPosition == position) {
-            hold.layout.setBackgroundColor(0xFFFFFFFF);
+            String tag = (String) hold.txt.getTag();
+            if(TextUtils.equals(tag,hold.txt.getText().toString())){
+//                hold.txt.setTextColor(Color.parseColor("#5e84ff"));
+            }
+            hold.txt.setTextColor(Color.parseColor("#5e84ff"));
+            hold.viewItem.setVisibility(View.VISIBLE);
+            hold.viewItem.setBackgroundResource(R.drawable.view_shap);
         }
         return convertView;
 
@@ -72,9 +82,11 @@ public class MsgPerfectAdapterOne extends BaseAdapter {
     static class ViewHolder {
         LinearLayout layout;
         TextView txt;
+        View viewItem;
         public ViewHolder(View view) {
             txt = (TextView) view.findViewById(R.id.mainitem_txt);
             layout = (LinearLayout) view.findViewById(R.id.mainitem_layout);
+            viewItem = view.findViewById(R.id.mainitem_view);
         }
     }
 }

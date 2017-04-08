@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/guide_bg">
-    <TextView
+    android:background="@drawable/guide02">
+    <!--<TextView
         android:id="@+id/tv_anhubao"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,11 +20,7 @@
         android:textSize="18sp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="21dp"
-<<<<<<< HEAD
         android:text="安全自证义务，动态互助凭证"
-=======
-        android:text="安全自证义务，动态互保凭证"
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         android:textColor="#66000000"/>
     <ImageView
         android:layout_below="@+id/tv_01"
@@ -32,6 +28,6 @@
         android:layout_height="260dp"
         android:layout_marginTop="60dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/guide_02"/>
+        android:background="@drawable/guide_02"/>-->
 
 </RelativeLayout>

@@ -11,6 +11,8 @@ import java.io.IOException;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 
 /**
  * Created by LUOLI on 2016/11/18.
@@ -95,7 +97,7 @@ public class ImageFactory {
      * @param pixelH target pixel of height
      * @return
      */
-    public Bitmap ratio(Bitmap image, float pixelW, float pixelH) {
+    public static Bitmap ratio(Bitmap image, float pixelW, float pixelH) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, os);
         if( os.toByteArray().length / 1024>1024) {//判断如果图片大于1M,进行压缩避免在生成图片（BitmapFactory.decodeStream）时溢出
@@ -111,8 +113,8 @@ public class ImageFactory {
         newOpts.inJustDecodeBounds = false;
         int w = newOpts.outWidth;
         int h = newOpts.outHeight;
-        float hh = pixelH;// 设置高度为240f时，可以明显看到图片缩小了
         float ww = pixelW;// 设置宽度为120f，可以明显看到图片缩小了
+        float hh = pixelH;// 设置高度为240f时，可以明显看到图片缩小了
         //缩放比。由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
         int be = 1;//be=1表示不缩放
         if (w > h && w > ww) {//如果宽度大的话根据宽度固定大小缩放
@@ -159,7 +161,42 @@ public class ImageFactory {
         fos.flush();
         fos.close();
     }
+    /**读取角度*/
+    public static int readPictureDegree(String path) {
+        int degree = 0;
+        try {
+            ExifInterface exifInterface = new ExifInterface(path);
+            int orientation = exifInterface.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree = 90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree = 270;
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return degree;
+    }
 
+    /**旋转指定的角度*/
+    public static Bitmap rotateBitmap(Bitmap bitmap, int degress) {
+        if (bitmap != null) {
+            Matrix m = new Matrix();
+            m.postRotate(degress);
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+                    bitmap.getHeight(), m, true);
+            return bitmap;
+        }
+        return bitmap;
+    }
     /**
      * Compress by quality,  and generate image to the path specified
      *

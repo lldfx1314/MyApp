@@ -2,177 +2,161 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/bg_upload">
+    android:background="@color/bg_upload"
+    android:orientation="vertical">
 
-<<<<<<< HEAD
-    <com.anhubo.anhubo.view.MyScrollView
-=======
-    <ScrollView
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_find"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <com.anhubo.anhubo.view.MyScrollView
             android:layout_width="match_parent"
-<<<<<<< HEAD
-            android:layout_height="match_parent"
-=======
-            android:layout_height="wrap_content"
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
-            android:orientation="vertical">
-            <!--公告-->
-            <RelativeLayout
-                android:id="@+id/rl_notice"
-<<<<<<< HEAD
-=======
-                android:layout_marginTop="8dp"
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
-                android:clickable="true"
+            android:layout_height="match_parent">
+
+
+            <LinearLayout
+                android:id="@+id/ll_plan"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.anhubo.anhubo.view.RatioImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/notice" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:background="@drawable/notice_icon" />
-
-                    <TextView
-                        android:id="@+id/tv_notice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="5dp"
-                        android:text="公告"
-                        android:textColor="@color/backgroud_white"/>
-
-                </LinearLayout>
-            </RelativeLayout>
-            <!--使用指导-->
-            <RelativeLayout
-                android:id="@+id/rl_useGuide"
-                android:layout_marginTop="8dp"
-                android:clickable="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.anhubo.anhubo.view.RatioImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/useguide" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:background="@drawable/useguide_icon" />
-
-                    <TextView
-                        android:id="@+id/tv_useGuide"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="5dp"
-                        android:text="使用指导"
-                        android:textColor="@color/backgroud_white"/>
-
-                </LinearLayout>
-            </RelativeLayout>
-            <!--反馈-->
-            <RelativeLayout
-                android:id="@+id/rl_feedback"
-                android:layout_marginTop="8dp"
-                android:clickable="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.anhubo.anhubo.view.RatioImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/feedback" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:background="@drawable/feedback_icon" />
-
-                    <TextView
-                        android:id="@+id/tv_feedback"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="5dp"
-                        android:text="反馈"
-                        android:textColor="@color/backgroud_white" />
-
-                </LinearLayout>
-            </RelativeLayout>
-
-            <!--测试-->
-            <RelativeLayout
-                android:id="@+id/rl_test"
-                android:layout_marginTop="8dp"
-                android:clickable="true"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp">
 
-                <com.anhubo.anhubo.view.RatioImageView
+                <!--未加入计划-->
+                <RelativeLayout
+                    android:id="@+id/rl_no_plan"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/test" />
+                    android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:orientation="vertical">
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_no_plan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:background="@drawable/test_icon" />
+                    </android.support.v7.widget.RecyclerView>
+                </RelativeLayout>
+                <!--加入计划-->
+
+                <RelativeLayout
+                    android:id="@+id/rl_join_plan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/tv_test"
+                        android:id="@+id/tv_join_plan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:drawableLeft="@drawable/icon_plan_run_pre"
+                        android:drawablePadding="15dp"
+                        android:text="动态凭证"
+                        android:textColor="@color/hanzi4_blue"
+                        android:textSize="15sp" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_join_plan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_join_plan">
+
+                    </android.support.v7.widget.RecyclerView>
+                </RelativeLayout>
+                <!--计划管理者-->
+                <RelativeLayout
+                    android:id="@+id/rl_plan_manage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_plan_manage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:drawableLeft="@drawable/icon_plan_manager"
+                        android:drawablePadding="15dp"
+                        android:text="计划管理"
+                        android:textColor="@color/hanzi4_blue"
+                        android:textSize="15sp" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_plan_manage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_plan_manage" />
+                </RelativeLayout>
+                <!--计划列表-->
+                <RelativeLayout
+                    android:id="@+id/rl_plan_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_plan_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:drawableLeft="@drawable/icon_plan_list"
+                        android:drawablePadding="15dp"
+                        android:text="计划列表"
+                        android:textColor="@color/hanzi4_blue"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tv_join_other_plan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_plan_list"
+                        android:background="@color/backgroud_white"
+                        android:drawableRight="@drawable/icon_add_other_plan"
+                        android:padding="15dp"
+                        android:text="加入其它计划"
+                        android:textColor="@color/hanzi8_black"
+                        android:textSize="15sp" />
+
+                </RelativeLayout>
+
+                <!--测试-->
+                <RelativeLayout
+                    android:id="@+id/rl_test"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:clickable="true"
+                    android:visibility="gone">
+
+                    <com.anhubo.anhubo.view.RatioImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/test" />
+
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="5dp"
-                        android:text="测试"
-                        android:textColor="@color/backgroud_white"/>
+                        android:layout_centerInParent="true"
+                        android:orientation="vertical">
 
-                </LinearLayout>
-            </RelativeLayout>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/test_icon" />
+
+                        <TextView
+                            android:id="@+id/tv_test"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="5dp"
+                            android:text="测试"
+                            android:textColor="@color/backgroud_white" />
+
+                    </LinearLayout>
+                </RelativeLayout>
 
 
-
-        </LinearLayout>
-<<<<<<< HEAD
-    </com.anhubo.anhubo.view.MyScrollView>
-=======
-    </ScrollView>
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+            </LinearLayout>
+        </com.anhubo.anhubo.view.MyScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

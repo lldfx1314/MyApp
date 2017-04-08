@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/ll_Top"
-              android:fitsSystemWindows="true"
-              android:clipToPadding="true"
-              android:layout_width="match_parent"
-              android:layout_height="68dp"
-              android:background="@color/bg_title"
-              android:orientation="horizontal">
+    android:id="@+id/ll_Top"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:background="@color/bg_title"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    android:orientation="horizontal">
 
 
     <RelativeLayout
         android:id="@+id/top_rl"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginBottom="3dp"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="3dp"
         android:orientation="horizontal">
 
         <ImageButton
@@ -23,10 +23,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
+            android:background="@drawable/left_select"
             android:paddingLeft="18dp"
             android:paddingRight="22dp"
-            android:src="@drawable/left"
-            android:background="@drawable/left_select"/>
+            android:src="@drawable/left" />
 
         <ImageView
             android:id="@+id/ivTopBarleft_unit_menu"
@@ -34,9 +34,9 @@
             android:layout_height="38dp"
             android:layout_centerVertical="true"
             android:layout_gravity="center"
-            android:visibility="gone"
             android:paddingLeft="15dp"
-            android:src="@drawable/unit_menu"/>
+            android:src="@drawable/unit_menu"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/ivTopBarleft_build_pen"
@@ -45,8 +45,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:paddingRight="15dp"
-            android:visibility="gone"
-            android:src="@drawable/build_pen"/>
+            android:src="@drawable/build_pen"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tvAddress"
@@ -56,14 +56,83 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/backgroud_white"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <!--<net.lucode.hackware.magicindicator.MagicIndicator
-            android:layout_marginBottom="5dp"
-            android:visibility="gone"
             android:id="@+id/magic_indicator"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>-->
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:visibility="gone"/>-->
+        <RelativeLayout
+            android:id="@+id/rl_Indicator"
+            android:layout_width="180dp"
+            android:visibility="gone"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center">
+
+            <RelativeLayout
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true">
+
+                <TextView
+                    android:id="@+id/tv_Indicator_adddevice"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="设备"
+                    android:textColor="@color/backgroud_white"
+                    android:textSize="16sp" />
+
+                <View
+                    android:id="@+id/view_Indicator_adddevice"
+                    android:layout_width="40dp"
+                    android:layout_height="1dp"
+                    android:visibility="gone"
+                    android:layout_marginBottom="5dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/view_gray" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@color/view_gray" />
+
+            <RelativeLayout
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:gravity="center_horizontal">
+
+
+                <TextView
+                    android:id="@+id/tv_Indicator_area"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="区域绑定"
+                    android:textColor="@color/backgroud_white"
+                    android:textSize="16sp" />
+
+                <View
+                    android:id="@+id/view_Indicator_area"
+                    android:layout_width="60dp"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:visibility="gone"
+                    android:background="@color/view_gray" />
+            </RelativeLayout>
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/ivTopBarRight_unit_msg"
@@ -71,9 +140,9 @@
             android:layout_height="38dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:visibility="gone"
             android:paddingRight="15dp"
-            android:src="@drawable/unit_msg"/>
+            android:src="@drawable/unit_msg"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tvTopBarRight"
@@ -81,49 +150,44 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:paddingRight="15dp"
-            android:enabled="true"
-            android:visibility="gone"
             android:background="@null"
-            android:textSize="16sp"
+            android:enabled="true"
+            android:paddingRight="15dp"
+            android:text="设备"
             android:textColor="@color/backgroud_white"
-            android:text="列表"
-            />
+            android:textSize="16sp"
+            android:visibility="gone" />
 
-<<<<<<< HEAD
         <ImageView
             android:id="@+id/ivTopBarRight_add"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:visibility="gone"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:paddingRight="15dp"
-            android:src="@drawable/add"/>
-
+            android:src="@drawable/add"
+            android:visibility="gone" />
+        <!--分享-->
         <ImageView
             android:id="@+id/ivTopBarRight_unit_share"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:visibility="gone"
             android:paddingRight="15dp"
-            android:src="@drawable/three_dot"/>
+            android:src="@drawable/three_dot"
+            android:visibility="gone" />
 
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     </RelativeLayout>
     <!--顶部加载的进度条-->
     <ProgressBar
         android:id="@+id/top_pb"
-        android:layout_alignParentBottom="true"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="3dp"
+        android:layout_alignParentBottom="true"
         android:indeterminateOnly="false"
-        android:visibility="gone"
         android:max="100"
-        android:progressDrawable="@drawable/progress_top" >
-    </ProgressBar>
+        android:progressDrawable="@drawable/progress_top"
+        android:visibility="gone"></ProgressBar>
 </RelativeLayout>

@@ -10,7 +10,9 @@ public class MyFragmentBean extends BaseEntity implements Serializable{
     public class Data implements Serializable{
 
         public String weixin_name  ;
+        public String business_id  ;
         public String business_name  ;
+        public String building_id  ;
         public String building_name  ;
         public String img  ;
         public String phone  ;

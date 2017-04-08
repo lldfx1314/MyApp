@@ -9,11 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-<<<<<<< HEAD
         android:layout_height="150dp"
-=======
-        android:layout_height="200dp"
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         android:gravity="center">
 
         <ImageView
@@ -90,7 +86,6 @@
             android:layout_marginRight="50dp"
             />
     </RelativeLayout>
-<<<<<<< HEAD
     <!--再次输入密码-->
     <RelativeLayout
         android:layout_marginTop="15dp"
@@ -118,29 +113,11 @@
         android:id="@+id/btn_register1"
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
-=======
-    <!--邀请码-->
-    <EditText
-        android:id="@+id/et_reg_inviteCode"
-        style="@style/reg_login_edit_style"
-        android:layout_marginTop="15dp"
-        android:hint="请输入邀请码(可不填)"
-        android:background="@drawable/edit_text"
-        />
-    <Button
-        android:id="@+id/btn_register1"
-        android:layout_marginTop="15dp"
-        android:layout_width="wrap_content"
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         android:layout_height="40dp"
         android:background="@drawable/btn_reg_login"
         android:textColor="@color/btn_blue"
         android:textSize="16sp"
-<<<<<<< HEAD
         android:text="注册"/>
-=======
-        android:text="下一步"/>
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     <LinearLayout
         android:layout_marginTop="15dp"
         android:gravity="center"

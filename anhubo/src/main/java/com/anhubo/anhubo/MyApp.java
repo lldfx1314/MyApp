@@ -1,20 +1,23 @@
 package com.anhubo.anhubo;
 
-import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 
-import com.umeng.analytics.MobclickAgent;
+import com.squareup.okhttp.OkHttpClient;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 import com.zhy.http.okhttp.OkHttpUtils;
 
+import org.litepal.LitePal;
+import org.litepal.LitePalApplication;
+
 import java.util.concurrent.TimeUnit;
+
 
 /**
  * Created by Administrator on 2016/9/18.
  */
-public class MyApp extends Application {
+public class MyApp extends LitePalApplication{
     public static MyApp mInstance;
     private static Context context;
     private static Handler handler;
@@ -26,10 +29,9 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-
+        LitePal.initialize(this);
         // 异常处理，不需要处理时注释掉这两句即可！
-        //CrashHandler crashHandler = CrashHandler.getInstance();
+        CrashHandler crashHandler = CrashHandler.getInstance();
         // 注册crashHandler
         //crashHandler.init(getApplicationContext());
 
@@ -43,11 +45,15 @@ public class MyApp extends Application {
         context = this;
         handler = new Handler();
         // OkHttp
-        OkHttpUtils.getInstance().debug("OkHttpUtils").setConnectTimeout(60000, TimeUnit.MILLISECONDS);
-        //使用https，但是默认信任全部证书
-        OkHttpUtils.getInstance().setCertificates();
+//        OkHttpUtils.getInstance().debug("OkHttpUtils").setConnectTimeout(60000, TimeUnit.MILLISECONDS);
+//        //使用https，但是默认信任全部证书
+//        OkHttpUtils.getInstance().setCertificates();
+        OkHttpClient client =
+                OkHttpUtils.getInstance().getOkHttpClient();
+        client.setConnectTimeout(60000,TimeUnit.MILLISECONDS);
+        // 替换字体
+//        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/fangzheng.TTF").setFontAttrId(R.attr.fontPath).build());
     }
-
 
 
     public static MyApp get(){

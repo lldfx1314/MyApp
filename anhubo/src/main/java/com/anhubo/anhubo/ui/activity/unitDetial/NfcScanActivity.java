@@ -24,9 +24,13 @@ import com.anhubo.anhubo.adapter.DeviceDetailsAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.CheckComplete_Bean;
 import com.anhubo.anhubo.bean.ScanBean;
+import com.anhubo.anhubo.entity.RxBus;
+import com.anhubo.anhubo.entity.event.Exbus_RefreshProgressbar;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.buildDetial.TestActivity;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.PopBirthHelper;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
@@ -46,7 +50,9 @@ import java.util.Map;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import okhttp3.Call;
+import com.squareup.okhttp.Request;
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * Created by Administrator on 2016/9/14.
@@ -54,6 +60,7 @@ import okhttp3.Call;
 public class NfcScanActivity extends BaseActivity {
 
     private static final int REQUIRECODE = 1;
+    private static final String TAG = "NfcScanActivity";
     @InjectView(R.id.btn_completeNfc)
     Button btnCompleteNfc;
     @InjectView(R.id.tv_bignfcNumber)
@@ -103,13 +110,10 @@ public class NfcScanActivity extends BaseActivity {
     private Map<Integer, Boolean> map = new HashMap<>();
     private View viewFeed;
     private View viewTime;
-    private String versionName;
     private ArrayList<String> listResult;
-<<<<<<< HEAD
     private Dialog showDialog;
     private Dialog showDialog1;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+    private Subscription rxSubscription;
 
     @Override
     protected void initConfig() {
@@ -200,19 +204,14 @@ public class NfcScanActivity extends BaseActivity {
 
     class MyStringCallback2 extends StringCallback {
         @Override
-        public void onError(Call call, Exception e) {
-
-            System.out.println("QrScanActivity+++获取进度条信息===没拿到数据" + e.getMessage());
+        public void onError(Request request, Exception e) {
+            LogUtils.e(TAG, ":进度条getNum", e);
         }
 
         @Override
         public void onResponse(String response) {
-//            System.out.println("获取进度条信息+" + response);
-<<<<<<< HEAD
-=======
-            progressBar.setVisibility(View.GONE);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
-            CheckComplete_Bean bean = new Gson().fromJson(response, CheckComplete_Bean.class);
+            LogUtils.eNormal(TAG + ":进度条getNum", response);
+            CheckComplete_Bean bean = JsonUtil.json2Bean(response, CheckComplete_Bean.class);
             if (bean != null) {
 
                 // 获取到数据
@@ -225,6 +224,40 @@ public class NfcScanActivity extends BaseActivity {
             }
         }
     }
+
+    @Override
+    protected void onLoadDatas() {
+
+        // RxBus
+        rxBusOnClickListener();
+    }
+    // 订阅修改信息的事件
+    private void rxBusOnClickListener() {
+        // rxSubscription是一个Subscription的全局变量，这段代码可以在onCreate/onStart等生命周期内
+        rxSubscription = RxBus.getDefault().toObservable(Exbus_RefreshProgressbar.class)
+                .subscribe(new Action1<Exbus_RefreshProgressbar>() {
+                               @Override
+                               public void call(Exbus_RefreshProgressbar progressbar) {
+                                   getNum();
+                               }
+                           },
+                        new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                // TODO: 处理异常
+                            }
+                        });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // 解除订阅
+        if(!rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
+        }
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -242,12 +275,6 @@ public class NfcScanActivity extends BaseActivity {
                     break;
             }
         }
-    }
-
-
-    @Override
-    protected void onLoadDatas() {
-
     }
 
 
@@ -326,13 +353,7 @@ public class NfcScanActivity extends BaseActivity {
      * 这是检查的网络请求获取数据的方法，使用Post
      */
     private void getData() {
-        String[] split = Utils.getAppInfo(mActivity).split("#");
-        versionName = split[1];
-<<<<<<< HEAD
         showDialog = loadProgressDialog.show(mActivity, "请稍后...");
-=======
-        progressBar.setVisibility(View.VISIBLE);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         String url = Urls.Url_Check;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("device_id", cardNumber);
@@ -346,38 +367,26 @@ public class NfcScanActivity extends BaseActivity {
 
     }
 
-    @Override
-    public void onSystemUiVisibilityChange(int visibility) {
-
-    }
-
 
     /**
      * 检查的网络请求获取数据的方法
      */
     class MyStringCallback extends StringCallback {
         @Override
-        public void onError(Call call, Exception e) {
-<<<<<<< HEAD
+        public void onError(Request request, Exception e) {
             showDialog.dismiss();
-=======
-            progressBar.setVisibility(View.GONE);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+            LogUtils.e(TAG, ":getData", e);
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(true).show();
-            System.out.println("NfcScanActivity+++===没拿到数据" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
-<<<<<<< HEAD
             showDialog.dismiss();
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
-            //System.out.println("nfc++"+response);
-            ScanBean bean = new Gson().fromJson(response, ScanBean.class);
+            LogUtils.eNormal(TAG + ":getData", response);
+            ScanBean bean = JsonUtil.json2Bean(response, ScanBean.class);
             if (bean != null) {
                 // 获取到数据置为true
                 isGetDeviceInfo = true;
@@ -394,11 +403,7 @@ public class NfcScanActivity extends BaseActivity {
      */
     private void parseMessage(ScanBean scanBean) {
         int isExist = scanBean.data.device_exist;//设备号是否在后台存在
-<<<<<<< HEAD
 
-=======
-        progressBar.setVisibility(View.GONE);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
         //设备ID
         deviceId = scanBean.data.device_id;
@@ -585,10 +590,7 @@ public class NfcScanActivity extends BaseActivity {
     private void checkComplete() {
 
         // 这里是完成的点击事件
-<<<<<<< HEAD
         showDialog1 = loadProgressDialog.show(mActivity, "正在提交...");
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         String url = Urls.Url_Check_Complete;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("uid", uid); //这是uid,登录后改成真正的用户
@@ -609,12 +611,8 @@ public class NfcScanActivity extends BaseActivity {
 
     class MyStringCallback1 extends StringCallback {
         @Override
-        public void onError(Call call, Exception e) {
-<<<<<<< HEAD
+        public void onError(Request request, Exception e) {
             showDialog1.dismiss();
-=======
-            progressBar.setVisibility(View.GONE);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
@@ -626,10 +624,7 @@ public class NfcScanActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-<<<<<<< HEAD
             showDialog1.dismiss();
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             CheckComplete_Bean bean = new Gson().fromJson(response, CheckComplete_Bean.class);
             if (bean != null) {
                 dialog.dismiss();
@@ -675,7 +670,6 @@ public class NfcScanActivity extends BaseActivity {
      * 动态的设置进度条
      */
     private void setProgressBar() {
-<<<<<<< HEAD
 
 
         int maxNum = Integer.parseInt(devicesNum);
@@ -689,11 +683,6 @@ public class NfcScanActivity extends BaseActivity {
         }
 
         pronfcBar.setMax(Integer.parseInt(devicesNum));
-=======
-        pronfcBar.setMax(Integer.parseInt(devicesNum));
-        pronfcBar.setProgress(deviceCheckedNum);
-        tvBignfcNumber.setText(deviceCheckedNum + "");
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         tvSmallnfcNumber.setText(devicesNum + "");
     }
 
@@ -926,5 +915,10 @@ public class NfcScanActivity extends BaseActivity {
             public void onClick(View v) {
             }
         }).show();
+    }
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
     }
 }

@@ -33,7 +33,7 @@ import java.util.Map;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import okhttp3.Call;
+import com.squareup.okhttp.Request;
 
 /**
  * Created by LUOLI on 2016/12/29.
@@ -136,7 +136,7 @@ public class CellListActivity extends BaseActivity implements CellListAdapter.On
     class MyStringCallback extends StringCallback {
 
         @Override
-        public void onError(Call call, Exception e) {
+        public void onError(Request request, Exception e) {
             System.out.println("CellListActivity界面+获取数据失败+" + e.getMessage());
             showDialog.dismiss();
         }

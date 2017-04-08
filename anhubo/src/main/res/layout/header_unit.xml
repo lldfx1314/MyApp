@@ -17,8 +17,8 @@
             android:layout_marginTop="10dp"
             android:gravity="center_horizontal"
             android:text="提升安全级别"
-            android:textColor="@color/gray"
-            android:textSize="14sp" />
+            android:textColor="@color/hanzi8_black"
+            android:textSize="15sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,11 +34,7 @@
                 android:layout_weight="1">
 
                 <RelativeLayout
-<<<<<<< HEAD
                     android:layout_width="80dp"
-=======
-                    android:layout_width="90dp"
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:gravity="center_vertical">
@@ -50,12 +46,11 @@
                         android:background="@null"
                         android:drawableTop="@drawable/unit_study"
                         android:text="学习"
-                        android:textColor="@color/gray"
-                        android:textSize="14sp" />
+                        android:textColor="@color/hanzi4_black"
+                        android:textSize="13sp" />
 
                     <View
                         android:id="@+id/dot_study"
-<<<<<<< HEAD
                         android:layout_width="5dp"
                         android:layout_height="5dp"
                         android:layout_alignParentRight="true"
@@ -64,29 +59,12 @@
                         android:visibility="gone" />
 
                 </RelativeLayout>
-=======
-                        android:layout_width="6dp"
-                        android:layout_height="6dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="5dp"
-                        android:visibility="gone"
-                        android:background="@drawable/dot_red_shape" />
-
-                </RelativeLayout>
-
-
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             </RelativeLayout>
 
 
             <View
-<<<<<<< HEAD
                 android:layout_width="0.5dp"
                 android:layout_height="25dp"
-=======
-                android:layout_width="1dp"
-                android:layout_height="30dp"
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 android:layout_gravity="center_vertical"
                 android:background="@color/gray" />
 
@@ -96,11 +74,7 @@
                 android:layout_weight="1">
 
                 <RelativeLayout
-<<<<<<< HEAD
                     android:layout_width="80dp"
-=======
-                    android:layout_width="90dp"
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:gravity="center_vertical">
@@ -111,31 +85,18 @@
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:drawableTop="@drawable/unit_check"
-<<<<<<< HEAD
-=======
-                        android:gravity="center_horizontal"
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                         android:text="检查"
-                        android:textColor="@color/gray"
-                        android:textSize="14sp" />
+                        android:textColor="@color/hanzi4_black"
+                        android:textSize="13sp" />
 
                     <View
                         android:id="@+id/dot_check"
-<<<<<<< HEAD
                         android:layout_width="5dp"
                         android:layout_height="5dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="5dp"
                         android:background="@drawable/dot_red_shape"
                         android:visibility="gone" />
-=======
-                        android:layout_width="6dp"
-                        android:layout_height="6dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="5dp"
-                        android:visibility="gone"
-                        android:background="@drawable/dot_red_shape" />
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
                 </RelativeLayout>
 
@@ -143,13 +104,8 @@
 
 
             <View
-<<<<<<< HEAD
                 android:layout_width="0.5dp"
                 android:layout_height="25dp"
-=======
-                android:layout_width="1dp"
-                android:layout_height="30dp"
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
@@ -161,11 +117,7 @@
                 android:layout_weight="1">
 
                 <RelativeLayout
-<<<<<<< HEAD
                     android:layout_width="80dp"
-=======
-                    android:layout_width="90dp"
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:gravity="center_vertical">
@@ -176,31 +128,18 @@
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:drawableTop="@drawable/unit_drill"
-<<<<<<< HEAD
                         android:text="疏散"
-=======
-                        android:text="演练"
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
-                        android:textColor="@color/gray"
-                        android:textSize="14sp" />
+                        android:textColor="@color/hanzi4_black"
+                        android:textSize="13sp" />
 
                     <View
                         android:id="@+id/dot_drill"
-<<<<<<< HEAD
                         android:layout_width="5dp"
                         android:layout_height="5dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="5dp"
                         android:background="@drawable/dot_red_shape"
                         android:visibility="gone" />
-=======
-                        android:layout_width="6dp"
-                        android:layout_height="6dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="5dp"
-                        android:visibility="gone"
-                        android:background="@drawable/dot_red_shape" />
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 </RelativeLayout>
 
             </RelativeLayout>
@@ -215,17 +154,10 @@
         android:layout_below="@+id/ll_unit_listview"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
-<<<<<<< HEAD
         android:text="您暂时还没有加入任何互保计划"
-        android:textColor="@color/gray"
-        android:textSize="14sp"
+        android:textColor="@color/hanzi8_black"
+        android:textSize="15sp"
         android:visibility="gone" />
-=======
-        android:visibility="gone"
-        android:text="您暂时还没有加入任何互保计划"
-        android:textColor="@color/gray"
-        android:textSize="14sp" />
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     <TextView
         android:id="@+id/tv_no_plan2"
@@ -234,15 +166,8 @@
         android:layout_below="@+id/ll_unit_listview"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-<<<<<<< HEAD
         android:text="动态保障凭证"
-        android:textColor="@color/gray"
-        android:textSize="14sp"
+        android:textColor="@color/hanzi8_black"
+        android:textSize="15sp"
         android:visibility="gone" />
-=======
-        android:visibility="gone"
-        android:text="动态保障凭证"
-        android:textColor="@color/gray"
-        android:textSize="14sp" />
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 </RelativeLayout>

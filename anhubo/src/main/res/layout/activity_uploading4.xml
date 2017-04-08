@@ -9,17 +9,18 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/top_title"
+        android:background="@color/bg_gray"
         android:orientation="vertical">
 
-<<<<<<< HEAD
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingTop="15dp"
             android:paddingLeft="15dp"
-            android:paddingTop="15dp">
+            android:paddingRight="15dp">
 
             <LinearLayout
                 android:id="@+id/ll_msgPerRenting01"
@@ -33,23 +34,22 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="开始日期"
-                    android:textColor="@color/text_biack"
-                    android:textSize="14sp" />
+                    android:textColor="@color/hanzi8_black"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tv_startTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
                     android:text="显示日期"
-                    android:textColor="@color/text_biack"
-                    android:textSize="16sp"
+                    android:textColor="@color/hanzi4_black"
+                    android:textColorHint="@color/hanzi4_black"
+                    android:textSize="13sp"
                     android:visibility="gone" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
                     android:background="@drawable/arrow_right" />
 
             </LinearLayout>
@@ -57,7 +57,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:background="@color/view_gray" />
         </LinearLayout>
 
@@ -65,8 +65,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingTop="15dp"
             android:paddingLeft="15dp"
-            android:paddingTop="15dp">
+            android:paddingRight="15dp">
 
             <LinearLayout
                 android:id="@+id/ll_msgPerRenting02"
@@ -80,8 +81,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="租房时长"
-                    android:textColor="@color/text_biack"
-                    android:textSize="14sp" />
+                    android:textColor="@color/hanzi8_black"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tv_Time"
@@ -89,14 +90,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="显示日期"
-                    android:textColor="@color/text_biack"
-                    android:textSize="14sp"
+                    android:textColorHint="@color/hanzi4_black"
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp"
                     android:visibility="gone" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
                     android:background="@drawable/arrow_right" />
 
             </LinearLayout>
@@ -104,16 +105,17 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:background="@color/view_gray" />
         </LinearLayout>
 
         <!--点击图标开始拍照-->
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="335dp"
             android:layout_height="150dp"
-            android:layout_marginTop="30dp"
-            android:background="@color/bg_upload">
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bg_upload">
 
             <LinearLayout
                 android:id="@+id/ll_takePhoto04"
@@ -126,169 +128,32 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/take_photo" />
+                    android:background="@drawable/photo" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="点击图标开始拍照"
-                    android:textColor="@color/upload_photo"
-                    android:textSize="14sp" />
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
 
             </LinearLayout>
 
             <ImageView
                 android:id="@+id/iv_showPhoto04"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
         </RelativeLayout>
 
         <Button
             android:id="@+id/btn_unloading04"
-            style="@style/btn_msg_perfect"
-            android:text="提交" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/btn_confirm"
+            android:text="提 交" />
 
 
     </LinearLayout>
 </RelativeLayout>
-=======
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="15dp"
-        android:paddingTop="15dp">
-        <LinearLayout
-            android:id="@+id/ll_msgPerRenting01"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="开始日期"
-                android:textSize="16sp"
-                android:textColor="@color/text_biack"
-                />
-            <TextView
-                android:id="@+id/tv_startTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="显示日期"
-                android:layout_marginRight="10dp"
-                android:visibility="gone"
-                android:textSize="16sp"
-                android:textColor="@color/text_biack"
-                />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/arrow_right"/>
-
-        </LinearLayout>
-        <View
-            android:layout_marginTop="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/view_gray"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="15dp"
-        android:paddingTop="15dp">
-        <LinearLayout
-            android:id="@+id/ll_msgPerRenting02"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="租房时长"
-                android:textSize="16sp"
-                android:textColor="@color/text_biack"
-                />
-            <TextView
-                android:id="@+id/tv_Time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="显示日期"
-                android:visibility="gone"
-                android:layout_marginRight="10dp"
-                android:textSize="16sp"
-                android:textColor="@color/text_biack"
-                />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/arrow_right"/>
-
-        </LinearLayout>
-        <View
-            android:layout_marginTop="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/view_gray"/>
-    </LinearLayout>
-
-<!--点击图标开始拍照-->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_marginTop="30dp"
-        android:background="@color/bg_upload"
-        >
-
-        <LinearLayout
-            android:id="@+id/ll_takePhoto04"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/take_photo"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="点击图标开始拍照"
-                android:textColor="@color/upload_photo"
-                android:textSize="16sp"
-                />
-
-        </LinearLayout>
-        <ImageView
-            android:id="@+id/iv_showPhoto04"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </RelativeLayout>
-    <Button
-        android:id="@+id/btn_unloading04"
-        style="@style/btn_msg_perfect"
-        android:text="提交"
-        />
-
-
-</LinearLayout>
-
-<include layout="@layout/loading" />
-
-
-    </RelativeLayout>
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce

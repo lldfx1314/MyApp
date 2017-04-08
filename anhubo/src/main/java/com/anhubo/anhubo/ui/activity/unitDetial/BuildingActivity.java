@@ -1,9 +1,6 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
-<<<<<<< HEAD
 import android.app.Dialog;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -33,19 +30,19 @@ import com.amap.api.maps2d.model.LatLng;
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.adapter.Business_Location_Adapter;
 import com.anhubo.anhubo.bean.LocationBean;
+import com.anhubo.anhubo.bean.Unit_RegisterBean;
+import com.anhubo.anhubo.entity.RxBus;
+import com.anhubo.anhubo.entity.event.Rxbus_BindBuilding;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
-<<<<<<< HEAD
 import com.anhubo.anhubo.utils.LogUtils;
-import com.anhubo.anhubo.utils.ToastUtils;
+import com.anhubo.anhubo.utils.SpUtils;
+import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.LoadProgressDialog;
-=======
-import com.anhubo.anhubo.utils.ToastUtils;
-import com.anhubo.anhubo.view.AlertDialog;
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.anhubo.anhubo.view.RefreshListview;
-import com.google.gson.Gson;
+import com.squareup.okhttp.Request;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -54,14 +51,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.Call;
-
 /**
  * Created by LUOLI on 2016/11/21.
  */
 public class BuildingActivity extends AppCompatActivity implements View.OnSystemUiVisibilityChangeListener {
 
-<<<<<<< HEAD
     private static final String TAG = "BuildingActivity";
     MapView mMapView = null;
     private RefreshListview lvBuilding;
@@ -69,15 +63,6 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
     private ImageView ivTopBarleftUnitMenu;
     private ImageView ivTopBarRightUnitMsg;
     private ImageView ivTopBarRight;
-=======
-    MapView mMapView = null;
-    private RefreshListview lvBuilding;
-    private RelativeLayout progressBar;
-    private ImageButton iv_basepager_left;
-    private ImageView ivTopBarleftUnitMenu;
-    private ImageView ivTopBarRightUnitMsg;
-    private TextView tvTopBarRight;
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     private ImageView ivTopBarleftBuildPen;
     private TextView tvToptitle;
     private RelativeLayout llTop;
@@ -93,12 +78,12 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
     //声明mListener对象，定位监听器
     private LocationSource.OnLocationChangedListener mListener = null;
     private ArrayList<String> listBuilding;
-<<<<<<< HEAD
     private ArrayList<String> listBuildingPoi;
     private LoadProgressDialog loadProgressDialog;
     private Dialog showDialog;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+    private String nobuildId;
+    private String buildingName;
+    private Dialog showDialog1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,51 +111,93 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
         //获取地图控件引用
         mMapView = (MapView) findViewById(R.id.map_building);
         lvBuilding = (RefreshListview) findViewById(R.id.lv_building);
-<<<<<<< HEAD
-=======
-        progressBar = (RelativeLayout) findViewById(R.id.rl_progress);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+        nobuildId = getIntent().getStringExtra(Keys.NOBUILDID);
         // 监听listview的滑动监听
         lvBuilding.setOnRefreshingListener(new MyOnRefreshingListener());
         lvBuilding.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-<<<<<<< HEAD
                 String poi = listBuildingPoi.get(position);
                 TextView tv = (TextView) view.findViewById(R.id.tv_location);
                 String str = tv.getText().toString().trim();
-                // 返回增加界面
-                returnAddActivity(str,poi);
-=======
-                TextView tv = (TextView) view.findViewById(R.id.tv_location);
-                String str = tv.getText().toString().trim();
-                // 返回增加界面
-                returnAddActivity(str);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+                if (!TextUtils.isEmpty(nobuildId)) {
+                    // 从疏散界面点击进来的，直接注册单位
+                    buildRegister(str, poi);
+                } else {
+                    // 返回增加界面
+                    returnAddActivity(str, poi);
+                }
+
             }
         });
     }
 
-<<<<<<< HEAD
-    private void returnAddActivity(String str,String poi) {
+    /**
+     * 注册建筑
+     */
+    private void buildRegister(String string, String poi) {
+        buildingName = string;
+        Map<String, String> params = new HashMap<>();
+        String uid = SpUtils.getStringParam(this, Keys.UID);
+        params.put("uid", uid);
+        params.put("building_name", string);
+        params.put("latitude", String.valueOf(latitude));
+        params.put("longitude", String.valueOf(longitude));
+        if (!TextUtils.isEmpty(poi)) {
+            params.put("poi_id", poi);
+        }
+        String url = Urls.Url_Building_Register;
+        showDialog1 = loadProgressDialog.show(this, "正在提交...");
+        OkHttpUtils.post()
+                .url(url)
+                .params(params)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+                        showDialog1.dismiss();
+                        LogUtils.e(TAG, "buildRegister", e);
+
+                        new AlertDialog(BuildingActivity.this).builder()
+                                .setTitle("提示")
+                                .setMsg("网络有问题，请检查")
+                                .setCancelable(true).show();
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        showDialog1.dismiss();
+                        LogUtils.eNormal(TAG + "+buildRegister", response);
+                        Unit_RegisterBean bean = JsonUtil.json2Bean(response, Unit_RegisterBean.class);
+                        if (bean != null) {
+                            int code = bean.code;
+                            if (code == 0) {
+                                String buildingId = bean.data.building_id;
+                                LogUtils.eNormal(TAG, "获取到buildingId：" + buildingId);
+                                // 缓存
+                                SpUtils.putParam(BuildingActivity.this, Keys.BULIDINGID, buildingId);
+                                SpUtils.putParam(BuildingActivity.this, Keys.BUILDINGNAME, buildingName);
+                                // 通知上一界面界面请求数据更新界面
+                                RxBus.getDefault().post(new Rxbus_BindBuilding());
+                                LogUtils.eNormal(TAG, "发送消息了buildingId+" + buildingId);
+                                finish();
+                            }
+                        }
+                    }
+                });
+    }
+
+    private void returnAddActivity(String str, String poi) {
         Intent intent = new Intent();
         intent.putExtra(Keys.STR, str);
         intent.putExtra(Keys.BUILD_POI, poi);
-=======
-    private void returnAddActivity(String str) {
-        Intent intent = new Intent();
-        intent.putExtra(Keys.STR, str);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         setResult(1, intent);
         finish();
     }
 
     private void initEvents() {
         listBuilding = new ArrayList<String>();
-<<<<<<< HEAD
         listBuildingPoi = new ArrayList<String>();
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     }
 
@@ -188,14 +215,8 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
     }
 
     private void addBuilding() {
-<<<<<<< HEAD
         ivTopBarRight.setVisibility(View.VISIBLE);
         ivTopBarRight.setOnClickListener(new View.OnClickListener() {
-=======
-        tvTopBarRight.setVisibility(View.VISIBLE);
-        tvTopBarRight.setText("添加");
-        tvTopBarRight.setOnClickListener(new View.OnClickListener() {
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             @Override
             public void onClick(View v) {
                 dialog();
@@ -214,21 +235,19 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
                     @Override
                     public void onClick(View v) {
                         String string = alertDialog.et_msg.getText().toString().trim();
-                        if (!TextUtils.isEmpty(string)) {
-<<<<<<< HEAD
 
-                            // 返回增加界面
-                            returnAddActivity(string,"");
+                        // 判断是从哪个界面点进来的，便于做相应操作
+                        if (!TextUtils.isEmpty(nobuildId)) {
+                            // 从疏散层点击进来的，直接注册单位
+                            buildRegister(string, "");
+                        } else {
+                            if (!TextUtils.isEmpty(string)) {
+                                // 返回增加界面
+                                returnAddActivity(string, "");
+                            }
                         }
 
 
-
-
-=======
-                            // 返回增加界面
-                            returnAddActivity(string);
-                        }
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                     }
                 }).setNegativeButton("取消", new View.OnClickListener() {
             @Override
@@ -256,8 +275,8 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
             //aMap.getCameraPosition(); 方法可以获取地图的旋转角度
 
 
-            //管理缩放控件
-            settings.setZoomControlsEnabled(true);
+            //管理缩放控件  不显示
+            settings.setZoomControlsEnabled(false);
             //设置logo位置，左下，底部居中，右下
             settings.setLogoPosition(AMapOptions.LOGO_POSITION_BOTTOM_LEFT);
             //设置显示地图的默认比例尺
@@ -328,17 +347,14 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
                         isFirstLoc = false;
                     }
                     // 拿到经纬度请求网络
-<<<<<<< HEAD
 
-                    loadProgressDialog = LoadProgressDialog.newInstance();
+                    loadProgressDialog = LoadProgressDialog.newInstance(BuildingActivity.this);
                     showDialog = loadProgressDialog.show(BuildingActivity.this, "正在加载...");
-=======
-                    progressBar.setVisibility(View.VISIBLE);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                     getData();
 
 
-                }else if(amapLocation.getErrorCode() == 12){
+                } else if (amapLocation.getErrorCode() == 12) {
+                    // 没有定位权限
                     dialogLocation();
                 } else {
                     //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
@@ -402,10 +418,12 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
 
     private void getData() {
         String location = String.valueOf(latitude) + "," + String.valueOf(longitude);
-
+        String[] split = Utils.getAppInfo(this).split("#");
+        String versionName = split[1];
         String url = Urls.Location;
         Map<String, String> params = new HashMap<>();
         params.put("location", location);
+        params.put("version", versionName);
         params.put("page", pager + "");
         pager++;
         OkHttpUtils.post()//
@@ -415,47 +433,32 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
                 .execute(new MyStringCallback());
     }
 
-<<<<<<< HEAD
-=======
-    @Override
-    public void onSystemUiVisibilityChange(int visibility) {
-
-    }
-
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     class MyStringCallback extends StringCallback {
         @Override
-        public void onError(Call call, Exception e) {
-<<<<<<< HEAD
+        public void onError(Request request, Exception e) {
             showDialog.dismiss();
-=======
-            progressBar.setVisibility(View.GONE);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+            LogUtils.e(TAG, ":getData:", e);
             new AlertDialog(BuildingActivity.this).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
-                    .setCancelable(true).show();
-<<<<<<< HEAD
-            LogUtils.e(TAG,":getData:",e);
-=======
-            System.out.println("定位+" + e.getMessage());
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+                    .setPositiveButton("确定", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (isLoadMore) {
+                                lvBuilding.loadMoreFinished();
+                            }
+                        }
+                    })
+                    .setCancelable(false).show();
         }
 
         @Override
         public void onResponse(String response) {
-<<<<<<< HEAD
-            LogUtils.eNormal(TAG+":getData:",response);
-            LocationBean bean = new Gson().fromJson(response, LocationBean.class);
+            LogUtils.eNormal(TAG + ":getData:", response);
+            LocationBean bean = JsonUtil.json2Bean(response, LocationBean.class);
             if (bean != null) {
                 showDialog.dismiss();
-=======
-            //System.out.println("地图建筑界面+++===" + response);
-            LocationBean bean = new Gson().fromJson(response, LocationBean.class);
-            if (bean != null) {
-                progressBar.setVisibility(View.GONE);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 processData(bean);
                 isLoadMore = false;
                 // 恢复加载更多状态
@@ -472,7 +475,6 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
         int code = bean.code;
         String msg = bean.msg;
         page = bean.data.page;
-<<<<<<< HEAD
         List<LocationBean.Data.Building> building = bean.data.building;
         if (!building.isEmpty()) {
             for (int i = 0; i < building.size(); i++) {
@@ -481,13 +483,6 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
                 listBuilding.add(s);
                 String poiId = build.poi_id;
                 listBuildingPoi.add(poiId);
-=======
-        List<String> building = bean.data.building;
-        if (!building.isEmpty()) {
-            for (int i = 0; i < building.size(); i++) {
-                String s = building.get(i);
-                listBuilding.add(s);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             }
         }
         if (!isLoadMore) {
@@ -507,18 +502,11 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
 
             // 判断是否有更多数据，moreurl是否为空
             if (pager <= page) {
-<<<<<<< HEAD
-=======
-                System.out.println("pager+++==="+pager);
-                System.out.println("page+++==="+page);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 // 加载更多业务
                 isLoadMore = true;
                 getData();
             } else {
-                // 恢复Listview的加载更多状态
-                lvBuilding.loadMoreFinished();
-                ToastUtils.showToast(BuildingActivity.this, "没有更多数据了");
+                lvBuilding.setLoadMoretv("没有更多内容了");
             }
         }
     }
@@ -560,11 +548,7 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
         iv_basepager_left = (ImageButton) findViewById(R.id.ivTopBarLeft);//左上角返回按钮
         ivTopBarleftUnitMenu = (ImageView) findViewById(R.id.ivTopBarleft_unit_menu);//左上角菜单按钮
         ivTopBarRightUnitMsg = (ImageView) findViewById(R.id.ivTopBarRight_unit_msg);//右上角信息按钮
-<<<<<<< HEAD
         ivTopBarRight = (ImageView) findViewById(R.id.ivTopBarRight_add);//右上角加号
-=======
-        tvTopBarRight = (TextView) findViewById(R.id.tvTopBarRight);//右上角列表
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         ivTopBarleftBuildPen = (ImageView) findViewById(R.id.ivTopBarleft_build_pen);//左上角铅笔按钮
         tvToptitle = (TextView) findViewById(R.id.tvAddress);//标题
         llTop = (RelativeLayout) findViewById(R.id.ll_Top); // 顶部标题栏
@@ -592,7 +576,6 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
     }
 
 
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -606,32 +589,32 @@ public class BuildingActivity extends AppCompatActivity implements View.OnSystem
         //在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，实现地图生命周期管理
         mMapView.onSaveInstanceState(outState);
     }
-    /**设置浸入式状态栏*/
-    private void setStatusBarTransparent(){
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+    /**
+     * 设置浸入式状态栏
+     */
+    private void setStatusBarTransparent() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //托盘重叠显示在Activity上
             View decorView = getWindow().getDecorView();
             int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    |View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
             decorView.setSystemUiVisibility(uiOptions);
             decorView.setOnSystemUiVisibilityChangeListener(this);
             // 设置托盘透明
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
             //Log.d("CP_Common","VERSION.SDK_INT =" + VERSION.SDK_INT);
-        }else{
+        } else {
             //Log.d("CP_Common", "SDK 小于19不设置状态栏透明效果");
         }
 
     }
 
-<<<<<<< HEAD
     @Override
     public void onSystemUiVisibilityChange(int visibility) {
 
     }
 
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 }

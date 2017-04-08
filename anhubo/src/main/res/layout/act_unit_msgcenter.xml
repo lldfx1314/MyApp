@@ -5,20 +5,13 @@
     <include
         android:id="@+id/top_title"
         layout="@layout/layout_top_bar"/>
-<<<<<<< HEAD
-=======
-    <include layout="@layout/loading"></include>
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     <com.anhubo.anhubo.view.RefreshListview
         android:id="@+id/lv_unit_msgCenter"
         android:layout_below="@+id/top_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:dividerHeight="0dp"
+        android:divider="@android:color/transparent">
     </com.anhubo.anhubo.view.RefreshListview>
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 </RelativeLayout>

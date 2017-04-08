@@ -6,10 +6,6 @@
     <include
         android:id="@+id/top_title"
         layout="@layout/layout_top_bar"/>
-<<<<<<< HEAD
-=======
-    <include layout="@layout/loading"/>
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     <WebView
         android:id="@+id/wv_useGuide"

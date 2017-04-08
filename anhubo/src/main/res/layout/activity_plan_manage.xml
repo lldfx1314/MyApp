@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_top_bar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/ll_plan_manage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+            <!--成员情况-->
+            <LinearLayout
+                android:id="@+id/ll_plan_member"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="成员情况"
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="已加入："
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_plan_member"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:text="0"
+                    android:textColor="@color/hanzi4_blue"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="12dp"
+                    android:background="@drawable/arrow_right" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="@color/view_gray" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <!--最高保障金-->
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="95dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="15dp">
+
+                    <RelativeLayout
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:background="@drawable/red_warning"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:id="@+id/tv_plan_redWarning"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text=""
+                            android:textColor="@color/backgroud_white"
+                            android:textSize="20sp" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="红色预警"
+                        android:textColor="@color/hanzi4_black"
+                        android:textSize="13sp" />
+                </RelativeLayout>
+
+                <!--最高分摊额-->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="95dp"
+                    android:layout_centerInParent="true">
+
+                    <RelativeLayout
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:background="@drawable/yellow_warning"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp">
+
+
+                        <TextView
+                            android:id="@+id/tv_plan_yellowWarning"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text=""
+                            android:textColor="@color/backgroud_white"
+                            android:textSize="20sp" />
+
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="黄色预警"
+                        android:textColor="@color/hanzi4_black"
+                        android:textSize="13sp" />
+                </RelativeLayout>
+                <!--预付保障金-->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="95dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp">
+
+                    <RelativeLayout
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:background="@drawable/green_warning"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp">
+
+
+                        <TextView
+                            android:id="@+id/tv_plan_greenWarning"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text=""
+                            android:textColor="@color/backgroud_white"
+                            android:textSize="20sp" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="绿色预警"
+                        android:textColor="@color/hanzi4_black"
+                        android:textSize="13sp" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.33dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/view_gray" />
+            <!--运行情况**-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"
+                android:text="运行情况"
+                android:textColor="@color/hanzi4_black"
+                android:textSize="13sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.33dp"
+                android:background="@color/view_gray" />
+            <!--风险指数-->
+            <LinearLayout
+                android:id="@+id/ll_plan_riskIndex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="风险指数"
+                    android:textColor="@color/hanzi8_black"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tv_plan_riskIndex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text=""
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="12dp"
+                    android:visibility="gone"
+                    android:background="@drawable/arrow_right" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="@color/view_gray" />
+            <!--互助事件-->
+            <LinearLayout
+                android:id="@+id/ll_plan_helpEvent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="互助事件"
+                    android:textColor="@color/hanzi8_black"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tv_plan_helpEvent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text=""
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="12dp"
+                    android:visibility="gone"
+                    android:background="@drawable/arrow_right" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="@color/view_gray" />
+            <!--退出申请-->
+            <LinearLayout
+                android:id="@+id/ll_plan_quitApply"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="退出申请"
+                    android:textColor="@color/hanzi8_black"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tv_plan_quitApply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text=""
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="12dp"
+                    android:visibility="gone"
+                    android:background="@drawable/arrow_right" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="@color/view_gray" />
+            <!--欠款情况**-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"
+                android:text="欠款情况"
+                android:textColor="@color/hanzi4_black"
+                android:textSize="13sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.33dp"
+                android:background="@color/view_gray" />
+            <!--互助金总额-->
+            <LinearLayout
+                android:id="@+id/ll_plan_helpSumMoney"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="互助金总额"
+                    android:textColor="@color/hanzi8_black"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tv_plan_helpSumMoney"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text=""
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="12dp"
+                    android:background="@drawable/arrow_right"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="@color/view_gray" />
+            <!--计划服务费-->
+            <LinearLayout
+                android:id="@+id/ll_plan_ServiceMoney"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="计划服务费"
+                    android:textColor="@color/hanzi8_black"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tv_plan_ServiceMoney"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text=""
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="12dp"
+                    android:background="@drawable/arrow_right"
+                    android:visibility="invisible" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="@color/view_gray" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

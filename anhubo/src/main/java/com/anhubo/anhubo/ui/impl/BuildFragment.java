@@ -20,18 +20,19 @@ import com.anhubo.anhubo.bean.BuildThreeBean;
 import com.anhubo.anhubo.bean.Build_Help_Plan_Bean;
 import com.anhubo.anhubo.bean.MyPolygonBean;
 import com.anhubo.anhubo.protocol.Urls;
-import com.anhubo.anhubo.ui.activity.MyDetial.AlterUnitActivity;
 import com.anhubo.anhubo.ui.activity.buildDetial.Build_CltMsgActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.FeedbackActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.QrScanActivity;
 import com.anhubo.anhubo.utils.DisplayUtil;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
-import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.MyPolygonView;
 import com.google.gson.Gson;
+import com.squareup.okhttp.Request;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -40,14 +41,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.Call;
-
 /**
  * Created by Administrator on 2016/10/8.
  */
 public class BuildFragment extends BaseFragment {
 
 
+    private static final String TAG = "BuildFragment";
     private ListView lvBuild;
     private RelativeLayout rlBuild01;
     private RelativeLayout rlBuild02;
@@ -163,11 +163,11 @@ public class BuildFragment extends BaseFragment {
             }
 
                 // 获取建筑安全指数
-                getBuildData(bulidingid);
-                // 获取三色预警比例
-                getThreeWarning(bulidingid);
-                // 获取户主计划列表信息
-                getHelpPlan(bulidingid);
+//                getBuildData(bulidingid);
+//                // 获取三色预警比例
+//                getThreeWarning(bulidingid);
+//                // 获取户主计划列表信息
+//                getHelpPlan(bulidingid);
 
 
         }
@@ -213,8 +213,8 @@ public class BuildFragment extends BaseFragment {
      */
     class MyStringCallback2 extends StringCallback {
         @Override
-        public void onError(Call call, Exception e) {
-            System.out.println("BuildFragment互助计划+++===获取数据失败" + e.getMessage());
+        public void onError(Request request, Exception e) {
+            LogUtils.e(TAG,":getHelpPlan",e);
             // 获取数据失败后显示三色以及互助计划
             if (plans != null) {
                 adapter = new BuildAdapter(mActivity, plans);
@@ -224,8 +224,8 @@ public class BuildFragment extends BaseFragment {
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("BuildFragment互助计划+++===" + response);
-            Build_Help_Plan_Bean bean = new Gson().fromJson(response, Build_Help_Plan_Bean.class);
+            LogUtils.eNormal(TAG+":getHelpPlan",response);
+            Build_Help_Plan_Bean bean = JsonUtil.json2Bean(response, Build_Help_Plan_Bean.class);
             if (bean != null) {
                 int code = bean.code;
                 String msg = bean.msg;
@@ -267,7 +267,7 @@ public class BuildFragment extends BaseFragment {
      */
     class MyStringCallback1 extends StringCallback {
         @Override
-        public void onError(Call call, Exception e) {
+        public void onError(Request request, Exception e) {
             System.out.println("BuildFragment三色预警+++===获取数据失败" + e.getMessage());
 
         }
@@ -329,7 +329,7 @@ public class BuildFragment extends BaseFragment {
      */
     class MyStringCallback extends StringCallback {
         @Override
-        public void onError(Call call, Exception e) {
+        public void onError(Request request, Exception e) {
 
             System.out.println("BuildFragment+++建筑安全指数===获取到数据失败" + e.getMessage());
 

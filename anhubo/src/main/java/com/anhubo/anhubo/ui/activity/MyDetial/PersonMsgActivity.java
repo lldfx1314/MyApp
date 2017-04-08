@@ -1,25 +1,33 @@
 package com.anhubo.anhubo.ui.activity.MyDetial;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-<<<<<<< HEAD
 import android.nfc.Tag;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -28,6 +36,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
@@ -37,34 +46,25 @@ import com.anhubo.anhubo.bean.MyAlterNameBean;
 import com.anhubo.anhubo.bean.MyFragmentBean;
 import com.anhubo.anhubo.bean.My_HeaderIconBean;
 import com.anhubo.anhubo.bean.PersonMsgBindBean;
-<<<<<<< HEAD
 import com.anhubo.anhubo.entity.RxBus;
 import com.anhubo.anhubo.entity.event.Exbus_AlterName;
 import com.anhubo.anhubo.entity.event.Exbus_ShowIcon;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.impl.MyFragment;
 import com.anhubo.anhubo.utils.DatePackerUtil;
+import com.anhubo.anhubo.utils.ImageFactory;
 import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
-=======
-import com.anhubo.anhubo.protocol.Urls;
-import com.anhubo.anhubo.ui.impl.MyFragment;
-import com.anhubo.anhubo.utils.DatePackerUtil;
-import com.anhubo.anhubo.utils.Keys;
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.anhubo.anhubo.utils.PopBirthHelper;
 import com.anhubo.anhubo.utils.PopGenderHelper;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.ShowBottonDialog;
-<<<<<<< HEAD
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.google.gson.Gson;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
@@ -89,12 +89,11 @@ import java.util.Set;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
-import okhttp3.Call;
-<<<<<<< HEAD
+
+import com.squareup.okhttp.Request;
+
 import rx.Subscription;
 import rx.functions.Action1;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
 /**
  * Created by LUOLI on 2016/10/28.
@@ -103,10 +102,8 @@ public class PersonMsgActivity extends BaseActivity {
     private static final int PICTURE = 0;
     private static final int CAMERA = 1;
     private static final int REQUESTCODE = 2;
-<<<<<<< HEAD
     private static final String TAG = "PersonMsgActivity";
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+    private static final int CROP_PHOTO = 3;
     @InjectView(R.id.ll_psHeaderIcon)
     LinearLayout llPsHeaderIcon;
     @InjectView(R.id.ll_psUsername)
@@ -164,11 +161,10 @@ public class PersonMsgActivity extends BaseActivity {
     private String newAge;
     private String buildingName;
     private UMShareAPI mShareAPI;
-<<<<<<< HEAD
     private Dialog showDialog;
     private Subscription rxSubscription;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+    private Uri imageUri;
+    private File filePhoto01;
 
     @Override
     protected void initConfig() {
@@ -205,14 +201,8 @@ public class PersonMsgActivity extends BaseActivity {
 
     @Override
     protected void onLoadDatas() {
-<<<<<<< HEAD
     }
 
-
-=======
-
-    }
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @Override
     protected void initEvents() {
@@ -236,15 +226,9 @@ public class PersonMsgActivity extends BaseActivity {
         // 给每个控件先设置初始内容
         setInitialData();
 
-<<<<<<< HEAD
         GlideDrawable mBitmap = MyFragment.mBitmap;
         if (mBitmap != null) {
             ivHeaderIcon.setImageDrawable(mBitmap);
-=======
-        Bitmap mBitmap = MyFragment.mBitmap;
-        if (mBitmap != null) {
-            ivHeaderIcon.setImageBitmap(mBitmap);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         }
         /**获取我的界面传过来的姓名，显示*/
         String name_new = MyFragment.name_new;
@@ -311,7 +295,7 @@ public class PersonMsgActivity extends BaseActivity {
                 mShareAPI = UMShareAPI.get(mActivity);
                 boolean authorize = mShareAPI.isAuthorize(mActivity, SHARE_MEDIA.WEIXIN);
 //                if (!authorize) {
-                    mShareAPI.doOauthVerify(mActivity, SHARE_MEDIA.WEIXIN, umAuthListener);//授权
+                mShareAPI.doOauthVerify(mActivity, SHARE_MEDIA.WEIXIN, umAuthListener);//授权
 //                }else{
 ////                    ToastUtils.showToast(mActivity,"别点了，已经授权了");
 //                }
@@ -319,7 +303,7 @@ public class PersonMsgActivity extends BaseActivity {
                 break;
             case R.id.btn_popDialog_takephoto:
                 // 拍照
-                takePhoto();
+                camera();
                 break;
             case R.id.btn_popDialog_photo:
                 // 相册
@@ -378,32 +362,10 @@ public class PersonMsgActivity extends BaseActivity {
                 unionid = map.get("unionid");
                 profileImageUrl = map.get("profile_image_url");
                 screenName = map.get("screen_name");
-<<<<<<< HEAD
             }
             // 绑定微信
             bindWeixin();
 
-=======
-
-            }
-
-            /**获取微信信息后走绑定接口*/
-            String url = Urls.Url_BindWEIXIN;
-            // 封装请求参数
-            HashMap<String, String> params = new HashMap<String, String>();
-
-            params.put("uid", uid);
-            params.put("third_type", 2 + "");// 2代表微信
-            params.put("unique_name", screenName);
-            params.put("unique_id", unionid);
-            params.put("pic_url", profileImageUrl);
-
-            OkHttpUtils.post()//
-                    .url(url)//
-                    .params(params)//
-                    .build()//
-                    .execute(new MyStringCallback5());
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
         }
 
@@ -417,7 +379,7 @@ public class PersonMsgActivity extends BaseActivity {
 
         }
     };
-<<<<<<< HEAD
+
     //绑定微信
     private void bindWeixin() {
         /**获取微信信息后走绑定接口*/
@@ -437,45 +399,26 @@ public class PersonMsgActivity extends BaseActivity {
                 .build()//
                 .execute(new MyStringCallback5());
     }
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     class MyStringCallback5 extends StringCallback {
         @Override
-        public void onError(Call call, Exception e) {
+        public void onError(Request request, Exception e) {
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
-<<<<<<< HEAD
-            LogUtils.e(TAG,":bindWeixin:",e);
-=======
-
-            System.out.println("PersonMsgActivity+++界面绑定微信===" + e.getMessage());
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+            LogUtils.e(TAG, ":bindWeixin:", e);
         }
 
         @Override
         public void onResponse(String response) {
-<<<<<<< HEAD
-            LogUtils.eNormal(TAG+":bindWeixin:",response);
-=======
-//            System.out.println("PersonMsgActivity界面+绑定微信+"+response);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+            LogUtils.eNormal(TAG + ":bindWeixin:", response);
             PersonMsgBindBean bean = new Gson().fromJson(response, PersonMsgBindBean.class);
             if (bean != null) {
                 int code = bean.code;
                 if (code == 0) {
                     if (TextUtils.isEmpty(img)) {
-<<<<<<< HEAD
                         // 代表用户没设置过自己的头像，因此显示自己的微信头像// 我的界面头像重新刷一遍
                         setHeaderIcon(profileImageUrl);
-=======
-                        // 代表用户没设置过自己的头像，因此显示自己的微信头像
-                        setHeaderIcon(profileImageUrl);
-
-                        // 设置完后通知我的界面也改变显示内容
-                        Intent intent = new Intent();
-                        intent.putExtra(Keys.HEADERICON_WEIXIN, profileImageUrl);
-                        setResult(5, intent);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+                        // 通知我的界面请求数据更新界面
+                        RxBus.getDefault().post(new Exbus_AlterName());
                     }
                     // 显示微信名
                     tvMyWechat.setText(screenName);
@@ -551,42 +494,24 @@ public class PersonMsgActivity extends BaseActivity {
      */
     class MyStringCallback4 extends StringCallback {
         @Override
-        public void onError(Call call, Exception e) {
+        public void onError(Request request, Exception e) {
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
-<<<<<<< HEAD
-            LogUtils.e(TAG,":alterGender:",e);
-=======
-
-            System.out.println("PersonMsgActivity+++界面上传性别===" + e.getMessage());
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+            LogUtils.e(TAG, ":alterGender:", e);
         }
 
         @Override
         public void onResponse(String response) {
-<<<<<<< HEAD
-            LogUtils.eNormal(TAG+":alterGender:",response);
+            LogUtils.eNormal(TAG + ":alterGender:", response);
             MyAlterGenderBean bean = JsonUtil.json2Bean(response, MyAlterGenderBean.class);
-=======
-            //System.out.println("PersonMsgActivity+++界面上传性别"+response);
-            MyAlterGenderBean bean = new Gson().fromJson(response, MyAlterGenderBean.class);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             if (bean != null) {
                 int code = bean.code;
                 String msg = bean.msg;
                 if (code != 0) {
                     ToastUtils.showToast(mActivity, msg);
                 } else {
-<<<<<<< HEAD
                     // 通知我的界面请求数据更新界面
                     RxBus.getDefault().post(new Exbus_AlterName());
-                    ToastUtils.showToast(mActivity,"性别修改成功");
-=======
-                    //ToastUtils.showToast(mActivity,"性别修改成功");
-                    // 每次更改成功后要通知我的界面也要改变显示内容
-                    Intent intent = new Intent();
-                    intent.putExtra(Keys.NEWGENDER, newGender);
-                    setResult(4, intent);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+                    ToastUtils.showToast(mActivity, "性别修改成功");
                 }
             }
         }
@@ -646,40 +571,25 @@ public class PersonMsgActivity extends BaseActivity {
 
     class MyStringCallback3 extends StringCallback {
         @Override
-        public void onError(Call call, Exception e) {
+        public void onError(Request request, Exception e) {
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
-<<<<<<< HEAD
-            LogUtils.e(TAG,":uploadAge:",e);
-=======
-            System.out.println("PersonMsgActivity+++界面上传年龄===" + e.getMessage());
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+            LogUtils.e(TAG, ":uploadAge:", e);
         }
 
         @Override
         public void onResponse(String response) {
-<<<<<<< HEAD
-            LogUtils.eNormal(TAG+":uploadAge:",response);
+            LogUtils.eNormal(TAG + ":uploadAge:", response);
             MyAlterAgeBean bean = JsonUtil.json2Bean(response, MyAlterAgeBean.class);
-=======
-            MyAlterAgeBean bean = new Gson().fromJson(response, MyAlterAgeBean.class);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             if (bean != null) {
                 int code = bean.code;
                 String msg = bean.msg;
                 if (code != 0) {
-                    ToastUtils.showToast(mActivity, msg);
+                    ToastUtils.showToast(mActivity, "年龄修改失败");
                 } else {
 
-<<<<<<< HEAD
                     // 通知我的界面请求数据更新界面
                     RxBus.getDefault().post(new Exbus_AlterName());
                     ToastUtils.showToast(mActivity, "年龄修改成功");
-=======
-                    //ToastUtils.showToast(mActivity, "年龄修改成功");
-                    Intent intent = new Intent();
-                    intent.putExtra(Keys.NEWAGE, newAge);
-                    setResult(3, intent);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 }
             }
         }
@@ -849,114 +759,84 @@ public class PersonMsgActivity extends BaseActivity {
      */
     class MyStringCallback2 extends StringCallback {
         @Override
-        public void onError(Call call, Exception e) {
+        public void onError(Request request, Exception e) {
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
-<<<<<<< HEAD
-            LogUtils.e(TAG,":uploadName:",e);
-=======
-            System.out.println("PersonMsgActivity+++界面上传name===" + e.getMessage());
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+            LogUtils.e(TAG, ":uploadName:", e);
         }
 
         @Override
         public void onResponse(String response) {
-<<<<<<< HEAD
-            LogUtils.eNormal(TAG+":uploadName:",response);
+            LogUtils.eNormal(TAG + ":uploadName:", response);
             MyAlterNameBean bean = JsonUtil.json2Bean(response, MyAlterNameBean.class);
-=======
-            //System.out.println("PersonMsgActivity+界面修改用户名" + response);
-            MyAlterNameBean bean = new Gson().fromJson(response, MyAlterNameBean.class);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             if (bean != null) {
                 int code = bean.code;
                 String msg = bean.msg;
                 if (code != 0) {
                     ToastUtils.showToast(mActivity, msg);
                 } else {
-<<<<<<< HEAD
                     // 通知我的界面请求数据更新界面
                     RxBus.getDefault().post(new Exbus_AlterName());
-                    LogUtils.eNormal(TAG+":uploadName:","姓名修改成功");
-=======
-                    //ToastUtils.showToast(mActivity, "修改成功");
-                    // 每次更改成功后要通知我的界面也要改变显示内容
-                    Intent intent = new Intent();
-                    intent.putExtra(Keys.NEWNAME, newName);
-                    setResult(2, intent);
-
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+                    LogUtils.eNormal(TAG + ":uploadName:", "姓名修改成功");
                 }
             }
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (null != data) {
-            switch (requestCode) {
-                case CAMERA:
-                    if (resultCode == Activity.RESULT_OK) {
-
-                        isShow = showPhoto01(data);
-                    }
-                    break;
-                case PICTURE:
-                    if (resultCode == Activity.RESULT_OK) {
-                        isShow = showPhoto02(data);
-                    }
-                    break;
-                case REQUESTCODE:
-                    if (resultCode == 1) {
-                        String newBusinessName = data.getStringExtra(Keys.BUSINESSNAME);
-                        if (!TextUtils.isEmpty(newBusinessName)) {
-                            SpUtils.putParam(mActivity, Keys.ISALTERUNIT, true);
-                            SpUtils.putParam(mActivity, Keys.NEWBUSINESSNAME, newBusinessName);
-                            tvMyUnit.setText(newBusinessName);
-
-                        }
-                    }
-
-                    break;
-            }
-        }
-        if (isShow) {
-
-            // 说明图片已经显示，上传头像到网络
-<<<<<<< HEAD
-            upLoadIcon();
-=======
-            upLoading();
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
-            isShow = false;
-        } else {
-            // 图片没显示
-            isShow = false;
-        }
-
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (null != data) {
+//            switch (requestCode) {
+//                case CAMERA:
+//                    if (resultCode == Activity.RESULT_OK) {
+//
+////                        isShow = showPhoto01(data);
+//                    }
+//                    break;
+//                case PICTURE:
+//                    if (resultCode == Activity.RESULT_OK) {
+//                        isShow = showPhoto02(data);
+//                    }
+//                    break;
+//                case REQUESTCODE:
+//                    if (resultCode == 1) {
+//                        String newBusinessName = data.getStringExtra(Keys.BUSINESSNAME);
+//                        if (!TextUtils.isEmpty(newBusinessName)) {
+//                            SpUtils.putParam(mActivity, Keys.ISALTERUNIT, true);
+//                            SpUtils.putParam(mActivity, Keys.NEWBUSINESSNAME, newBusinessName);
+//                            tvMyUnit.setText(newBusinessName);
+//                        }
+//                    }
+//
+//                    break;
+//            }
+//        }
+//        if (isShow) {
+//
+//            // 说明图片已经显示，上传头像到网络
+//            upLoadIcon();
+//            isShow = false;
+//        } else {
+//            // 图片没显示
+//            isShow = false;
+//        }
+//
+//    }
 
     /**
      * 拿到拍到的照片去上传
      */
     private File newFile = null;
 
-<<<<<<< HEAD
     private void upLoadIcon() {
-=======
-    private void upLoading() {
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
         // 获取
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
         if (newFile == null) {
             return;
         }
-<<<<<<< HEAD
 //        showDialog = loadProgressDialog.show(mActivity, "正在上传...");
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         String url = Urls.Url_UpLoadingHeaderIcon;
@@ -974,27 +854,17 @@ public class PersonMsgActivity extends BaseActivity {
      */
     class MyStringCallback1 extends StringCallback {
         @Override
-        public void onError(Call call, Exception e) {
-<<<<<<< HEAD
+        public void onError(Request request, Exception e) {
 //            showDialog.dismiss();
-            LogUtils.e(TAG,":upLoadIcon:",e);
-=======
-            System.out.println("PersonMsgActivity+++界面上传头像===" + e.getMessage());
-
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+            LogUtils.e(TAG, ":upLoadIcon:", e);
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
 
         }
 
         @Override
         public void onResponse(String response) {
-<<<<<<< HEAD
-            LogUtils.eNormal(TAG+":upLoadIcon:",response);
+            LogUtils.eNormal(TAG + ":upLoadIcon:", response);
             My_HeaderIconBean bean = JsonUtil.json2Bean(response, My_HeaderIconBean.class);
-=======
-            //System.out.println("PersonMsgActivity个人信息页面+" + response);
-            My_HeaderIconBean bean = new Gson().fromJson(response, My_HeaderIconBean.class);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             if (bean != null) {
                 int code = bean.code;
                 final String img1 = bean.data.img;
@@ -1002,16 +872,9 @@ public class PersonMsgActivity extends BaseActivity {
                 if (code != 0) {
                     ToastUtils.showToast(mActivity, msg);
                 } else {
-<<<<<<< HEAD
                     // 通知我的界面请求数据更新界面
                     RxBus.getDefault().post(new Exbus_AlterName());
                     ToastUtils.showToast(mActivity, "保存成功");
-=======
-                    ToastUtils.showToast(mActivity, "保存成功");
-                    Intent intent = new Intent();
-                    intent.putExtra(Keys.HEADERICON, img1);
-                    setResult(1, intent);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
                 }
             }
@@ -1020,134 +883,261 @@ public class PersonMsgActivity extends BaseActivity {
     }
 
     /**
-     * 展示相册图片
+     * 打开相机
      */
-    private boolean showPhoto02(Intent data) {
-
-        Uri selectedImage = data.getData();
-        String[] filePathColumns = {MediaStore.Images.Media.DATA};
-        Cursor c = getContentResolver().query(selectedImage, filePathColumns, null, null, null);
-        c.moveToFirst();
-        int columnIndex = c.getColumnIndex(filePathColumns[0]);
-        String imagePath = c.getString(columnIndex);
-        Bitmap photo = BitmapFactory.decodeFile(imagePath);
-        try {
-
-            /*imgName = createPhotoFileName();
-            //写一个方法将此文件保存到本应用下面啦
-            savePicture(imgName, photo);*/
-
-
-            if (photo != null) {
-
-                //显示图片
-                ivHeaderIcon.setImageBitmap(photo);
-                // 把本文件压缩后缓存到本地文件里面
-                savePicture(photo, "photo02");
-                File filePhoto02 = new File(Environment.getExternalStorageDirectory() + "/" + "photo02");
-                newFile = filePhoto02;
-                return true;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-
-            c.close();
-        }
-        return false;
+    private void camera() {
+        takePhoto();
+        dialog.dismiss();
     }
 
     /**
-     * 展示照相机图片
+     * 获取相册照片
      */
-    private boolean showPhoto01(Intent data) {
-        String sdState = Environment.getExternalStorageState();
-        if (!sdState.equals(Environment.MEDIA_MOUNTED)) {
-            ToastUtils.showLongToast(mActivity, "sd card unmount");
-            return false;
-        }
-        new DateFormat();
-        String name = DateFormat.format("yyyyMMdd_hhmmss", Calendar.getInstance(Locale.CHINA)) + ".jpg";
-        Bundle bundle = data.getExtras();
-        //获取相机返回的数据，并转换为图片格式
-        Bitmap bitmap = (Bitmap) bundle.get("data");
-        FileOutputStream fout = null;
-        File file = new File("/sdcard/photo_anhubo/");
-        file.mkdirs();
-        String filename = file.getPath() + name;
-        try {
-            fout = new FileOutputStream(filename);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fout);
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fout.flush();
-                fout.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        if (bitmap != null) {
-            //显示图片
-            ivHeaderIcon.setImageBitmap(bitmap);
-            // 把本文件压缩后缓存到本地文件里面
-            savePicture(bitmap, "photo01");
-            File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
-            newFile = filePhoto01;
-            return true;
-        }
-        return false;
+    private void openAlbum() {
+        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+        intent.setType("image/*");
+        startActivityForResult(intent, PICTURE); // 打开相册
     }
 
-    /**
-     * 保存图片到本应用下
-     **/
-    private void savePicture(Bitmap bitmap, String fileName) {
-
-        FileOutputStream fos = null;
-        try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新写入内容会被覆盖
-            //fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
-            OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() + "/" + fileName);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);// 把图片写入指定文件夹中
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (null != fos) {
-                    fos.close();
-                    fos = null;
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openAlbum();
+                } else {
+                    Toast.makeText(this, "You denied the permission", Toast.LENGTH_SHORT).show();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                break;
+            default:
         }
+
     }
 
+
     /**
-     * 打开相册获取图片
+     * 打开相册
      */
     private void getPhoto() {
-
-        Intent intent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, PICTURE);
-
+        if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(mActivity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        } else {
+            openAlbum();
+        }
         dialog.dismiss();
+    }
+
+    private void takePhoto() {
+        //图片名称 时间命名
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date date = new Date(System.currentTimeMillis());
+        String filename = format.format(date);
+        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+        File outputImage = new File(path, filename + ".jpg");
+        try {
+            if (outputImage.exists()) {
+                outputImage.delete();
+            }
+            outputImage.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //将File对象转换为Uri并启动照相程序
+        if (Build.VERSION.SDK_INT < 24) {
+
+            imageUri = Uri.fromFile(outputImage);
+        } else {
+            imageUri = FileProvider.getUriForFile(mActivity, "com.luoli.cameraalbumtest.fileprovider", outputImage);
+        }
+        Intent tTntent = new Intent("android.media.action.IMAGE_CAPTURE"); //照相
+        tTntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri); //指定图片输出地址
+        startActivityForResult(tTntent, CAMERA); //启动照相
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUESTCODE:
+                if (resultCode == 1) {
+                    String newBusinessName = data.getStringExtra(Keys.BUSINESSNAME);
+                    if (!TextUtils.isEmpty(newBusinessName)) {
+                        SpUtils.putParam(mActivity, Keys.ISALTERUNIT, true);
+                        SpUtils.putParam(mActivity, Keys.NEWBUSINESSNAME, newBusinessName);
+                        tvMyUnit.setText(newBusinessName);
+                    }
+                }
+
+                break;
+            case CAMERA:
+                if (resultCode == Activity.RESULT_OK) {
+                    try {
+                        //　启动相机裁剪
+                        startCameraCrop();
+
+                        break;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case CROP_PHOTO://相机裁剪成功
+                if (resultCode == Activity.RESULT_OK) {
+                    try {
+                        //图片解析成Bitmap对象
+                        Bitmap bitmap = BitmapFactory.decodeStream(
+                                getContentResolver().openInputStream(imageUri));
+                        if (bitmap != null) {
+                            Bitmap photo = ImageFactory.ratio(bitmap, 800, 800);
+
+                            //显示图片
+                            ivHeaderIcon.setImageBitmap(photo);
+                            // 把本文件压缩后缓存到本地文件里面
+                            filePhoto01 = savePicture(photo, "photo01");
+                            newFile = filePhoto01;
+                            isShow = true;
+                        }
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case PICTURE:// 相册
+                if (resultCode == RESULT_OK) {
+                    // 判断手机系统版本号
+                    Bitmap bitmap = null;
+                    if (Build.VERSION.SDK_INT >= 19) {
+                        // 4.4及以上系统使用这个方法处理图片
+                        bitmap = handleImageOnKitKat(data);
+                    } else {
+                        // 4.4以下系统使用这个方法处理图片
+                        bitmap = handleImageBeforeKitKat(data);
+                    }
+                    if (bitmap != null) {
+                        Bitmap photo = ImageFactory.ratio(bitmap, 800, 800);
+                        //显示图片
+                        ivHeaderIcon.setImageBitmap(photo);
+                        // 把本文件压缩后缓存到本地文件里面
+                        filePhoto01 = savePicture(photo, "photo02");
+                        newFile = filePhoto01;
+                        isShow = true;
+                    }
+                }
+                break;
+        }
+        if (isShow) {
+
+            // 说明图片已经显示，上传头像到网络
+            upLoadIcon();
+            isShow = false;
+        } else {
+            // 图片没显示
+            isShow = false;
+        }
 
     }
 
     /**
-     * 打开相机拍照
+     * 相机裁剪
      */
-    private void takePhoto() {
-        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(camera, CAMERA);
-        dialog.dismiss();
+    private void startCameraCrop() {
+        // 启动剪裁功能
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(imageUri, "image/*");
+        intent.putExtra("scale", true);
+        //设置宽高比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        //设置裁剪图片宽高
+        intent.putExtra("outputX", 800);
+        intent.putExtra("outputY", 800);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        //广播刷新相册
+        Intent intentBc = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        intentBc.setData(imageUri);
+        this.sendBroadcast(intentBc);
+        startActivityForResult(intent, CROP_PHOTO); //设置裁剪参数显示图片至ImageView
+    }
 
+    @TargetApi(19)
+    private Bitmap handleImageOnKitKat(Intent data) {
+        String imagePath = null;
+        Uri uri = data.getData();
+        Log.d("TAG", "handleImageOnKitKat: uri is " + uri);
+        if (DocumentsContract.isDocumentUri(this, uri)) {
+            // 如果是document类型的Uri，则通过document id处理
+            String docId = DocumentsContract.getDocumentId(uri);
+            if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
+                String id = docId.split(":")[1]; // 解析出数字格式的id
+                String selection = MediaStore.Images.Media._ID + "=" + id;
+                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+            } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                imagePath = getImagePath(contentUri, null);
+            }
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            // 如果是content类型的Uri，则使用普通方式处理
+            imagePath = getImagePath(uri, null);
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            // 如果是file类型的Uri，直接获取图片路径即可
+            imagePath = uri.getPath();
+        }
+        Bitmap bitmap = displayImage(imagePath);// 根据图片路径显示图片
+        return bitmap;
+    }
+
+    private Bitmap handleImageBeforeKitKat(Intent data) {
+        Uri uri = data.getData();
+        String imagePath = getImagePath(uri, null);
+        Bitmap bitmap = displayImage(imagePath);
+        return bitmap;
+    }
+
+    private String getImagePath(Uri uri, String selection) {
+        String path = null;
+        // 通过Uri和selection来获取真实的图片路径
+        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+
+    private Bitmap displayImage(String imagePath) {
+        Bitmap bitmap = null;
+        if (imagePath != null) {
+            bitmap = BitmapFactory.decodeFile(imagePath);
+//            ivPhoto.setImageBitmap(bitmap);
+        } else {
+            Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT).show();
+//            ToastUtils.showToast(mActivity, "failed to get image");
+        }
+        return bitmap;
+    }
+
+
+    /**
+     * 为了减小体积 把图片压缩保存到手机上（清晰度改动不大，基本不受影响）
+     **/
+    private File savePicture(Bitmap bitmap, String fileName) {
+        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+        File outputImage = new File(path, fileName + ".jpg");
+        try {
+            if (outputImage.exists()) {
+                outputImage.delete();
+            }
+            outputImage.createNewFile();
+            OutputStream stream = new FileOutputStream(outputImage);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);// 把图片写入指定文件夹中
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        }
+        return outputImage;
     }
 
     /**
@@ -1175,52 +1165,10 @@ public class PersonMsgActivity extends BaseActivity {
      * 设置头像的方法
      */
     private void setHeaderIcon(String imgurl) {
-<<<<<<< HEAD
         Glide
                 .with(mActivity)
                 .load(imgurl)
                 .centerCrop().crossFade().into(ivHeaderIcon);
-//        OkHttpUtils
-//                .get()//
-//                .url(imgurl)//
-//                .tag(this)//
-//                .build()//
-//                .connTimeOut(10000)
-//                .readTimeOut(10000)
-//                .writeTimeOut(10000)
-//                .execute(new BitmapCallback() {
-//                    @Override
-//                    public void onError(Call call, Exception e) {
-//                        LogUtils.e(TAG,":setHeaderIcon:",e);
-//                    }
-//
-//                    @Override
-//                    public void onResponse(Bitmap bitmap) {
-//                        ivHeaderIcon.setImageBitmap(bitmap);
-//                    }
-//                });
-=======
-        OkHttpUtils
-                .get()//
-                .url(imgurl)//
-                .tag(this)//
-                .build()//
-                .connTimeOut(10000)
-                .readTimeOut(10000)
-                .writeTimeOut(10000)
-                .execute(new BitmapCallback() {
-                    @Override
-                    public void onError(Call call, Exception e) {
-
-                        System.out.println("MyFragment获取头像+++===" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onResponse(Bitmap bitmap) {
-                        ivHeaderIcon.setImageBitmap(bitmap);
-                    }
-                });
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     }
 
 }

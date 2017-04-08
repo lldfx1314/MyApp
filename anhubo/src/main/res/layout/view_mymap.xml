@@ -1,0 +1,57 @@
+<RelativeLayout
+    android:id="@+id/absoluteLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="400dp"
+    android:background="#ffffff">
+
+
+    <com.anhubo.anhubo.view.evacuateLine.MyBaseMapAndLines
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#BCBCBC"
+        android:scaleType="matrix"
+        />
+
+    <!-- 指定为matrix类型 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"
+        android:orientation="horizontal">
+        <!--android:layout_below="@+id/imageView"-->
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="10dp"
+            android:layout_weight="9"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/mapBigger"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:src="@drawable/map_bigger"/>
+
+        <ImageView
+            android:id="@+id/mapOriginal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:src="@drawable/map_original_size"/>
+
+        <ImageView
+            android:id="@+id/mapSmaller"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:src="@drawable/map_smaller"/>
+    </LinearLayout>
+</RelativeLayout>
+

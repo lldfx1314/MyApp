@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="55dp"
-              android:orientation="vertical"
-              android:paddingLeft="10dp" >
+              android:layout_height="48dp"
+              android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/moreitem_layout"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="#ffffffff"
+        android:layout_height="48dp"
+        android:background="#ffffff"
         android:orientation="vertical" >
 
         <TextView
@@ -17,9 +16,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
+            android:layout_marginLeft="20dp"
             android:text="灭火器"
-            android:textColor="#232323"
-            android:textSize="14sp" />
+            android:textColor="@color/hanzi4_black"
+            android:textSize="13sp" />
     </LinearLayout>
 
 </LinearLayout>

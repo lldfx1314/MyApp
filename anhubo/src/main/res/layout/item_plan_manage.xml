@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_ll_paln_manage"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:padding="15dp"
+    android:background="@color/backgroud_white"
+    android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/ll_plan_member"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/item_tv_plan_manage_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="大理客栈联盟"
+            android:textColor="@color/hanzi8_black"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/item_tv_plan_manage_joinNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:text=""
+            android:textColor="@color/hanzi4_blue"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/item_tv_plan_manage_sumNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_gravity="center_vertical"
+            android:text=""
+            android:textColor="@color/hanzi4_black"
+            android:textSize="13sp" />
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/item_tv_plan_manage_MarginMoney"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center_horizontal"
+                android:text=""
+                android:textColor="@color/hanzi4_blue"
+                android:textSize="24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="保证金总额"
+                android:textColor="@color/hanzi4_black"
+                android:textSize="12dp" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/item_tv_plan_manage_HelpEventNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center_horizontal"
+                android:text=""
+                android:textColor="@color/hanzi4_blue"
+                android:textSize="24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="互助事件数"
+                android:textColor="@color/hanzi4_black"
+                android:textSize="12dp" />
+
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_alignParentRight="true"
+            android:layout_width="80dp"
+            android:layout_height="80dp">
+            <!--圆形进度条-->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:background="@drawable/plan_norun"/>
+            <com.anhubo.anhubo.view.MyRoundProcess
+                android:id="@+id/roundProcess"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                app:roundColor="@color/view_gray"
+                app:roundProgressColor="@color/bg_title"
+                />
+            <TextView
+                android:id="@+id/item_tv_plan_manage_Proportion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone"
+                android:text="20%"
+                android:textColor="@color/hanzi4_black"
+                android:textSize="12dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:text="保证金"
+                android:textColor="@color/hanzi4_black"
+                android:textSize="12dp" />
+        </RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

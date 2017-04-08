@@ -1,19 +1,17 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
 import android.app.Activity;
-<<<<<<< HEAD
 import android.app.Dialog;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-<<<<<<< HEAD
 import android.os.Handler;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
@@ -28,20 +26,13 @@ import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.AddDevice_CheckName_Bean;
 import com.anhubo.anhubo.bean.Add_Device_Bean;
 import com.anhubo.anhubo.protocol.Urls;
-<<<<<<< HEAD
+import com.anhubo.anhubo.utils.ImageFactory;
 import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
-=======
-import com.anhubo.anhubo.utils.Keys;
-import com.anhubo.anhubo.utils.SpUtils;
-import com.anhubo.anhubo.utils.ToastUtils;
-import com.anhubo.anhubo.view.AlertDialog;
-import com.google.gson.Gson;
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -50,12 +41,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import okhttp3.Call;
+import com.squareup.okhttp.Request;
 
 /**
  * Created by LUOLI on 2016/9/14.
@@ -66,10 +59,8 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     private static final int REQUEST_CODE = 2;
     private static final int REQUESTCODE1 = 3;
     private static final int REQUESTCODE2 = 4;
-<<<<<<< HEAD
     private static final String TAG = "Add_Device_Activity";
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+    private static final int CROP_PHOTO = 5;
     private Button complete;
     private LinearLayout takePhoto;
     private EditText device_Name;
@@ -90,12 +81,10 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     private String businessname;
     private File newFile;
     private TextView tvAddDevice;
-<<<<<<< HEAD
     private Dialog showDialog;
     private String buildPoi;
     private String businessPoi;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+    private Uri imageUri;
 
     @Override
     protected void initConfig() {
@@ -159,10 +148,6 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         super.initEvents();
         //　查询该设备号是否已经添加到设备里里面
         getData_Device();
-<<<<<<< HEAD
-=======
-        //tvAddDevice
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     }
 
     /**
@@ -182,45 +167,27 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     class MyStringCallback1 extends StringCallback {
 
         @Override
-        public void onError(Call call, Exception e) {
-<<<<<<< HEAD
+        public void onError(Request request, Exception e) {
             LogUtils.e(TAG, ":getData_Device", e);
-=======
-            System.out.println("Add_Device_Activity+++===界面失败" + e.getMessage());
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(true).show();
-<<<<<<< HEAD
 
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         }
 
         @Override
         public void onResponse(String response) {
-<<<<<<< HEAD
             LogUtils.eNormal(TAG + ":getData_Device", response);
             AddDevice_CheckName_Bean bean = JsonUtil.json2Bean(response, AddDevice_CheckName_Bean.class);
-=======
-            //System.out.println("Add_Device_Activity界面+++" + response);
-            AddDevice_CheckName_Bean bean = new Gson().fromJson(response, AddDevice_CheckName_Bean.class);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             if (bean != null) {
                 int code = bean.code;
                 String typeName = bean.data.device_dev_type_name;
                 if (code == 0) {
                     if (!TextUtils.isEmpty(typeName)) {
-<<<<<<< HEAD
                         tvAddDevice.setText("您扫描的二维码绑定的设备是:" + "\n" + typeName);
 
                     } else {
-=======
-                        tvAddDevice.setText("您扫描的二维码绑定的设备是:"+"\n"+typeName);
-
-                    }else {
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                         tvAddDevice.setText("您扫描的二维码尚未添加到设备库");
                     }
                 }
@@ -238,115 +205,72 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if (intent != null) {
-            switch (requestCode) {
-                case REQUEST_CODE:
+        switch (requestCode) {
+            case REQUEST_CODE:
+                if (intent != null) {
                     String str = intent.getStringExtra(Keys.STR);
                     if (!TextUtils.isEmpty(str)) {
                         device_Name.setText(str);
                     }
-                    break;
-                case CAMERA:
-                    // 从相机界面返回
-                    if (resultCode == Activity.RESULT_OK) {
-                        showPhoto01(intent);
-                    }
-                    break;
-                case REQUESTCODE1:
-                    if (resultCode == 1) {
-                        String stringExtra = intent.getStringExtra(Keys.STR);
-<<<<<<< HEAD
-                        buildPoi = intent.getStringExtra(Keys.BUILD_POI);
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
-                        if (!TextUtils.isEmpty(stringExtra)) {
-                            device_Build.setText(stringExtra);
-                        }
-                    }
-                    break;
-                case REQUESTCODE2:
-                    if (resultCode == 2) {
-                        String stringExtra = intent.getStringExtra(Keys.STR);
-<<<<<<< HEAD
-                        businessPoi = intent.getStringExtra(Keys.BUSINESS_POI);
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
-                        if (!TextUtils.isEmpty(stringExtra)) {
-                            device_Unit.setText(stringExtra);
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
-    }
-
-    /**
-     * 从相机界面返回
-     */
-    private void showPhoto01(Intent intent) {
-        String sdState = Environment.getExternalStorageState();
-        if (!sdState.equals(Environment.MEDIA_MOUNTED)) {
-            ToastUtils.showLongToast(mActivity, "sd card unmount");
-            return;
-        }
-        new DateFormat();
-        String name = DateFormat.format("yyyyMMdd_hhmmss", Calendar.getInstance(Locale.CHINA)) + ".jpg";
-        Bundle bundle = intent.getExtras();
-        //获取相机返回的数据，并转换为图片格式
-        Bitmap bitmap = (Bitmap) bundle.get("data");
-        FileOutputStream fout = null;
-        File file = new File("/sdcard/photo_anhubo/");
-        file.mkdirs();
-        String filename = file.getPath() + name;
-        //filePhoto = new File(filename);//图片的文件对象
-        try {
-            fout = new FileOutputStream(filename);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fout);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fout.flush();
-                fout.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        //显示图片
-        iv.setImageBitmap(bitmap);
-        //file1 = filePhoto;
-        // 把本文件压缩后缓存到本地文件里面
-        savePicture(bitmap, "photo01");
-        File filePhoto01 = new File(Environment.getExternalStorageDirectory() + "/" + "photo01");
-        newFile = filePhoto01;
-    }
-
-    /**
-     * 保存图片到本应用下
-     **/
-    private void savePicture(Bitmap bitmap, String fileName) {
-
-        FileOutputStream fos = null;
-        try {//直接写入名称即可，没有会被自动创建；私有：只有本应用才能访问，重新写入内容会被覆盖
-            //fos = mActivity.openFileOutput(fileName, Context.MODE_PRIVATE);
-            OutputStream stream = new FileOutputStream(Environment.getExternalStorageDirectory() + "/" + fileName);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);// 把图片写入指定文件夹中
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (null != fos) {
-                    fos.close();
-                    fos = null;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                break;
+            case REQUESTCODE1:
+                if (intent != null&&resultCode == 1) {
+                    String stringExtra = intent.getStringExtra(Keys.STR);
+                    buildPoi = intent.getStringExtra(Keys.BUILD_POI);
+                    if (!TextUtils.isEmpty(stringExtra)) {
+                        device_Build.setText(stringExtra);
+                    }
+                }
+                break;
+            case REQUESTCODE2:
+                if (intent != null&&resultCode == 2) {
+                    String stringExtra = intent.getStringExtra(Keys.STR);
+                    businessPoi = intent.getStringExtra(Keys.BUSINESS_POI);
+                    if (!TextUtils.isEmpty(stringExtra)) {
+                        device_Unit.setText(stringExtra);
+                    }
+                }
+                break;
+            case CAMERA:
+                // 从相机界面返回
+                if (resultCode == Activity.RESULT_OK) {
+                    try {
+                        //　启动相机裁剪
+                        startCameraCrop();
+
+                        break;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case CROP_PHOTO://相机裁剪成功
+                if (resultCode == Activity.RESULT_OK) {
+
+
+                    try {
+                        //图片解析成Bitmap对象
+                        Bitmap bitmap = BitmapFactory.decodeStream(
+                                getContentResolver().openInputStream(imageUri));
+                        if (bitmap != null) {
+                            Bitmap photo = ImageFactory.ratio(bitmap, 800, 800);
+
+                            //显示图片
+                            iv.setImageBitmap(photo);
+                            // 把本文件压缩后缓存到本地文件里面
+                            File filePhoto01 = savePicture(photo, "photo01");
+                            newFile = filePhoto01;
+                        }
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            default:
+                break;
         }
+
     }
 
 
@@ -377,20 +301,11 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
     }
 
     /**
-     * 处理拍照的相关事项
-     */
-    private void takePhoto() {
-        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(camera, CAMERA);
-    }
-
-    /**
      * 点击添加完成的界面的按钮的点击事件
      */
     private void addComplete() {
         // 点击完成的时候获取输入框内的内容，调用接口，使用post方法把数据添加到后台
         getInputData();
-<<<<<<< HEAD
         if (TextUtils.isEmpty(build)) {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
@@ -398,9 +313,6 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
                     .setCancelable(true).show();
             return;
         }
-=======
-
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         if (TextUtils.isEmpty(devicePlace)) {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
@@ -425,28 +337,21 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
             return;
         }
 
-<<<<<<< HEAD
         showDialog = loadProgressDialog.show(mActivity, "正在提交...");
         String url = Urls.Url_Add;
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         if (TextUtils.isEmpty(buildPoi)) {
             params.put("building_poi_id", "");
-        }else{
+        } else {
             params.put("building_poi_id", buildPoi);
         }
         if (TextUtils.isEmpty(businessPoi)) {
             params.put("business_poi_id", "");
-        }else{
+        } else {
             params.put("business_poi_id", businessPoi);
         }
 
-=======
-        progressBar.setVisibility(View.VISIBLE);
-        String url = Urls.Url_Add;
-        Map<String, String> params = new HashMap<>();
-        params.put("uid", uid);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         params.put("qrcode", cardnumber);
         params.put("building_name", build);// 所属建筑
         params.put("business_name", unit);//所属单位
@@ -455,6 +360,8 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         }
         params.put("name", devicePlace);// 设备位置
         params.put("type", deviceName);// 设备名称
+        params.put("version", versionName);
+        LogUtils.eNormal(TAG, ":新增:" + versionName);
         OkHttpUtils.post()//
                 .addFile("file", "file01.png", newFile)//
                 .url(url)//
@@ -464,25 +371,13 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
 
     }
 
-<<<<<<< HEAD
     private Handler handler = new Handler();
-=======
-    @Override
-    public void onSystemUiVisibilityChange(int visibility) {
-
-    }
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     class MyStringCallback extends StringCallback {
         @Override
-        public void onError(Call call, Exception e) {
-<<<<<<< HEAD
+        public void onError(Request request, Exception e) {
             LogUtils.e(TAG, ":addComplete", e);
             showDialog.dismiss();
-=======
-            System.out.println("Add_Device_Activity+++===获取数据失败+++===" + e.getMessage());
-            progressBar.setVisibility(View.GONE);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -491,7 +386,6 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
 
         @Override
         public void onResponse(String response) {
-<<<<<<< HEAD
             LogUtils.eNormal(TAG + ":addComplete", response);
             showDialog.dismiss();
             if (!TextUtils.isEmpty(response)) {
@@ -502,28 +396,88 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
+                                SpUtils.putParam(mActivity, Keys.BUILDINGNAME, build);
                                 ToastUtils.showToast(mActivity, "添加成功");
                                 finish();
                             }
-                        }, 500);
+                        }, 300);
                     }
-=======
-            //System.out.println("添加界面+++==="+response);
-            if (!TextUtils.isEmpty(response)) {
-                Add_Device_Bean addDeviceBean = new Gson().fromJson(response, Add_Device_Bean.class);
-                if (addDeviceBean != null) {
-
-                    progressBar.setVisibility(View.GONE);
-                    deviceId = addDeviceBean.data.device_id;
-                    ToastUtils.showToast(mActivity, "添加成功");
-                    finish();
-                } else {
-                    System.out.println("Add_Device_Activity+++===没获取bean对象");
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 }
             }
 
         }
+    }
+
+    /**
+     * 打开相机
+     */
+    private void takePhoto() {
+        //图片名称 时间命名
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date date = new Date(System.currentTimeMillis());
+        String filename = format.format(date);
+        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+        File outputImage = new File(path, filename + ".jpg");
+        try {
+            if (outputImage.exists()) {
+                outputImage.delete();
+            }
+            outputImage.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //将File对象转换为Uri并启动照相程序
+        if (Build.VERSION.SDK_INT < 24) {
+
+            imageUri = Uri.fromFile(outputImage);
+        } else {
+            imageUri = FileProvider.getUriForFile(mActivity, "com.luoli.cameraalbumtest.fileprovider", outputImage);
+        }
+        Intent tTntent = new Intent("android.media.action.IMAGE_CAPTURE"); //照相
+        tTntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri); //指定图片输出地址
+        startActivityForResult(tTntent, CAMERA); //启动照相
+    }
+
+    /**
+     * 相机裁剪
+     */
+    private void startCameraCrop() {
+        // 启动剪裁功能
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(imageUri, "image/*");
+        intent.putExtra("scale", true);
+        //设置宽高比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        //设置裁剪图片宽高
+        intent.putExtra("outputX", 800);
+        intent.putExtra("outputY", 800);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        //广播刷新相册
+        Intent intentBc = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        intentBc.setData(imageUri);
+        this.sendBroadcast(intentBc);
+        startActivityForResult(intent, CROP_PHOTO); //设置裁剪参数显示图片至ImageView
+    }
+
+    /**
+     * 为了减小体积 把图片压缩保存到手机上（清晰度改动不大，基本不受影响）
+     **/
+    private File savePicture(Bitmap bitmap, String fileName) {
+        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+        File outputImage = new File(path, fileName + ".jpg");
+        try {
+            if (outputImage.exists()) {
+                outputImage.delete();
+            }
+            outputImage.createNewFile();
+            OutputStream stream = new FileOutputStream(outputImage);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);// 把图片写入指定文件夹中
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        }
+        return outputImage;
     }
 
 
@@ -537,12 +491,9 @@ public class Add_Device_Activity extends BaseActivity implements View.OnClickLis
         devicePlace = device_Place.getText().toString().trim();//设备位置
         deviceName = device_Name.getText().toString().trim();//设备名称
     }
-<<<<<<< HEAD
 
     @Override
     public void onSystemUiVisibilityChange(int visibility) {
 
     }
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 }

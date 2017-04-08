@@ -14,8 +14,8 @@ public class Login_WeiXin_Bean {
         public String uid;
         public String business_id;
         public String business_name;
-//        public String building_id;
-//        public String building_name;
+        public String building_id;
+        public String building_name;
         public int exict;
     }
 }

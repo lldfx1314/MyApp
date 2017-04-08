@@ -14,22 +14,24 @@
         android:layout_below="@+id/top_title"
         android:background="@color/backgroud_white"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
         <TextView
-            android:id="@+id/tv_employee"
+            android:id="@+id/tv_employee_adm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:visibility="gone"
+            android:layout_marginTop="16dp"
             android:layout_marginLeft="5dp"
+            android:visibility="gone"
             android:text="管理员"
-            android:textColor="@color/black"
+            android:textColor="@color/hanzi4_black"
             android:textSize="13sp" />
         <RelativeLayout
             android:id="@+id/rl_employee_adm"
             android:layout_width="wrap_content"
             android:visibility="gone"
-            android:layout_height="80dp">
+            android:layout_height="70dp">
 
             <include
                 android:id="@+id/employee_adm"
@@ -38,22 +40,24 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_below="@+id/employee_adm"
-                android:background="@color/gray_line" />
+                android:layout_alignParentBottom="true"
+                android:background="@color/view_gray" />
         </RelativeLayout>
-
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
 
             <TextView
+                android:id="@+id/tv_employee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="5dp"
                 android:text="员工"
-                android:textColor="@color/black"
+                android:textColor="@color/hanzi4_black"
                 android:textSize="13sp" />
 
             <TextView
@@ -62,7 +66,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="5dp"
-                android:textColor="@color/black"
+                android:textColor="@color/hanzi4_black"
+                android:text=""
                 android:textSize="13sp" />
         </RelativeLayout>
 
@@ -76,12 +81,11 @@
 
     <Button
         android:id="@+id/btn_employee_invate"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:background="@drawable/btn_confirm"
         android:text="邀请同事"
         android:textColor="@color/btn_blue"

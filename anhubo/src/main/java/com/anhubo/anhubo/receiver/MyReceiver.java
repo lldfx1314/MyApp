@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import cn.jpush.android.api.JPushInterface;
-import okhttp3.Call;
+import com.squareup.okhttp.Request;
 
 /**
  * 自定义接收器

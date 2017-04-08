@@ -19,18 +19,14 @@
         android:text="拍照"
         android:enabled="true"
         android:paddingBottom="10dp"
-        android:textSize="16sp"
-<<<<<<< HEAD
-        android:textColor="@color/text_gray"
-=======
-        android:textColor="@color/blue"
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+        android:textSize="15sp"
+        android:textColor="@color/hanzi8_black"
         android:background="@null"
         />
         <View
             android:layout_width="match_parent"
             android:layout_height="0.1dp"
-            android:background="@color/text_gray"/>
+            android:background="@color/view_gray"/>
         <Button
             android:id="@+id/btn_popDialog_photo"
             android:layout_width="match_parent"
@@ -38,12 +34,8 @@
             android:text="从手机相册选取"
             android:enabled="true"
             android:paddingTop="10dp"
-            android:textSize="16sp"
-<<<<<<< HEAD
-            android:textColor="@color/text_gray"
-=======
-            android:textColor="@color/blue"
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+            android:textSize="15sp"
+            android:textColor="@color/hanzi8_black"
             android:background="@null"
             />
 

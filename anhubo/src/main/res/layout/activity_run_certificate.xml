@@ -5,7 +5,7 @@
     android:background="@color/bg_upload"
     android:orientation="vertical">
 
-    <include layout="@layout/layout_top_bar"></include>
+    <include layout="@layout/layout_top_bar"/>
 
     <com.anhubo.anhubo.view.MyScrollView
         android:layout_width="match_parent"
@@ -15,8 +15,8 @@
             android:id="@+id/run_ll_sum"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:visibility="gone"
+            android:orientation="vertical"
             android:padding="5dp">
             <!--会员-->
             <LinearLayout
@@ -33,8 +33,8 @@
                     android:layout_height="wrap_content"
                     android:padding="5dp"
                     android:text="会员"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -54,8 +54,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:text="5000"
-                            android:textColor="@color/blue"
-                            android:textSize="30sp" />
+                            android:textColor="@color/hanzi4_blue"
+                            android:textSize="28sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -82,8 +82,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:text="50万"
-                            android:textColor="@color/blue"
-                            android:textSize="30sp" />
+                            android:textColor="@color/hanzi4_blue"
+                            android:textSize="28sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -109,8 +109,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:text="300"
-                            android:textColor="@color/blue"
-                            android:textSize="30sp" />
+                            android:textColor="@color/hanzi4_blue"
+                            android:textSize="28sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -129,17 +129,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
+                    android:layout_marginTop="5dp"
                     android:text="三旬三色情况"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:orientation="horizontal"
+                    android:layout_marginTop="5dp"
                     android:paddingBottom="18dp"
-                    android:paddingTop="15dp">
+                    android:paddingTop="10dp">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -148,8 +150,8 @@
 
                         <ImageView
                             android:id="@+id/run_iv_red"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="18dp"
                             android:background="@drawable/run_gray"/>
@@ -164,8 +166,8 @@
 
                         <ImageView
                             android:id="@+id/run_iv_yellow"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:background="@drawable/run_gray"/>
                     </RelativeLayout>
 
@@ -177,8 +179,8 @@
 
                         <ImageView
                             android:id="@+id/run_iv_green"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginBottom="2dp"
                             android:layout_marginLeft="18dp"
                             android:background="@drawable/run_gray"/>
@@ -210,7 +212,7 @@
                         android:layout_height="wrap_content"
                         android:padding="5dp"
                         android:text="单元"
-                        android:textColor="@color/black"
+                        android:textColor="@color/hanzi4_black"
                         android:textSize="13sp" />
 
                     <TextView
@@ -219,8 +221,9 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/run_tv_unit"
                         android:layout_marginLeft="12dp"
+                        android:layout_centerVertical="true"
                         android:text=" 安互保"
-                        android:textColor="@color/black"
+                        android:textColor="@color/hanzi8_black"
                         android:textSize="15sp" />
                     <TextView
                         android:id="@+id/run_tv_unit_details"
@@ -232,14 +235,14 @@
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
                         android:text="查看详情"
-                        android:textColor="@color/black"
+                        android:textColor="@color/hanzi4_blue"
                         android:textSize="13sp" />
                 </RelativeLayout>
                 <!--头像-->
                 <RelativeLayout
                     android:id="@+id/run_rl_unit_member"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="114dp"
                     android:layout_marginTop="15dp"
                     android:paddingBottom="10dp">
 
@@ -321,7 +324,7 @@
                         android:id="@+id/run_tv_plan_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="30dp"
+                        android:layout_marginRight="5dp"
                         android:padding="5dp"
                         android:text="运行期"
                         android:textColor="@color/backgroud_white"
@@ -333,15 +336,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp">
-
-                    <!--<TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:padding="5dp"
-                        android:text="计划名称"
-                        android:textColor="@color/backgroud_white"
-                        android:textSize="15sp" />-->
 
                     <TextView
                         android:id="@+id/run_tv_plan_name"
@@ -432,7 +426,7 @@
                         android:layout_width="100dp"
                         android:layout_height="20dp"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="15dp"
+                        android:layout_marginRight="5dp"
                         android:background="@drawable/btn_white_shap"
                         android:text="查看互助情况"
                         android:textColor="@color/backgroud_white"

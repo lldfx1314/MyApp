@@ -19,10 +19,11 @@ import com.anhubo.anhubo.bean.AssignmentAdminBean;
 import com.anhubo.anhubo.bean.EmployeeListBean;
 import com.anhubo.anhubo.bean.EmployeeOperate;
 import com.anhubo.anhubo.bean.Unit_Invate_WorkMateBean;
+import com.anhubo.anhubo.entity.RxBus;
+import com.anhubo.anhubo.entity.event.Exbus_EmployeeList;
 import com.anhubo.anhubo.interfaces.InterClick;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.HomeActivity;
-import com.anhubo.anhubo.utils.DisplayUtil;
 import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
@@ -32,10 +33,9 @@ import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.FooterListview;
 import com.bumptech.glide.Glide;
+import com.squareup.okhttp.Request;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +44,8 @@ import java.util.Map;
 
 import butterknife.InjectView;
 import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.Call;
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * Created by LUOLI on 2017/1/11.
@@ -53,6 +54,8 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
     private static final String TAG = "EmployeeListActivity";
     @InjectView(R.id.rl_employee_adm)
     RelativeLayout rlEmployeeAdm;
+    @InjectView(R.id.tv_employee_adm)
+    TextView tvEmployeeAdm;
     @InjectView(R.id.lv_employ)
     FooterListview lvEmploy;
     @InjectView(R.id.tv_employee)
@@ -61,7 +64,6 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
     TextView employeeNum;
     @InjectView(R.id.btn_employee_invate)
     Button btnEmployeeInvate;
-    private String versionName;
     private Dialog showDialog;
     private String businessId;
     private ArrayList<EmployeeListBean.Data.User_info> list;
@@ -75,6 +77,7 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
     private boolean isHaveAdm;
     private EmployeeListBean bean;
     private SpannableString ss;
+    private Subscription rxSubscription;
 
     @Override
     protected int getContentViewId() {
@@ -103,29 +106,50 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
         uid = SpUtils.getStringParam(mActivity, Keys.UID);
         businessId = SpUtils.getStringParam(mActivity, Keys.BUSINESSID);
         list = new ArrayList<>();
+        // 请求数据
+        getData();
     }
 
     @Override
     protected void onLoadDatas() {
         btnEmployee.setOnClickListener(this);
         btnEmployeeInvate.setOnClickListener(this);
+        // RxBus
+        rxBusOnClickListener();
+    }
+    // 订阅修改信息的事件
+    private void rxBusOnClickListener() {
+        // rxSubscription是一个Subscription的全局变量，这段代码可以在onCreate/onStart等生命周期内
+        rxSubscription = RxBus.getDefault().toObservable(Exbus_EmployeeList.class)
+                .subscribe(new Action1<Exbus_EmployeeList>() {
+                               @Override
+                               public void call(Exbus_EmployeeList employeeList) {
+                                   getData();
+                               }
+                           },
+                        new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                // TODO: 处理异常
+                            }
+                        });
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        // 界面重新可见时让管理员布局隐藏
-        rlEmployeeAdm.setVisibility(View.GONE);
-        tvEmployee.setVisibility(View.GONE);
-        list.clear();
-        // 请求数据
-        getData();
+    public void onDestroy() {
+        super.onDestroy();
+        // 解除订阅
+        if(!rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
+        }
     }
+
 
     /**
      * 请求数据
      */
     private void getData() {
+
         final Dialog showDialog = loadProgressDialog.show(mActivity, "正在加载...");
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
@@ -136,15 +160,20 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
                 .build()
                 .execute(new StringCallback() {
                     @Override
-                    public void onError(Call call, Exception e) {
+                    public void onError(Request request, Exception e) {
                         showDialog.dismiss();
                         LogUtils.e(TAG, ":getData", e);
+                        new AlertDialog(mActivity).builder()
+                                .setTitle("提示")
+                                .setMsg("网络有问题，请检查")
+                                .setCancelable(true).show();
                     }
 
                     @Override
                     public void onResponse(String response) {
                         showDialog.dismiss();
                         LogUtils.eNormal(TAG + ":getData", response);
+                        tvEmployee.setVisibility(View.VISIBLE);// 显示员工标记
                         // 处理数据
                         dealData(response);
                     }
@@ -172,7 +201,8 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
                 if (userType == 1) {
                     // 有管理员,显示管理员信息
                     isHaveAdm = true;
-                    tvEmployee.setVisibility(View.VISIBLE);
+                    // 显示管理员布局
+                    tvEmployeeAdm.setVisibility(View.VISIBLE);
                     rlEmployeeAdm.setVisibility(View.VISIBLE);
                     if (!TextUtils.isEmpty(picPath)) {
                         setHeaderIcon(ivIcon, picPath);
@@ -183,7 +213,6 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
                     // 显示的员工人数-1
                     if (!TextUtils.isEmpty(userNum)) {
                         int m = Integer.parseInt(userNum) - 1;
-//                        employeeNum.setText(m + "人");
                         setHanZiColor(m + "人");
                         employeeNum.setHorizontallyScrolling(true);
                         employeeNum.setText(ss);
@@ -211,12 +240,12 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
             if (!isHaveAdm) {
                 // 没有管理员，显示员工人数
                 if (!TextUtils.isEmpty(userNum)) {
-                    /*employeeNum.setText(userNum + "人");*/
                     setHanZiColor(userNum + "人");
                     employeeNum.setHorizontallyScrolling(true);
                     employeeNum.setText(ss);
                 }
             }
+            list.clear();
             list.addAll(userInfo);
             adapter = new EmployeeListAdapter(mActivity, list, EmployeeListActivity.this, isAdm);
             lvEmploy.setAdapter(adapter);
@@ -224,7 +253,7 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
     }
 
     /**
-     * 设置人字颜色
+     * 设置人字数字的颜色
      */
     private void setHanZiColor(String string) {
 
@@ -256,7 +285,8 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
     }
 
     /**
-     * listView条目的点击事件
+     * 这个方法是实现InterClick接口
+     * listView条目里按钮的点击事件
      */
     @Override
     public void onBtnClick(View v) {
@@ -302,8 +332,6 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
      * 退出企业
      */
     private void quitBusiness(int mPosition) {
-//        EmployeeListBean.Data.User_info userInfo = list.get(mPosition);
-//        userInfo.uid
         final Dialog showDialog = loadProgressDialog.show(mActivity, "正在退出...");
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
@@ -314,7 +342,7 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
                 .build()
                 .execute(new StringCallback() {
                     @Override
-                    public void onError(Call call, Exception e) {
+                    public void onError(Request request, Exception e) {
                         showDialog.dismiss();
                         LogUtils.e(TAG, ":quitBusiness", e);
                         new AlertDialog(mActivity).builder()
@@ -333,6 +361,9 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
                             if (code == 0) {
                                 SpUtils.putParam(mActivity, Keys.BUSINESSID, null);
                                 SpUtils.putParam(mActivity, Keys.BUSINESSNAME, null);
+                                SpUtils.putParam(mActivity, Keys.BUILDINGNAME, null);
+                                /**是否修改过单位，都置于false*/
+                                SpUtils.putParam(mActivity, Keys.ISALTERUNIT, false);
                                 // 跳转到HomeActivity里面
                                 startActivity(new Intent(mActivity, HomeActivity.class));
                                 // 发送一条广播,关掉之前所有界面
@@ -352,8 +383,7 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
         Glide
                 .with(mActivity)
                 .load(imgurl)
-                .centerCrop().crossFade().into(ivIcon);
-
+                .centerCrop().crossFade(800).into(ivIcon);
     }
 
     @Override
@@ -411,9 +441,6 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
     private void invateWorkMate(String phone) {
         showDialog = loadProgressDialog.show(mActivity, "正在请求...");
 
-        String[] split = Utils.getAppInfo(mActivity).split("#");
-        versionName = split[1];
-
         String url = Urls.Url_Unit_InvateWorkMate;
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
@@ -430,7 +457,7 @@ public class EmployeeListActivity extends BaseActivity implements InterClick {
     class MyStringCallback2 extends StringCallback {
 
         @Override
-        public void onError(Call call, Exception e) {
+        public void onError(Request request, Exception e) {
             showDialog.dismiss();
             LogUtils.e(TAG, "+:invateWorkMate", e);
         }

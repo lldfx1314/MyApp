@@ -27,7 +27,7 @@ import com.zhy.http.okhttp.callback.BitmapCallback;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.Call;
+import com.squareup.okhttp.Request;
 
 /**
  * Created by LUOLI on 2017/1/11.
@@ -152,7 +152,8 @@ public class AssignmentAdminAdapter extends BaseAdapter implements View.OnClickL
         Glide.with(mContext)
                 .load(imgurl)
                 .centerCrop()
-                .crossFade()
+                .crossFade(800)
+                .error(R.drawable.newicon)
 //                .diskCacheStrategy(DiskCacheStrategy.NONE)
 //                .skipMemoryCache(true)
                 .into(ivIcon);

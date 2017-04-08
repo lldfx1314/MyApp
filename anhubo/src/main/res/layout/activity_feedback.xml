@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <include android:id="@+id/top_title"
-        layout="@layout/layout_top_bar"></include>
+        layout="@layout/layout_top_bar"/>
 
     <LinearLayout
         android:layout_below="@+id/top_title"
@@ -136,19 +136,10 @@
             android:id="@+id/tv_submit_feedback"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/backgroud_white"
             android:enabled="true"
             android:gravity="center"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:text="提交"
-            android:textColor="#5e84ff"
-            android:textSize="14sp" />
+            android:text="提 交"
+            style="@style/btn_confirm"/>
 
     </LinearLayout>
-<<<<<<< HEAD
-=======
-    <include layout="@layout/loading"/>
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 </RelativeLayout>

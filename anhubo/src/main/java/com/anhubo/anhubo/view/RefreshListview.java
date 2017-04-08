@@ -3,11 +3,14 @@ package com.anhubo.anhubo.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
+import com.anhubo.anhubo.utils.DisplayUtil;
 
 
 import butterknife.InjectView;
@@ -16,14 +19,10 @@ import butterknife.InjectView;
  */
 public class RefreshListview extends ListView {
 
-    @InjectView(R.id.tv_footer)
-    TextView tvFooter;
-
-
-
     private OnRefreshingListener mListener;
     private View footer;
     private int footerMeasuredHeight;
+    private TextView tvFooter;
 
     public RefreshListview(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -32,23 +31,19 @@ public class RefreshListview extends ListView {
 
     private void addFooter() {
         // 添加加载更多的脚布局
+
         footer = View.inflate(getContext(), R.layout.footer, null);
+        tvFooter =  (TextView) footer.findViewById(R.id.tv_footer);
+
         // 隐藏脚布局
         footer.measure(0, 0);
         footerMeasuredHeight = footer.getMeasuredHeight();
         footer.setPadding(0, -footerMeasuredHeight, 0, 0);
-<<<<<<< HEAD
         this.addFooterView(footer,null, true);
         this.setFooterDividersEnabled(false);
-=======
-        this.addFooterView(footer);
-
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         // 监听Listview的条目滚动事件
         this.setOnScrollListener(new MyOnScrollListener());
     }
-
-
 
     // 对外暴露接口
     public interface OnRefreshingListener {
@@ -61,11 +56,18 @@ public class RefreshListview extends ListView {
         this.mListener = listener;
     }
 
-
-
-
+    // 更改加载更多TextView显示的提示内容
+    public void setLoadMoretv(String string){
+        tvFooter.setText(string);
+    }
+    // 更改加载更多TextView显示的提示内容
+    public void layoutParams(){
+        tvFooter.setText("");
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) tvFooter.getLayoutParams();
+        layoutParams.height = DisplayUtil.dp2px(getContext(),80);
+        tvFooter.setLayoutParams(layoutParams);
+    }
     private boolean isLoadMore = false;// 是否处于加载更多中
-
     // 恢复加载更多状态的方法
     public void loadMoreFinished() {
         footer.setPadding(0, -footerMeasuredHeight, 0, 0);

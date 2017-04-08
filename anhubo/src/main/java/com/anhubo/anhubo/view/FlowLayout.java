@@ -57,7 +57,7 @@ public class FlowLayout extends ViewGroup {
 		int totalVerticalPadding = getPaddingTop() + getPaddingBottom();		// 总的垂直padding
 		int totalVerticalSpacing = verticalSpacing * (allLines.size() - 1);		// 总的垂直行间距
 		int containerMeasuredHeight = getAllLinesHeight() + totalVerticalPadding + totalVerticalSpacing;
-		setMeasuredDimension(containerMeasureWidth, containerMeasuredHeight);
+		setMeasuredDimension(containerMeasureWidth, containerMeasuredHeight); 
 	}
 
 	/** 获取所有行的高 */
@@ -67,7 +67,7 @@ public class FlowLayout extends ViewGroup {
 
 	/**
 	 * 获取一行当中可用的宽
-	 * @param containerMeasureWidth
+	 * @param
 	 * @param oneLine
 	 * @return
 	 */
@@ -109,10 +109,10 @@ public class FlowLayout extends ViewGroup {
 				int childTop = (rowIndex == 0) ? getPaddingTop() : tempBottom + verticalSpacing;
 				
 				// 如果是最后一列，则把View的right安排在容器的最右边
-				int childRight = (columnIndex == oneLine.size() - 1)
-						         ? getMeasuredWidth() - getPaddingRight()
-						         : childLeft + childMeasuredWidth + averageUsableWidth;
-						         
+//				int childRight = (columnIndex == oneLine.size() - 1)
+//						         ? getMeasuredWidth() - getPaddingRight()
+//						         : childLeft + childMeasuredWidth + averageUsableWidth;
+				int childRight = childLeft + childMeasuredWidth; /*+ averageUsableWidth;*/
 				int childBottom = childTop + childMeasuredHeight;
 				child.layout(childLeft, childTop, childRight, childBottom);
 				

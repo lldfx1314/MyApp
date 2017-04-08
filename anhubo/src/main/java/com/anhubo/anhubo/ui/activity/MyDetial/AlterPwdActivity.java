@@ -1,12 +1,10 @@
 package com.anhubo.anhubo.ui.activity.MyDetial;
 
-<<<<<<< HEAD
 import android.app.Dialog;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -14,7 +12,9 @@ import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.MyAlterPwdBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.utils.Utils;
@@ -27,30 +27,28 @@ import java.util.HashMap;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
-import okhttp3.Call;
+import com.squareup.okhttp.Request;
 
 /**
  * Created by LUOLI on 2016/10/31.
  */
 public class AlterPwdActivity extends BaseActivity {
 
+    private static final String TAG = "AlterUnitActivity";
     @InjectView(R.id.et_alter_oldPwd)
     EditText etAlterOldPwd;
     @InjectView(R.id.et_alter_newPwd1)
     EditText etAlterNewPwd1;
     @InjectView(R.id.et_alter_newPwd2)
     EditText etAlterNewPwd2;
-    @InjectView(R.id.tv_sure_alter)
-    TextView tvSureAlter;
+    @InjectView(R.id.btn_sure_alter)
+    Button btnSureAlter;
     private String uid;
     private String oldPwd;
     private String newPwd1;
     private String newPwd2;
     private AlertDialog builder;
-<<<<<<< HEAD
     private Dialog showDialog;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @Override
     protected void initConfig() {
@@ -79,13 +77,13 @@ public class AlterPwdActivity extends BaseActivity {
 
     }
 
-    @OnClick(R.id.tv_sure_alter)
+    @OnClick(R.id.btn_sure_alter)
     public void onClick(View v) {
         /**获取输入的内容*/
         getInputData();
         builder = new AlertDialog(mActivity).builder();
         switch (v.getId()) {
-            case R.id.tv_sure_alter:
+            case R.id.btn_sure_alter:
                 // 对密码做判断
                 if (!TextUtils.isEmpty(oldPwd)) {
                     boolean isoldPwd = Utils.isRightPwd(oldPwd);
@@ -153,11 +151,7 @@ public class AlterPwdActivity extends BaseActivity {
      */
     private void alterPwd(String oldPwd, String newPwd2) {
         // 走网络，提交性别
-<<<<<<< HEAD
         showDialog = loadProgressDialog.show(mActivity, "正在提交...");
-=======
-        progressBar.setVisibility(View.VISIBLE);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         String url = Urls.Url_My_AlterPwd;
         HashMap<String, String> params = new HashMap<>();
         params.put("uid", uid);
@@ -179,26 +173,19 @@ public class AlterPwdActivity extends BaseActivity {
 
     class MyStringCallback extends StringCallback {
         @Override
-        public void onError(Call call, Exception e) {
-<<<<<<< HEAD
+        public void onError(Request request, Exception e) {
             showDialog.dismiss();
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+            LogUtils.e(TAG,":alterPwd",e);
             ToastUtils.showToast(mActivity, "网络有问题，请检查");
 
-            System.out.println("AlterPwdActivity+++界面修改密码===" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
-            //System.out.println(response);
-            MyAlterPwdBean bean = new Gson().fromJson(response, MyAlterPwdBean.class);
+            LogUtils.eNormal(TAG+":alterPwd",response);
+            MyAlterPwdBean bean = JsonUtil.json2Bean(response, MyAlterPwdBean.class);
             if (bean != null) {
-<<<<<<< HEAD
                 showDialog.dismiss();
-=======
-                progressBar.setVisibility(View.GONE);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 int code = bean.code;
                 String msg = bean.msg;
                 if (code != 0) {
@@ -212,7 +199,7 @@ public class AlterPwdActivity extends BaseActivity {
                         public void run() {
                             finish();
                         }
-                    }, 2000);
+                    }, 500);
                 }
             }
         }

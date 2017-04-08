@@ -1,9 +1,6 @@
 package com.anhubo.anhubo.bean;
 
-<<<<<<< HEAD
 import java.io.Serializable;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import java.util.List;
 
 /**
@@ -15,7 +12,6 @@ public class LocationBean extends BaseEntity {
     public class Data {
 
         public int page;
-<<<<<<< HEAD
         public List<Business> business;
 
         public List<Building> building;
@@ -33,9 +29,5 @@ public class LocationBean extends BaseEntity {
             public String poi_id;
 
         }
-=======
-        public List<String> business;
-        public List<String> building;
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     }
 }

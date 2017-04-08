@@ -1,6 +1,7 @@
 package com.anhubo.anhubo.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -50,9 +51,9 @@ public class MsgPerfectAdapterSecond extends BaseAdapter {
             hold = (ViewHolder) convertView.getTag();
         }
         hold.txt.setText(mArr[position]);
-        hold.txt.setTextColor(0xFF666666);
+        hold.txt.setTextColor(Color.parseColor("#66000000"));
         if (position == mPosition) {
-            hold.txt.setTextColor(0xFFFF8C00);
+//            hold.txt.setTextColor(0xFFFF8C00);
         }
         return convertView;
     }

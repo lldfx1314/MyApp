@@ -3,9 +3,5 @@
        android:shape="rectangle"
        android:useLevel="false" >
     <solid android:color="@color/dot_yellow" />
-<<<<<<< HEAD
     <corners android:radius="5dp" />
-=======
-    <corners android:radius="3dp" />
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 </shape>

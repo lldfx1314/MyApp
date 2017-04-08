@@ -19,7 +19,6 @@ import com.anhubo.anhubo.adapter.RunCertificateIconAdapter;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.RunCertificateBean;
 import com.anhubo.anhubo.entity.RxBus;
-import com.anhubo.anhubo.entity.event.Exbus_AlterName;
 import com.anhubo.anhubo.entity.event.Rxbus_JoinUnit;
 import com.anhubo.anhubo.protocol.DividerItemDecoration;
 import com.anhubo.anhubo.protocol.Urls;
@@ -30,6 +29,7 @@ import com.anhubo.anhubo.utils.Keys;
 import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.utils.SpUtils;
 import com.anhubo.anhubo.view.AlertDialog;
+import com.squareup.okhttp.Request;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -40,7 +40,6 @@ import java.util.Map;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
-import okhttp3.Call;
 import rx.Subscription;
 import rx.functions.Action1;
 
@@ -183,6 +182,8 @@ public class RunCertificateActivity extends BaseActivity {
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         params.put("plan_id", planId);
+        params.put("version", versionName);
+        LogUtils.eNormal(TAG, ":动态凭证:" + versionName);
         OkHttpUtils.post()
                 .url(url)
                 .params(params)
@@ -195,7 +196,7 @@ public class RunCertificateActivity extends BaseActivity {
     class MyStringCallback extends StringCallback {
 
         @Override
-        public void onError(Call call, Exception e) {
+        public void onError(Request request, Exception e) {
 
             LogUtils.e(TAG, ":getData", e);
             showDialog.dismiss();
@@ -221,8 +222,8 @@ public class RunCertificateActivity extends BaseActivity {
         @Override
         public void onResponse(String response) {
             LogUtils.eNormal(TAG + ":getData", response);
-            runllSum.setVisibility(View.VISIBLE);
             isHaveData = true;
+
             showDialog.dismiss();
             setPlanData(response);
         }
@@ -235,10 +236,11 @@ public class RunCertificateActivity extends BaseActivity {
             String msg = bean.msg;
             RunCertificateBean.Data data = bean.data;
             if (code == 0) {
+                runllSum.setVisibility(View.VISIBLE);
                 //　会员
                 String sumMoney = data.sum_money;// 交互金余额
-                int newPlanEnsure = data.plan_ensure;// 最高互助额
-                int newPlanMoney = data.plan_money;// 最高分摊额
+                double newPlanEnsure = data.plan_ensure;// 最高互助额
+                double newPlanMoney = data.plan_money;// 最高分摊额
                 int twoDaysAgo = data.score0;
                 int last = data.score1;
                 today = data.score2;
@@ -289,16 +291,7 @@ public class RunCertificateActivity extends BaseActivity {
                 } else if (last <= 100) {
                     runivYellow.setBackgroundResource(R.drawable.green01);
                 }
-                // 三
-//                if (today == 0) {
-//                    runivGreen.setImageResource(R.drawable.tv_shap_bottom3);
-//                } else if (today <= 60) {
-//                    runivGreen.setImageResource(R.drawable.red_animlist);
-//                } else if (today <= 80) {
-//                    runivGreen.setImageResource(R.drawable.yellow_animlist);
-//                } else if (today <= 100) {
-//                    runivGreen.setImageResource(R.drawable.red_animlist);
-//                }
+
 
                 // 单元
                 if (existFlag == 1) {
@@ -367,6 +360,9 @@ public class RunCertificateActivity extends BaseActivity {
             Double heighSharing = Double.parseDouble(string) / 10000;
 
             if (heighSharing < 1) {
+                if (string.endsWith(".0")) {
+                    string = string.replace(".0", "");
+                }
                 textView.setText(string);
             } else if (heighSharing >= 1) {
                 String str = String.valueOf(heighSharing);
@@ -375,9 +371,10 @@ public class RunCertificateActivity extends BaseActivity {
                     //　做判断，防止显示类似＂50.万＂这样的情况
                     if (substring.endsWith(".")) {
                         textView.setText(string.substring(0, 2) + "万");
-                    } else {
-                        textView.setText(substring + "万");
+                    } else if (substring.endsWith(".0")) {
+                        textView.setText(substring.substring(0, 1) + "万");
                     }
+
                 } else {
                     textView.setText(str + "万");
 

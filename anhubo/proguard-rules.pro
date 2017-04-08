@@ -53,7 +53,8 @@
 -keep public class com.android.vending.licensing.ILicensingService
 #如果有引用v4包可以添加下面这行
 -keep public class * extends android.support.v4.app.Fragment
-
+#保持适配器不被混淆
+#-keep public class com.anhubo.anhubo.adapter.HomeAdapter
 
 #忽略警告
 -ignorewarning
@@ -79,6 +80,11 @@
 #保持 native 方法不被混淆
 -keepclasseswithmembernames class * {
     native <methods>;
+}
+#保持
+-keep public class * extends android.view.ViewPager{
+
+    public <init>(android.content.Context, android.util.AttributeSet);
 }
 
 #保持自定义控件类不被混淆
@@ -326,3 +332,4 @@ public static final ** CREATOR;
 
 -keep class com.linkedin.** { *; }
 -keepattributes Signature
+#友盟分享结束

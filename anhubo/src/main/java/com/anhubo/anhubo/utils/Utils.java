@@ -1,7 +1,5 @@
 package com.anhubo.anhubo.utils;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,22 +8,13 @@ import android.net.wifi.WifiManager;
 import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
-import android.view.View;
-import android.widget.Button;
+import android.text.SpannableString;
+import android.text.TextPaint;
+import android.text.TextUtils;
+import android.text.style.URLSpan;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.anhubo.anhubo.R;
-import com.anhubo.anhubo.view.ShowBottonDialog;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,6 +24,10 @@ import java.util.regex.Pattern;
  * Created by Administrator on 2016/9/28.
  */
 public class Utils {
+
+
+    private SpannableString ss;
+
 
 
     /**
@@ -51,10 +44,19 @@ public class Utils {
     }
 
     /**
-     * 验证密码是否正确
+     * 验证注册密码是否正确
      */
     public static final boolean isRightPwd(String pwd) {
         Pattern p = Pattern.compile("^(?![^a-zA-Z]+$)(?!\\D+$)[0-9a-zA-Z]{8,16}$");
+        Matcher m = p.matcher(pwd);
+        return m.matches();
+
+    }
+    /**
+     * 验证登录密码是否正确
+     */
+    public static final boolean isRightLoginPwd(String pwd) {
+        Pattern p = Pattern.compile("^\\w{8}(,\\w{8})*$");
         Matcher m = p.matcher(pwd);
         return m.matches();
 
@@ -175,5 +177,6 @@ public class Utils {
         // 设置光标
         et.setSelection(0);
     }
+
 
 }

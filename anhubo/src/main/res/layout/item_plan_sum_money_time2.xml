@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="155dp"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="155dp"
+        android:layout_marginLeft="15dp">
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="2dp"
+            android:background="@color/view_gray" />
+
+        <View
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/dot_blue_shape_big" />
+
+        <View
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/dot_blue_shape" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="155dp"
+        android:layout_marginRight="15dp">
+
+        <LinearLayout
+            android:id="@+id/ll_item_helpmoney"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_item_check_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="03-21"
+                android:textColor="@color/hanzi8_black"
+                android:textSize="15sp" />
+
+
+            <TextView
+                android:id="@+id/tv_item_check_status"
+                android:layout_width="50dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="15dp"
+                android:gravity="center"
+                android:background="@drawable/shap_helpmoney_blue01"
+                android:text=""
+                android:textColor="@color/hanzi4_black"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_item_helpmoney_photo"
+            android:layout_width="299dp"
+            android:layout_height="100dp"
+            android:layout_below="@+id/ll_item_helpmoney"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="25dp"
+            android:scaleType="centerCrop" />
+
+    </RelativeLayout>
+
+</LinearLayout>

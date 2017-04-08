@@ -21,7 +21,7 @@ import com.zhy.http.okhttp.callback.BitmapCallback;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.Call;
+import com.squareup.okhttp.Request;
 
 /**
  * Created by LUOLI on 2017/1/17.
@@ -67,9 +67,11 @@ public class RunCertificateIconAdapter extends RecyclerView.Adapter<RunCertifica
         Glide
                 .with(mContext)
                 .load(imgurl)
-                .centerCrop().crossFade()
-//                .diskCacheStrategy(DiskCacheStrategy.NONE)
-//                .skipMemoryCache(true)
+                .centerCrop().crossFade(1000)// 淡入淡出的时间为1S
+//                .placeholder(R.drawable.newicon)
+                .error(R.drawable.newicon)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .into(ivIcon);
 
     }

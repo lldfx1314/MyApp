@@ -6,30 +6,22 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.OnApplyWindowInsetsListener;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.WindowInsetsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
-<<<<<<< HEAD
+import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.LoadProgressDialog;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
@@ -49,15 +41,17 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected RelativeLayout llTop;
     protected TextView tvToptitle;
     protected TextView tvTopBarRight;
-<<<<<<< HEAD
     protected ProgressBar topPb;
     protected LoadProgressDialog loadProgressDialog;
     protected ImageView ivTopBarRightUnitShare;
     protected ImageView ivTopBarRight;
-=======
-    protected RelativeLayout progressBar;
-    protected ProgressBar topPb;
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+    protected String versionName;
+    protected RelativeLayout rlIndicator;
+    protected TextView tvIndicatorAdddevice;
+    protected TextView tvIndicatorArea;
+    protected View viewIndicatorAddDevice;
+    protected View viewIndicatorArea;
+
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -69,11 +63,25 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
 
         mActivity = this;
+        getVersionName();
         initConfig();
         if (getContentViewId() != 0) {
             setContentView(getContentViewId());
         }
     }
+
+    private void getVersionName(){
+
+        String[] split = Utils.getAppInfo(this).split("#");
+        versionName = split[1];
+    }
+
+//    @Override
+//    protected void attachBaseContext(Context newBase) {
+////        super.attachBaseContext(newBase);
+//        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+//    }
+
     /**设置浸入式状态栏*/
     private void setStatusBarTransparent(){
 
@@ -103,7 +111,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         // 加载标题栏的布局
         initTitleView();// 找到标题栏布局
         initTitleBar();//设置标题栏的具体事件
-        initProgressBar();//初始化加载进度条
+        initProgressBar(mActivity);//初始化加载进度条
         initViews();
         initEvents();
         onLoadDatas();
@@ -113,12 +121,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
 
-    private void initProgressBar() {
-<<<<<<< HEAD
-        loadProgressDialog = LoadProgressDialog.newInstance();
-=======
-        progressBar = (RelativeLayout) findViewById(R.id.rl_progress);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+    private void initProgressBar(Context context) {
+        loadProgressDialog = LoadProgressDialog.newInstance(context);
 
     }
 
@@ -184,17 +188,19 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         iv_basepager_left = (ImageButton) findViewById(R.id.ivTopBarLeft);//左上角返回按钮
         ivTopBarleftUnitMenu = (ImageView) findViewById(R.id.ivTopBarleft_unit_menu);//左上角菜单按钮
         ivTopBarRightUnitMsg = (ImageView) findViewById(R.id.ivTopBarRight_unit_msg);//右上角信息按钮
-<<<<<<< HEAD
         ivTopBarRightUnitShare = (ImageView) findViewById(R.id.ivTopBarRight_unit_share);//右上角分享按钮
         tvTopBarRight = (TextView) findViewById(R.id.tvTopBarRight);//右上角列表
         ivTopBarRight = (ImageView) findViewById(R.id.ivTopBarRight_add);//右上角加号
-=======
-        tvTopBarRight = (TextView) findViewById(R.id.tvTopBarRight);//右上角列表
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         ivTopBarleftBuildPen = (ImageView) findViewById(R.id.ivTopBarleft_build_pen);//左上角铅笔按钮
         tvToptitle = (TextView) findViewById(R.id.tvAddress);//标题
         llTop = (RelativeLayout) findViewById(R.id.ll_Top); // 顶部标题栏
         topPb = (ProgressBar) findViewById(R.id.top_pb); // 顶部进度条
+
+        rlIndicator = (RelativeLayout) findViewById(R.id.rl_Indicator);
+        tvIndicatorAdddevice = (TextView) findViewById(R.id.tv_Indicator_adddevice);
+        tvIndicatorArea = (TextView) findViewById(R.id.tv_Indicator_area);
+        viewIndicatorAddDevice = (View) findViewById(R.id.view_Indicator_adddevice);
+        viewIndicatorArea = (View) findViewById(R.id.view_Indicator_area);
 
     }
     /**设置标题栏*/

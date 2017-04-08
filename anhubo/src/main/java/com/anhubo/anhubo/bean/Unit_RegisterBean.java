@@ -9,5 +9,6 @@ public class Unit_RegisterBean extends BaseEntity{
     public class Data {
 
         public String business_id;
+        public String building_id;
     }
 }

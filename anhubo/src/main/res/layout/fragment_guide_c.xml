@@ -2,19 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/guide_bg">
+    android:background="@drawable/guide03">
 
-    <TextView
+    <!--<TextView
         android:id="@+id/tv_anhubao"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="80dp"
-<<<<<<< HEAD
         android:text="互助计划"
-=======
-        android:text="互保计划"
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         android:textColor="#AA000000"
         android:textSize="24sp" />
 
@@ -25,11 +21,7 @@
         android:layout_below="@+id/tv_anhubao"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="21dp"
-<<<<<<< HEAD
         android:text="为互助组织及其会员单位服务"
-=======
-        android:text="为互保组织及其会员单位服务"
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         android:textColor="#66000000"
         android:textSize="18sp" />
 
@@ -39,6 +31,6 @@
         android:layout_below="@+id/tv_01"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
-        android:background="@drawable/guide_03" />
+        android:background="@drawable/guide_03" />-->
 
 </RelativeLayout>

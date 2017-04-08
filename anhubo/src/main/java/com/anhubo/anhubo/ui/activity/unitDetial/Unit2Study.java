@@ -45,7 +45,6 @@ public class Unit2Study extends BaseActivity {
     protected void initEvents() {
         // 获取uid拼接参数
         String uid = SpUtils.getStringParam(mActivity, Keys.UID);
-        //System.out.println("uid是==========" + uid);
         String newUrl = url + "?uid=" + uid;
 
         WebSettings settings = wvStudy.getSettings();
@@ -59,7 +58,7 @@ public class Unit2Study extends BaseActivity {
             }
 
         });
-
+/**/
         wvStudy.addJavascriptInterface(new MyJavaScriptInterface(), "ADAPP");
         // 加载界面
         wvStudy.loadUrl(newUrl);
@@ -77,22 +76,14 @@ public class Unit2Study extends BaseActivity {
 
     }
 
-<<<<<<< HEAD
-=======
-    @Override
-    public void onSystemUiVisibilityChange(int visibility) {
-
-    }
-
-
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     class MyJavaScriptInterface {
         public MyJavaScriptInterface() {
         }
 
         @JavascriptInterface
-        public void alertAPP() {
-            ToastUtils.showToast(mActivity, "请选择答案");
+        public void popNav() {
+//            ToastUtils.showToast(mActivity, "请选择答案");
+            finish();
         }
     }
 
@@ -105,12 +96,8 @@ public class Unit2Study extends BaseActivity {
     public void onClick(View v) {
 
     }
-<<<<<<< HEAD
     @Override
     public void onSystemUiVisibilityChange(int visibility) {
 
     }
-=======
-
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 }

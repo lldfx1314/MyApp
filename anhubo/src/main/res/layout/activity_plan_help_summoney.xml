@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_gray"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/top_title"
+        layout="@layout/layout_top_bar" />
+    <com.anhubo.anhubo.view.RefreshListview
+        android:id="@+id/rl_plan_help_summoney"
+        android:layout_below="@+id/top_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:dividerHeight="0dp"
+        android:divider="@android:color/transparent"
+        android:listSelector="@android:color/transparent"/>
+    <Button
+        android:id="@+id/btn_plan_help_summoney_comfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/btn_reg_login"
+        android:text="提交"
+        android:textColor="@color/backgroud_white"
+        android:textSize="18sp"/>
+
+</RelativeLayout>

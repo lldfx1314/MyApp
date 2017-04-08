@@ -1,94 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<<<<<<< HEAD
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-=======
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!--不拦截子view事件的ViewPager-->
-    <com.anhubo.anhubo.view.NoScrollViewPager
-
-        android:id="@+id/viewpager"
+    <FrameLayout
+        android:id="@+id/flContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-<<<<<<< HEAD
-        android:layout_weight="1" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/rl_gray" />
-
-    <RadioGroup
-        android:id="@+id/rg_home_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@android:color/transparent"
-        android:orientation="horizontal"
-        android:paddingBottom="2dp"
-        android:paddingTop="2dp">
-=======
-        android:layout_weight="1"/>
+        android:layout_weight="1" >
+    </FrameLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="@color/rl_gray"/>
-    <RadioGroup
-        android:id="@+id/rg_home_bottom"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:background="@android:color/transparent">
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+        android:layout_height="55dp"
+        android:orientation="horizontal" >
 
-        <RadioButton
-            android:id="@+id/rb_bottom_unit"
-            style="@style/bottom_style"
-            android:drawableTop="@drawable/bottom_unit_selector"
-<<<<<<< HEAD
-            android:text="单位" />
+        <LinearLayout
+            android:id="@+id/llChat"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
 
-        <RadioButton
-            android:id="@+id/rb_bottom_build"
-            style="@style/bottom_style"
-            android:drawableTop="@drawable/bottom_build_selector"
-            android:text="建筑"
-            android:visibility="gone" />
+            <ImageView
+                android:id="@+id/ivChat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:src="@drawable/bottom_unit_selector" />
 
-=======
-            android:text="单位"/>
-        <RadioButton
-            android:id="@+id/rb_bottom_build"
-            style="@style/bottom_style"
+            <TextView
+                android:id="@+id/tvChat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="安全自证"
+                android:textColor="@drawable/bottom_text_selector" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llFriends"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:visibility="gone"
-            android:drawableTop="@drawable/bottom_build_selector"
-            android:text="建筑"/>
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
-        <RadioButton
-            android:id="@+id/rb_bottom_find"
-            style="@style/bottom_style"
-            android:drawableTop="@drawable/bottom_find_selector"
-<<<<<<< HEAD
-            android:text="发现" />
+            android:gravity="center"
+            android:orientation="vertical" >
 
-=======
-            android:text="发现"/>
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
-        <RadioButton
-            android:id="@+id/rb_bottom_my"
-            style="@style/bottom_style"
-            android:drawableTop="@drawable/bottom_my_selector"
-<<<<<<< HEAD
-            android:text="我的" />
-=======
-            android:text="我的"/>
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
-    </RadioGroup>
+            <ImageView
+                android:id="@+id/ivFriends"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:src="@drawable/bottom_build_selector" />
+
+            <TextView
+                android:id="@+id/tvFriends"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="建筑"
+                android:textColor="@drawable/bottom_text_selector" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llContacts"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/ivContacts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:src="@drawable/bottom_find_selector" />
+
+            <TextView
+                android:id="@+id/tvContacts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="互助计划"
+                android:textColor="@drawable/bottom_text_selector" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llSettings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/ivSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:src="@drawable/bottom_my_selector" />
+
+            <TextView
+                android:id="@+id/tvSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我的"
+                android:textColor="@drawable/bottom_text_selector" />
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

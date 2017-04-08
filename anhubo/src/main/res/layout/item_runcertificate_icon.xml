@@ -12,8 +12,7 @@
             android:id="@+id/iv_run_icon"
             android:layout_width="46dp"
             android:layout_height="46dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/newicon" />
+            android:layout_centerVertical="true"/>
     </RelativeLayout>
 
 

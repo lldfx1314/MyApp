@@ -1,9 +1,6 @@
 package com.anhubo.anhubo.ui.activity.unitDetial;
 
-<<<<<<< HEAD
 import android.app.Dialog;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,7 +13,9 @@ import com.anhubo.anhubo.adapter.DeviceNameAdapterSecond;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.DeviceNameBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
+import com.anhubo.anhubo.utils.LogUtils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -25,7 +24,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Call;
+import com.squareup.okhttp.Request;
 
 /**
  * 这个类是用来设置设备名称的
@@ -33,6 +32,7 @@ import okhttp3.Call;
  */
 public class DeviceName_Activity extends BaseActivity {
 
+    private static final String TAG = "DeviceName_Activity";
     private ListView mainlist;
     private ListView morelist;
     private List<DeviceNameBean.DataBean.DevicesBean> list;
@@ -42,10 +42,7 @@ public class DeviceName_Activity extends BaseActivity {
     private DeviceNameAdapterSecond adapterSecond;
     private String typeName;
     private String[][] data;
-<<<<<<< HEAD
     private Dialog showDialog;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
 
     @Override
@@ -90,14 +87,10 @@ public class DeviceName_Activity extends BaseActivity {
 
 
     private void getData() {
-<<<<<<< HEAD
         showDialog = loadProgressDialog.show(mActivity, "正在加载...");
-=======
-        progressBar.setVisibility(View.VISIBLE);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         String url = Urls.Url_GetDevName;
 
-        OkHttpUtils.post()//
+        OkHttpUtils.get()
                 .url(url)//
                 .build()//
                 .execute(new MyStringCallback());
@@ -110,34 +103,24 @@ public class DeviceName_Activity extends BaseActivity {
 
     class MyStringCallback extends StringCallback {
         @Override
-        public void onError(Call call, Exception e) {
-<<<<<<< HEAD
+        public void onError(Request request, Exception e) {
             showDialog.dismiss();
-=======
-            progressBar.setVisibility(View.GONE);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+            LogUtils.e(TAG,":getData",e);
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
                     .setCancelable(false).show();
-            System.out.println("DeviceName_Activity+++===没拿到数据" + e.getMessage());
         }
 
         @Override
         public void onResponse(String response) {
-            DeviceNameBean bean = new Gson().fromJson(response, DeviceNameBean.class);
+            LogUtils.eNormal(TAG+":getData",response);
+            DeviceNameBean bean = JsonUtil.json2Bean(response, DeviceNameBean.class);
             if (bean != null) {
-<<<<<<< HEAD
                 showDialog.dismiss();
-=======
-                progressBar.setVisibility(View.GONE);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                 showData(bean);
                 // 设置第一个适配器
                 setAdapterOne();
-
-            } else {
-                System.out.println("DeviceName_Activity+++===没拿到bean对象");
             }
         }
     }
@@ -206,25 +189,28 @@ public class DeviceName_Activity extends BaseActivity {
         list = deviceNameBean.data.devices;
         // 每次遍历都清空一下集合
         mainList.clear();
-        // 遍历list
-        for (int i = 0; i < list.size(); i++) {
-            DeviceNameBean.DataBean.DevicesBean devicesBean = list.get(i);
-            String system_name = devicesBean.system_name;
-            // 获取到第一列数据的集合
-            mainList.add(system_name);
+        if(list!=null){
+            // 遍历list
+            for (int i = 0; i < list.size(); i++) {
+                DeviceNameBean.DataBean.DevicesBean devicesBean = list.get(i);
+                String system_name = devicesBean.system_name;
+                // 获取到第一列数据的集合
+                mainList.add(system_name);
 
-            // 获取到第二列数据
-            list2 = devicesBean.choice;
-            for (int m = 0; m < list2.size(); m++) {
-                DeviceNameBean.DataBean.DevicesBean.ChoiceBean choiceBean = list2.get(m);
-                // 拿到第二列的每一组的每个数据
-                typeName = choiceBean.device_name;
-                //添加进每组
-                list2TypeName.add(typeName);
+                // 获取到第二列数据
+                list2 = devicesBean.choice;
+                for (int m = 0; m < list2.size(); m++) {
+                    DeviceNameBean.DataBean.DevicesBean.ChoiceBean choiceBean = list2.get(m);
+                    // 拿到第二列的每一组的每个数据
+                    typeName = choiceBean.device_name;
+                    //添加进每组
+                    list2TypeName.add(typeName);
+                }
+                // 每次添加完后为了便于区分,添加一个*来用于分割集合
+                list2TypeName.add("#");
             }
-            // 每次添加完后为了便于区分,添加一个*来用于分割集合
-            list2TypeName.add("#");
         }
+
 
         //list2TypeName集合添加完之后用#切割得到新数组
         String[] arr = list2TypeName.toString().split("#");

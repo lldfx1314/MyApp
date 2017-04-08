@@ -27,7 +27,7 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.InjectView;
-import okhttp3.Call;
+import com.squareup.okhttp.Request;
 
 /**
  * Created by LUOLI on 2016/10/27.
@@ -138,7 +138,7 @@ public class InvateActivity extends BaseActivity {
 
                     String url = Urls.Url_MyShare;
 
-                    OkHttpUtils.post()//
+                    OkHttpUtils.get()//
                             .url(url)//
                             .build()//
                             .execute(new MyStringCallback1());
@@ -156,7 +156,7 @@ public class InvateActivity extends BaseActivity {
 
             String url = Urls.Url_MyShare;
 
-            OkHttpUtils.post()//
+            OkHttpUtils.get()//
                     .url(url)//
                     .build()//
                     .execute(new MyStringCallback());
@@ -188,7 +188,7 @@ public class InvateActivity extends BaseActivity {
      */
     class MyStringCallback1 extends StringCallback {
         @Override
-        public void onError(Call call, Exception e) {
+        public void onError(Request request, Exception e) {
 
             System.out.println("InvateActivity界面获取信息失败");
         }
@@ -234,7 +234,7 @@ public class InvateActivity extends BaseActivity {
      */
     class MyStringCallback extends StringCallback {
         @Override
-        public void onError(Call call, Exception e) {
+        public void onError(Request request, Exception e) {
 
             System.out.println("InvateActivity界面获取信息失败");
         }

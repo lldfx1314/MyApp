@@ -1,12 +1,10 @@
 package com.anhubo.anhubo.ui.activity.MyDetial;
 
-<<<<<<< HEAD
 import android.app.Dialog;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,12 +14,11 @@ import com.anhubo.anhubo.bean.Alter_UnitBean;
 import com.anhubo.anhubo.protocol.Urls;
 import com.anhubo.anhubo.ui.activity.unitDetial.BuildingActivity;
 import com.anhubo.anhubo.ui.activity.unitDetial.BusinessActivity;
+import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
-<<<<<<< HEAD
 import com.anhubo.anhubo.utils.LogUtils;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 import com.anhubo.anhubo.utils.SpUtils;
+import com.anhubo.anhubo.utils.Utils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -32,7 +29,7 @@ import java.util.Map;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
-import okhttp3.Call;
+import com.squareup.okhttp.Request;
 
 /**
  * Created by LUOLI on 2016/12/6.
@@ -40,10 +37,7 @@ import okhttp3.Call;
 public class AlterUnitActivity extends BaseActivity {
     private static final int REQUESTCODE1 = 1;
     private static final int REQUESTCODE2 = 2;
-<<<<<<< HEAD
-    private static final String TAB = "AlterUnitActivity";
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+    private static final String TAG = "AlterUnitActivity";
     @InjectView(R.id.tv_alter_unit)
     TextView tvMyUnit;
     @InjectView(R.id.ll_alter_unit)
@@ -52,18 +46,15 @@ public class AlterUnitActivity extends BaseActivity {
     TextView tvMyBuilding;
     @InjectView(R.id.ll_alter_building)
     LinearLayout llAlterBuilding;
-    @InjectView(R.id.tv_alter_building_unit)
-    TextView tvAlterBuildingUnit;
+    @InjectView(R.id.btn_alter_building_unit)
+    Button btnAlterBuildingUnit;
     private String businessName;
     private String buildingName;
     private String building;
     private String unit;
-<<<<<<< HEAD
     private Dialog showDialog;
     private String buildPoi;
     private String businessPoi;
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
     @Override
     protected int getContentViewId() {
@@ -92,7 +83,7 @@ public class AlterUnitActivity extends BaseActivity {
 
     @Override
     protected void onLoadDatas() {
-        tvAlterBuildingUnit.setOnClickListener(this);
+        btnAlterBuildingUnit.setOnClickListener(this);
     }
 
     @Override
@@ -102,14 +93,10 @@ public class AlterUnitActivity extends BaseActivity {
             switch (requestCode) {
                 case REQUESTCODE1:
                     if (resultCode == 1) {
-<<<<<<< HEAD
                         // 建筑
                         String stringExtra = data.getStringExtra(Keys.STR);
                         buildPoi = data.getStringExtra(Keys.BUILD_POI);
 
-=======
-                        String stringExtra = data.getStringExtra(Keys.STR);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                         if (!TextUtils.isEmpty(stringExtra)) {
                             tvMyBuilding.setText(stringExtra);
                         }
@@ -117,13 +104,9 @@ public class AlterUnitActivity extends BaseActivity {
                     break;
                 case REQUESTCODE2:
                     if (resultCode == 2) {
-<<<<<<< HEAD
                         // 单位
                         String stringExtra = data.getStringExtra(Keys.STR);
                         businessPoi = data.getStringExtra(Keys.BUSINESS_POI);
-=======
-                        String stringExtra = data.getStringExtra(Keys.STR);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
                         if (!TextUtils.isEmpty(stringExtra)) {
                             tvMyUnit.setText(stringExtra);
                         }
@@ -133,7 +116,7 @@ public class AlterUnitActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.ll_alter_unit, R.id.ll_alter_building, R.id.tv_alter_building_unit})
+    @OnClick({R.id.ll_alter_unit, R.id.ll_alter_building, R.id.btn_alter_building_unit})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_alter_building:
@@ -146,7 +129,7 @@ public class AlterUnitActivity extends BaseActivity {
                 Intent intent2 = new Intent(mActivity, BusinessActivity.class);
                 startActivityForResult(intent2, REQUESTCODE2);
                 break;
-            case R.id.tv_alter_building_unit:
+            case R.id.btn_alter_building_unit:
                 submitAlter();
                 break;
         }
@@ -157,7 +140,6 @@ public class AlterUnitActivity extends BaseActivity {
      */
     private void submitAlter() {
         getText();
-<<<<<<< HEAD
 
         if (TextUtils.isEmpty(building)) {
             new AlertDialog(mActivity).builder()
@@ -172,9 +154,8 @@ public class AlterUnitActivity extends BaseActivity {
         Map<String, String> params = new HashMap<>();
         params.put("uid", uid);
         params.put("building_name", building);
-        LogUtils.eNormal(TAB+":building",building);
         params.put("business_name", unit);
-        LogUtils.eNormal(TAB+":unit",unit);
+        params.put("version", versionName);
         if (TextUtils.isEmpty(buildPoi)) {
             params.put("building_poi_id", "");
         }else{
@@ -186,13 +167,6 @@ public class AlterUnitActivity extends BaseActivity {
             params.put("business_poi_id", businessPoi);
         }
 
-=======
-        String uid = SpUtils.getStringParam(mActivity, Keys.UID);
-        Map<String, String> params = new HashMap<>();
-        params.put("uid", uid);
-        params.put("building_name", building);
-        params.put("business_name", unit);
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
         String url = Urls.Url_AlterUnit;
 
         OkHttpUtils.post()//
@@ -207,20 +181,11 @@ public class AlterUnitActivity extends BaseActivity {
         unit = tvMyUnit.getText().toString().trim();
     }
 
-    @Override
-    public void onSystemUiVisibilityChange(int visibility) {
-
-    }
-
     class MyStringCallback extends StringCallback {
         @Override
-        public void onError(Call call, Exception e) {
-<<<<<<< HEAD
+        public void onError(Request request, Exception e) {
             showDialog.dismiss();
-=======
-
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
-            System.out.println("AlterUnitActivity+++===界面失败" + e.getMessage());
+            LogUtils.e(TAG,":submitAlter",e);
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
                     .setMsg("网络有问题，请检查")
@@ -229,12 +194,9 @@ public class AlterUnitActivity extends BaseActivity {
 
         @Override
         public void onResponse(String response) {
-            //System.out.println("AlterUnitActivity界面+++"+response);
-<<<<<<< HEAD
+            LogUtils.eNormal(TAG+":submitAlter",response);
             showDialog.dismiss();
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
-            final Alter_UnitBean bean = new Gson().fromJson(response, Alter_UnitBean.class);
+            final Alter_UnitBean bean = JsonUtil.json2Bean(response, Alter_UnitBean.class);
             if (bean != null) {
                 int code = bean.code;
                 String msg = bean.msg;
@@ -270,4 +232,10 @@ public class AlterUnitActivity extends BaseActivity {
 
         }
     }
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+
+    }
+
 }

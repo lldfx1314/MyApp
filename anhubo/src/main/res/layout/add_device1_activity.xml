@@ -6,67 +6,80 @@
     <include
         android:id="@+id/top_title"
         layout="@layout/layout_top_bar"></include>
-<<<<<<< HEAD
-=======
-    <include layout="@layout/loading"/>
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+
     <LinearLayout
         android:id="@+id/llayout"
-        android:layout_below="@+id/top_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:layout_below="@+id/top_title"
+        android:background="@color/bg_gray"
+        android:orientation="horizontal">
 
-        <Button
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:background="@color/btn_gray"
-            android:enabled="false"
-            android:text="系统名称"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
-            />
-        <View
-            android:layout_marginLeft="1dp"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@android:color/darker_gray"/>
-
-        <Button
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="1dp"
             android:layout_weight="1"
-            android:background="@color/btn_gray"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="20dp"
+            android:enabled="false"
+            android:text="系统名称"
+            android:textColor="#66000000"
+            android:textSize="13sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:layout_marginLeft="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
             android:enabled="false"
             android:text="设施设备名称"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"/>
+            android:textColor="#66000000"
+            android:textSize="13sp" />
 
     </LinearLayout>
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/llayout"
+        android:background="@color/view_gray"/>
     <!-- 下面的ListView -->
     <LinearLayout
-        android:layout_below="@+id/llayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/view"
         android:orientation="horizontal">
+
         <ListView
 
             android:id="@+id/lv_dev_name01"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:dividerHeight="0dp"
+            android:divider="@null"
+            android:background="@color/bg_gray" />
+
         <ListView
 
             android:id="@+id/lv_dev_name02"
             android:layout_width="match_parent"
-            android:layout_marginLeft="0dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:dividerHeight="0dp"
+            android:divider="@null"
+            android:background="@color/textcolor" />
 
     </LinearLayout>
 
-<<<<<<< HEAD
-    </RelativeLayout>
-=======
 </RelativeLayout>
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce

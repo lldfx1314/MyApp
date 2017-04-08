@@ -26,12 +26,15 @@
     <color name="dot_yellow">#ffe718</color>
     <color name="dot_green">#61a21b</color>
 
-
-    <color name="text_biack">#1C1C1C</color>
-    <color name="view_gray">#F0EFF1</color>
+    <!--分割线和字的颜色-->
+    <color name="view_gray">#d7d7d7</color>
     <color name="bg_upload">#F4F4F4</color>
     <color name="upload_photo">#CACACA</color>
     <color name="btn_gray">#999999</color>
+    <color name="bg_gray">#f7f7f7</color>
+    <color name="hanzi8_black">#99000000</color>
+    <color name="hanzi4_black">#66000000</color>
+    <color name="hanzi4_blue">#5e84ff</color>
     <!--二维码的颜色-->
     <color name="cornercolor">#FF8C00</color>
     <color name="textcolor">#FFFFFF</color>
@@ -45,9 +48,6 @@
     <color name="actionsheet_red">#FD4A2E</color>
     <color name="actionsheet_gray">#8F8F8F</color>
     <color name="guide_bg">#FAFAFA</color>
-<<<<<<< HEAD
     <color name="dialog_bg">#aaffffff</color>
-    <color name="gray_line">#c7c7c7</color>
-=======
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
+
 </resources>

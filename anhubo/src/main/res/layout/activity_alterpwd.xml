@@ -20,17 +20,17 @@
         android:background="@color/backgroud_white"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="10dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="10dp">
+        android:paddingRight="16dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:text="原密码"
-            android:textColor="@color/text_gray1"
-            android:textSize="14sp" />
+            android:textColor="@color/hanzi4_black"
+            android:textSize="12sp" />
         <EditText
             android:id="@+id/et_alter_oldPwd"
             android:layout_width="match_parent"
@@ -38,14 +38,14 @@
             android:layout_weight="1"
             android:hint="请输入原密码"
             android:textColorHint="@color/gray"
-            android:layout_marginLeft="16dp"
-            android:paddingLeft="15dp"
+            android:layout_marginLeft="15dp"
             android:inputType="textPassword"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:background="@null"
-            android:textColor="@color/gray"
-            android:textSize="13sp" />
+            android:textColorHighlight="@color/hanzi4_black"
+            android:textColor="@color/hanzi8_black"
+            android:textSize="15sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -56,17 +56,17 @@
         android:background="@color/backgroud_white"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="10dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="10dp">
+        android:paddingRight="16dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:text="新密码"
-            android:textColor="@color/text_gray1"
-            android:textSize="14sp" />
+            android:textColor="@color/hanzi4_black"
+            android:textSize="13sp" />
         <EditText
             android:id="@+id/et_alter_newPwd1"
             android:layout_width="match_parent"
@@ -75,37 +75,37 @@
             android:hint="密码长度需要8位以上"
             android:textColorHint="@color/gray"
             android:inputType="textPassword"
-            android:layout_marginLeft="16dp"
-            android:paddingLeft="15dp"
+            android:layout_marginLeft="15dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:textColor="@color/gray"
             android:background="@null"
-            android:textSize="13sp" />
+            android:textColorHighlight="@color/hanzi4_black"
+            android:textColor="@color/hanzi8_black"
+            android:textSize="15sp" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="0.3dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:background="@color/gray" />
+        android:background="@color/view_gray" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/backgroud_white"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="10dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="10dp">
+        android:paddingRight="16dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:text="确认密码"
-            android:textColor="@color/text_gray1"
-            android:textSize="14sp" />
+            android:textColor="@color/hanzi4_black"
+            android:textSize="13sp" />
         <EditText
             android:id="@+id/et_alter_newPwd2"
             android:layout_width="match_parent"
@@ -114,30 +114,22 @@
             android:hint="密码长度需要8位以上"
             android:textColorHint="@color/gray"
             android:inputType="textPassword"
-            android:paddingLeft="15dp"
+            android:layout_marginLeft="15dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:textColor="@color/gray"
             android:background="@null"
-            android:textSize="13sp" />
+            android:textColorHighlight="@color/hanzi4_black"
+            android:textColor="@color/hanzi8_black"
+            android:textSize="15sp" />
     </LinearLayout>
-    <TextView
-        android:id="@+id/tv_sure_alter"
+    <Button
+        android:id="@+id/btn_sure_alter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:background="@color/backgroud_white"
         android:gravity="center"
         android:enabled="true"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
         android:text="确认修改"
-        android:textColor="@color/blue"
-        android:textSize="14sp" />
+        style="@style/btn_confirm" />
     </LinearLayout>
-<<<<<<< HEAD
-=======
-    <include layout="@layout/loading"/>
->>>>>>> 3e8e17c0bcfaefbf5a3deb90a517d6c61d5401ce
 
 </RelativeLayout>
