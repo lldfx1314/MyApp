@@ -165,7 +165,7 @@ public class MyRoundProcess extends View {
         mTextPaint = new Paint();
         mTextPaint.setAntiAlias(true);
         mTextPaint.setColor(textColor);
-        mTextPaint.setTextSize(DisplayUtil.sp2px(getContext(),15));
+        mTextPaint.setTextSize(DisplayUtil.sp2px(getContext(),18));
     }
 
     @Override
@@ -186,7 +186,6 @@ public class MyRoundProcess extends View {
         Rect bounds = new Rect();
         mTextPaint.getTextBounds(text, 0, text.length(), bounds);
         canvas.drawText(text, mWidth / 2 - bounds.width() / 2, mHeight / 2 + bounds.height() / 2, mTextPaint);
-
         // 第三步：绘制动态进度圆环
         mPaint.setDither(true);
         mPaint.setStrokeJoin(Paint.Join.BEVEL);

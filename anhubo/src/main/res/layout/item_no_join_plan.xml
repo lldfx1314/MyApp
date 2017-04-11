@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_no_join_plan"
     android:layout_width="match_parent"
-    android:layout_height="220dp"
-    android:layout_marginTop="5dp"
+    android:layout_height="230dp"
+    android:layout_marginTop="8dp"
     android:background="@drawable/noplan_bg"
     android:orientation="vertical">
 
@@ -13,39 +13,66 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:gravity="center_horizontal"
-        android:padding="10dp"
+        android:textStyle="bold"
         android:text="大理"
         android:textColor="@color/backgroud_white"
-        android:textSize="15sp" />
+        android:textSize="18sp" />
 
-    <TextView
+    <LinearLayout
         android:layout_width="265dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
         android:layout_gravity="center_horizontal"
-        android:padding="5dp"
-        android:text="火灾公众责任需要通过加入(会员数量)、(数据积累)才可加入其它子计划，如："
-        android:textColor="@color/backgroud_white"
-        android:textSize="14sp" />
+        android:background="@drawable/btn_no_join"
+        android:orientation="vertical">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="3dp"
+            android:text="火灾公众责任需要通过加入"
+            android:textColor="@color/backgroud_white"
+            android:textSize="16sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold"
+            android:padding="3dp"
+            android:text="会员数量、数据积累"
+            android:textColor="@color/backgroud_white"
+            android:textSize="16sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="3dp"
+            android:text="才可加入其它子计划，如："
+            android:textColor="@color/backgroud_white"
+            android:textSize="16sp" />
+
+    </LinearLayout>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:padding="5dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/btn_no_join"
+        android:background="@android:color/transparent"
         android:text="房屋互助计划、财产互助计划、自身安全互助计划"
         android:textColor="@color/backgroud_white"
-        android:textSize="12sp" />
-
-    <Button
+        android:textSize="14sp" />
+    <TextView
         android:layout_width="120dp"
         android:layout_height="35dp"
-        android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
         android:background="@drawable/btn_no_join_01"
+        android:gravity="center"
+        android:text="火灾公众责任"
         android:textColor="@color/backgroud_white"
-        android:textSize="15sp"
-        android:text="火灾公众责任"/>
+        android:textSize="16sp" />
 
 </LinearLayout>

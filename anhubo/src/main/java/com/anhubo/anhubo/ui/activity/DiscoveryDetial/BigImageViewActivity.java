@@ -89,8 +89,6 @@ public class BigImageViewActivity extends AppCompatActivity {
                 .placeholder(R.drawable.buffer_icon)
                 .thumbnail(0.1f)
                 .animate(animationObject)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-//                .skipMemoryCache( true )
                 .listener(new RequestListener<String, Bitmap>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {

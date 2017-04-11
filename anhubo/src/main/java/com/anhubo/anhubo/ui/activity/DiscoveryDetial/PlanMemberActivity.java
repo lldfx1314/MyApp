@@ -329,12 +329,22 @@ public class PlanMemberActivity extends BaseActivity {
                 tvPlanJoinRecordNum.setText("新加入" + todayNum + "家");
                 // 为满员
                 List<PlanMemberBean.Data.Unfilled_units> unfilledUnits = data.unfilled_units;
+                if (unfilledUnits.size() != 0) {
+                    tvPlanNofullmore.setVisibility(View.VISIBLE);
+                } else {
+                    tvPlanNofullmore.setVisibility(View.GONE);
+                }
                 unfullList.clear();
                 unfullList.addAll(unfilledUnits);
                 adapterPlanNumberUnFull.notifyDataSetChanged();
 
                 // 满员
                 List<PlanMemberBean.Data.Filled_units> filledUnits = data.filled_units;
+                if (filledUnits.size() != 0) {
+                    tvPlanFullmore.setVisibility(View.VISIBLE);
+                } else {
+                    tvPlanFullmore.setVisibility(View.GONE);
+                }
                 fullList.clear();
                 fullList.addAll(filledUnits);
                 adapterPlanNumberFull.notifyDataSetChanged();

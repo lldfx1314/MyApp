@@ -13,6 +13,8 @@ import org.litepal.LitePalApplication;
 
 import java.util.concurrent.TimeUnit;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+
 
 /**
  * Created by Administrator on 2016/9/18.
@@ -52,7 +54,7 @@ public class MyApp extends LitePalApplication{
                 OkHttpUtils.getInstance().getOkHttpClient();
         client.setConnectTimeout(60000,TimeUnit.MILLISECONDS);
         // 替换字体
-//        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/fangzheng.TTF").setFontAttrId(R.attr.fontPath).build());
+//        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/xxx.ttf").setFontAttrId(R.attr.fontPath).build());
     }
 
 

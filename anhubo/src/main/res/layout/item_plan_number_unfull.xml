@@ -18,23 +18,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:text="unit1-4"
-            android:textColor="@color/hanzi4_black"
-            android:textSize="13sp" />
+            android:textColor="@color/hanzi8_black"
+            android:textSize="15sp"  />
 
         <TextView
             android:id="@+id/tv_item_plan_member_nofull_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:text="7/10"
-            android:textColor="@color/hanzi4_black"
-            android:textSize="13sp" />
+            android:textColor="@color/hanzi8_black"
+            android:textSize="15sp"  />
 
         <ImageView
             android:id="@+id/iv_item_plan_member_nofull_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@drawable/paln_member_add" />

@@ -26,6 +26,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
 import cn.jpush.android.api.JPushInterface;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by Administrator on 2016/9/18.

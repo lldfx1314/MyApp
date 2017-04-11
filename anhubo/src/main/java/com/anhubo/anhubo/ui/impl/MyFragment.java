@@ -326,9 +326,6 @@ public class MyFragment extends BaseFragment {
         /**清除微信头像*/
         SpUtils.putParam(mActivity, Keys.HEADERICON_WEIXIN, null);
 
-        /**修改过单位*/
-        SpUtils.putParam(mActivity, Keys.ISALTERUNIT, false);
-        SpUtils.putParam(mActivity, Keys.NEWBUSINESSNAME, null);
         /**保存版本号*/
         SpUtils.putParam(mActivity, Keys.VERSIONNAME, null);
         /**学习和检查的小圆点*/

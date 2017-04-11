@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="155dp"
+    android:layout_height="185dp"
     android:orientation="horizontal">
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="155dp"
+        android:layout_height="185dp"
         android:layout_marginLeft="15dp">
 
         <View
@@ -31,7 +31,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="155dp"
+        android:layout_height="185dp"
         android:layout_marginRight="15dp">
 
         <LinearLayout
@@ -65,10 +65,11 @@
         <ImageView
             android:id="@+id/iv_item_helpmoney_photo"
             android:layout_width="299dp"
-            android:layout_height="100dp"
+            android:layout_height="135dp"
             android:layout_below="@+id/ll_item_helpmoney"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="25dp"
+            android:background="@drawable/btn_sum_money_shap"
             android:scaleType="centerCrop" />
 
     </RelativeLayout>

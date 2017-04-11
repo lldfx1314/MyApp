@@ -39,6 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="安全自证"
+                android:textSize="12sp"
                 android:textColor="@drawable/bottom_text_selector" />
         </LinearLayout>
 
@@ -63,6 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="建筑"
+                android:textSize="12sp"
                 android:textColor="@drawable/bottom_text_selector" />
         </LinearLayout>
 
@@ -86,6 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="互助计划"
+                android:textSize="12sp"
                 android:textColor="@drawable/bottom_text_selector" />
         </LinearLayout>
 
@@ -109,6 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="我的"
+                android:textSize="12sp"
                 android:textColor="@drawable/bottom_text_selector" />
         </LinearLayout>
     </LinearLayout>

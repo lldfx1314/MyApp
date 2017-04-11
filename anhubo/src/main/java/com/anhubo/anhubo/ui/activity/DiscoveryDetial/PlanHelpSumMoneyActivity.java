@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -23,6 +24,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.URLSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -47,6 +49,8 @@ import com.anhubo.anhubo.utils.ToastUtils;
 import com.anhubo.anhubo.view.AlertDialog;
 import com.anhubo.anhubo.view.RefreshListview;
 import com.anhubo.anhubo.view.ShowBottonDialog;
+import com.bigkoo.pickerview.TimePickerView;
+import com.bigkoo.pickerview.listener.CustomListener;
 import com.squareup.okhttp.Request;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -58,10 +62,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import butterknife.InjectView;
 
@@ -72,8 +78,7 @@ public class PlanHelpSumMoneyActivity extends BaseActivity implements InterClick
     private static final String TAG = "PlanHelpSumMoneyActivity";
     private static final int CAMERA = 0;
     private static final int PICTURE = 1;
-    private static final int START_ALBUM_CODE = 2;
-    private static final int CROP_PHOTO = 3;
+    private static final int CROP_PHOTO = 2;
     @InjectView(R.id.rl_plan_help_summoney)
     RefreshListview rlPlanHelpSummoney;
     @InjectView(R.id.btn_plan_help_summoney_comfirm)
@@ -93,6 +98,11 @@ public class PlanHelpSumMoneyActivity extends BaseActivity implements InterClick
     private ImageView ivPhoto;
     private SpannableString ss;
     private Uri imageUri;
+    private TextView tvStatementTime;
+    private TimePickerView pvCustomTime;
+    private String time;
+    private LinearLayout llStatementTime;
+    private String cTime;
 
     @Override
     protected void initTitleBar() {
@@ -113,6 +123,8 @@ public class PlanHelpSumMoneyActivity extends BaseActivity implements InterClick
     @Override
     protected void initEvents() {
         super.initEvents();
+
+
         getLocalData();
 
         getData();
@@ -143,7 +155,83 @@ public class PlanHelpSumMoneyActivity extends BaseActivity implements InterClick
                 // 相册
                 getPhoto();
                 break;
+            case R.id.ll_help_sum_money_statement_time:
+                // 弹出自定义选择对账单日期的按钮
+                if (pvCustomTime != null) {
+
+                    pvCustomTime.show(); //弹出自定义时间选择器
+                }
+                break;
         }
+    }
+
+    /**
+     * 初始化对账单时间选择的对话框
+     */
+    private void initTimePicker() {
+        Calendar selectedDate = Calendar.getInstance();//系统当前时间
+        Calendar startDate = Calendar.getInstance();
+        if (!TextUtils.isEmpty(cTime)) {
+            String[] split = cTime.split("-");
+            int year1 = Integer.parseInt(split[0]);
+            int month1 = Integer.parseInt(split[1])-1;
+            startDate.set(year1, month1, 1);
+        } else {
+            startDate.set(2010, 1, 1);
+        }
+
+        Calendar endDate = Calendar.getInstance();
+        int year = endDate.get(Calendar.YEAR);
+        int month = endDate.get(Calendar.MONTH);
+//        int day = endDate.get(Calendar.DAY_OF_MONTH);
+        int day = 30;
+//        LogUtils.eNormal(TAG,"哈哈：+"+day);
+        endDate.set(year, month, day);
+        //时间选择器 ，自定义布局
+        pvCustomTime = new TimePickerView.Builder(this, new TimePickerView.OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {//选中事件回调
+                time = getTime(date);
+                StringBuilder builder = new StringBuilder(time.replace("-", "年"));
+                String newTime = builder.append("月").toString();
+                tvStatementTime.setText(newTime);
+            }
+        }).setType(TimePickerView.Type.YEAR_MONTH)
+                .setDate(selectedDate)
+                .setRangDate(startDate, endDate)
+                .setTextColorCenter(DisplayUtil.getColor(R.color.hanzi8_black))
+                .setTextColorOut(DisplayUtil.getColor(R.color.hanzi4_black))
+//                .isDialog(true)
+//                .isCyclic(true)
+                .setLayoutRes(R.layout.pickerview_custom_time, new CustomListener() {
+
+                    @Override
+                    public void customLayout(View v) {
+                        final TextView tvSubmit = (TextView) v.findViewById(R.id.tv_finish);
+                        TextView tvCancel = (TextView) v.findViewById(R.id.tv_cancel);
+                        TextView tvTitle = (TextView) v.findViewById(R.id.tv_title);
+                        tvTitle.setText("选择对账单时间");
+                        tvSubmit.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                pvCustomTime.returnData(tvSubmit);
+                            }
+                        });
+                        tvCancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                pvCustomTime.dismiss();
+                            }
+                        });
+                    }
+                })
+                .setDividerColor(DisplayUtil.getColor(R.color.rl_gray))
+                .build();
+    }
+
+    private String getTime(Date date) {//可根据需要自行截取数据显示
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
+        return format.format(date);
     }
 
     private void setAdapters() {
@@ -152,6 +240,8 @@ public class PlanHelpSumMoneyActivity extends BaseActivity implements InterClick
         // 填充头布局
         View view = View.inflate(mActivity, R.layout.header_help_sunmoney, null);
         tvMoney = (TextView) view.findViewById(R.id.tv_help_sum_money);
+        tvStatementTime = (TextView) view.findViewById(R.id.tv_help_sum_money_statement_time);
+        llStatementTime = (LinearLayout) view.findViewById(R.id.ll_help_sum_money_statement_time);
         llTakePhoto = (LinearLayout) view.findViewById(R.id.ll_help_sunmoney_takePhoto);
         ivPhoto = (ImageView) view.findViewById(R.id.iv_help_sunmoney_photo);
 
@@ -161,6 +251,7 @@ public class PlanHelpSumMoneyActivity extends BaseActivity implements InterClick
         rlPlanHelpSummoney.setOnRefreshingListener(new MyOnRefreshingListener());
         // 拍照按钮监听
         llTakePhoto.setOnClickListener(this);
+        llStatementTime.setOnClickListener(this);
     }
 
     private boolean isLoadMore;//记录是否加载更多
@@ -241,6 +332,7 @@ public class PlanHelpSumMoneyActivity extends BaseActivity implements InterClick
             PlanHelpSumMoneyBean.Data data = bean.data;
             page = data.page;
             String sumMoney = data.sum_money;
+            cTime = data.c_time;
             if (!TextUtils.isEmpty(sumMoney)) {
                 // 填充头布局里互助金总额
 //                tvMoney.setText(sumMoney);
@@ -270,6 +362,7 @@ public class PlanHelpSumMoneyActivity extends BaseActivity implements InterClick
             // 恢复加载更多状态
             rlPlanHelpSummoney.loadMoreFinished();
         }
+        initTimePicker();
     }
 
     private void getLocalData() {
@@ -283,11 +376,18 @@ public class PlanHelpSumMoneyActivity extends BaseActivity implements InterClick
     private File newFile = null;
 
     private void upLoading() {
-
+        String billTime = tvStatementTime.getText().toString().trim();
+        if (TextUtils.isEmpty(billTime) && TextUtils.isEmpty(time)) {
+            new AlertDialog(mActivity).builder()
+                    .setTitle("提示")
+                    .setMsg("请选取对账单对应日期")
+                    .setCancelable(false).show();
+            return;
+        }
         if (newFile == null) {
             new AlertDialog(mActivity).builder()
                     .setTitle("提示")
-                    .setMsg("亲，请拍取对账单照片")
+                    .setMsg("请拍取对账单照片")
                     .setCancelable(false).show();
             return;
         }
@@ -297,6 +397,7 @@ public class PlanHelpSumMoneyActivity extends BaseActivity implements InterClick
         Map<String, String> params = new HashMap<>();
         params.put("plan_id", planId);
         params.put("uid", uid);
+        params.put("bill_time", time);
 
         OkHttpUtils.post()//
                 .addFile("file", "file01.png", newFile)//
@@ -339,6 +440,9 @@ public class PlanHelpSumMoneyActivity extends BaseActivity implements InterClick
 
                                         //让显示的图片不显示
                                         ivPhoto.setImageBitmap(null);
+                                        //让时间置空
+                                        tvStatementTime.setText(null);
+                                        time = null;
                                     }
                                 }).show();
                             }

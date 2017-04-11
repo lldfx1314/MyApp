@@ -230,13 +230,7 @@ public class FindFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                             .setPositiveButton("确认", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    ToastUtils.showToast(mActivity, "计划名称：" + noPlanList.get(position).plan_name);
-                                }
-                            })
-                            .setNegativeButton("取消", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
+//                                    ToastUtils.showToast(mActivity, "计划名称：" + noPlanList.get(position).plan_name);
                                 }
                             })
                             .show();
@@ -283,7 +277,6 @@ public class FindFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     private void dealWith(String response) {
         PlanBean bean = JsonUtil.json2Bean(response, PlanBean.class);
-        int code1 = bean.code;
         if (bean != null) {
             int code = bean.code;
             String msg = bean.msg;
@@ -302,13 +295,15 @@ public class FindFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                     rlNoPlan.setVisibility(View.GONE);
                     rlJoinPlan.setVisibility(View.VISIBLE);
                     rlPlanManage.setVisibility(View.GONE);
-                    rlPlanList.setVisibility(View.VISIBLE);
+//                    rlPlanList.setVisibility(View.VISIBLE);
+                    rlPlanList.setVisibility(View.GONE);
                 } else if (status == 2) {
                     // 是计划管理者
                     rlNoPlan.setVisibility(View.GONE);
                     rlJoinPlan.setVisibility(View.VISIBLE);
                     rlPlanManage.setVisibility(View.VISIBLE);
-                    rlPlanList.setVisibility(View.VISIBLE);
+//                    rlPlanList.setVisibility(View.VISIBLE);
+                    rlPlanList.setVisibility(View.GONE);
                 }
                 // 未加入计划
                 List<PlanBean.Data.PlanList> planList = data.list;

@@ -112,7 +112,7 @@ public class AdapterPlanHelpSumMoney extends BaseAdapter implements View.OnClick
                 String status = pic.status;
                 String picUrl = pic.pic_url;
                 // 填充数据
-                hold2.tvTime.setText(uploadDate);
+                hold2.tvTime.setText(uploadDate+"月");
 
                 //设置标记
                 hold2.ivPhoto.setTag(R.id.image_tag, position);

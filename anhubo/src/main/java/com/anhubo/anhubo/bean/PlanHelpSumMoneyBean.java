@@ -13,6 +13,7 @@ public class PlanHelpSumMoneyBean extends BaseEntity {
     public class Data implements Serializable {
 
         public String sum_money;
+        public String c_time;
         public int page;
         public List<Pics> pics;
 

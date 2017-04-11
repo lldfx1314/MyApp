@@ -8,7 +8,7 @@ import android.util.Log;
  * Log工具类
  */
 public class LogUtils {
-    private static final boolean ENABLE = true;
+    private static final boolean ENABLE = false;
 
     /**
      * 打印info级别的log

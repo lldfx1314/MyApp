@@ -146,7 +146,6 @@ public class PersonMsgActivity extends BaseActivity {
     private String sex;
     private String img;
     private String name;
-    private String businessName;
     private String phone;
     private String qqName;
     private String weiboName;
@@ -159,7 +158,6 @@ public class PersonMsgActivity extends BaseActivity {
     private PopGenderHelper popGenderHelper;
     private String newGender;
     private String newAge;
-    private String buildingName;
     private UMShareAPI mShareAPI;
     private Dialog showDialog;
     private Subscription rxSubscription;
@@ -176,8 +174,8 @@ public class PersonMsgActivity extends BaseActivity {
             sex = bean.data.sex;
             img = bean.data.img;
             name = bean.data.name;
-            businessName = bean.data.business_name;
-            buildingName = bean.data.building_name;
+//            businessName = bean.data.business_name;
+//            buildingName = bean.data.building_name;
             phone = bean.data.phone;
             qqName = bean.data.qq_name;
             weiboName = bean.data.weibo_name;
@@ -647,9 +645,7 @@ public class PersonMsgActivity extends BaseActivity {
      * 给每个控件先设置初始内容
      */
     private void setInitialData() {
-        // 记录是否修改过单位，以便于从我的界面进来后决定是否修改单位显示内容，因为修改完返回到我的界面是不请求网络的，此时要是进入PersonMsgActivity界面，单位显示的必然是修改之前的单位
-        boolean isalterUnit = SpUtils.getBooleanParam(mActivity, Keys.ISALTERUNIT, false);
-        String newBusinessName = SpUtils.getStringParam(mActivity, Keys.NEWBUSINESSNAME);
+        String businessName = SpUtils.getStringParam(mActivity, Keys.BUSINESSNAME);
 
         if (!TextUtils.isEmpty(name)) {
             etMyUsername.setText(name);
@@ -663,18 +659,9 @@ public class PersonMsgActivity extends BaseActivity {
         if (!TextUtils.isEmpty(phone)) {
             tvMyPhone.setText(phone);
         }
-        if (!isalterUnit) {
-            // 没修改过，显示之前的单位
-            if (!TextUtils.isEmpty(businessName)) {
-                tvMyUnit.setText(businessName);
-            }
-        } else {
-            // 修改过，显示修改的单位
-            if (!TextUtils.isEmpty(newBusinessName)) {
-                tvMyUnit.setText(newBusinessName);
-            }
+        if (!TextUtils.isEmpty(businessName)) {
+            tvMyUnit.setText(businessName);
         }
-
         if (!TextUtils.isEmpty(weixinName)) {
             tvMyWechat.setText(weixinName);
         }
@@ -782,47 +769,6 @@ public class PersonMsgActivity extends BaseActivity {
         }
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (null != data) {
-//            switch (requestCode) {
-//                case CAMERA:
-//                    if (resultCode == Activity.RESULT_OK) {
-//
-////                        isShow = showPhoto01(data);
-//                    }
-//                    break;
-//                case PICTURE:
-//                    if (resultCode == Activity.RESULT_OK) {
-//                        isShow = showPhoto02(data);
-//                    }
-//                    break;
-//                case REQUESTCODE:
-//                    if (resultCode == 1) {
-//                        String newBusinessName = data.getStringExtra(Keys.BUSINESSNAME);
-//                        if (!TextUtils.isEmpty(newBusinessName)) {
-//                            SpUtils.putParam(mActivity, Keys.ISALTERUNIT, true);
-//                            SpUtils.putParam(mActivity, Keys.NEWBUSINESSNAME, newBusinessName);
-//                            tvMyUnit.setText(newBusinessName);
-//                        }
-//                    }
-//
-//                    break;
-//            }
-//        }
-//        if (isShow) {
-//
-//            // 说明图片已经显示，上传头像到网络
-//            upLoadIcon();
-//            isShow = false;
-//        } else {
-//            // 图片没显示
-//            isShow = false;
-//        }
-//
-//    }
 
     /**
      * 拿到拍到的照片去上传
@@ -963,8 +909,6 @@ public class PersonMsgActivity extends BaseActivity {
                 if (resultCode == 1) {
                     String newBusinessName = data.getStringExtra(Keys.BUSINESSNAME);
                     if (!TextUtils.isEmpty(newBusinessName)) {
-                        SpUtils.putParam(mActivity, Keys.ISALTERUNIT, true);
-                        SpUtils.putParam(mActivity, Keys.NEWBUSINESSNAME, newBusinessName);
                         tvMyUnit.setText(newBusinessName);
                     }
                 }

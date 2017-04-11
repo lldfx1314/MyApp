@@ -83,6 +83,7 @@
                     android:id="@+id/iv_issue2"
                     android:layout_width="95dp"
                     android:layout_height="95dp"
+                    android:visibility="gone"
                     android:layout_marginRight="25dp"
                     android:scaleType="fitXY" />
             </RelativeLayout>
@@ -96,6 +97,7 @@
                     android:id="@+id/iv_issue3"
                     android:layout_width="95dp"
                     android:layout_height="95dp"
+                    android:visibility="gone"
                     android:layout_marginRight="25dp"
                     android:scaleType="fitXY" />
             </RelativeLayout>

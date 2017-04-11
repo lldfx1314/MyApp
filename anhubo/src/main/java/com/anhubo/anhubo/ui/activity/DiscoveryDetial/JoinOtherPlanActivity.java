@@ -171,12 +171,6 @@ public class JoinOtherPlanActivity extends BaseActivity {
 //                                    ToastUtils.showToast(mActivity, "计划名称：" + noPlanList.get(position).plan_name);
                                 }
                             })
-                            .setNegativeButton("取消", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                }
-                            })
                             .show();
                 }
             });

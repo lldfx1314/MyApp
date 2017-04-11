@@ -461,21 +461,21 @@ public class UnitFragment extends BaseFragment {
         if (code == 0 && certs != null) {
 
             if (certs.size() == 0) {
-                tvNoPlan2.setVisibility(View.GONE);
-                tvNoPlan1.setVisibility(View.VISIBLE);
+//                tvNoPlan2.setVisibility(View.GONE);
+//                tvNoPlan1.setVisibility(View.VISIBLE);
                 lvUnit.setDividerHeight(0);
             } else {
-                tvNoPlan1.setVisibility(View.GONE);
-                tvNoPlan2.setVisibility(View.VISIBLE);
-                tvNoPlan2.setText("动态互保凭证");
+//                tvNoPlan1.setVisibility(View.GONE);
+//                tvNoPlan2.setVisibility(View.VISIBLE);
+//                tvNoPlan2.setText("动态互保凭证");
             }
 
         } else {
-            tvNoPlan2.setVisibility(View.GONE);
-            tvNoPlan1.setVisibility(View.VISIBLE);
+//            tvNoPlan2.setVisibility(View.GONE);
+//            tvNoPlan1.setVisibility(View.VISIBLE);
             lvUnit.setDividerHeight(0);
         }
-        adapter = new UnitAdapter(mActivity, certs);
+        adapter = new UnitAdapter(mActivity, null/*certs*/);
         lvUnit.setAdapter(adapter);
 
     }
@@ -663,9 +663,6 @@ public class UnitFragment extends BaseFragment {
                 if (!isShowDot_drill) {
                     handler.sendEmptyMessage(DRILL);
                 }
-//                Intent intentExercise = new Intent(mActivity, QrScanActivity.class);
-//                intentExercise.putExtra(Keys.EXERCISE, "Exercise");
-//                startActivity(intentExercise);
                 Intent intentAreaBinding = new Intent(mActivity, EvacuateActivity.class);
                 startActivity(intentAreaBinding);
 //                new AlertDialog(mActivity).builder()

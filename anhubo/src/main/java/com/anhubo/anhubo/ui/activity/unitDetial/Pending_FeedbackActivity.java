@@ -36,7 +36,9 @@ import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.base.BaseActivity;
 import com.anhubo.anhubo.bean.Peeding_FeedBackBean;
 import com.anhubo.anhubo.bean.Pending_FeedbackBean;
+import com.anhubo.anhubo.bean.PlanHelpSumMoneyBean;
 import com.anhubo.anhubo.protocol.Urls;
+import com.anhubo.anhubo.ui.activity.DiscoveryDetial.BigImageViewActivity;
 import com.anhubo.anhubo.utils.ImageFactory;
 import com.anhubo.anhubo.utils.JsonUtil;
 import com.anhubo.anhubo.utils.Keys;
@@ -117,6 +119,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
     private Dialog showDialog;
     private Dialog showDialog1;
     private Uri imageUri;
+    private List<String> isPic;
 
     @Override
     protected void initConfig() {
@@ -172,7 +175,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
                 int code = bean.code;
                 String isContent = bean.data.is_content;
                 String isTime = bean.data.is_time;
-                List<String> isPic = bean.data.is_pic;
+                isPic = bean.data.is_pic;
 
                 tvIssueTime.setText("反馈时间： " + isTime);
                 tvIssueDetail.setText(isContent);
@@ -190,6 +193,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
                             if (i == 0) {
                                 setHeaderIcon(ivIssue1, isPic.get(i));
                             } else if (i == 1) {
+                                ivIssue2.setVisibility(View.VISIBLE);
                                 setHeaderIcon(ivIssue2, isPic.get(i));
                             }
                         }
@@ -198,8 +202,10 @@ public class Pending_FeedbackActivity extends BaseActivity {
                             if (i == 0) {
                                 setHeaderIcon(ivIssue1, isPic.get(i));
                             } else if (i == 1) {
+                                ivIssue2.setVisibility(View.VISIBLE);
                                 setHeaderIcon(ivIssue2, isPic.get(i));
                             } else if (i == 2) {
+                                ivIssue3.setVisibility(View.VISIBLE);
                                 setHeaderIcon(ivIssue3, isPic.get(i));
                             }
                         }
@@ -216,6 +222,9 @@ public class Pending_FeedbackActivity extends BaseActivity {
     @Override
     protected void onLoadDatas() {
 
+        ivIssue1.setOnClickListener(Pending_FeedbackActivity.this);
+        ivIssue2.setOnClickListener(Pending_FeedbackActivity.this);
+        ivIssue3.setOnClickListener(Pending_FeedbackActivity.this);
     }
 
     @OnClick({R.id.iv_pend_photo1, R.id.iv_pend_photo2, R.id.iv_pend_photo3, R.id.btn_noDeal, R.id.btn_complete_Deal})
@@ -252,7 +261,36 @@ public class Pending_FeedbackActivity extends BaseActivity {
                 // 相册
                 getPhoto();
                 break;
+            case R.id.iv_issue1:
+                if (isPic != null && isPic.size() >0) {
+                    String picUrl = isPic.get(0);
+                    enterBigImage(picUrl);
+
+                }
+                break;
+            case R.id.iv_issue2:
+                if (isPic != null && isPic.size()  >1) {
+                    String picUrl = isPic.get(1);
+                    // 打开另一界面显示大图
+                    enterBigImage(picUrl);
+                }
+                break;
+            case R.id.iv_issue3:
+                if (isPic != null && isPic.size() > 2) {
+                    String picUrl = isPic.get(2);
+                    // 打开另一界面显示大图
+                    enterBigImage(picUrl);
+                }
+                break;
         }
+    }
+
+    private void enterBigImage(String picUrl) {
+        // 打开另一界面显示大图
+        Intent intent = new Intent(mActivity, BigImageViewActivity.class);
+        intent.putExtra("images", picUrl);
+        startActivity(intent);
+        overridePendingTransition(R.anim.big_image_enter, 0);
     }
 
     /**
@@ -338,7 +376,7 @@ public class Pending_FeedbackActivity extends BaseActivity {
 
 
                 }
-            }else{
+            } else {
                 // 防止返回json字符串出问题导致奔溃
                 new AlertDialog(mActivity).builder()
                         .setTitle("提示")

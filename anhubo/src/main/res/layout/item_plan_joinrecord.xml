@@ -11,5 +11,7 @@
         android:paddingRight="15dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
+        android:textSize="15sp"
+        android:textColor="@color/hanzi8_black"
         android:text="安互保加入了计划"/>
 </LinearLayout>

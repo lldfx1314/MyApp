@@ -3,7 +3,6 @@ package com.anhubo.anhubo.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -11,9 +10,6 @@ import android.widget.TextView;
 
 import com.anhubo.anhubo.R;
 import com.anhubo.anhubo.utils.DisplayUtil;
-
-
-import butterknife.InjectView;
 /**
  * Created by LUOLI on 2016/10/28.
  */

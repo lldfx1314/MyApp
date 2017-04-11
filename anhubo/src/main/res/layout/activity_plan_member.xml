@@ -8,14 +8,14 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/ll_plan_member"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_height="match_parent"
             android:visibility="gone"
+            android:orientation="vertical"
             android:background="@color/bg_upload">
 
             <LinearLayout
@@ -69,7 +69,7 @@
                 android:paddingBottom="10dp"
                 android:paddingTop="15dp"
                 android:text="未满员"
-                android:textColor="@color/hanzi8_black"
+                android:textColor="@color/hanzi4_black"
                 android:textSize="13sp" />
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_plan_member_unfull"
@@ -86,7 +86,7 @@
                 android:gravity="center_horizontal"
                 android:text="查看更多"
                 android:textColor="@color/hanzi4_black"
-                android:textSize="15dp" />
+                android:textSize="13sp" />
             <!--满员-->
             <TextView
                 android:layout_width="match_parent"
@@ -96,7 +96,7 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:text="满员"
-                android:textColor="@color/hanzi8_black"
+                android:textColor="@color/hanzi4_black"
                 android:textSize="13sp" />
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_plan_member_full"
@@ -113,7 +113,7 @@
                 android:gravity="center_horizontal"
                 android:text="查看更多"
                 android:textColor="@color/hanzi4_black"
-                android:textSize="15dp" />
+                android:textSize="13sp"  />
 
             <View
                 android:layout_width="match_parent"
@@ -137,8 +137,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="加入记录"
-                    android:textColor="@color/hanzi8_black"
-                    android:textSize="15sp" />
+                    android:textColor="@color/hanzi4_black"
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/tv_plan_joinRecordNum"
